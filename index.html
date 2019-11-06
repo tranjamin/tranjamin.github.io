@@ -68,9 +68,25 @@
                               </form></div><a href="" style="text-decoration: none; color: white;" id="signup" class="hoverable">Sign Up</a></li>
             <li class="topnav">
                     <div class="search-container">
-                      <form action="/action_page.php">
-                        <input type="text" placeholder="Search.." name="search">
+                      <form id="search-button">
+                        <input type="text" placeholder="Search.." name="search" id="input" pattern="^(?!(([Tt]his website ((is (bad|worse))|(sucks)))|([Bb]en('s website)? ((is (bad|worse) )|sucks))))([^><]{2,})$" oninvalid="displayErrorMessage()" style="overflow-x: scroll" required >
                         <button type="submit"><i class="fa fa-search"></i></button>
+                        <script>
+                          function displayErrorMessage() {
+                          if (!document.getElementById('input').value) {
+                          document.getElementById('input').setCustomValidity("Please enter a keyword");}
+                          else {
+                            if (document.getElementById('input').value.length < 2) {
+                              document.getElementById('input').setCustomValidity("Keywords must be at least 2 characters");
+                            }
+                            else if (document.getElementById('input').value.includes("<")||document.getElementById('input').value.includes(">")) {
+                            document.getElementById('input').setCustomValidity("Chevrons are not allowed");}
+                            else {
+                            document.getElementById('input').setCustomValidity("Duck you");
+                            }
+                          }
+                        }
+                        </script>
                       </form>
                     </div>
                   </li>
