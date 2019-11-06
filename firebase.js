@@ -106,8 +106,8 @@ loggedIn ? document.getElementById('title').style.overflow = "hidden" : document
 revealPoints();
 //window.addEventListener("load",(e) => {
     if (name) {
-        document.getElementById("login").innerHTML = "Welcome, " + name + ".";
-        document.getElementById("signup").innerHTML = "Logout.";
+        document.getElementById("signup").innerHTML = "Welcome, " + name + ".";
+        document.getElementById("login").innerHTML = "Logout.";
         document.getElementById("loginform").style.visibility = "hidden";
         document.getElementById("incorrectusername").innerHTML = "";
         document.getElementById("password").value = "";
@@ -246,9 +246,71 @@ function checkStreaks() {
 }
 
 
+
+document.getElementById("search-button").addEventListener('submit', e=> {
+    console.log('submitted');
+    e.preventDefault();
+    var search = document.getElementById('search-button')["input"].value.toLowerCase();
+    var link_arr =['about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
+    for (var i=0;i<link_arr.length;i++) {
+        ajaxSearch(link_arr[i], search);}
+
+})
+
+function ajaxSearch (url, search) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET",url,true);
+    xhttp.responseType = 'document';
+    xhttp.send();
+
+    xhttp.onreadystatechange = () => {
+        if(xhttp.readyState == 4) {
+            console.log("link secured!");
+            
+    console.log(xhttp);
+    console.log(xhttp.status);
+    
+    var InnerHTML = xhttp.response.getElementsByTagName('main')[0].innerHTML.toLowerCase();
+    if (InnerHTML.includes(search)) {
+        var index = InnerHTML.indexOf(search);
+        var includes_tag = false;
+        var i=0;
+        while (i<InnerHTML.length) {
+            if (InnerHTML[index+i] == ">") {
+                includes_tag = true;
+                break;
+            }
+            else if (InnerHTML[index+i] == "<") {
+                break;
+            }
+            else {
+                i++;
+            }
+        }
+        if (!includes_tag) {
+            console.log('success at ' + url);
+        }
+        else {
+            console.log('tag results found at ' + url);
+        }
+
+
+    }
+    else {
+        console.log('no results found at ' + url);
+    }
+
+        }
+        else {console.log('link failed!');}
+    }
+}
+
+
+
 const signup = document.querySelector("#signupform");
 signup.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (!loggedIn) {
     if (signup.newPassword.value === signup.confirmPassword.value) {
         //console.log("first function")
         var counter = 0;
@@ -292,8 +354,8 @@ signup.addEventListener('submit', (e) => {
         //console.log("submitted...");
         loggedIn = true;
         name = signup.newName.value;
-        document.getElementById("signup").innerHTML = "Logout.";
-        document.getElementById("login").innerHTML = "Hello, " + name + ".";
+        document.getElementById("login").innerHTML = "Logout.";
+        document.getElementById("signup").innerHTML = "Hello, " + name + ".";
         document.getElementById("newPassword").value = "";
         document.getElementById("newUsername").value = "";
         document.getElementById("confirmPassword").value = "";
@@ -352,8 +414,91 @@ signup.addEventListener('submit', (e) => {
     document.getElementById("nonmatchingpasswords").style.display = "";
     document.getElementById("confirmPassword").value = "";
     document.getElementById("newPassword").value = "";
+}}
+else {
+    db.collection('users').doc(id).get().then(doc => {
+    if (document.getElementById('newUsername').value == doc.data()['password']){
+    if (document.getElementById('newPassword').value) {
+        document.getElementById('confirmPassword').required = true;
+        if (document.getElementById('newPassword').value == document.getElementById('confirmPassword').value) {
+            db.collection('users').doc(id).update({
+                password: document.getElementById('newPassword').value
+            })
+            if (document.getElementById('newName').value) {
+                db.collection('users').doc(id).update({
+                    name: document.getElementById('newName').value
+                }) 
+                document.getElementById("signup").innerHTML = "Hello, " + document.getElementById('newName').value + "."; 
+                setCookie("name",document.getElementById('newName').value,2);
+            }
+            document.getElementById("login").innerHTML = "Logout.";
+            document.getElementById("newPassword").value = "";
+            document.getElementById("newUsername").value = "";
+            document.getElementById("confirmPassword").value = "";
+            document.getElementById("newName").value = "";
+        
+            function vis() {document.getElementById("newPassword").style.visibility = "";
+            document.getElementById("newPassword").value = "";}
+            function vis22() {document.getElementById("newUsername").style.visibility = "";
+            document.getElementById("newUsername").value = "";}
+            function vis3() {document.getElementById("newName").style.visibility = "";
+            document.getElementById("newName").value = "";}
+            function vis7() {document.getElementById("confirmPassword").style.visibility = "";
+            document.getElementById("confirmPassword").value = "";}
+            document.getElementById("nonmatchingpasswords").style.visibility = "";
+            document.getElementById("nonmatchingpasswords").style.display = "none";
+            document.getElementById("signupbutton").style.visibility = "";
+            setTimeout(vis7,100);
+            setTimeout(vis,200);
+            setTimeout(vis22,300);
+            setTimeout(vis3,400);
+        }
+        else {
+            document.getElementById("nonmatchingpasswords").innerHTML = "Passwords do not match";
+    document.getElementById("nonmatchingpasswords").style.display = "";
+    document.getElementById("confirmPassword").value = "";
+    document.getElementById("newPassword").value = "";
+        }
+}
+else if (document.getElementById('newName').value) {
+    db.collection('users').doc(id).update({
+        name: document.getElementById('newName').value
+    })
+    setCookie("name",document.getElementById('newName').value,2);
+    document.getElementById("login").innerHTML = "Logout.";
+    document.getElementById("signup").innerHTML = "Hello, " + document.getElementById('newName').value + ".";
+    document.getElementById("newPassword").value = "";
+    document.getElementById("newUsername").value = "";
+    document.getElementById("confirmPassword").value = "";
+    document.getElementById("newName").value = "";
+
+    function vis() {document.getElementById("newPassword").style.visibility = "";
+    document.getElementById("newPassword").value = "";}
+    function vis22() {document.getElementById("newUsername").style.visibility = "";
+    document.getElementById("newUsername").value = "";}
+    function vis3() {document.getElementById("newName").style.visibility = "";
+    document.getElementById("newName").value = "";}
+    function vis7() {document.getElementById("confirmPassword").style.visibility = "";
+    document.getElementById("confirmPassword").value = "";}
+    document.getElementById("nonmatchingpasswords").style.visibility = "";
+    document.getElementById("nonmatchingpasswords").style.display = "none";
+    document.getElementById("signupbutton").style.visibility = "";
+    setTimeout(vis7,100);
+    setTimeout(vis,200);
+    setTimeout(vis22,300);
+    setTimeout(vis3,400);
+}
+else{
+    document.getElementById("nonmatchingpasswords").innerHTML = "Please enter a change";
+}
+}
+else {
+    document.getElementById("nonmatchingpasswords").innerHTML = "Incorrect Password";
+    document.getElementById("nonmatchingpasswords").style.display = "";
+    document.getElementById("newUsername").value = "";
 }
 
+})}
 })
 
 const login = document.querySelector('#loginform');
@@ -370,8 +515,8 @@ login.addEventListener("submit", (e) => {
                     loggedIn = true;
                     name = doc.data()["name"];
                     //console.log(doc.data().id);
-                    document.getElementById("login").innerHTML = "Welcome, " + name + ".";
-                    document.getElementById("signup").innerHTML = "Logout.";
+                    document.getElementById("signup").innerHTML = "Welcome, " + name + ".";
+                    document.getElementById("login").innerHTML = "Logout.";
                     //console.log(loginform.style.visibility);
                     document.getElementById("loginform").style.visibility = "hidden";
                     document.getElementById("incorrectusername").innerHTML = "";
@@ -425,7 +570,27 @@ login.addEventListener("submit", (e) => {
             }}
             //setTimeout(incorrect, 500);
     }
-    checkLogin();
+        checkLogin();
+})
+
+document.getElementById('signup').addEventListener('click', () => {
+    if (loggedIn) {
+    document.getElementById('newName').placeholder = "New Name";
+    document.getElementById('newUsername').placeholder = "Current Password";
+    document.getElementById('newPassword').placeholder = "New Password";
+    document.getElementById('confirmPassword').placeholder = "Confirm New Password";
+    document.getElementById('signupbutton').value = "Change Details";
+    document.getElementById('newName').required = false;
+    document.getElementById('newPassword').required = false;
+    document.getElementById('confirmPassword').required = false;
+}
+    else {
+        document.getElementById('newName').placeholder = "Name";
+        document.getElementById('newUsername').placeholder = "Username";
+        document.getElementById('newPassword').placeholder = "Password";
+        document.getElementById('confirmPassword').placeholder = "Confirm Password";
+        document.getElementById('signupbutton').value = "Sign Up";
+    }
 })
 
 function toggleVisibilityLogin(host, element1){
@@ -434,7 +599,9 @@ function toggleVisibilityLogin(host, element1){
     //console.log(document.getElementById("password").style.visibility);
     //console.log(element1);
     //console.log(element1.visibility);
-    if (document.getElementById("password").style.visibility == "visible") {
+    if (host.innerHTML === "Logout.") {
+        logout();}
+    else if (document.getElementById("password").style.visibility == "visible") {
         //console.log("break 3");
         function vis2() {document.getElementById("username").style.visibility = "";document.getElementById("username").value="";}
         function vis21() {document.getElementById("password").style.visibility = "";document.getElementById("password").value="";}
@@ -644,8 +811,8 @@ Security
     
         }}
         }
-window.addEventListener('load', e => {overlaps()});
-window.addEventListener('resize', e => {overlaps();});
+window.addEventListener('load', e => {overlaps();resizeAll();removeCaption();});
+window.addEventListener('resize', e => {overlaps();resizeAll();removeCaption();});
 
 function overlaps() {
     //console.log('resize');
@@ -774,8 +941,6 @@ function removeCaption(){
     }
 }
 
-window.addEventListener('load', e => {removeCaption()});
-window.addEventListener('resize', e => {removeCaption();});
 
 function resizeContent(element,ratio) {
     //console.log("width: " + element.width);
@@ -794,6 +959,3 @@ function resizeAll() {
         resizeContent(document.getElementById(array[i]),array2[i]);
     }
 }
-
-window.addEventListener('resize', resizeAll);
-window.addEventListener('load', resizeAll);
