@@ -289,15 +289,24 @@ function ajaxSearch (url, search) {
         }
         if (!includes_tag) {
             console.log('success at ' + url);
+            setCookie("search",true,2);
+            
+
+
+
         }
         else {
             console.log('tag results found at ' + url);
+            setCookie("search",false,2);
+            window.location = "search.html";
         }
 
 
     }
     else {
         console.log('no results found at ' + url);
+        setCookie("search",false,0.04167);
+        window.location = "search.html";
     }
 
         }
@@ -305,7 +314,18 @@ function ajaxSearch (url, search) {
     }
 }
 
+if (document.title == "Benjamin Tran | Search") {
+    console.log('search page');
+    if (getCookie('search') == "true") {
+        document.getElementById('projects_title').innerHTML = "Results";
+        console.log('results');
+    }
+    else {
+        document.getElementById('projects_title').innerHTML = "No Results Found :(";
+        console.log('no results');
+    }
 
+}
 
 const signup = document.querySelector("#signupform");
 signup.addEventListener('submit', (e) => {
@@ -811,8 +831,9 @@ Security
     
         }}
         }
+if (document.title == "Benjamin Tran | Homepage") {
 window.addEventListener('load', e => {overlaps();resizeAll();removeCaption();});
-window.addEventListener('resize', e => {overlaps();resizeAll();removeCaption();});
+window.addEventListener('resize', e => {overlaps();resizeAll();removeCaption();});}
 
 function overlaps() {
     //console.log('resize');
@@ -881,10 +902,7 @@ function overlaps() {
     }
 }
 
-function pauseBefore(e) {
-    e.preventDefault();
-
-}
+if (document.title == "Benjamin Tran | Homepage") {
 document.getElementById('sample-image4').addEventListener("click", e => {
     e.preventDefault();
     function f1() {window.open("https://rooster202.github.io","_blank");}
@@ -906,7 +924,7 @@ document.getElementById('sample-image5').addEventListener("click", e => {
     function f1() {window.open("https://nebrok.github.io","_blank");}
     setTimeout(f1,2000);
 });
-
+}
 
             db.collection('users').doc(id).get().then(doc => {
                 document.getElementById('sample-image3').addEventListener('click', e=> {e.preventDefault();
