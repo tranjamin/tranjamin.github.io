@@ -270,7 +270,7 @@ function ajaxSearch (url, search) {
     console.log(xhttp);
     console.log(xhttp.status);
     
-    var InnerHTML = xhttp.response.getElementsByTagName('main')[0].innerHTML.toLowerCase();
+    var InnerHTML = xhttp.responseXML.getElementsByTagName('main')[0].innerHTML.toLowerCase();
     if (InnerHTML.includes(search)) {
         var index = InnerHTML.indexOf(search);
         var includes_tag = false;
@@ -290,15 +290,13 @@ function ajaxSearch (url, search) {
         if (!includes_tag) {
             console.log('success at ' + url);
             setCookie("search",true,2);
-            
-
-
+            //window.location = "search.html";
 
         }
         else {
             console.log('tag results found at ' + url);
             setCookie("search",false,2);
-            window.location = "search.html";
+            //window.location = "search.html";
         }
 
 
@@ -306,7 +304,7 @@ function ajaxSearch (url, search) {
     else {
         console.log('no results found at ' + url);
         setCookie("search",false,0.04167);
-        window.location = "search.html";
+        //window.location = "search.html";
     }
 
         }
