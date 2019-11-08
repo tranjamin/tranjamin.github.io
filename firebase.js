@@ -268,6 +268,7 @@ function ajaxSearch (url, search,i,link_arr) {
     xhttp.open("GET",url,true);
     xhttp.responseType = 'document';
     xhttp.send();
+    var i = i;
 
     xhttp.onreadystatechange = () => {
         if(xhttp.readyState == 4) {
