@@ -326,7 +326,7 @@ function ajaxSearch (url, search,i,link_arr) {
     if (occurrence != 0) {
         //setCookie("search",true,2);
         console.log('success at ' + url + " (" + occurrence + ")");
-        count = "results"
+        count = "results";
         //window.location = "search.html";
     }
     else {
@@ -345,6 +345,8 @@ function ajaxSearch (url, search,i,link_arr) {
         }
         else {console.log('link failed!'); count="error";
     }
+    console.log("i: " + i);
+    console.log("link_arr: " + link_arr);
     if (i == (link_arr.length -1)) {
         console.log('search results');
         console.log(count);
