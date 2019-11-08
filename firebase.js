@@ -288,8 +288,10 @@ function ajaxSearch (url, search) {
             }
         }
         if (!includes_tag) {
-            console.log('success at ' + url);
             setCookie("search",true,2);
+            var str = new RegExp(search);
+            var num_includes = InnerHTML.match(str);
+            console.log('success at ' + url + " (" + num_includes + ")");
             //window.location = "search.html";
 
         }
