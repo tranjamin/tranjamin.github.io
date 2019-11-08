@@ -272,8 +272,8 @@ function ajaxSearch (url, search,i,link_arr) {
         if(xhttp.readyState == 4) {
             console.log("link secured!");
             
-    console.log(xhttp);
-    console.log(xhttp.status);
+    //console.log(xhttp);
+    //console.log(xhttp.status);
     
     var InnerHTML = xhttp.responseXML.getElementsByTagName('main')[0].innerHTML.toLowerCase();
     if (InnerHTML.includes(search)) {
