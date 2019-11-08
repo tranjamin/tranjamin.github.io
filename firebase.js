@@ -346,6 +346,7 @@ function ajaxSearch (url, search,i,link_arr) {
         else {console.log('link failed!'); count="error";
     }
     if (i == (link_arr.length -1)) {
+        console.log('search results');
         console.log(count);
         document.getElementById('projects_title').innerHTML = count;
     }
