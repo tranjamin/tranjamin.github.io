@@ -263,6 +263,7 @@ if (document.title == "Benjamin Tran | Search") {
 }
 
 function ajaxSearch (url, search,i,link_arr) {
+    console.log("i is: " + i);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET",url,true);
     xhttp.responseType = 'document';
