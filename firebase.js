@@ -284,7 +284,6 @@ function ajaxSearch (url, search) {
         var tick = 0;
         while (tick < num_includes) {
         var index = InnerHTML.indexOf(search,prev_index+1);
-        console.log(tick + "----" + index);
         prev_index = index;
         var includes_tag = false;
         var i=0;
@@ -312,6 +311,7 @@ function ajaxSearch (url, search) {
             //console.log('success at ' + url + " (" + num_includes + ")");
             //window.location = "search.html";
             occurrence ++;
+            console.log(tick + "----" + index);
 
         }
         else {
