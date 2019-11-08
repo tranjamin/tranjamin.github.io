@@ -268,11 +268,10 @@ function ajaxSearch (url, search,i,link_arr) {
     xhttp.open("GET",url,true);
     xhttp.responseType = 'document';
     xhttp.send();
-    var i = i;
-    var link_arr = link_arr;
 
     xhttp.onreadystatechange = () => {
         if(xhttp.readyState == 4) {
+            console.log("i2 is: " + i);
             console.log("link secured!");
             
     //console.log(xhttp);
