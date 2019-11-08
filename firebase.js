@@ -250,12 +250,15 @@ function checkStreaks() {
 document.getElementById("search-button").addEventListener('submit', e=> {
     console.log('submitted');
     e.preventDefault();
-    var search = document.getElementById('search-button')["input"].value.toLowerCase();
+    var search2 = document.getElementById('search-button')["input"].value.toLowerCase();
+    setCookie("search",search2,2);
+    window.location = "search.html"; })
+
+if (document.title == "Benjamin Tran | Search") {
+    var search = getCookie('search');
     var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
     for (var i=0;i<link_arr.length;i++) {
         ajaxSearch(link_arr[i], search);}
-
-})
 
 function ajaxSearch (url, search) {
     var xhttp = new XMLHttpRequest();
@@ -318,19 +321,19 @@ function ajaxSearch (url, search) {
     tick ++;
     }
     if (occurrence != 0) {
-        setCookie("search",true,2);
+        //setCookie("search",true,2);
         console.log('success at ' + url + " (" + occurrence + ")");
         //window.location = "search.html";
     }
     else {
             console.log('tag results found at ' + url);
-            setCookie("search",false,2);
+            //setCookie("search",false,2);
             //window.location = "search.html";
     }
     }
     else {
         console.log('no results found at ' + url);
-        setCookie("search",false,0.04167);
+        //setCookie("search",false,0.04167);
         //window.location = "search.html";
     }
 
@@ -350,6 +353,7 @@ if (document.title == "Benjamin Tran | Search") {
         console.log('no results');
     }
 
+}
 }
 
 const signup = document.querySelector("#signupform");
