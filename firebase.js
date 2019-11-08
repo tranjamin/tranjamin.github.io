@@ -292,7 +292,7 @@ function ajaxSearch (url, search) {
                 includes_tag = true;
                 break;
             }
-            else if (InnerHTML[index+i] == "<") {
+            else if (InnerHTML[index+i] == "<" && (/[a-zA-Z]/.test(InnerHTML[index+i+1])||(InnerHTML[index+i+1] == "/"))) {
                 console.log(InnerHTML[index+i] + InnerHTML[index+i+1]);
                 if (InnerHTML.substring(index+i,index+i+9) == "</script>") {
                     includes_tag = true;
