@@ -260,6 +260,10 @@ if (document.title == "Benjamin Tran | Search") {
     var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
     for (var i=0;i<link_arr.length;i++) {
         ajaxSearch(link_arr[i], search);}
+    
+console.log(count);
+document.getElementById('projects_title').innerHTML = count;
+}
 
 function ajaxSearch (url, search) {
     var xhttp = new XMLHttpRequest();
@@ -347,9 +351,6 @@ function ajaxSearch (url, search) {
     }
 }
 
-console.log(count);
-document.getElementById('projects_title').innerHTML = count;
-}
 
 const signup = document.querySelector("#signupform");
 signup.addEventListener('submit', (e) => {
