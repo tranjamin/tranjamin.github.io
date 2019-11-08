@@ -290,7 +290,8 @@ function ajaxSearch (url, search) {
         if (!includes_tag) {
             setCookie("search",true,2);
             var str = new RegExp(search);
-            var num_includes = InnerHTML.match(str).length;
+            var reg2 = RegExp(str.source,str.flags + "g");
+            var num_includes = InnerHTML.match(reg2).length;
             console.log('success at ' + url + " (" + num_includes + ")");
             //window.location = "search.html";
 
