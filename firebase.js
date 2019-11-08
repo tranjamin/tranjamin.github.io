@@ -251,7 +251,7 @@ document.getElementById("search-button").addEventListener('submit', e=> {
     console.log('submitted');
     e.preventDefault();
     var search = document.getElementById('search-button')["input"].value.toLowerCase();
-    var link_arr =['about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
+    var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
     for (var i=0;i<link_arr.length;i++) {
         ajaxSearch(link_arr[i], search);}
 
