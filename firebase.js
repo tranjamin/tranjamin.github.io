@@ -290,8 +290,13 @@ function ajaxSearch (url, search) {
                 break;
             }
             else if (InnerHTML[index+i] == "<") {
-                break;
-            }
+                if (InnerHTML.substring(index+i,index+i+9) == "</script>") {
+                    includes_tag = true;
+                    break;
+                }
+                else {
+                    break;
+            }}
             else {
                 i++;
             }
