@@ -347,18 +347,7 @@ function ajaxSearch (url, search) {
     }
 }
 
-if (document.title == "Benjamin Tran | Search") {
-    console.log('search page');
-    if (getCookie('search') == "true") {
-        document.getElementById('projects_title').innerHTML = "Results";
-        console.log('results');
-    }
-    else {
-        document.getElementById('projects_title').innerHTML = "No Results Found :(";
-        console.log('no results');
-    }
-
-}
+console.log(count);
 document.getElementById('projects_title').innerHTML = count;
 }
 
