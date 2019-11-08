@@ -272,7 +272,7 @@ function ajaxSearch (url, search,i,link_arr) {
 
     xhttp.onreadystatechange = () => {
         if(xhttp.readyState == 4) {
-            console.log("i2 is: " + i);
+            console.log("i2c is: " + i);
             console.log("link secured!");
             
     //console.log(xhttp);
