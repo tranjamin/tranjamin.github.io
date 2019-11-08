@@ -255,6 +255,7 @@ document.getElementById("search-button").addEventListener('submit', e=> {
     window.location = "search.html"; })
 
 if (document.title == "Benjamin Tran | Search") {
+    var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
     for (var i=0;i<link_arr.length;i++) {
@@ -323,6 +324,7 @@ function ajaxSearch (url, search) {
     if (occurrence != 0) {
         //setCookie("search",true,2);
         console.log('success at ' + url + " (" + occurrence + ")");
+        count = "results"
         //window.location = "search.html";
     }
     else {
@@ -333,12 +335,14 @@ function ajaxSearch (url, search) {
     }
     else {
         console.log('no results found at ' + url);
+
         //setCookie("search",false,0.04167);
         //window.location = "search.html";
     }
 
         }
-        else {console.log('link failed!');}
+        else {console.log('link failed!'); count="error";
+    }
     }
 }
 
@@ -354,6 +358,7 @@ if (document.title == "Benjamin Tran | Search") {
     }
 
 }
+document.getElementById('projects_title').innerHTML = count;
 }
 
 const signup = document.querySelector("#signupform");
