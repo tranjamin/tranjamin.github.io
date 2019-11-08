@@ -272,7 +272,16 @@ function ajaxSearch (url, search) {
     
     var InnerHTML = xhttp.responseXML.getElementsByTagName('main')[0].innerHTML.toLowerCase();
     if (InnerHTML.includes(search)) {
-        var index = InnerHTML.indexOf(search);
+        var occurrence = 0;
+        var str = new RegExp(search);
+        var reg2 = RegExp(str.source,str.flags + "g");
+        var num_includes = InnerHTML.match(reg2).length;
+        var prev_index = -1;
+        var tick = 0;
+        while (tick < num_includes) {
+        var index = InnerHTML.indexOf(search,prev_index+1);
+        console.log(tick + "----" + index);
+        prev_index = index;
         var includes_tag = false;
         var i=0;
         while (i<InnerHTML.length) {
@@ -287,22 +296,32 @@ function ajaxSearch (url, search) {
                 i++;
             }
         }
+
+        
         if (!includes_tag) {
-            setCookie("search",true,2);
-            var str = new RegExp(search);
-            var reg2 = RegExp(str.source,str.flags + "g");
-            var num_includes = InnerHTML.match(reg2).length;
-            console.log('success at ' + url + " (" + num_includes + ")");
+            //setCookie("search",true,2);
+            //console.log('success at ' + url + " (" + num_includes + ")");
             //window.location = "search.html";
+            occurrence ++;
 
         }
         else {
+            //console.log('tag results found at ' + url);
+            //setCookie("search",false,2);
+            //window.location = "search.html";
+        }
+    tick ++;
+    }
+    if (occurrence != 0) {
+        setCookie("search",true,2);
+        console.log('success at ' + url + " (" + occurrence + ")");
+        //window.location = "search.html";
+    }
+    else {
             console.log('tag results found at ' + url);
             setCookie("search",false,2);
             //window.location = "search.html";
-        }
-
-
+    }
     }
     else {
         console.log('no results found at ' + url);
