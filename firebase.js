@@ -389,9 +389,9 @@ function ajaxSearch(url, search, i, link_arr) {
                                         clock2++;
 
                                     }}
-                                    if (clock1 == 65 && clock2 == 65) {
+                                    if (clock2 == 65) {
                                         console.log('break 4');
-                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - 65, index + 65) + "...";
+                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - start_index, index + 65) + "...";
                                     }
 
 
