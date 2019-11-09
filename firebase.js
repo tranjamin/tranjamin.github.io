@@ -355,7 +355,7 @@ function ajaxSearch (url, search,i,link_arr) {
             id_occurrence ++;
         }
         if (i == (tag_array.length - 1)) {
-            if (id_occurrence) {console.log(id_occurrence + " id results found")}
+            if (id_occurrence > 0) {console.log(id_occurrence + " id results found")}
             else {console.log('no id results found')}
         }
     }
