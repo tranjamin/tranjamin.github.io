@@ -350,6 +350,7 @@ function ajaxSearch (url, search,i,link_arr) {
     for (var i=0; i<tag_array.length; i++) {
         var bool_reg = id_regexp.test(tag_array[i].id);
         if (bool_reg) {
+            console.log('happy');
             var search_id = tag_array[i].id;
             id_occurrence ++;
         }
