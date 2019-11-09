@@ -265,7 +265,7 @@ document.getElementById("search-button").addEventListener('submit', e => {
 
 if (document.title == "Benjamin Tran | Search") {
     var page_number = 1;
-    var total_counts = 0;
+    var total_counts = 46;
     var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr = ['index.html', 'about_me.html', 'projects.html', 'engineering.html', 'member_benefits.html', 'woodworking.html', 'architecture.html'];
@@ -276,10 +276,10 @@ if (document.title == "Benjamin Tran | Search") {
         }
         var pages = Math.ceil(total_counts/15);
         var num_array = [];
-        for (var i=pages;i>0;i--) {
+        for (var i=1;i<=pages;i++) {
             num_array.push(i);
         }
-        document.getElementById('page_numbers2').innerHTML = num_array.join(" | ");
+        document.getElementById('page_numbers2').innerHTML = "<a>" + num_array.join("</a> | <a>") + "</a>";
     }
     else {
         document.getElementById('projects_title').innerHTML = "Search Something...";
@@ -310,6 +310,9 @@ if (document.title == "Benjamin Tran | Search") {
         e.preventDefault();
         if (page_number != Math.ceil(total_counts/15)) {
         //console.log("Double forward");
+        forwardOne();}
+    })
+    function forwardOne () { 
         var arr = document.getElementsByClassName('search-results');
         for (var i=0; i < arr.length;i++) {arr[i].style.display = "none";}
         for (var i=page_number*15; i < page_number*15 + 15;i++) {
@@ -317,21 +320,40 @@ if (document.title == "Benjamin Tran | Search") {
             catch (TypeError) {break;}
         }
         page_number += 1;}
-    })
     document.getElementById('back').addEventListener('click', e => {
         e.preventDefault();
         if (page_number != 1) { 
         //console.log("Double forward");
-        page_number
+        backOne();}
+    })
+    function backOne () {
         var arr = document.getElementsByClassName('search-results');
         for (var i=0; i < arr.length;i++) {arr[i].style.display = "none";}
         for (var i=(page_number-1)*15 - 1; i >= (page_number-1)*15-15;i--) {
             arr[i].style.display = "block";
         }
         page_number -= 1;}
-    })
 
-
+    for (var i = 1; i <= pages; i++) {
+        createEvent(i);
+    }
+    function createEvent(i) {
+    document.getElementById("page_numbers2").childNodes[2 * i - 2].addEventListener(e => {
+        console.log("page number function");
+        e.preventDefault();
+        if (i != page_number) {
+            if (i > page_number) {
+                for (var j = 0; j < (page_number - i); i++) {
+                    forwardOne();
+                }
+            }
+            else {
+                for (var j = 0; j < (page_number - i); i++) {
+                    backOne();
+                }
+            }
+        }
+    })}
 }
 
 function ajaxSearch(url, search, i, link_arr) {
