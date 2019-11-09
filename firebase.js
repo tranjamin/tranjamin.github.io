@@ -353,7 +353,7 @@ function ajaxSearch (url, search,i,link_arr) {
         console.log('search results');
         console.log(count);
         document.getElementById('projects_title').innerHTML = count;
-        document.cookie = "search=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        //document.cookie = "search=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
     }
 }
