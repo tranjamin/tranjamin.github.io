@@ -339,6 +339,7 @@ function ajaxSearch(url, search, i, link_arr) {
                         console.log('at the moment, ' + total_counts);
                         document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " | " + index;
                         document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "Literal Match";
+                        document.getElementsByClassName('search-results')[total_counts].style.display = "block";
                         if (end_index) {
                             start_index = 100 - end_index;
                             var clock = 0;
@@ -423,6 +424,7 @@ function ajaxSearch(url, search, i, link_arr) {
                                     var search_id = tag_array[i].id;
                                     document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " # " + search_id;
                                     document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "ID Match";
+                                    document.getElementsByClassName('search-results')[total_counts].style.display = "block";
                                     if (document.getElementById(search_id).innerHTML.length <= 100) {
                                         document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = document.getElementById(search_id).innerHTML;
                                     }
