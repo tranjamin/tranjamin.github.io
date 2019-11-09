@@ -364,15 +364,20 @@ function ajaxSearch(url, search, i, link_arr) {
                             var clock2 = 0;
                             start_index = 50;
                             end_index = 50;
+                            console.log("big else statement");
                             while (clock1 < 65) {
+                                console.log("while (clock1 < 65");
                                 if ((InnerHTML[index - clock1] == " " && clock1 >= 50) || InnerHTML[index - clock1] == ">") {
+                                    console.log('if ((InnerHTML[index - clock1]');
                                     start_index = clock1;
                                     break;
                                 }
                                 else {
+                                    console.log('else{clock1++}');
                                     clock1++;
                                 }}
                                 while (clock2 < 65) {
+                                    console.log('while (clock2 < 65');
                                     if ((InnerHTML[index + clock] == " " && clock2 >= 50) || InnerHTML[index + clock] == "<") {
                                         end_index = clock2;
                                         console.log('break 3');
@@ -380,6 +385,7 @@ function ajaxSearch(url, search, i, link_arr) {
                                         break;
                                     }
                                     else {
+                                        console.log("else 2")
                                         clock2++;
 
                                     }}
