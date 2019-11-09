@@ -255,6 +255,7 @@ document.getElementById("search-button").addEventListener('submit', e=> {
     window.location = "search.html"; })
 
 if (document.title == "Benjamin Tran | Search") {
+    var total_counts;
     var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
@@ -296,6 +297,8 @@ function ajaxSearch (url, search,i,link_arr) {
         prev_index = index;
         var includes_tag = false;
         var i=0;
+        var start_index = 0;
+        var end_index = 0;
         while (i<InnerHTML.length) {
             if (InnerHTML[index+i] == ">") {
                 includes_tag = true;
@@ -308,6 +311,7 @@ function ajaxSearch (url, search,i,link_arr) {
                     break;
                 }
                 else {
+                    if (i < 50) {end_index = index + i;}
                     break;
             }}
             else {
@@ -320,11 +324,64 @@ function ajaxSearch (url, search,i,link_arr) {
             //setCookie("search",true,2);
             //console.log('success at ' + url + " (" + num_includes + ")");
             //window.location = "search.html";
+            document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " | " + index;
+            document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "Literal Match";
+            if (end_index) {
+                start_index = 100 - end_index;
+                var clock = 0;
+                while (clock < 15) {
+                    if (InnerHTML[index - start_index] == " " || InnerHTML[index - start_index] == ">") {
+                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index + 1, index + end_index);
+                        break;
+                    }
+                    else {
+                        clock++;
+                        start_index--;
+
+                    }
+                }
+                if (clock == 15) {
+                    document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index, index + end_index);
+                }
+            }
+            else {
+                var clock1 = 0;
+                var clock2 = 0;
+                start_index = 50;
+                end_index = 50;
+                while (clock1 < 15) {
+                    if (InnerHTML[index - start_index] == " " || InnerHTML[index - start_index] == ">") {
+                        break;
+                    }
+                    else {
+                        clock1++;
+                        start_index++;
+                    }
+                    while (clock2 < 15) {
+                        if (InnerHTML[index + end_index] == " " || InnerHTML[index - start_index] == "<") {
+                            document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index, index + end_index);
+                            break;
+                        }
+                        else {
+                            clock2++;
+                            end_index--;
+
+                        }
+                        if (clock1 == 15 && clock2 == 15) {
+                            document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index, index + end_index);
+                        }
+
+
+
+
+
             occurrence ++;
             console.log(tick + "----" + index);
 
+
         }
         else {
+            
             //console.log('tag results found at ' + url);
             //setCookie("search",false,2);
             //window.location = "search.html";
@@ -346,13 +403,21 @@ function ajaxSearch (url, search,i,link_arr) {
     var tag_array = xhttp.responseXML.getElementsByTagName('main')[0].getElementsByTagName('*');
     var id_regexp = new RegExp(search,"ig");
     var id_occurrence = 0;
-    console.log(tag_array);
+    //console.log(tag_array);
     for (var i=0; i<tag_array.length; i++) {
         var bool_reg = id_regexp.test(tag_array[i].id);
         if (bool_reg) {
-            console.log('happy');
+            //console.log('happy');
             var search_id = tag_array[i].id;
+            document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " # " + search_id;
+            document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "ID Match";
+            if (document.getElementById(search_id).innerHTML.length <= 100) {            
+                document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = document.getElementById(search_id).innerHTML;}
+            else {
+                document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = document.getElementById(search_id).innerHTML.substring(0,100);
+            }
             id_occurrence ++;
+            occurrence ++;
         }
         if (i == (tag_array.length - 1)) {
             if (id_occurrence > 0) {console.log(id_occurrence + " id results found")}
@@ -364,12 +429,13 @@ function ajaxSearch (url, search,i,link_arr) {
         //class function
         var class_regexp = new RegExp(search,"ig");
         var class_occurrence = 0;
-        console.log(tag_array + "," + class_regexp);
+       // console.log(tag_array + "," + class_regexp);
         for (var i=0; i<tag_array.length; i++) {
             var bool_reg_class = class_regexp.test(tag_array[i].className);
             if (bool_reg_class) {
                 var search_class = tag_array[i].className;
                 class_occurrence ++;
+                occurrence ++;
             }
             if (i == (tag_array.length - 1)) {
                 if (class_occurrence > 0) {console.log(class_occurrence + " class results found")}
@@ -388,7 +454,7 @@ function ajaxSearch (url, search,i,link_arr) {
         //window.location = "search.html";
     }
 
-        }
+}
         else {console.log('link failed!'); //count="error";
     }
 
@@ -399,7 +465,8 @@ function ajaxSearch (url, search,i,link_arr) {
         document.cookie = "search=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
     }
-}
+    total_counts += occurrece;
+}}}}
 
 
 const signup = document.querySelector("#signupform");
