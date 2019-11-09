@@ -273,6 +273,12 @@ if (document.title == "Benjamin Tran | Search") {
         for (var i = 0; i < link_arr.length; i++) {
             ajaxSearch(link_arr[i], search, i, link_arr);
         }
+        var pages = ceil(total_counts/15);
+        var num_array = [];
+        for (var i=pages;i>0;i--) {
+            num_array.push(i);
+        }
+        document.getElementById('page_numbers').innerHTML = num_array.join(" | ");
     }
     else {
         document.getElementById('projects_title').innerHTML = "Search Something...";
