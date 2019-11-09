@@ -345,6 +345,7 @@ function ajaxSearch(url, search, i, link_arr) {
                             var clock = 0;
                             while (clock < (100- end_index + 15)) {
                                 if ((InnerHTML[index - clock] == " " && clock >= (100-end_index)) || InnerHTML[index - clock] == ">") {
+                                    console.log("break 1");
                                     document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - (clock -1), index + end_index) + "...";
                                     break;
                                 }
@@ -354,6 +355,7 @@ function ajaxSearch(url, search, i, link_arr) {
                                 }
                             }
                             if (clock == (100-end_index+15)) {
+                                console.log('break 2');
                                 document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - clock, index + end_index) + "...";
                             }
                         }
