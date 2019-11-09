@@ -278,7 +278,7 @@ if (document.title == "Benjamin Tran | Search") {
         for (var i=pages;i>0;i--) {
             num_array.push(i);
         }
-        document.getElementById('page_numbers').innerHTML = num_array.join(" | ");
+        document.getElementById('page_numbers').innerHTML = "<<  < " + num_array.join(" | ") + " >  >>";
     }
     else {
         document.getElementById('projects_title').innerHTML = "Search Something...";
