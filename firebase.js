@@ -458,7 +458,9 @@ function ajaxSearch(url, search, i, link_arr) {
 
 
 
-
+                            console.log(total_counts);
+                            console.log(occurrence);
+                            total_counts += occurrence;
                         }}
     else { console.log('no results found at ' + url); }}
                     
@@ -471,9 +473,6 @@ function ajaxSearch(url, search, i, link_arr) {
                         document.cookie = "search=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                     }
                 
-                console.log(total_counts);
-                console.log(occurrence);
-                total_counts += occurrence;
             }
 }
 
