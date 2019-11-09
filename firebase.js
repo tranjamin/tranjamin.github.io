@@ -258,8 +258,12 @@ if (document.title == "Benjamin Tran | Search") {
     var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
+    if (search) {
     for (var i=0;i<link_arr.length;i++) {
-        ajaxSearch(link_arr[i], search,i,link_arr);}
+        ajaxSearch(link_arr[i], search,i,link_arr);}}
+    else {
+        document.getElementById('projects_title').innerHTML = "Search Something...";
+    }
 }
 
 function ajaxSearch (url, search,i,link_arr) {
@@ -353,7 +357,7 @@ function ajaxSearch (url, search,i,link_arr) {
         console.log('search results');
         console.log(count);
         document.getElementById('projects_title').innerHTML = count;
-        //document.cookie = "search=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "search=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
     }
 }
