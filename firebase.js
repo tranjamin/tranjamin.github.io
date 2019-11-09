@@ -364,26 +364,28 @@ function ajaxSearch(url, search, i, link_arr) {
                             var clock2 = 0;
                             start_index = 50;
                             end_index = 50;
-                            while (clock1 < 15) {
-                                if (InnerHTML[index - start_index] == " " || InnerHTML[index - start_index] == ">") {
+                            while (clock1 < 65) {
+                                if ((InnerHTML[index - clock1] == " " && clock1 >= 50) || InnerHTML[index - clock1] == ">") {
+                                    start_index = clock1;
                                     break;
                                 }
                                 else {
                                     clock1++;
-                                    start_index++;
                                 }}
-                                while (clock2 < 15) {
-                                    if (InnerHTML[index + end_index] == " " || InnerHTML[index - start_index] == "<") {
-                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index, index + end_index);
+                                while (clock2 < 65) {
+                                    if ((InnerHTML[index + clock] == " " && clock2 >= 50) || InnerHTML[index + clock] == "<") {
+                                        end_index = clock2;
+                                        console.log('break 3');
+                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - start_index, index + end_index) + "...";
                                         break;
                                     }
                                     else {
                                         clock2++;
-                                        end_index--;
 
                                     }}
-                                    if (clock1 == 15 && clock2 == 15) {
-                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index, index + end_index);
+                                    if (clock1 == 65 && clock2 == 65) {
+                                        console.log('break 4');
+                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - 65, index + 65) + "...";
                                     }
 
 
