@@ -336,6 +336,7 @@ function ajaxSearch(url, search, i, link_arr) {
                         //setCookie("search",true,2);
                         //console.log('success at ' + url + " (" + num_includes + ")");
                         //window.location = "search.html";
+                        console.log('at the moment, ' + total_counts);
                         document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " | " + index;
                         document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "Literal Match";
                         if (end_index) {
