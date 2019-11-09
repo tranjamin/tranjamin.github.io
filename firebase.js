@@ -472,7 +472,7 @@ function ajaxSearch(url, search, i, link_arr) {
                     }
                 
 
-                total_counts += occurrece;
+                total_counts += occurrence;
             }
 }
 
