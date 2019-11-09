@@ -258,6 +258,7 @@ if (document.title == "Benjamin Tran | Search") {
     var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr =['index.html','about_me.html','projects.html','engineering.html','member_benefits.html','woodworking.html','architecture.html'];
+    if (loggedIn) {link_arr.unshift('member_benefits.html')}
     if (search) {
     for (var i=0;i<link_arr.length;i++) {
         ajaxSearch(link_arr[i], search,i,link_arr);}}
@@ -267,7 +268,7 @@ if (document.title == "Benjamin Tran | Search") {
 }
 
 function ajaxSearch (url, search,i,link_arr) {
-    console.log("i is: " + i);
+    //console.log("i is: " + i);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET",url,true);
     xhttp.responseType = 'document';
@@ -276,7 +277,7 @@ function ajaxSearch (url, search,i,link_arr) {
 
     xhttp.onreadystatechange = (i) => {
         if(xhttp.readyState == 4) {
-            console.log("i2e is: " + i);
+            //console.log("i2e is: " + i);
             console.log("link secured!");
             
     //console.log(xhttp);
@@ -341,6 +342,43 @@ function ajaxSearch (url, search,i,link_arr) {
             //setCookie("search",false,2);
             //window.location = "search.html";
     }
+    //id function
+    var tag_array = xhttp.responseXML.getElementsByTagName('main')[0].getElementsByTagName('*');
+    var id_regexp = new RegExp(search,"ig");
+    var id_occurrence;
+    console.log(tag_array + "," + id_regexp);
+    for (var i=0; i<tag_array.length; i++) {
+        var bool_reg = id_regexp.test(tag_array[i].id);
+        if (bool_reg) {
+            var search_id = tag_array[i].id;
+            id_occurrence ++;
+        }
+        if (i == (tag_array.length - 1)) {
+            if (id_occurrence) {console.log(id_occurrence + " id results found")}
+            else {console.log('no id results found')}
+        }
+    }
+
+
+        //class function
+        var class_regexp = new RegExp(search,"ig");
+        var class_occurrence;
+        console.log(tag_array + "," + class_regexp);
+        for (var i=0; i<tag_array.length; i++) {
+            var bool_reg_class = class_regexp.test(tag_array[i].className);
+            if (bool_reg_class) {
+                var search_class = tag_array[i].className;
+                class_occurrence ++;
+            }
+            if (i == (tag_array.length - 1)) {
+                if (class_occurrence) {console.log(class_occurrence + " id results found")}
+                else {console.log('no id results found')}
+            }
+        }
+
+
+
+
     }
     else {
         console.log('no results found at ' + url);
