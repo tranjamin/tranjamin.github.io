@@ -191,6 +191,7 @@ top: /*182px;*/ 163.5px; /* altered */
 }
 main {
 visibility: visible;
+height: 2000px;
 }
 #incorrectusername {
   position: absolute;
@@ -519,4 +520,34 @@ footer {
 .package {
   background-color: rgba(255,0,0,0.5);
   margin: 10px 10px;
+}
+.search-results {
+  margin-left: 1%;
+  margin-right: 1%;
+  background-color: rgba(255,255,255,0.4);
+  /*height: 1%;*/
+}
+.search-results h3 {
+  text-align: left;
+  margin: 1%;
+  font-family: 'Windlass';
+}
+.search-results p {
+  margin: 1%;
+}
+.search-results h6 {
+  margin: 1%;
+  text-align: right;
+}
+
+#page_numbers {
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  align-content: center;
+  margin: 1%;
+  text-align: center;
+  font-family: 'Lobster Two', cursive;
+  font-size: 20pt;
+  height: auto;
 }
