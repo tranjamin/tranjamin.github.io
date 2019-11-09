@@ -341,19 +341,18 @@ function ajaxSearch(url, search, i, link_arr) {
                         if (end_index) {
                             start_index = 100 - end_index;
                             var clock = 0;
-                            while (clock < 15) {
-                                if (InnerHTML[index - start_index] == " " || InnerHTML[index - start_index] == ">") {
-                                    document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index + 1, index + end_index);
+                            while (clock < (100- end_index + 15)) {
+                                if ((InnerHTML[index - clock] == " " && clock >= (100-end_index)) || InnerHTML[index - clock] == ">") {
+                                    document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - (clock -1), index + end_index) + "...";
                                     break;
                                 }
                                 else {
                                     clock++;
-                                    start_index--;
 
                                 }
                             }
-                            if (clock == 15) {
-                                document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = InnerHTML.substring(index - start_index, index + end_index);
+                            if (clock == (100-end_index+15)) {
+                                document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - clock, index + end_index) + "...";
                             }
                         }
                         else {
