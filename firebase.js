@@ -346,7 +346,7 @@ function ajaxSearch (url, search,i,link_arr) {
     }
 
         }
-        else {console.log('link failed!'); count="error";
+        else {console.log('link failed!'); //count="error";
     }
 
     if (xhttp.responseURL == "https://tranjamin.github.io/architecture.html") {
