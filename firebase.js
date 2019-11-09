@@ -345,7 +345,7 @@ function ajaxSearch (url, search,i,link_arr) {
     //id function
     var tag_array = xhttp.responseXML.getElementsByTagName('main')[0].getElementsByTagName('*');
     var id_regexp = new RegExp(search,"ig");
-    var id_occurrence;
+    var id_occurrence = 0;
     console.log(tag_array);
     for (var i=0; i<tag_array.length; i++) {
         var bool_reg = id_regexp.test(tag_array[i].id);
