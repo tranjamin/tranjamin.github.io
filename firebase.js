@@ -273,7 +273,7 @@ if (document.title == "Benjamin Tran | Search") {
         for (var i = 0; i < link_arr.length; i++) {
             ajaxSearch(link_arr[i], search, i, link_arr);
         }
-        var pages = ceil(total_counts/15);
+        var pages = Math.ceil(total_counts/15);
         var num_array = [];
         for (var i=pages;i>0;i--) {
             num_array.push(i);
