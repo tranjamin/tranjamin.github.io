@@ -264,7 +264,7 @@ document.getElementById("search-button").addEventListener('submit', e => {
 })
 
 if (document.title == "Benjamin Tran | Search") {
-    var total_counts;
+    var total_counts = 0;
     var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr = ['index.html', 'about_me.html', 'projects.html', 'engineering.html', 'member_benefits.html', 'woodworking.html', 'architecture.html'];
