@@ -337,8 +337,14 @@ function ajaxSearch(url, search, i, link_arr) {
                         //console.log('success at ' + url + " (" + num_includes + ")");
                         //window.location = "search.html";
                         console.log('at the moment, ' + total_counts);
+                        if (total_counts > 15) {
+                            var newElement = document.createElement("ARTICLE");
+                            newElement.className = "search-results";
+                            newElement.innerHTML = "<h3>Index.html</h3><p>Welcome to the blah blah blah</p><h6>Literal Match</h6>";
+                            document.getElementsByTagName('main')[0].appendChild(newElement);
+                        }
                         document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " | " + index;
-                        document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "Literal Match";
+                        document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "Literal Match" + total_counts;
                         document.getElementsByClassName('search-results')[total_counts].style.display = "block";
                         if (end_index) {
                             start_index = 100 - end_index;
@@ -381,7 +387,7 @@ function ajaxSearch(url, search, i, link_arr) {
                                     if ((InnerHTML[index + clock] == " " && clock2 >= 50) || InnerHTML[index + clock] == "<") {
                                         end_index = clock2;
                                         console.log('break 3');
-                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - start_index, index + end_index) + "...";
+                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - start_index +1, index + end_index) + "...";
                                         break;
                                     }
                                     else {
@@ -391,7 +397,7 @@ function ajaxSearch(url, search, i, link_arr) {
                                     }}
                                     if (clock2 == 65) {
                                         console.log('break 4');
-                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - start_index, index + 65) + "...";
+                                        document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = "..." + InnerHTML.substring(index - start_index+1, index + 65) + "...";
                                     }
 
 
@@ -433,7 +439,7 @@ function ajaxSearch(url, search, i, link_arr) {
                                     //console.log('happy');
                                     var search_id = tag_array[i].id;
                                     document.getElementsByClassName('search-results')[total_counts].firstChild.innerHTML = url + " # " + search_id;
-                                    document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "ID Match";
+                                    document.getElementsByClassName('search-results')[total_counts].lastChild.innerHTML = "ID Match" + total_counts;
                                     document.getElementsByClassName('search-results')[total_counts].style.display = "block";
                                     if (document.getElementById(search_id).innerHTML.length <= 100) {
                                         document.getElementsByClassName('search-results')[total_counts].childNodes[1].innerHTML = document.getElementById(search_id).innerHTML;
