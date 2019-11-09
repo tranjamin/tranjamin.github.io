@@ -265,7 +265,7 @@ document.getElementById("search-button").addEventListener('submit', e => {
 
 if (document.title == "Benjamin Tran | Search") {
     var page_number = 1;
-    var total_counts = 46;
+    var total_counts = 0;
     var count = "No Results Found :(";
     var search = getCookie('search');
     var link_arr = ['index.html', 'about_me.html', 'projects.html', 'engineering.html', 'member_benefits.html', 'woodworking.html', 'architecture.html'];
@@ -279,7 +279,7 @@ if (document.title == "Benjamin Tran | Search") {
         for (var i=pages;i>0;i--) {
             num_array.push(i);
         }
-        document.getElementById('page_numbers').innerHTML = "<a><<</a><a><</a> <a>" + num_array.join(" | ") + "</a> <a>></a>  <a>>></a>";
+        document.getElementById('page_numbers2').innerHTML = num_array.join(" | ");
     }
     else {
         document.getElementById('projects_title').innerHTML = "Search Something...";
