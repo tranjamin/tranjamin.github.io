@@ -75,14 +75,37 @@
 
 
 
-            <div class="topnav">
-                    <div class="search-container">
-                      <form action="/action_page.php">
-                        <input type="text" placeholder="Search.." name="search">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                      </form>
-                    </div>
-                  </div>
+            <li class="topnav">
+              <div class="search-container">
+                <form id="search-button">
+                  <input oninput="setCustomValidity('')" type="text" placeholder="Search.." name="search" id="input"
+                    pattern="^(?!((([Tt]his website ((is (bad|worse))|(sucks)))|([Bb]en('s website)? ((is (bad|worse))|sucks)))))(?!(\s*$))([^<>]{2,})$"
+                    oninvalid="displayErrorMessage();" style="overflow-x: scroll" required>
+                  <button type="submit"><i class="fa fa-search"></i></button>
+                  <script>
+                    function displayErrorMessage() {
+                      console.log('error');
+                      if (!document.getElementById('input').value) {
+                        document.getElementById('input').setCustomValidity("Please enter a keyword");
+                      }
+                      else if (document.getElementById('input').value.length < 2) {
+                          document.getElementById('input').setCustomValidity("Keywords must be at least 2 characters");
+                        }
+                      else if (document.getElementById('input').value.includes("<") || document.getElementById('input').value.includes(">")) {
+                          document.getElementById('input').setCustomValidity("Chevrons are not allowed");
+                        }
+                      else if (!document.getElementById('input').value.match(/\S/)) {
+                        document.getElementById('input').setCustomValidity("C'mon, please");
+                      }
+                      else {
+                          document.getElementById('input').setCustomValidity("Duck you");
+                      }
+                    }
+                    document.getElementById('search-button').addEventListener('submit',e=> {e.preventDefault();console.log('success')})
+                  </script>
+                </form>
+              </div>
+                  </li>
             </ul>
             <div class="achievement" style="display: none;" id="a1">20pts: I don't take Ideas from Scum <p style="font-size: 12px;">Click on Reuben's website then my title<p></div>
         <div class="achievement" style="display: none;" id="a2">40pts: Thanks for Signing Up! <p style="font-size: 12px;">Kinda self-explanatory<p></div>
