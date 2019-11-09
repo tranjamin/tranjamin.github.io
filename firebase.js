@@ -363,7 +363,7 @@ function ajaxSearch (url, search,i,link_arr) {
 
         //class function
         var class_regexp = new RegExp(search,"ig");
-        var class_occurrence;
+        var class_occurrence = 0;
         console.log(tag_array + "," + class_regexp);
         for (var i=0; i<tag_array.length; i++) {
             var bool_reg_class = class_regexp.test(tag_array[i].className);
@@ -372,8 +372,8 @@ function ajaxSearch (url, search,i,link_arr) {
                 class_occurrence ++;
             }
             if (i == (tag_array.length - 1)) {
-                if (class_occurrence) {console.log(class_occurrence + " id results found")}
-                else {console.log('no id results found')}
+                if (class_occurrence > 0) {console.log(class_occurrence + " class results found")}
+                else {console.log('no class results found')}
             }
         }
 
