@@ -348,9 +348,8 @@ function ajaxSearch (url, search,i,link_arr) {
         }
         else {console.log('link failed!'); count="error";
     }
-    console.log("i: " + i);
-    console.log("link_arr: " + link_arr);
-    if (i == (link_arr.length -1)) {
+
+    if (xhttp.responseURL == "https://tranjamin.github.io/architecture.html") {
         console.log('search results');
         console.log(count);
         document.getElementById('projects_title').innerHTML = count;
