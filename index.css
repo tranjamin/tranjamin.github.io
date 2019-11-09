@@ -551,4 +551,7 @@ footer {
   font-family: 'Lobster Two', cursive;
   font-size: 20pt;
   height: auto;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
 }
