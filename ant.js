@@ -1,4 +1,4 @@
-console.log('connection initiated')
+console.log('connection 2 initiated')
 var canvas = document.getElementById('canvas1');
 var ctx = canvas.getContext('2d');
 var pixel_width = 10;
