@@ -1,20 +1,20 @@
 console.log('connection initiated')
 var canvas = document.getElementById('canvas1');
 var ctx = canvas.getContext('2d');
-var pixel_width = 20;
+var pixel_width = 10;
 ctx.fillStyle = "#FF0000";
 var stopped = false;
-var iterations = 10000
+var iterations = 0.1;
+var pattern1 = 1
+var pattern2 = 1
+var pattern3 = 1
+var pattern4 = 1
+var random = false;
+var small = false;
+var interval;
 ctx.fillRect((canvas.width-pixel_width)/2,(canvas.height-pixel_width)/2,pixel_width,pixel_width);
 var array = [];
-for (var i=0; i<canvas.width/pixel_width;i++) {
-    var sub_array = []
-    for (var j=0; j<canvas.height/pixel_width;j++) {
-        sub_array.push(1);
-    }
-    array.push(sub_array);
-}
-var position = [(canvas.width+pixel_width)/(2*pixel_width),(canvas.height+pixel_width)/(2*pixel_width)];
+var position = [(canvas.width-pixel_width)/(2*pixel_width),(canvas.height-pixel_width)/(2*pixel_width)];
 var orientation = "up"
 var img = document.getElementById("image")
 
@@ -103,25 +103,52 @@ function moveTotal () {
 
 function repeat() 
 {
-var clock = 1
+    for (var i = 0; i < canvas.width / pixel_width; i++) {
+        var sub_array = []
+        for (var j = 0; j < canvas.height / pixel_width; j++) {
+            if (!random) {
+                if (i % 2 == 0) {
+                    if (j % 2 == 0) { sub_array.push(pattern1); }
+                    else { sub_array.push(pattern2); }
+                }
+                else {
+                    if (j % 2 == 0) { sub_array.push(pattern3); }
+                    else { sub_array.push(pattern4); }
+                }
+            }
+            else if (small) {
+                if ((i > Math.floor((canvas.width/pixel_width)/4) && i < Math.floor(3*((canvas.width/pixel_width)/4))) && (j > Math.floor((canvas.height/pixel_width)/4) && j < Math.floor(3*((canvas.height/pixel_width)/4)))) {sub_array.push(Math.round(Math.random()))}
+                else {sub_array.push(1)}
+            }
+            else { sub_array.push(Math.round(Math.random())) }
+        }
+        array.push(sub_array);
+    }
+    //interval = setInterval(moveTotal,10);
+/*var clock = 1
 while (clock <= iterations) {
     console.log(stopped)
+    var nothing = () => {console.log('nothing')}
     if (!stopped)
-{    setTimeout(moveTotal, 100);
+    setTimeout(nothing, 10000)
+    moveTotal();
+{    
     clock ++;
     if (!(clock % (iterations / 10))) {
         console.log(clock);
     }}
-}}
+}*/
+}
+
 
 document.getElementById('stop').addEventListener('submit', e=> {
     console.log('stopping')
     var element = document.getElementById('stop');
     e.preventDefault();
     if (element["stop_button"].value == "Stop") {
-    stopped = true; element["stop_button"].value = "Resume"}
+    stopped = true; element["stop_button"].value = "Resume";clearInterval(interval)}
     else if (element["stop_button"].value == "Resume") {
-    stopped = false; element["stop_button"].value = "Stop"}
+    stopped = false; element["stop_button"].value = "Stop";interval = setInterval(moveTotal,iterations);}
 })
 
 document.getElementById('go').addEventListener('submit', e=> {
@@ -138,5 +165,30 @@ document.getElementById('go').addEventListener('submit', e=> {
         canvas.width = int_num2 * pixel_width; }
     if (element2["repetitions"].value) { iterations = element2["repetitions"].value }
     element2.style.display = "none";
+    if (element2["pattern"].value) {
+        console.log(element2['pattern'].value)
+        switch (element2['pattern'].value) {
+            case "Criss-Cross":
+                pattern3 = 0;
+                break
+            case "Black Block":
+                pattern1 = 0;
+                pattern2 = 0;
+                pattern3 = 0;
+                pattern4 = 0;
+                break
+            case "Checkerboard":
+                pattern1 = 0;
+                pattern4 = 0;
+                break;
+            case "Random Centre":
+                small = true;
+            case "Random":
+                random = true;
+                break;
+        }
+    }
+    position = [(canvas.width-pixel_width)/(2*pixel_width),(canvas.height-pixel_width)/(2*pixel_width)];
     repeat();
+    interval = setInterval(moveTotal,iterations);
 })
