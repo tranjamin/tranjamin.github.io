@@ -67,7 +67,21 @@ if (document.title == "Benjamin Tran | Homepage") {
             break;
     }
 }
-
+function dropdown (e) {
+    e.preventDefault();
+    document.getElementById('highlight').removeAttribute("id");
+    e.target.parentElement.id = 'highlight';
+    var sub =  e.target.parentElement.childNodes[3];
+    console.log(sub);
+    if (sub.style.display == "none") {sub.style.display = "inline"}
+    else {sub.style.display = "none"}
+}
+if (document.title == "Benjamin Tran | Projects | Programming and Robotics") {
+    console.log('yes')
+    document.getElementById("drop-menu").childNodes[1].childNodes[1].getElementsByTagName('a')[0].addEventListener('click', e=> {dropdown(e)});
+    document.getElementById("drop-menu").childNodes[1].childNodes[3].getElementsByTagName('a')[0].addEventListener('click', e=> {dropdown(e)});
+    document.getElementById("drop-menu").childNodes[1].childNodes[5].getElementsByTagName('a')[0].addEventListener('click', e=> {dropdown(e)});
+}
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));

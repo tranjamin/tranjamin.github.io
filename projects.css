@@ -5,7 +5,7 @@
   src: url(Windlass.ttf) format('woff2');
 }
 html {
-  background-color: black;
+  background-color: rgb(209, 84, 0);
   /*background-attachment: fixed;*/
 }
 body {
@@ -21,7 +21,7 @@ top: /*10px;*/ 2px; /* altered */
 right: 20%;
 z-index: 2;
 line-height: 70px;
-color: /*darkred*/ black;
+color: /*darkred*/ /*black*/ rgb(221, 88, 0);
 display: inline-block;
 margin: none;
 padding: none;
@@ -33,17 +33,17 @@ white-space: nowrap;
   position: relative;
   top: -69px;
   position: fixed;
-  background-color: /*rgb(255, 123, 0)*/ rgb(255, 72, 0);
+  background-color: /*rgb(255, 123, 0)*/ /*rgb(255, 72, 0)*/ rgb(24, 21, 21);
   color: black;
   font-weight: bold;
   z-index: 1;
   width: 100%;
   text-align: center;
-  border-bottom: black solid 2pt;
+  border-bottom: /*black*/rgb(255, 72, 0) solid 2pt;
   border-top: black solid 1pt;
   font-family: 'Trajan Pro', 'Times New Roman', serif;
   font-size: 0.28rem;
-  color: black;
+  color: /*black*/rgb(255, 72, 0);
   height: 192px;
 }
 .header ul {
@@ -60,7 +60,31 @@ white-space: nowrap;
   position:relative;
   top: /*0px;*/ 14px; /* altered */;
 }
+#drop-menu {
+  position: absolute;
+  top: 16%; 
+  z-index: 1000;
+  background-color: black;
+  margin-right: 1%;
+  width: 11.5%;
+  padding-left: 0.5%;
+  color: white;
+  font-family: 'Work Sans', sans-serif;
+  text-indent: 2.5%;
+}
+.second-drop {
+  list-style-type: none;
+}
 
+#drop-menu ul li {
+  border-left: solid 3pt rgba(255,72,0,0.7);
+}
+#drop-menu ul #highlight {
+  border-left: solid 3pt rgba(255,72,0,1);
+}
+#drop-menu ul li ul {
+  border-left: none;
+}
 #currentPage{
   border-top: black solid 3px;
   width: 60px;
