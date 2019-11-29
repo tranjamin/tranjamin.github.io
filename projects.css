@@ -74,6 +74,12 @@ white-space: nowrap;
 }
 .second-drop {
   list-style-type: none;
+  margin-left: 6%;
+  width: 11.5%;
+  padding-left: 6.5%;
+  color: white;
+  font-family: 'Work Sans', sans-serif;
+  text-indent: 9.5%;
 }
 
 #drop-menu ul li {
