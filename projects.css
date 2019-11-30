@@ -80,6 +80,17 @@ white-space: nowrap;
   color: white;
   font-family: 'Work Sans', sans-serif;
   text-indent: 9.5%;
+  cursor: pointer;
+}
+#program_page:before {
+  content: "____";
+  color: rgba(0,0,0,0);
+  background-image: url('arrow.png');
+  background-size: cover;
+  background-position: right;
+  width: 10px;
+  position: relative;
+  right: 10px;
 }
 
 #drop-menu ul li {
@@ -91,6 +102,28 @@ white-space: nowrap;
 #drop-menu ul li ul {
   border-left: none;
 }
+#light p {
+  width: 3.5%;
+  height: 2pt;
+  background: linear-gradient(to right,rgb(206, 206, 206),rgb(100,100,100),rgb(206, 206, 206));
+  position: absolute;
+  right: 4.5%;
+  top: 13.75%;
+  z-index: 1000;
+}
+
+#light h1 {
+  transform: translateX(-50%) perspective(400px) rotateX(80deg);
+  transform-origin: top center;
+  background: linear-gradient(0deg, transparent,rgb(255, 208, 0) 60%,rgba(255, 238, 0, 0.6) 100%,rgba(255, 255, 255, 0.8) 100%);
+  width: 2.75%;
+  height: 40%;
+  position: absolute;
+  right: 3.45%;
+  top: 12%;
+}
+
+
 #currentPage{
   border-top: black solid 3px;
   width: 60px;

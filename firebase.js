@@ -76,11 +76,21 @@ function dropdown (e) {
     if (sub.style.display == "none") {sub.style.display = "inline"}
     else {sub.style.display = "none"}
 }
+function loadProgram (e) {
+    e.preventDefault();
+    try {document.getElementById('program_page').removeAttribute('id')}
+    catch (ValueError) {console.log('error')}
+    finally {e.target.id = "program_page"}
+}
 if (document.title == "Benjamin Tran | Projects | Programming and Robotics") {
     console.log('yes')
     document.getElementById("drop-menu").childNodes[1].childNodes[1].getElementsByTagName('a')[0].addEventListener('click', e=> {dropdown(e)});
     document.getElementById("drop-menu").childNodes[1].childNodes[3].getElementsByTagName('a')[0].addEventListener('click', e=> {dropdown(e)});
     document.getElementById("drop-menu").childNodes[1].childNodes[5].getElementsByTagName('a')[0].addEventListener('click', e=> {dropdown(e)});
+
+    document.getElementById("drop-menu").childNodes[1].childNodes[1].getElementsByTagName('ul')[0].getElementsByTagName('li')[0].addEventListener('click', e=> {loadProgram(e)});
+    document.getElementById("drop-menu").childNodes[1].childNodes[1].getElementsByTagName('ul')[0].getElementsByTagName('li')[1].addEventListener('click', e=> {loadProgram(e)});
+    document.getElementById("drop-menu").childNodes[1].childNodes[1].getElementsByTagName('ul')[0].getElementsByTagName('li')[2].addEventListener('click', e=> {loadProgram(e)});
 }
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
