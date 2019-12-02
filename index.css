@@ -23,7 +23,7 @@ top: /*10px;*/ 2px; /* altered */
 right: 20%;
 z-index: 2;
 line-height: 70px;
-color: /*darkred*/ black;
+color: /*darkred*/ rgb(224, 90, 0);
 display: inline-block;
 margin: none;
 padding: none;
@@ -35,17 +35,16 @@ white-space: nowrap;
   position: relative;
   top: -69px;
   position: fixed;
-  background-color: /*rgb(255, 123, 0)*/ rgb(255, 72, 0);
-  color: black;
+  background-color: black;
   font-weight: bold;
   z-index: 1;
   width: 100%;
   text-align: center;
-  border-bottom: black solid 2pt;
+  border-bottom: rgb(224, 90, 0) solid 2pt;
   border-top: black solid 1pt;
   font-family: 'Trajan Pro', 'Times New Roman', serif;
   font-size: 0.28rem;
-  color: black;
+  color: rgb(255, 115, 0);
   height: 192px;
 }
 .header ul {
@@ -80,7 +79,7 @@ white-space: nowrap;
   font-size: 0.28rem;  
   border: none;
   outline: none;
-  color: black;
+  color: rgb(255, 115, 0);
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit;
