@@ -76,7 +76,6 @@ body {
     position: absolute;
     width: 98%;
     visibility: hidden;
-<<<<<<< HEAD
 }
 
 #level_select {
@@ -112,6 +111,4 @@ body {
     left: 25%;
     width: 50%;
     z-index: 10
-=======
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 }

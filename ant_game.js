@@ -2,7 +2,6 @@ console.log('connection initiated');
 
 var canvas = document.getElementById('canvas1');
 var ctx = canvas.getContext('2d');
-<<<<<<< HEAD
 var current_level = 1;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height / 2;
 
@@ -15,14 +14,6 @@ var iit = it;
 
 
 
-=======
-var current_level = 6;
-document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height / 2;
-
-
-function level1(input_array)  {
-
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 //General Init
 ctx.fillStyle = "#FF0000";
 document.getElementById('resume').innerHTML = "<img src='resume.png'></img>";
@@ -35,11 +26,8 @@ canvas.height = Math.floor(window.innerHeight / squares * 0.98) * squares;
 canvas.width = canvas.height;
 var pixel_width = canvas.height / squares;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height/2;
-<<<<<<< HEAD
 document.getElementById('level_select').style.width =  canvas.width + "px";
 document.getElementById('level_select').style.height = canvas.height + "px";
-=======
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 
 var array = []
 for (var i=0; i < input_array[1].length; i++) {
@@ -52,28 +40,17 @@ for (var i=0; i < input_array[1].length; i++) {
 }  //---------------------------------------Vary-for-Levels---------------------------------------//
 //Person Init
 var person_width = 0.15 * pixel_width;
-<<<<<<< HEAD
 eval("var speed" + iit + " = input_array[2] * pixel_width / 64;") //---------------------------------------Vary-for-Levels---------------------------------------//
-=======
-var speed = input_array[2]; //---------------------------------------Vary-for-Levels---------------------------------------//
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 var person_position = [input_array[3],input_array[4]]; //--------------Vary-for-Levels------------------------//
 var started;
 var end = input_array[5]; //---------------------------------------Vary-for-Levels---------------------------------------//
 
 //Screen Update Init
 var stopped = false;
-<<<<<<< HEAD
 var iterations = input_array[6]; //---------------------------------------Vary-for-Levels---------------------------------------//
 eval("var interval" + iit);
 eval("var interval2" + iit);
 eval("var count" + iit + " = 5")
-=======
-var iterations = input_array[6] //---------------------------------------Vary-for-Levels---------------------------------------//
-var interval;
-var interval2;
-var count = 5;
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 var count_interval;
 var message_timeout;
 
@@ -93,13 +70,10 @@ var position = [input_array[8],input_array[9]]; //------------------------------
 var orientation = "up";
 var img = document.getElementById("image");
 
-<<<<<<< HEAD
 function instructions() {
 
 }
 
-=======
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 //Ant Moving Functions
 function moveRight() {
     switch (orientation) {
@@ -124,10 +98,7 @@ function moveRight() {
             break;
     }
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 function moveLeft() {
     switch (orientation) {
         case "up":
@@ -154,12 +125,8 @@ function moveLeft() {
 
 //Update Screen Functions
 function flipScreen() {
-<<<<<<< HEAD
     if ((iit + 1) == it)
     {ctx.clearRect(0, 0, canvas.width, canvas.height);
-=======
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
     for (var i = 0; i < array.length; i++) {
         for (var j = 0; j < array[0].length; j++) {
             if (array[i][j]) {
@@ -185,20 +152,12 @@ function flipScreen() {
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
     ctx.drawImage(img, position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
-<<<<<<< HEAD
     console.log(eval("speed" + iit))
 
     if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)])) {person_position[1] -= eval("speed" + iit)}
     if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width])) {person_position[1] += eval("speed" + iit);}
     if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1]])) {person_position[0] += eval("speed" + iit)}
     if (LEFT_DOWN && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1]])) {person_position[0] -= eval("speed" + iit)}
-=======
-
-    if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - speed])) {person_position[1] -= speed}
-    if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + speed + person_width])) {person_position[1] += speed;}
-    if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width + speed, person_position[1]])) {person_position[0] += speed}
-    if (LEFT_DOWN && pixelToSquareColour([person_position[0] - speed, person_position[1]])) {person_position[0] -= speed}
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
     if (SPACE_DOWN) {spacebar()}
     
 
@@ -207,18 +166,11 @@ function flipScreen() {
 
     if (collideAnt()) {lose()}
     
-<<<<<<< HEAD
     isWinning()}
 }
 
 function moveTotal() {
     if ((iit + 1) == it) {
-=======
-    isWinning()
-}
-
-function moveTotal() {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
     try {
     var colour = array[position[0]][position[1]];
     if (colour) {
@@ -231,7 +183,6 @@ function moveTotal() {
     }
 }
     catch (ValueError) {
-<<<<<<< HEAD
         document.getElementById('middle_text').style.visibility = "visible";
         eval ("document.getElementById('middle_text').innerHTML = count" + iit);
         if (eval("0 >= count" + iit)) {
@@ -242,38 +193,15 @@ function moveTotal() {
 
     }
 }}
-=======
-        console.log("offscreen")
-
-        //clearInterval(interval)
-        document.getElementById('middle_text').style.visibility = "visible";
-        document.getElementById('middle_text').innerHTML = count;
-        if (!count) {
-                document.getElementById('middle_text').style.visibility = "hidden";
-                lose()}
-        count -= 1;
-
-    }
-}
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 
 //Pausing/Starting Functions
 document.getElementById('stop').addEventListener('click', e => {
     var element = document.getElementById('stop');
-<<<<<<< HEAD
         stopped = true; 
         element.style.display = "none";
         overlay.style.display = "grid";
         window["interval2" + iit].pause();
         window["interval" + iit].pause();
-=======
-        console.log('stopping')
-        stopped = true; 
-        element.style.display = "none";
-        overlay.style.display = "grid";
-        clearInterval(interval2);
-        clearInterval(interval);
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
         document.getElementById('resume').style.display = "inline-block";
         document.getElementById('go').style.display = "inline-block";
         document.getElementById('levels').style.display = "inline-block";
@@ -282,39 +210,26 @@ document.getElementById('stop').addEventListener('click', e => {
         try {count_interval.pause() }
         catch (ValueError) { }
 })
-<<<<<<< HEAD
 
 document.getElementById('resume').addEventListener('click', e => {
     if (continual && iit + 1 == it) {
         window["interval" + iit].clear();
         window["interval2" + iit].clear();
-=======
-document.getElementById('resume').addEventListener('click', e => {
-    if (continual) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
         current_level += 1;
         level1(window["level_array" + current_level])
 
     }
     else {
-<<<<<<< HEAD
         //console.log("resuming")
         document.getElementById('stop').style.display = "inline"; 
         window["interval" + iit].resume();
         window["interval2" + iit].resume();
-=======
-        console.log("resuming")
-        document.getElementById('stop').style.display = "inline"; 
-        interval = setInterval(moveTotal, iterations);
-        interval2 = setInterval(flipScreen, 1 / 60);
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
         overlay.style.display = "none";
         try { accelerator.resume() }
         catch (ValueError) { }
         try { count_interval.resume() }
         catch (ValueError) { }
         stopped = false; 
-<<<<<<< HEAD
     }
 })
 
@@ -355,15 +270,6 @@ function start() {
     var element2 = document.getElementById('go');
     window["interval" + iit] = new Timer(moveTotal, iterations);
     window["interval2" + iit] = new Timer(flipScreen, 1 / 60);
-=======
-    }}
-)
-
-function start() {
-    var element2 = document.getElementById('go');
-    interval = setInterval(moveTotal, iterations);
-    interval2 = setInterval(flipScreen, 1 / 60);
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
     element2.style.display = "none";
     overlay.style.display = "none";
     document.getElementById('stop').style.display = "inline";
@@ -376,7 +282,6 @@ function start() {
     var person = ctx.fillRect((person_position[0] - 0.5) * pixel_width, (person_position[1] - 0.5) * pixel_width, person_width, person_width);
     person_position[0] = (person_position[0] - 0.5) * pixel_width
     person_position[1] = (person_position[1] - 0.5) * pixel_width
-<<<<<<< HEAD
     }}
 
 document.getElementById('go').addEventListener("click", e => {
@@ -388,17 +293,6 @@ document.getElementById('go').addEventListener("click", e => {
     try {accelerator.clear();} catch (Error) {}
     try {count_interval.clear();} catch (Error) {}
     level1(window["level_array" + current_level])}
-=======
-
-
-}
-
-document.getElementById('go').addEventListener("click", e => {
-    clearTimeout(message_timeout); 
-    clearInterval(interval); 
-    clearInterval(interval2);
-    level1(window["level_array" + current_level])
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 })
 
 //controls code
@@ -423,10 +317,7 @@ function two_arrays_equal(array_1, array_2) {
 }
 return returne
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 function array_includes(subject_arr, target_arr) {
     var returni = false;
     for (var i = 0; i < target_arr.length; i++) {
@@ -446,10 +337,6 @@ function spacebar() {
     else if ((person_position[1] % pixel_width) / pixel_width < 0.1) {space_person_position[1] -= 1; edging = true;}
     else if (((person_position[1]+person_width) % pixel_width / pixel_width) > 0.9) {space_person_position[1] += 1; edging = true;}
     if (swaps < allowed_swaps && edging) {
-<<<<<<< HEAD
-=======
-        console.log('swaps++')
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
         var change_target = [space_person_position[0],space_person_position[1]]
         if (!array_includes(change_target, blocked_swaps))
 {        if (array[change_target[0]-1][change_target[1]-1]) {array[change_target[0]-1][change_target[1]-1] = 0}
@@ -524,7 +411,6 @@ window.addEventListener("keydown", e => {
                 break
             case "m":
             case "z":
-<<<<<<< HEAD
                 if (iit+1 == it) {
                 if (accelerations < allowed_accelerations && !accelerated) {
                     accelerated = true;
@@ -545,24 +431,6 @@ window.addEventListener("keydown", e => {
                 e.preventDefault()
             case "s":
                 if (pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width])) {
-=======
-                if (accelerations < allowed_accelerations && !accelerated) {
-                    accelerated = true;
-                    console.log('accelerate');
-                    accelerate();
-                    accelerator = new Timer(decelerate, 5000)
-                    function decelerate() {
-                        accelerations++;
-                        accelerated = false;
-                        speed /= 2;
-                    }
-                }
-                break
-            case "ArrowDown":
-                e.preventDefault()
-            case "s":
-                if (pixelToSquareColour([person_position[0], person_position[1] + speed + person_width])) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
                     DOWN_DOWN = true;
                     DOWN_UP = false;
                 }
@@ -570,11 +438,7 @@ window.addEventListener("keydown", e => {
             case "ArrowUp":
                 e.preventDefault()
             case "w":
-<<<<<<< HEAD
                 if (pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)])) {
-=======
-                if (pixelToSquareColour([person_position[0], person_position[1] - speed])) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
                     UP_DOWN = true;
                     UP_UP = false;
                 }
@@ -582,11 +446,7 @@ window.addEventListener("keydown", e => {
             case "ArrowLeft":
                 e.preventDefault();
             case "a":
-<<<<<<< HEAD
                 if (pixelToSquareColour([person_position[0] -eval("speed" + iit), person_position[1]])) {
-=======
-                if (pixelToSquareColour([person_position[0] - speed, person_position[1]])) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
                     LEFT_DOWN = true;
                     LEFT_UP = false;
                 }
@@ -594,11 +454,7 @@ window.addEventListener("keydown", e => {
             case "ArrowRight":
                 e.preventDefault();
             case "d":
-<<<<<<< HEAD
                 if (pixelToSquareColour([person_position[0] + person_width + eval("speed" + iit), person_position[1]])) {
-=======
-                if (pixelToSquareColour([person_position[0] + person_width + speed, person_position[1]])) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
                     RIGHT_DOWN = true;
                     RIGHT_UP = false;
                 }
@@ -618,31 +474,9 @@ function pixelToSquareColour(array2) {
 }
 
 function accelerate() {
-<<<<<<< HEAD
     eval("speed" + iit + " *= 2") 
 }
 
-=======
-    speed *= 2; 
-}
-
-var Timer = function(callback, delay) {
-    var timerId, start, remaining = delay;
-
-    this.pause = function() {
-        window.clearTimeout(timerId);
-        remaining -= Date.now() - start;
-    };
-
-    this.resume = function() {
-        start = Date.now();
-        window.clearTimeout(timerId);
-        timerId = window.setTimeout(callback, remaining);
-    };
-
-    this.resume();
-};
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 
 
 //overlay code
@@ -719,17 +553,10 @@ function isWinning() {
 
     if (end_orientation == "horizontal") {
         if (((end[0]-1)*pixel_width < person_position[0]) && ((end[0])*pixel_width > (person_position[0]+person_width))) {
-<<<<<<< HEAD
             if (end[1] == 1 && (person_position[1]-eval("speed" + iit)) <= 0) {
                 win()
             }
             else if (end[1] == squares && (person_position[1]+eval("speed" + iit)+person_width) >= canvas.height) {
-=======
-            if (end[1] == 1 && (person_position[1]-speed) <= 0) {
-                win()
-            }
-            else if (end[1] == squares && (person_position[1]+speed+person_width) >= canvas.height) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
                 win()
             }
         }
@@ -737,19 +564,11 @@ function isWinning() {
     }
     else {
         if (((end[1]-1)*pixel_width < person_position[1]) && ((end[1])*pixel_width > (person_position[1]+person_width))) {
-<<<<<<< HEAD
             if (end[0] == 1 && (person_position[0]-eval("speed" + iit)) <= 0) {
 
                 win()
             }
             else if (end[0] == squares && (person_position[0]+eval("speed" + iit)+person_width) >= canvas.width) {
-=======
-            if (end[0] == 1 && (person_position[0]-speed) <= 0) {
-
-                win()
-            }
-            else if (end[0] == squares && (person_position[0]+speed+person_width) >= canvas.width) {
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
                 win()
             }
         }
@@ -765,10 +584,7 @@ function win() {
     document.getElementById('middle_text').style.visibility = "visible";
     document.getElementById('middle_text').innerHTML = "Success!";
     continual = true;
-<<<<<<< HEAD
     setCookie("level"+current_level,true,100000000000000000);
-=======
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
     var exists = !(typeof(window["level_array" + (current_level+1)]) == "undefined")
     if (!exists) {document.getElementById('resume').style.visibility = "hidden"}
 }
@@ -781,16 +597,10 @@ function lose() {
     document.getElementById('resume').removeEventListener('click', e => {}, false)
     
 }
-<<<<<<< HEAD
 if (iit == it)
 {start();}
 }
 
-=======
-
-start();
-}
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
 //var level_arrayx = [squares, array, speed, person_position_x,person_position_y, end, iterations, allowed accelerations, position_x,position_y, allowed_swaps, blocked_swaps]
 var level_array1 = [7, [
     [0, 0, 0, 0, 0, 0, 0],
@@ -865,7 +675,6 @@ var level_array6 = [15, [
     [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
     [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-<<<<<<< HEAD
 ], 0.4, 7,8, [15,3], 200, 4, 1,1,7, [[6,6],[6,7],[6,8],[6,9],[6,10],[7,6],[7,10],[8,5],[8,10],[9,6],[9,10],[9,6],[9,10],[10,6],[10,7],[10,8],[10,9],[10,10], [15,3]]]
 
 window.addEventListener('load', e=> {
@@ -934,10 +743,3 @@ function getCookie(cname) {
     }
     return "";
 }
-=======
-], 0.4, 7,8, [15,3], 200, 4, 1,1,6, [[6,6],[6,7],[6,8],[6,9],[6,10],[7,6],[7,10],[8,5],[8,10],[9,6],[9,10],[9,6],[9,10],[10,6],[10,7],[10,8],[10,9],[10,10]]]
-
-window.addEventListener('load', e=> {
-level1(window["level_array" + current_level]);
-})
->>>>>>> 9023729491b71a5eee6a740e38f7edbc1eed112c
