@@ -2,12 +2,13 @@
 <html>
     <head>
         <title>Langton's Ant Game</title>
-        <link type="text/css" href="ant_game.css" rel="stylesheet">
+        <link type="text/css" href="ant.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet"> 
     </head>
     <body>
         <canvas id="canvas1" style="border: black 2pt solid">
         </canvas>
+        <p id="instructions"></p>
         <div id="stop">| |</div>
         <p id="middle_text">5</p>
         <div id="overlay">
@@ -15,7 +16,18 @@
         <button id="resume"><img src='resume.png'></button>
         <button id="go"><img src='restart.png'></button>
         </div>
+        <div id="level_select" style="display:none" color="white">
+            <div class="level_button">1</div>
+            <div class="level_button">2</div>
+            <div class="level_button">3</div>
+            <div class="level_button">4</div>
+            <div class="level_button">5</div>
+            <div class="level_button">6</div>
+            <div class="level_button">7</div>
+            <div class="level_button">8</div>
+            <div class="level_button">9</div>
+        </div>
         <img src="https://www.raid.com/~/media/raid/bugs/ants/fire-ants/fire-ant-top-v.png?la=en-us?la=en-US" id="image" style="visibility: hidden;">
-        <script src="ant_game.js"></script>
+        <script src="ant.js"></script>
     </body>
 </html>

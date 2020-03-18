@@ -2,11 +2,17 @@ console.log('connection initiated');
 
 var canvas = document.getElementById('canvas1');
 var ctx = canvas.getContext('2d');
-var current_level = 6;
+var current_level = 1;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height / 2;
 
+var it = 0;
 
 function level1(input_array)  {
+
+
+var iit = it;
+
+
 
 //General Init
 ctx.fillStyle = "#FF0000";
@@ -20,6 +26,8 @@ canvas.height = Math.floor(window.innerHeight / squares * 0.98) * squares;
 canvas.width = canvas.height;
 var pixel_width = canvas.height / squares;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height/2;
+document.getElementById('level_select').style.width =  canvas.width + "px";
+document.getElementById('level_select').style.height = canvas.height + "px";
 
 var array = []
 for (var i=0; i < input_array[1].length; i++) {
@@ -32,17 +40,17 @@ for (var i=0; i < input_array[1].length; i++) {
 }  //---------------------------------------Vary-for-Levels---------------------------------------//
 //Person Init
 var person_width = 0.15 * pixel_width;
-var speed = input_array[2]; //---------------------------------------Vary-for-Levels---------------------------------------//
+eval("var speed" + iit + " = input_array[2] * pixel_width / 64;") //---------------------------------------Vary-for-Levels---------------------------------------//
 var person_position = [input_array[3],input_array[4]]; //--------------Vary-for-Levels------------------------//
 var started;
 var end = input_array[5]; //---------------------------------------Vary-for-Levels---------------------------------------//
 
 //Screen Update Init
 var stopped = false;
-var iterations = input_array[6] //---------------------------------------Vary-for-Levels---------------------------------------//
-var interval;
-var interval2;
-var count = 5;
+var iterations = input_array[6]; //---------------------------------------Vary-for-Levels---------------------------------------//
+eval("var interval" + iit);
+eval("var interval2" + iit);
+eval("var count" + iit + " = 5")
 var count_interval;
 var message_timeout;
 
@@ -61,6 +69,10 @@ var blocked_swaps = input_array[11];
 var position = [input_array[8],input_array[9]]; //-------------------------------Vary-for-Levels-------------------------------//
 var orientation = "up";
 var img = document.getElementById("image");
+
+function instructions() {
+
+}
 
 //Ant Moving Functions
 function moveRight() {
@@ -86,6 +98,7 @@ function moveRight() {
             break;
     }
 }
+
 function moveLeft() {
     switch (orientation) {
         case "up":
@@ -112,7 +125,8 @@ function moveLeft() {
 
 //Update Screen Functions
 function flipScreen() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if ((iit + 1) == it)
+    {ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (var i = 0; i < array.length; i++) {
         for (var j = 0; j < array[0].length; j++) {
             if (array[i][j]) {
@@ -138,11 +152,12 @@ function flipScreen() {
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
     ctx.drawImage(img, position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
+    console.log(eval("speed" + iit))
 
-    if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - speed])) {person_position[1] -= speed}
-    if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + speed + person_width])) {person_position[1] += speed;}
-    if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width + speed, person_position[1]])) {person_position[0] += speed}
-    if (LEFT_DOWN && pixelToSquareColour([person_position[0] - speed, person_position[1]])) {person_position[0] -= speed}
+    if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)])) {person_position[1] -= eval("speed" + iit)}
+    if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width])) {person_position[1] += eval("speed" + iit);}
+    if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1]])) {person_position[0] += eval("speed" + iit)}
+    if (LEFT_DOWN && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1]])) {person_position[0] -= eval("speed" + iit)}
     if (SPACE_DOWN) {spacebar()}
     
 
@@ -151,10 +166,11 @@ function flipScreen() {
 
     if (collideAnt()) {lose()}
     
-    isWinning()
+    isWinning()}
 }
 
 function moveTotal() {
+    if ((iit + 1) == it) {
     try {
     var colour = array[position[0]][position[1]];
     if (colour) {
@@ -167,28 +183,25 @@ function moveTotal() {
     }
 }
     catch (ValueError) {
-        console.log("offscreen")
-
-        //clearInterval(interval)
         document.getElementById('middle_text').style.visibility = "visible";
-        document.getElementById('middle_text').innerHTML = count;
-        if (!count) {
+        eval ("document.getElementById('middle_text').innerHTML = count" + iit);
+        if (eval("0 >= count" + iit)) {
                 document.getElementById('middle_text').style.visibility = "hidden";
                 lose()}
-        count -= 1;
+        else {
+            eval ("count" + iit + " -= 1")}
 
     }
-}
+}}
 
 //Pausing/Starting Functions
 document.getElementById('stop').addEventListener('click', e => {
     var element = document.getElementById('stop');
-        console.log('stopping')
         stopped = true; 
         element.style.display = "none";
         overlay.style.display = "grid";
-        clearInterval(interval2);
-        clearInterval(interval);
+        window["interval2" + iit].pause();
+        window["interval" + iit].pause();
         document.getElementById('resume').style.display = "inline-block";
         document.getElementById('go').style.display = "inline-block";
         document.getElementById('levels').style.display = "inline-block";
@@ -197,30 +210,66 @@ document.getElementById('stop').addEventListener('click', e => {
         try {count_interval.pause() }
         catch (ValueError) { }
 })
+
 document.getElementById('resume').addEventListener('click', e => {
-    if (continual) {
+    if (continual && iit + 1 == it) {
+        window["interval" + iit].clear();
+        window["interval2" + iit].clear();
         current_level += 1;
         level1(window["level_array" + current_level])
 
     }
     else {
-        console.log("resuming")
+        //console.log("resuming")
         document.getElementById('stop').style.display = "inline"; 
-        interval = setInterval(moveTotal, iterations);
-        interval2 = setInterval(flipScreen, 1 / 60);
+        window["interval" + iit].resume();
+        window["interval2" + iit].resume();
         overlay.style.display = "none";
         try { accelerator.resume() }
         catch (ValueError) { }
         try { count_interval.resume() }
         catch (ValueError) { }
         stopped = false; 
-    }}
-)
+    }
+})
+
+document.getElementById("levels").addEventListener('click', e => {
+    window["interval" + iit].clear();
+    window["interval2" + iit].clear();
+    try {accelerator.clear();} catch (Error) {}
+    try {count_interval.clear();} catch (Error) {}
+    document.getElementById('overlay').style.display = "none";
+    document.getElementById('level_select').style.display = "grid";
+
+})
+
+document.getElementById('level_select').addEventListener('click', e => {
+    if (parseInt(e.target.innerHTML)) {
+        current_level = parseInt(e.target.innerHTML);
+        if (typeof(window["level_array" + current_level]) == "object") {
+            if (current_level == 1 || getCookie("level"+current_level))
+            {document.getElementById('overlay').style.display = "none";
+            document.getElementById('level_select').style.display = "none";
+            level1(window["level_array" + current_level]);
+        }
+        else {
+            alert("Locked");
+        }
+    }
+        else {
+            alert("Coming Soon!");
+        }
+    }
+
+})
 
 function start() {
+    if (iit == it) {
+    it++;
+
     var element2 = document.getElementById('go');
-    interval = setInterval(moveTotal, iterations);
-    interval2 = setInterval(flipScreen, 1 / 60);
+    window["interval" + iit] = new Timer(moveTotal, iterations);
+    window["interval2" + iit] = new Timer(flipScreen, 1 / 60);
     element2.style.display = "none";
     overlay.style.display = "none";
     document.getElementById('stop').style.display = "inline";
@@ -233,15 +282,17 @@ function start() {
     var person = ctx.fillRect((person_position[0] - 0.5) * pixel_width, (person_position[1] - 0.5) * pixel_width, person_width, person_width);
     person_position[0] = (person_position[0] - 0.5) * pixel_width
     person_position[1] = (person_position[1] - 0.5) * pixel_width
-
-
-}
+    }}
 
 document.getElementById('go').addEventListener("click", e => {
+    if (iit+1 == it) {
+    document.getElementById('go').style.display = "none";
     clearTimeout(message_timeout); 
-    clearInterval(interval); 
-    clearInterval(interval2);
-    level1(window["level_array" + current_level])
+    window["interval" + iit].clear(); 
+    window["interval2" + iit].clear();
+    try {accelerator.clear();} catch (Error) {}
+    try {count_interval.clear();} catch (Error) {}
+    level1(window["level_array" + current_level])}
 })
 
 //controls code
@@ -266,6 +317,7 @@ function two_arrays_equal(array_1, array_2) {
 }
 return returne
 }
+
 function array_includes(subject_arr, target_arr) {
     var returni = false;
     for (var i = 0; i < target_arr.length; i++) {
@@ -285,7 +337,6 @@ function spacebar() {
     else if ((person_position[1] % pixel_width) / pixel_width < 0.1) {space_person_position[1] -= 1; edging = true;}
     else if (((person_position[1]+person_width) % pixel_width / pixel_width) > 0.9) {space_person_position[1] += 1; edging = true;}
     if (swaps < allowed_swaps && edging) {
-        console.log('swaps++')
         var change_target = [space_person_position[0],space_person_position[1]]
         if (!array_includes(change_target, blocked_swaps))
 {        if (array[change_target[0]-1][change_target[1]-1]) {array[change_target[0]-1][change_target[1]-1] = 0}
@@ -360,22 +411,26 @@ window.addEventListener("keydown", e => {
                 break
             case "m":
             case "z":
+                if (iit+1 == it) {
                 if (accelerations < allowed_accelerations && !accelerated) {
                     accelerated = true;
-                    console.log('accelerate');
+                    //console.log('accelerate');
                     accelerate();
-                    accelerator = new Timer(decelerate, 5000)
+                    accelerator = new Timeout(decelerate, 5000)
                     function decelerate() {
+                        console.log('decel')
                         accelerations++;
                         accelerated = false;
-                        speed /= 2;
+                        eval("speed" + iit + " /= 2")
                     }
-                }
+                }}
                 break
+            case "r":
+                document.getElementById('go').click();
             case "ArrowDown":
                 e.preventDefault()
             case "s":
-                if (pixelToSquareColour([person_position[0], person_position[1] + speed + person_width])) {
+                if (pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width])) {
                     DOWN_DOWN = true;
                     DOWN_UP = false;
                 }
@@ -383,7 +438,7 @@ window.addEventListener("keydown", e => {
             case "ArrowUp":
                 e.preventDefault()
             case "w":
-                if (pixelToSquareColour([person_position[0], person_position[1] - speed])) {
+                if (pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)])) {
                     UP_DOWN = true;
                     UP_UP = false;
                 }
@@ -391,7 +446,7 @@ window.addEventListener("keydown", e => {
             case "ArrowLeft":
                 e.preventDefault();
             case "a":
-                if (pixelToSquareColour([person_position[0] - speed, person_position[1]])) {
+                if (pixelToSquareColour([person_position[0] -eval("speed" + iit), person_position[1]])) {
                     LEFT_DOWN = true;
                     LEFT_UP = false;
                 }
@@ -399,7 +454,7 @@ window.addEventListener("keydown", e => {
             case "ArrowRight":
                 e.preventDefault();
             case "d":
-                if (pixelToSquareColour([person_position[0] + person_width + speed, person_position[1]])) {
+                if (pixelToSquareColour([person_position[0] + person_width + eval("speed" + iit), person_position[1]])) {
                     RIGHT_DOWN = true;
                     RIGHT_UP = false;
                 }
@@ -419,25 +474,9 @@ function pixelToSquareColour(array2) {
 }
 
 function accelerate() {
-    speed *= 2; 
+    eval("speed" + iit + " *= 2") 
 }
 
-var Timer = function(callback, delay) {
-    var timerId, start, remaining = delay;
-
-    this.pause = function() {
-        window.clearTimeout(timerId);
-        remaining -= Date.now() - start;
-    };
-
-    this.resume = function() {
-        start = Date.now();
-        window.clearTimeout(timerId);
-        timerId = window.setTimeout(callback, remaining);
-    };
-
-    this.resume();
-};
 
 
 //overlay code
@@ -514,10 +553,10 @@ function isWinning() {
 
     if (end_orientation == "horizontal") {
         if (((end[0]-1)*pixel_width < person_position[0]) && ((end[0])*pixel_width > (person_position[0]+person_width))) {
-            if (end[1] == 1 && (person_position[1]-speed) <= 0) {
+            if (end[1] == 1 && (person_position[1]-eval("speed" + iit)) <= 0) {
                 win()
             }
-            else if (end[1] == squares && (person_position[1]+speed+person_width) >= canvas.height) {
+            else if (end[1] == squares && (person_position[1]+eval("speed" + iit)+person_width) >= canvas.height) {
                 win()
             }
         }
@@ -525,11 +564,11 @@ function isWinning() {
     }
     else {
         if (((end[1]-1)*pixel_width < person_position[1]) && ((end[1])*pixel_width > (person_position[1]+person_width))) {
-            if (end[0] == 1 && (person_position[0]-speed) <= 0) {
+            if (end[0] == 1 && (person_position[0]-eval("speed" + iit)) <= 0) {
 
                 win()
             }
-            else if (end[0] == squares && (person_position[0]+speed+person_width) >= canvas.width) {
+            else if (end[0] == squares && (person_position[0]+eval("speed" + iit)+person_width) >= canvas.width) {
                 win()
             }
         }
@@ -545,6 +584,7 @@ function win() {
     document.getElementById('middle_text').style.visibility = "visible";
     document.getElementById('middle_text').innerHTML = "Success!";
     continual = true;
+    setCookie("level"+current_level,true,100000000000000000);
     var exists = !(typeof(window["level_array" + (current_level+1)]) == "undefined")
     if (!exists) {document.getElementById('resume').style.visibility = "hidden"}
 }
@@ -557,9 +597,10 @@ function lose() {
     document.getElementById('resume').removeEventListener('click', e => {}, false)
     
 }
-
-start();
+if (iit == it)
+{start();}
 }
+
 //var level_arrayx = [squares, array, speed, person_position_x,person_position_y, end, iterations, allowed accelerations, position_x,position_y, allowed_swaps, blocked_swaps]
 var level_array1 = [7, [
     [0, 0, 0, 0, 0, 0, 0],
@@ -634,8 +675,71 @@ var level_array6 = [15, [
     [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
     [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-], 0.4, 7,8, [15,3], 200, 4, 1,1,6, [[6,6],[6,7],[6,8],[6,9],[6,10],[7,6],[7,10],[8,5],[8,10],[9,6],[9,10],[9,6],[9,10],[10,6],[10,7],[10,8],[10,9],[10,10],[15,3]]]
+], 0.4, 7,8, [15,3], 200, 4, 1,1,7, [[6,6],[6,7],[6,8],[6,9],[6,10],[7,6],[7,10],[8,5],[8,10],[9,6],[9,10],[9,6],[9,10],[10,6],[10,7],[10,8],[10,9],[10,10], [15,3]]]
 
 window.addEventListener('load', e=> {
 level1(window["level_array" + current_level]);
 })
+
+var Timeout = function(callback, interval) {
+    var timerrId;
+    var start = new Date();
+    remaining = interval;
+
+    this.pause = function() {
+        window.clearTimeout(timerId);
+        remaining = interval - (new Date() - start);
+    }
+
+    this.resume = function() {
+        timerrId = setTimeout(callback, remaining)
+    }
+    this.resume();
+
+}
+
+var Timer = function(callback, interval) {
+    var timerId, start, remaining = 0;
+
+    this.pause = function() {
+        window.clearInterval(timerId);
+        remaining = interval - ((Date.now() - start) % interval);
+    };
+
+    this.resume = function() {
+        setTimeout(() => {
+        start = Date.now();
+        window.clearInterval(timerId);
+        callback()
+        timerId = window.setInterval(callback, interval)}, remaining)
+    };
+    this.clear = function() {
+        window.clearInterval(timerId);
+        delete this
+    }
+
+    this.resume();
+};
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
