@@ -75,10 +75,6 @@ var position = [input_array[8],input_array[9]]; //------------------------------
 var orientation = "up";
 var img = document.getElementById("image");
 
-function instructions() {
-
-}
-
 //Ant Moving Functions
 function moveRight() {
     switch (orientation) {
@@ -267,26 +263,6 @@ document.getElementById('level_select').addEventListener('click', e => {
 
 })
 
-function start() {
-    if (iit == it) {
-    it++;
-
-    var element2 = document.getElementById('go');
-    window["interval" + iit] = new Timer(moveTotal, iterations);
-    window["interval2" + iit] = new Timer(flipScreen, 1 / 60);
-    element2.style.display = "none";
-    overlay.style.display = "none";
-    document.getElementById('stop').style.display = "inline";
-    var started = true;
-
-    
-    //Draw Functions
-    ctx.fillStyle = "#FF0000"
-    ctx.fillRect((canvas.width - pixel_width) / 2, (canvas.height - pixel_width) / 2, pixel_width, pixel_width);
-    var person = ctx.fillRect((person_position[0] - 0.5) * pixel_width, (person_position[1] - 0.5) * pixel_width, person_width, person_width);
-    person_position[0] = (person_position[0] - 0.5) * pixel_width
-    person_position[1] = (person_position[1] - 0.5) * pixel_width
-    }}
 
 document.getElementById('go').addEventListener("click", e => {
     if (iit+1 == it) {
@@ -601,8 +577,64 @@ function lose() {
     document.getElementById('resume').removeEventListener('click', e => {}, false)
     
 }
-if (iit == it)
-{start();}
+
+function start() {
+if (iit == it) {
+    it++;
+
+    ctx.fillStyle = "#FF0000"
+    ctx.fillRect((canvas.width - pixel_width) / 2, (canvas.height - pixel_width) / 2, pixel_width, pixel_width);
+    var person = ctx.fillRect((person_position[0] - 0.5) * pixel_width, (person_position[1] - 0.5) * pixel_width, person_width, person_width);
+    person_position[0] = (person_position[0] - 0.5) * pixel_width
+    person_position[1] = (person_position[1] - 0.5) * pixel_width
+    flipScreen();
+    var element2 = document.getElementById('go');
+    element2.style.display = "none";
+    overlay.style.display = "none";
+    document.getElementById('stop').style.display = "inline";
+    started = true;
+
+    var instructions = document.getElementById("instructions")
+
+    switch (current_level) {
+    case 1:
+        instructions.style.display = "initial";
+        instructions.innerHTML = "Use the arrow keys or WASD to move your character through the maze. You can only move on white squares. <br><button id='next_instruction'>Next</button>";
+        instructions.lastChild.addEventListener('click', () => {
+            instructions.innerHTML = "The ant will move around the board. Don't let it eat you! <br><button id='next_instruction'>Next</button>";
+            instructions.lastChild.addEventListener('click', () => {
+                instructions.innerHTML = "The ant switches the colour of the tile its is on before moving forwards.<br><button id='next_instruction'>Next</button>";
+                instructions.lastChild.addEventListener('click', () => {
+                    instructions.innerHTML = "If it lands on a white square, it turns right. If it is on black, it turns left. <br><button id='next_instruction'>Next</button>";
+                    instructions.lastChild.addEventListener('click', () => {
+                        instructions.innerHTML = "After the ant leaves the board, get to the green tile before the time runs out! <br><button id='next_instruction'>Go</button>";
+                        instructions.lastChild.addEventListener('click', drawFunction);
+                    })
+                })
+            })
+        })
+        break;
+    case 2:
+        instructions.style.display = "initial";
+        instructions.innerHTML = "Feeling a bit retarded? Press z or m to double your speed for 5s. <br><button id='next_instruction'>Go</button>";
+        instructions.lastChild.addEventListener('click', drawFunction);        
+
+    case 3:
+        instructions.style.display = "initial";
+        instructions.innerHTML = "Press space as you approach a block to switch its colour. <br><button id='next_instruction'>Go</button>";
+        instructions.lastChild.addEventListener('click', drawFunction);    
+    }
+}
+  
+
+
+    function drawFunction() {
+    document.getElementById("instructions").style.display = "none";
+    window["interval" + iit] = new Timer(moveTotal, iterations);
+    window["interval2" + iit] = new Timer(flipScreen, 1 / 60);}
+
+}
+start()
 }
 
 //var level_arrayx = [squares, array, speed, person_position_x,person_position_y, end, iterations, allowed accelerations, position_x,position_y, allowed_swaps, blocked_swaps]
