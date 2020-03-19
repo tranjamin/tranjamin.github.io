@@ -533,29 +533,16 @@ function isWinning() {
 
     if (end_orientation == "horizontal") {
         if (((end[0]-1)*pixel_width < person_position[0]) && ((end[0])*pixel_width > (person_position[0]+person_width))) {
-            if (end[1] == 1 && (person_position[1]-eval("speed" + iit)) <= 0) {
-                win()
-            }
+            if (end[1] == 1 && (person_position[1]-eval("speed" + iit)) <= 0) {win()}
             else if (end[1] == squares && (person_position[1]+eval("speed" + iit)+person_width) >= canvas.height) {
-                win()
-            }
-        }
-
-    }
+                win()}}}
     else {
         if (((end[1]-1)*pixel_width < person_position[1]) && ((end[1])*pixel_width > (person_position[1]+person_width))) {
             if (end[0] == 1 && (person_position[0]-eval("speed" + iit)) <= 0) {
-
-                win()
-            }
+                win()}
             else if (end[0] == squares && (person_position[0]+eval("speed" + iit)+person_width) >= canvas.width) {
-                win()
+                win()}}}
             }
-        }
-
-    }
-}
-
 
 function win() {
     document.getElementById('stop').click();
@@ -566,17 +553,14 @@ function win() {
     continual = true;
     setCookie("level"+current_level,true,100000000000000000);
     var exists = !(typeof(window["level_array" + (current_level+1)]) == "undefined")
-    if (!exists) {document.getElementById('resume').style.visibility = "hidden"}
-}
+    if (!exists) {document.getElementById('resume').style.visibility = "hidden"}}
 
 function lose() {
     document.getElementById('stop').click();
     document.getElementById('resume').innerHTML = "YOU WON...";
     message_timeout = setTimeout(fun, 3000)
     function fun() {    document.getElementById('resume').innerHTML = "LAST PLACE";}
-    document.getElementById('resume').removeEventListener('click', e => {}, false)
-    
-}
+    document.getElementById('resume').removeEventListener('click', e => {}, false)}
 
 function start() {
 if (iit == it) {
@@ -608,32 +592,25 @@ if (iit == it) {
                     instructions.innerHTML = "If it lands on a white square, it turns right. If it is on black, it turns left. <br><button id='next_instruction'>Next</button>";
                     instructions.lastChild.addEventListener('click', () => {
                         instructions.innerHTML = "After the ant leaves the board, get to the green tile before the time runs out! <br><button id='next_instruction'>Go</button>";
-                        instructions.lastChild.addEventListener('click', drawFunction);
-                    })
-                })
-            })
-        })
+                        instructions.lastChild.addEventListener('click', drawFunction);})})})})
         break;
     case 2:
         instructions.style.display = "initial";
         instructions.innerHTML = "Feeling a bit retarded? Press z or m to double your speed for 5s. <br><button id='next_instruction'>Go</button>";
-        instructions.lastChild.addEventListener('click', drawFunction);        
-
+        instructions.lastChild.addEventListener('click', drawFunction);       
+        break;
     case 3:
         instructions.style.display = "initial";
         instructions.innerHTML = "Press space as you approach a block to switch its colour. <br><button id='next_instruction'>Go</button>";
         instructions.lastChild.addEventListener('click', drawFunction);    
-    }
-}
-  
-
+        break;
+    }}}
 
     function drawFunction() {
     document.getElementById("instructions").style.display = "none";
     window["interval" + iit] = new Timer(moveTotal, iterations);
     window["interval2" + iit] = new Timer(flipScreen, 1 / 60);}
 
-}
 start()
 }
 
