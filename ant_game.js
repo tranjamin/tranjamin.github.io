@@ -22,8 +22,13 @@ var continual = false;
 
 //Square Init
 var squares = input_array[0]; //---------------------------------------Vary-for-Levels---------------------------------------//
-canvas.height = Math.floor(window.innerHeight / squares * 0.98) * squares;
-canvas.width = canvas.height;
+if (window.innerHeight < window.innerWidth) {
+    canvas.height = Math.floor(window.innerHeight / squares * 0.98) * squares;
+canvas.width = canvas.height;}
+else {
+    canvas.width = Math.floor(window.innerWidth / squares * 0.98) * squares;
+canvas.height = canvas.width;
+}
 var pixel_width = canvas.height / squares;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height/2;
 document.getElementById('level_select').style.width =  canvas.width + "px";
@@ -152,12 +157,11 @@ function flipScreen() {
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
     ctx.drawImage(img, position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
-    console.log(eval("speed" + iit))
 
-    if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)])) {person_position[1] -= eval("speed" + iit)}
-    if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width])) {person_position[1] += eval("speed" + iit);}
-    if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1]])) {person_position[0] += eval("speed" + iit)}
-    if (LEFT_DOWN && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1]])) {person_position[0] -= eval("speed" + iit)}
+    if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)]) && pixelToSquareColour([person_position[0] + person_width, person_position[1] - eval("speed" + iit)])) {person_position[1] -= eval("speed" + iit)}
+    if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width]) && pixelToSquareColour([person_position[0] + person_width, person_position[1] + eval("speed" + iit) + person_width])) {person_position[1] += eval("speed" + iit);}
+    if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1]]) && pixelToSquareColour([person_position[0] +eval("speed" + iit), person_position[1]])) {person_position[0] += eval("speed" + iit)}
+    if (LEFT_DOWN && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1]]) && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1] + person_width])) {person_position[0] -= eval("speed" + iit)}
     if (SPACE_DOWN) {spacebar()}
     
 
