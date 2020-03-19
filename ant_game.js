@@ -601,7 +601,7 @@ if (iit == it) {
         instructions.style.display = "initial";
         instructions.innerHTML = "Use the arrow keys or WASD to move your character through the maze. You can only move on white squares. <br><button id='next_instruction'>Next</button>";
         instructions.lastChild.addEventListener('click', () => {
-            instructions.innerHTML = "The ant will move around the board. Don't let it eat you! <br><button id='next_instruction'>Next</button>";
+            instructions.innerHTML = "The ant will move around the board. Don't let it eat you! _______________________________________<br><button id='next_instruction'>Next</button>";
             instructions.lastChild.addEventListener('click', () => {
                 instructions.innerHTML = "The ant switches the colour of the tile its is on before moving forwards.<br><button id='next_instruction'>Next</button>";
                 instructions.lastChild.addEventListener('click', () => {
