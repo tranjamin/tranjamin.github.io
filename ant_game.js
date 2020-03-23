@@ -635,6 +635,13 @@ function start2() {
             instructions.innerHTML = "Press space as you approach a block to switch its colour. <br><button id='next_instruction'>Go</button>";
             instructions.lastChild.addEventListener('click', drawFunction);    
             break;
+        case 4:
+            instructions.style.display = "initial";
+            instructions.innerHTML = "You cannot switch the colour of a brown-edged block. <br><button id='next_instruction'>Go</button>";
+            instructions.lastChild.addEventListener('click', drawFunction);    
+            break;
+        default:
+            drawFunction();
         }
         
     }}
