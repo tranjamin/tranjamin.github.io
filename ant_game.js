@@ -22,13 +22,8 @@ var continual = false;
 
 //Square Init
 var squares = input_array[0]; //---------------------------------------Vary-for-Levels---------------------------------------//
-if (window.innerHeight < window.innerWidth) {
-    canvas.height = Math.floor(window.innerHeight / squares * 0.98) * squares;
-canvas.width = canvas.height;}
-else {
-    canvas.width = Math.floor(window.innerWidth / squares * 0.98) * squares;
-canvas.height = canvas.width;
-}
+canvas.height = Math.floor(window.innerHeight / squares * 0.98) * squares;
+canvas.width = canvas.height;
 var pixel_width = canvas.height / squares;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height/2;
 document.getElementById('level_select').style.width =  canvas.width + "px";
@@ -74,6 +69,10 @@ var blocked_swaps = input_array[11];
 var position = [input_array[8],input_array[9]]; //-------------------------------Vary-for-Levels-------------------------------//
 var orientation = "up";
 var img = document.getElementById("image");
+
+function instructions() {
+
+}
 
 //Ant Moving Functions
 function moveRight() {
@@ -153,11 +152,30 @@ function flipScreen() {
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
     ctx.drawImage(img, position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
+    console.log(eval("speed" + iit))
 
-    if (UP_DOWN && pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)]) && pixelToSquareColour([person_position[0] + person_width, person_position[1] - eval("speed" + iit)])) {person_position[1] -= eval("speed" + iit)}
-    if (DOWN_DOWN && pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width]) && pixelToSquareColour([person_position[0] + person_width, person_position[1] + eval("speed" + iit) + person_width])) {person_position[1] += eval("speed" + iit);}
-    if (RIGHT_DOWN && pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1]]) && pixelToSquareColour([person_position[0] +eval("speed" + iit), person_position[1]])) {person_position[0] += eval("speed" + iit)}
-    if (LEFT_DOWN && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1]]) && pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1] + person_width])) {person_position[0] -= eval("speed" + iit)}
+    if (
+        UP_DOWN && 
+        pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)]) &&
+        pixelToSquareColour([person_position[0] + person_width, person_position[1] - eval("speed" + iit)])              
+        ) {person_position[1] -= eval("speed" + iit)}
+
+    if (
+        DOWN_DOWN && 
+        pixelToSquareColour([person_position[0], person_position[1] + eval("speed" + iit) + person_width]) &&
+        pixelToSquareColour([person_position[0] + person_width, person_position[1] + eval("speed" + iit) + person_width])
+        ) {person_position[1] += eval("speed" + iit);}
+
+    if (
+        RIGHT_DOWN && 
+        pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1]]) &&
+        pixelToSquareColour([person_position[0] + person_width +eval("speed" + iit), person_position[1] + person_width])
+        ) {person_position[0] += eval("speed" + iit)}
+
+    if (LEFT_DOWN && 
+        pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1]]) && 
+        pixelToSquareColour([person_position[0] - eval("speed" + iit), person_position[1] + person_width])
+        ) {person_position[0] -= eval("speed" + iit)}
     if (SPACE_DOWN) {spacebar()}
     
 
@@ -262,7 +280,6 @@ document.getElementById('level_select').addEventListener('click', e => {
     }
 
 })
-
 
 document.getElementById('go').addEventListener("click", e => {
     if (iit+1 == it) {
@@ -533,16 +550,29 @@ function isWinning() {
 
     if (end_orientation == "horizontal") {
         if (((end[0]-1)*pixel_width < person_position[0]) && ((end[0])*pixel_width > (person_position[0]+person_width))) {
-            if (end[1] == 1 && (person_position[1]-eval("speed" + iit)) <= 0) {win()}
+            if (end[1] == 1 && (person_position[1]-eval("speed" + iit)) <= 0) {
+                win()
+            }
             else if (end[1] == squares && (person_position[1]+eval("speed" + iit)+person_width) >= canvas.height) {
-                win()}}}
+                win()
+            }
+        }
+
+    }
     else {
         if (((end[1]-1)*pixel_width < person_position[1]) && ((end[1])*pixel_width > (person_position[1]+person_width))) {
             if (end[0] == 1 && (person_position[0]-eval("speed" + iit)) <= 0) {
-                win()}
-            else if (end[0] == squares && (person_position[0]+eval("speed" + iit)+person_width) >= canvas.width) {
-                win()}}}
+
+                win()
             }
+            else if (end[0] == squares && (person_position[0]+eval("speed" + iit)+person_width) >= canvas.width) {
+                win()
+            }
+        }
+
+    }
+}
+
 
 function win() {
     document.getElementById('stop').click();
@@ -553,65 +583,73 @@ function win() {
     continual = true;
     setCookie("level"+current_level,true,100000000000000000);
     var exists = !(typeof(window["level_array" + (current_level+1)]) == "undefined")
-    if (!exists) {document.getElementById('resume').style.visibility = "hidden"}}
+    if (!exists) {document.getElementById('resume').style.visibility = "hidden"}
+}
 
 function lose() {
     document.getElementById('stop').click();
     document.getElementById('resume').innerHTML = "YOU WON...";
     message_timeout = setTimeout(fun, 3000)
     function fun() {    document.getElementById('resume').innerHTML = "LAST PLACE";}
-    document.getElementById('resume').removeEventListener('click', e => {}, false)}
+    document.getElementById('resume').removeEventListener('click', e => {}, false)
+    
+}
 
-function start() {
-if (iit == it) {
-    it++;
+function start2() {
+    if (iit == it) {
+        it++;
+    
+        ctx.fillStyle = "#FF0000"
+        ctx.fillRect((canvas.width - pixel_width) / 2, (canvas.height - pixel_width) / 2, pixel_width, pixel_width);
+        var person = ctx.fillRect((person_position[0] - 0.5) * pixel_width, (person_position[1] - 0.5) * pixel_width, person_width, person_width);
+        person_position[0] = (person_position[0] - 0.5) * pixel_width
+        person_position[1] = (person_position[1] - 0.5) * pixel_width
+        flipScreen();
+        var element2 = document.getElementById('go');
+        element2.style.display = "none";
+        overlay.style.display = "none";
+    
+        var instructions = document.getElementById("instructions")
 
-    ctx.fillStyle = "#FF0000"
-    ctx.fillRect((canvas.width - pixel_width) / 2, (canvas.height - pixel_width) / 2, pixel_width, pixel_width);
-    var person = ctx.fillRect((person_position[0] - 0.5) * pixel_width, (person_position[1] - 0.5) * pixel_width, person_width, person_width);
-    person_position[0] = (person_position[0] - 0.5) * pixel_width
-    person_position[1] = (person_position[1] - 0.5) * pixel_width
-    flipScreen();
-    var element2 = document.getElementById('go');
-    element2.style.display = "none";
-    overlay.style.display = "none";
-    document.getElementById('stop').style.display = "inline";
-    started = true;
-
-    var instructions = document.getElementById("instructions")
-
-    switch (current_level) {
-    case 1:
-        instructions.style.display = "initial";
-        instructions.innerHTML = "Use the arrow keys or WASD to move your character through the maze. You can only move on white squares. <br><button id='next_instruction'>Next</button>";
-        instructions.lastChild.addEventListener('click', () => {
-            instructions.innerHTML = "The ant will move around the board. Don't let it eat you! _______________________________________<br><button id='next_instruction'>Next</button>";
+        switch (current_level) {
+        case 1:
+            instructions.style.display = "initial";
+            instructions.innerHTML = "Use the arrow keys or WASD to move your character through the maze. You can only move on white squares. <br><button id='next_instruction'>Next</button>";
             instructions.lastChild.addEventListener('click', () => {
-                instructions.innerHTML = "The ant switches the colour of the tile its is on before moving forwards.<br><button id='next_instruction'>Next</button>";
+                instructions.innerHTML = "The ant will move around the board. Don't let it eat you! _______________________________________<br><button id='next_instruction'>Next</button>";
                 instructions.lastChild.addEventListener('click', () => {
-                    instructions.innerHTML = "If it lands on a white square, it turns right. If it is on black, it turns left. <br><button id='next_instruction'>Next</button>";
+                    instructions.innerHTML = "The ant switches the colour of the tile its is on before moving forwards.<br><button id='next_instruction'>Next</button>";
                     instructions.lastChild.addEventListener('click', () => {
-                        instructions.innerHTML = "After the ant leaves the board, get to the green tile before the time runs out! <br><button id='next_instruction'>Go</button>";
-                        instructions.lastChild.addEventListener('click', drawFunction);})})})})
-        break;
-    case 2:
-        instructions.style.display = "initial";
-        instructions.innerHTML = "Feeling a bit retarded? Press z or m to double your speed for 5s. <br><button id='next_instruction'>Go</button>";
-        instructions.lastChild.addEventListener('click', drawFunction);       
-        break;
-    case 3:
-        instructions.style.display = "initial";
-        instructions.innerHTML = "Press space as you approach a block to switch its colour. <br><button id='next_instruction'>Go</button>";
-        instructions.lastChild.addEventListener('click', drawFunction);    
-        break;
-    }}}
+                        instructions.innerHTML = "If it lands on a white square, it turns right. If it is on black, it turns left. <br><button id='next_instruction'>Next</button>";
+                        instructions.lastChild.addEventListener('click', () => {
+                            instructions.innerHTML = "After the ant leaves the board, get to the green tile before the time runs out! <br><button id='next_instruction'>Go</button>";
+                            instructions.lastChild.addEventListener('click', drawFunction);})})})})
+            break;
+        case 2:
+            instructions.style.display = "initial";
+            instructions.innerHTML = "Feeling a bit retarded? Press z or m to double your speed for 5s. <br><button id='next_instruction'>Go</button>";
+            instructions.lastChild.addEventListener('click', drawFunction);       
+            break;
+        case 3:
+            instructions.style.display = "initial";
+            instructions.innerHTML = "Press space as you approach a block to switch its colour. <br><button id='next_instruction'>Go</button>";
+            instructions.lastChild.addEventListener('click', drawFunction);    
+            break;
+        }
+        
+    }}
 
+    
     function drawFunction() {
+    var started = true;
     document.getElementById("instructions").style.display = "none";
+    document.getElementById('stop').style.display = "initial"
     window["interval" + iit] = new Timer(moveTotal, iterations);
     window["interval2" + iit] = new Timer(flipScreen, 1 / 60);}
 
-start()
+
+start2()
+
 }
 
 //var level_arrayx = [squares, array, speed, person_position_x,person_position_y, end, iterations, allowed accelerations, position_x,position_y, allowed_swaps, blocked_swaps]
@@ -756,3 +794,5 @@ function getCookie(cname) {
     }
     return "";
 }
+
+
