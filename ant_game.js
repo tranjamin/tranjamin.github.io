@@ -68,7 +68,6 @@ var blocked_swaps = input_array[11];
 //Ant Init
 var position = [input_array[8],input_array[9]]; //-------------------------------Vary-for-Levels-------------------------------//
 var orientation = "up";
-var img = document.getElementById("image");
 
 function instructions() {
 
@@ -127,6 +126,7 @@ function moveLeft() {
 function flipScreen() {
     if ((iit + 1) == it)
     {ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     for (var i = 0; i < array.length; i++) {
         for (var j = 0; j < array[0].length; j++) {
             if (array[i][j]) {
@@ -151,9 +151,26 @@ function flipScreen() {
     }
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
-    ctx.drawImage(img, position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
-    console.log(eval("speed" + iit))
+    ctx.drawImage(document.getElementById('image'), position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
 
+    console.log(orientation)
+    switch (orientation) {
+        case "up":
+            break;
+        case "down":
+            document.getElementById('image').setAttribute('style', 'transform:rotate(180deg)');
+            ctx.rotate(Math.PI)
+            break;
+        case "right":
+            document.getElementById('image').setAttribute('style', 'transform:rotate(90deg)');
+            ctx.rotate(Math.PI/2)
+            break;
+        case "left":
+            document.getElementById('image').setAttribute('style', 'transform:rotate(270deg)');
+            ctx.rotate(3*Math.PI/2)
+            break;
+    }    
+    
     if (
         UP_DOWN && 
         pixelToSquareColour([person_position[0], person_position[1] - eval("speed" + iit)]) &&
