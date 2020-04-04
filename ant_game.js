@@ -155,8 +155,11 @@ function flipScreen() {
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
     //ctx.drawImage(document.getElementById('image'), position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
 
+    image = new Image();  
+    image.src = "https://www.raid.com/~/media/raid/bugs/ants/fire-ants/fire-ant-top-v.png?la=en-us?la=en-US";  
+
     image.width = pixel_width;
-    image.height = pixel_height;
+    image.height = pixel_width;
     ctx.save();  
     ctx.translate(position[0] * pixel_width + 0.5 * pixel_width, position[1] * pixel_width + 0.5 * pixel_width);  
     ctx.rotate(move)
@@ -744,13 +747,8 @@ var level_array6 = [15, [
     [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ], 0.4, 7,8, [15,3], 200, 4, 1,1,7, [[6,6],[6,7],[6,8],[6,9],[6,10],[7,6],[7,10],[8,5],[8,10],[9,6],[9,10],[9,6],[9,10],[10,6],[10,7],[10,8],[10,9],[10,10], [15,3]]]
 
-window.addEventListener('load', e=> {
-image = new Image();  
-image.src = "https://www.raid.com/~/media/raid/bugs/ants/fire-ants/fire-ant-top-v.png?la=en-us?la=en-US";  
-image.onload = function() {
+
 level1(window["level_array" + current_level]);
-}
-})
 
 var Timeout = function(callback, interval) {
     var timerrId;
