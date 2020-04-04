@@ -11,8 +11,7 @@ function level1(input_array)  {
 
 
 var iit = it;
-
-
+var image;
 
 //General Init
 ctx.fillStyle = "#FF0000";
@@ -68,6 +67,7 @@ var blocked_swaps = input_array[11];
 //Ant Init
 var position = [input_array[8],input_array[9]]; //-------------------------------Vary-for-Levels-------------------------------//
 var orientation = "up";
+var move = Math.PI;
 
 function instructions() {
 
@@ -96,6 +96,7 @@ function moveRight() {
             console.log("Error: invalid orientation")
             break;
     }
+    move -= Math.PI/2
 }
 
 function moveLeft() {
@@ -120,6 +121,7 @@ function moveLeft() {
             console.log("Error: invalid orientation")
             break;
     }
+    move -= 3*Math.PI/2
 }
 
 //Update Screen Functions
@@ -151,25 +153,17 @@ function flipScreen() {
     }
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
-    ctx.drawImage(document.getElementById('image'), position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
+    //ctx.drawImage(document.getElementById('image'), position[0] * pixel_width, position[1] * pixel_width, pixel_width, pixel_width);
 
-    console.log(orientation)
-    switch (orientation) {
-        case "up":
-            break;
-        case "down":
-            document.getElementById('image').setAttribute('style', 'transform:rotate(180deg)');
-            ctx.rotate(Math.PI)
-            break;
-        case "right":
-            document.getElementById('image').setAttribute('style', 'transform:rotate(90deg)');
-            ctx.rotate(Math.PI/2)
-            break;
-        case "left":
-            document.getElementById('image').setAttribute('style', 'transform:rotate(270deg)');
-            ctx.rotate(3*Math.PI/2)
-            break;
-    }    
+    image.width = pixel_width;
+    image.height = pixel_height;
+    ctx.save();  
+    ctx.translate(position[0] * pixel_width + 0.5 * pixel_width, position[1] * pixel_width + 0.5 * pixel_width);  
+    ctx.rotate(move)
+    ctx.translate(-(position[0] * pixel_width + 0.5 * pixel_width), -(position[1] * pixel_width + 0.5 * pixel_width));  
+    ctx.drawImage(image,  position[0] * pixel_width, position[1] * pixel_width, pixel_width,pixel_width);  
+    ctx.restore();
+    
     
     if (
         UP_DOWN && 
@@ -624,8 +618,7 @@ function start2() {
         flipScreen();
         var element2 = document.getElementById('go');
         element2.style.display = "none";
-        overlay.style.display = "none";
-    
+        overlay.style.display = "none";    
         var instructions = document.getElementById("instructions")
 
         switch (current_level) {
@@ -670,7 +663,6 @@ function start2() {
     document.getElementById('stop').style.display = "initial"
     window["interval" + iit] = new Timer(moveTotal, iterations);
     window["interval2" + iit] = new Timer(flipScreen, 1 / 60);}
-
 
 start2()
 
@@ -753,7 +745,11 @@ var level_array6 = [15, [
 ], 0.4, 7,8, [15,3], 200, 4, 1,1,7, [[6,6],[6,7],[6,8],[6,9],[6,10],[7,6],[7,10],[8,5],[8,10],[9,6],[9,10],[9,6],[9,10],[10,6],[10,7],[10,8],[10,9],[10,10], [15,3]]]
 
 window.addEventListener('load', e=> {
+image = new Image();  
+image.src = "https://www.raid.com/~/media/raid/bugs/ants/fire-ants/fire-ant-top-v.png?la=en-us?la=en-US";  
+image.onload = function() {
 level1(window["level_array" + current_level]);
+}
 })
 
 var Timeout = function(callback, interval) {
