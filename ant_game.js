@@ -296,13 +296,13 @@ document.getElementById("levels").addEventListener('click', e => {
 
 document.getElementById('level_select').addEventListener('click', e => {
     if (parseInt(e.target.innerHTML)) {
-        current_level = parseInt(e.target.innerHTML);
-        console.log(sessionStorage.getItem('level' + current_level))
-        if (typeof(window["level_array" + current_level]) == "object") {
-            if (current_level == 1 || getCookie("level"+current_level) || sessionStorage.getItem("level" + current_level))
+        current_level2 = parseInt(e.target.innerHTML);
+        console.log(sessionStorage.getItem('level' + current_level2))
+        if (typeof(window["level_array" + current_level2]) == "object") {
+            if (current_level2 == 1 || getCookie("level"+current_level2) || sessionStorage.getItem("level" + current_level2))
             {document.getElementById('overlay').style.display = "none";
             document.getElementById('level_select').style.display = "none";
-            level1(window["level_array" + current_level]);
+            level1(window["level_array" + current_level2]);
         }
         else {
             alert("Locked");
@@ -616,8 +616,8 @@ function win() {
     document.getElementById('middle_text').innerHTML = "Success!";
     continual = true;
     if (cookie_allowed){
-    setCookie("level"+current_level,true,100000000000000000);}
-    sessionStorage.setItem("level" + current_level, true)
+    setCookie("level"+ (current_level + 1),true,100000000000000000);}
+    sessionStorage.setItem("level" + (current_level + 1), true)
     var exists = !(typeof(window["level_array" + (current_level+1)]) == "undefined")
     if (!exists) {document.getElementById('resume').style.visibility = "hidden"}
 }
