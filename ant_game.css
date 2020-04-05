@@ -128,3 +128,34 @@ body {
     margin: none;
     font-family: 'Times New Roman', Times, serif
 }
+
+#cookie_alert{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 0% 2% 0.25%;
+    background-color: blue;
+    width: 96%;
+    height: 9%;
+    display: inline-block;
+    font-size: large;
+    background-color: purple;
+}
+
+
+#cookie_alert p {
+    display: inline-block;
+    width: 70%;
+}
+
+#cookie_alert button {
+    margin: 0 0 0 7%;
+    font-size: larger;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 5%;
+    height: 60%;
+    position: relative;
+    bottom: 10%;
+    cursor: pointer;
+    background-color: white;
+}

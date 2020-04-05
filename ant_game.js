@@ -5,7 +5,26 @@ var ctx = canvas.getContext('2d');
 var current_level = 1;
 document.getElementById("middle_text").style.top = canvas.getBoundingClientRect().top + canvas.height / 2;
 
+var cookie_allowed;
+
+if (getCookie('cookie_allowed')) {
+    document.getElementById('cookie_alert').style.display = "none";
+}
+
+document.getElementById('accept').addEventListener('click', e=> {
+    cookie_allowed = true;
+    setCookie('cookie_allowed', true, 10000);
+    document.getElementById('cookie_alert').style.display = "none";
+})
+
+document.getElementById('decline').addEventListener('click', e=> {
+    cookie_allowed = false;
+    deleteAllCookies()
+    document.getElementById('cookie_alert').style.display = "none";
+})
+
 var it = 0;
+
 
 function level1(input_array)  {
 
@@ -278,8 +297,9 @@ document.getElementById("levels").addEventListener('click', e => {
 document.getElementById('level_select').addEventListener('click', e => {
     if (parseInt(e.target.innerHTML)) {
         current_level = parseInt(e.target.innerHTML);
+        console.log(sessionStorage.getItem('level' + current_level))
         if (typeof(window["level_array" + current_level]) == "object") {
-            if (current_level == 1 || getCookie("level"+current_level))
+            if (current_level == 1 || getCookie("level"+current_level) || sessionStorage.getItem("level" + current_level))
             {document.getElementById('overlay').style.display = "none";
             document.getElementById('level_select').style.display = "none";
             level1(window["level_array" + current_level]);
@@ -595,7 +615,9 @@ function win() {
     document.getElementById('middle_text').style.visibility = "visible";
     document.getElementById('middle_text').innerHTML = "Success!";
     continual = true;
-    setCookie("level"+current_level,true,100000000000000000);
+    if (cookie_allowed){
+    setCookie("level"+current_level,true,100000000000000000);}
+    sessionStorage.setItem("level" + current_level, true)
     var exists = !(typeof(window["level_array" + (current_level+1)]) == "undefined")
     if (!exists) {document.getElementById('resume').style.visibility = "hidden"}
 }
@@ -814,3 +836,13 @@ function getCookie(cname) {
 }
 
 
+function deleteAllCookies() {
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
