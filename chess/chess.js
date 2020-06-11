@@ -754,7 +754,7 @@ options_list[3].addEventListener('click', e => {
     }
 })
 
-    ('game_creator').addEventListener('submit', e => {
+$('game_creator').addEventListener('submit', e => {
         e.preventDefault();
         console.log($('game_creator').getElementsByTagName('input')[0].value);
 
@@ -763,4 +763,3 @@ $('game_loader').addEventListener('submit', e => {
     e.preventDefault();
     console.log($('game_loader').getElementsByTagName('input')[0].value);
 })
-
