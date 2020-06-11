@@ -29,12 +29,12 @@
             <h4>Set up your own chess game or visit an existing one</h4>
             <form id="game_creator" action="chess.php" method="POST">
                 <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
-                <div style="text-decoration: unset;"><?= $error_list['create_error']?></div>
+                <div style="text-decoration: unset;"></div>
                 <input type='submit' value='Create your board' name="create_submit">
             </form>
             <form id="game_loader" action="chess.php" method="GET">
                 <input type='text' placeholder='Server Name' id='load_name' name="load_name"><br>
-                <div style='text-decoration: none;'><?= $error_list['load_error']?></div>
+                <div style='text-decoration: none;'></div>
                 <input type='submit' value='Join Game' name="load_submit">
             </form>
         </div>
