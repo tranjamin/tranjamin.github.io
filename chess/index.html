@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chess</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+        <link type="text/css" href="chess.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap" rel="stylesheet">
+        <meta charset="utf8">
+    </head>
+    <body>
+        <div id="chat_title">CHAT</div>
+        
+        <div id="message"></div>
+        <p id="text"></p>
+        <div id="submit_message">
+            <form id="message_form">
+                <input type="text" placeholder="Write a message">
+                <input type="submit" value="Submit" style="visibility: hidden;">
+            </form>
+        </div>
+        <canvas id="canvas1" style="border: white 2pt solid">
+        </canvas>
+        <div id='test'>
+            <p id='est'></p>
+        </div>
+        <div id="overlay">
+            <h2>Welcome to Ben's Chess Website</h2>
+            <h4>Set up your own chess game or visit an existing one</h4>
+            <form id="game_creator" action="chess.php" method="POST">
+                <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
+                <div style="text-decoration: unset;"><?= $error_list['create_error']?></div>
+                <input type='submit' value='Create your board' name="create_submit">
+            </form>
+            <form id="game_loader" action="chess.php" method="GET">
+                <input type='text' placeholder='Server Name' id='load_name' name="load_name"><br>
+                <div style='text-decoration: none;'><?= $error_list['load_error']?></div>
+                <input type='submit' value='Join Game' name="load_submit">
+            </form>
+        </div>
+        <div id="options">
+            <button>Start New Game</button><br>
+            <button>Load</button><br>
+            <button>Resign</button><br>
+            <button><?php if ($user_id) {echo "Welcome, $username";} else {echo "Login/Signup";}?></button>
+            <form id="login" style="display: none;" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+                <input name="username" type="text" placeholder="username"><br>
+                <input name="password" type="password" placeholder="password"><br>
+                <input name="login" type="submit" value="Login">
+            </form>
+            <form id="signup" style="display: none;" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+                <input name="new_username" placeholder="create username"><br>
+                <input name="email" placeholder="enter email"><br>
+                <input name="new_password" placeholder="create password"><br>
+                <input name="confirm_password" placeholder="confirm password"><br>
+                <input name="signup" type="submit" value="Sign Up">
+            </form>
+        </div><form action="<?php echo $_SERVER['PHP_SELF']?>" method="GET">
+        <input id="logout" value="Logout" type="submit" name="logout"></form>
+        <image src="white_rookv2.jpg" class="piece" id="wR" style="display: none;"></image>
+        <image src="white_knightv2.jpg" class="piece" id="wN" style="display: none;"></image>
+        <image src="white_bishopv2.jpg" class="piece" id="wB" style="display: none;"></image>
+        <image src="white_queenv2.jpg" class="piece" id="wQ" style="display: none;"></image>
+        <image src="white_kingv2.jpg" class="piece" id="wK" style="display: none;"></image>
+        <image src="white_pawnv2.jpg" class="piece" id="wP" style="display: none;"></image>
+        <image src="black_rookv2.jpg" class="piece" id="bR" style="display: none;"></image>
+        <image src="black_knightv2.jpg" class="piece" id="bN" style="display: none;"></image>
+        <image src="black_bishopv2.jpg" class="piece" id="bB" style="display: none;"></image>
+        <image src="black_queenv2.jpg" class="piece" id="bQ" style="display: none;"></image>
+        <image src="black_kingv2.jpg" class="piece" id="bK" style="display: none;"></image>
+        <image src="black_pawnv2.jpg" class="piece" id="bP" style="display: none;"></image>
+        <script src='chess.js'></script>
+    </body>
+</html>
