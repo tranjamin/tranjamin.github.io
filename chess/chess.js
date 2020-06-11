@@ -28,9 +28,6 @@ var ready;
 loaded = false;
 ready = false;
 window.addEventListener('load', e => {
-    socket = io('http://localhost:4000', { query: "name=" + game });
-    loaded = true;
-    socket_data(socket);
     show_pieces();
 })
 
