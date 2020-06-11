@@ -68,5 +68,28 @@
         <image src="black_kingv2.jpg" class="piece" id="bK" style="display: none;"></image>
         <image src="black_pawnv2.jpg" class="piece" id="bP" style="display: none;"></image>
         <script src='chess.js'></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+    authDomain: "chess-10cd9.firebaseapp.com",
+    databaseURL: "https://chess-10cd9.firebaseio.com",
+    projectId: "chess-10cd9",
+    storageBucket: "chess-10cd9.appspot.com",
+    messagingSenderId: "897666750783",
+    appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+    measurementId: "G-H57J99DFNG"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+          </script>
     </body>
 </html>

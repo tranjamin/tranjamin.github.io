@@ -17,6 +17,14 @@ Flip Board
 var game = "";
 var undo = [];
 
+db.collection("users").get().then(function (snapshot) {
+    snapshot.docs.forEach(function (doc) {
+        //console.log(doc.data());
+        //name = console.log(doc.data()["name"]);
+    })
+})
+
+
 // socket
 
 var socket;
