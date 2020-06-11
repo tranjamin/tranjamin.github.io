@@ -14,7 +14,6 @@ Flip Board
 
 */
 
-$('overlay').style.visibility = "hidden";
 var game = "";
 var undo = [];
 
