@@ -42,20 +42,20 @@
             <button>Start New Game</button><br>
             <button>Load</button><br>
             <button>Resign</button><br>
-            <button><?php if ($user_id) {echo "Welcome, $username";} else {echo "Login/Signup";}?></button>
-            <form id="login" style="display: none;" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+            <button></button>
+            <form id="login" style="display: none;">
                 <input name="username" type="text" placeholder="username"><br>
                 <input name="password" type="password" placeholder="password"><br>
                 <input name="login" type="submit" value="Login">
             </form>
-            <form id="signup" style="display: none;" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+            <form id="signup" style="display: none;">
                 <input name="new_username" placeholder="create username"><br>
                 <input name="email" placeholder="enter email"><br>
                 <input name="new_password" placeholder="create password"><br>
                 <input name="confirm_password" placeholder="confirm password"><br>
                 <input name="signup" type="submit" value="Sign Up">
             </form>
-        </div><form action="<?php echo $_SERVER['PHP_SELF']?>" method="GET">
+        </div><form>
         <input id="logout" value="Logout" type="submit" name="logout"></form>
         <image src="white_rookv2.jpg" class="piece" id="wR" style="display: none;"></image>
         <image src="white_knightv2.jpg" class="piece" id="wN" style="display: none;"></image>
