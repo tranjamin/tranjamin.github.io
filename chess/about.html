@@ -29,10 +29,135 @@
     </div>
     </div>
     <div id="overlay">
-    <h2></h2>
-    <h4></h4>
-        <ul id="nav">
+    <h2>How to Play</h2>
+        <ul id="rules_nav">
+            <li>Creating a Game</li>
+            <li>Chess Variants</li>
+            <li>Time Control</li>
         </ul>
+        <div class="rules" id="create_rules">How to Play</div>
+        <div class="rules" id="variant_rules">
+            <h4>Classic</h4>
+            <p>If classic chess was a spice, it would be flour</p>
+            <h4>Chess960 (Fischer Random Chess)</h4>
+            <p>In Chess960, the starting positions are randomised, creating 960 possible combinations
+                <ol>
+                    <li>White's 8 back-rank pieces are randomly placed on the first rank</li>
+                    <li>Black's pieces are placed to mirror White's</li>
+                    <li>The bishops must be on opposing colours</li>
+                    <li>The king must be between the two rooks</li>
+                    <li>In castling, the king and rook end up on the same squares as in classic chess</li>
+                
+                </ol>
+            </p>
+            <h4>Antichess</h4>
+            <p>In Antichess, your aim is to lose all of your pieces, but capturing is compulsory.
+                <ol>
+                    <li>If you can capture an opposing piece, you must do so.</li>
+                    <li>If you can capture multiple pieces, you can decide which one to capture.</li>
+                    <li>There is no check or checkmate; the king can be captured like any other piece.</li>
+                    <li>As such, pawns can promote to kings</li>
+                    <li>There is no castling</li>
+                    <li>A player wins if they have no legal moves possible (if there is a stalemate or they have no pieces remaining)</li> 
+                    <li>The game is drawn if neither player can capture the other player's pieces (ie. two opposite-coloured bishops)</li>
+                </ol>
+            </p>
+            <h4>Armageddon</h4>
+            <p>In Armageddon, there is always a decisive victory.
+                <ol>
+                    <li>In drawn games, Black always wins</li>
+                    <li>To compensate, White is given time odds; in this game, they are given 20% more time.</li>
+                    <li>All other rules are the same as Classical Chess</li>
+                </ol>
+            </p>
+            <h4>Atomic Chess</h4>
+            <p>Pieces "explode" when captured.
+                <ol>
+                    <li>When a piece is captured, both the capturing and captured piece are removed</li>
+                    <li>Additionally, all non-pawn pieces in the surrounding 8 squares are removed</li>
+                    <li>A player cannot capture a piece that would result in their own king being exploded; as such, the king can never capture a piece</li>
+                    <li>There is no check, so two kings can occupy adjacent spaces</li>
+                    <li>A player wins by exploding the opposing king without exploding their own</li>
+                    <li>A player also wins if the opposing king has no legal moves and is in direct check, if not, the game is a stalemate</li>
+                </ol>
+            </p>
+            <h4>Beirut Chess</h4>
+            <p>One piece each, unbeknowngst to the other player, is equipped with a suicide vest.
+                <ol>
+                    <li>On their turn, instead of playing a regular turn, the designated piece can be detonated</li>
+                    <li>This explosion kills the bomb carrier as well as any piece on the surrounding 8 squares, regardless of colour</li>
+                    <li>When a piece is captured, the piece cannot be inspected to see if it carried the bomb</li>
+                    <li>A player wins by checkmate, resignation, or by exploding the king</li>
+                </ol>
+            </p>
+            <h4>Crazyhouse</h4>
+            <p>A captured piece can be introduced as the player's own
+                <ol>
+                    <li>On their turn, instead of playing a regular turn, any captured piece can be dropped onto an empty space on the board</li>
+                    <li>This piece changes colour from the opposing colour to the player's own</li>
+                    <li>This piece can be dropped to avoid a certain checkmate, or to create a checkmate</li>
+                    <li>When captured, promoted pawns are kept as pawns and not queens</li>
+                    <li>Pawns cannot be dropped on the 1st rank (for Black) or 8th rank (for White)</li>
+                    <li>Pawns dropped on the 2nd rank (for White) or 7th rank (for Black) can be moved two squares on their first move, as usual</li>
+                    <li>Dropped rooks are not available for castling</li>
+                    <li>Drop moves are denoted with the @ symbol (eg. N@b5)</li>
+                </ol>
+            </p>
+            <h4>3 Check Checkmate</h4>
+            <p>A player can win if they put their opponent in check 3 times
+            </p>
+            <h4>Checkless Chess</h4>
+            <p>Putting the opponent in check is illegal unless it is checkmate
+                <ol>
+                    <li>A move cannot be made if it puts the enemy king in check without checkmating it</li>
+                    <li>As such, the king becomes very powerful</li>
+                </ol>
+            </p>
+            <h4>Circe Chess</h4>
+            <p>Instead of pieces being removed when captured, they are reborn
+                <ol>
+                    <li>Any captured piece returns to its starting square, with the rooks, bishops and knights returning to the starting square the same colour as the square they were captured on</li>
+                    <li>Pawns are returned on the file they were captured on</li>
+                    <li>Reborn pawns are able to move two squares on their first move</li>
+                    <li>Reborn rooks can be castled with</li>
+                    <li>Any captured promoted pawns are treated as a piece, not a pawn</li>
+                    <li>If the starting square is occupied, the piece is removed instead of reborn</li>
+                    <li>A rebirth is denoted with parantheses after the move (eg. Rxe5(Bc3))</li>
+                </ol>
+            </p>
+             <h4>Dusanny's Chess</h4>
+            <p>White's horde of pawns take on Black's army
+                <ol>
+                    <li>Black's starting position is conventional, whilst White starts with 32 pawns</li>
+                    <li>Black starts</li>
+                    <li>Only Black's pawns are able to move two squares on their first move</li>
+                    <li>White wins by checkmating Black, whilst Black wins by capturing all of White's pieces</li>
+                </ol>
+            </p>
+            <h4>King of the Hill</h4>
+            <p>A player can also win by legally moving their king to one of the center squares (d4,d5,e4,e5)
+            </p>
+            <h4>Really Bad Chess</h4>
+            <p>This variation is really really bad
+                <ol>
+                    <li>White and Black's pieces are completely randomised and not identical</li>
+                    <li>The Kings start in their regular positions, but for the remaining 15 squares a piece is chosen at random</li>
+                    <li>Due to the likelihood that one player will have a large advantage, these games are not rated</li>
+                </ol>
+            </p>
+            <h4>Schrodinger Chess</h4>
+            <p>This version is waaaaaay to complicated to explain, but I'll try anyway
+                <ol>
+                    <li>A player can choose to make a quantum or regular move</li>
+                    <li>If they choose a quantum move, they may move a piece twice, but there is a 50% chance that the move did not occur</li>
+                    <li>As a result of this uncertainty, there are two versions of the piece, and either can be moved</li>
+                    <li>When a piece is captured, the wave function collapses and, based on probability, it is determined if the piece is actually in that location. This can result in a chain of collapses</li>
+                    <li>As such, there is no check or checkmate unless there is a 100% chance that the king is in that location, otherwise, the king has to be captured to determine if the game is over or not</li>
+                    <li>Rwo pieces can become entangled if one moves through a square that the other one has a probability of occuring at. The probability that the first piece has moved is equal to the probability that the second piece is not in the sqaure</li>
+                </ol>
+            </p>
+        </div>
+        <div class="rules" id="time_rules">How to hug Lila</div>
     </div>
     
     <!-- The core Firebase JS SDK is always required and must be listed first -->
