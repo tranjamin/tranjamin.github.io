@@ -36,6 +36,7 @@ window.addEventListener('resize', e => {
 if (getCookie('username') || sessionStorage.getItem('username')) {
         $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
     $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+$('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 }
 
 

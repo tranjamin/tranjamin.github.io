@@ -23,6 +23,7 @@ var user_id = "";
 if (getCookie('username') || sessionStorage.getItem('username')) {
     $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
 $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+$('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 }
 
 update_graphics();
@@ -64,7 +65,7 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
     else {
         sessionStorage.clear();
-        document.cookie = "";
+        deleteAllCookies();
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
