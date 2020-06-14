@@ -162,7 +162,7 @@ $('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
     window.location.assign('create.html')
 });
 $('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
-    window.location.assign('load.html')
+    window.location.assign('create.html')
 });
 $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
     window.location.assign('about.html')

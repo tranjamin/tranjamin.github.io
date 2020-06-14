@@ -1,0 +1,320 @@
+html {
+    background-color: black;
+}
+
+
+#overlay {
+    background-color: rgb(41, 33, 33);
+    position: absolute;
+    z-index: 10;
+    color: white;
+    height: 100%;
+}
+
+#overlay h2 {
+    text-align: center;
+    font-family: 'Philosopher';
+}
+#overlay h4 {
+    text-align: center;
+    font-family: 'Raleway';
+}
+
+#game_creator {
+    text-indent: 0;
+    text-align: center;
+}
+
+#overlay #game_creator > input[type=text] {
+    font-size: 200%;
+    background-image: linear-gradient(to right, rgb(41,33,33),rgb(214, 82, 34) 50%,rgb(41,33,33));
+    margin-bottom: 2%;
+    text-decoration-line: underline;
+    color: white;
+    border: none;
+    text-align: center;
+}
+#overlay input[type=submit] {
+    background-color: rgb(255, 115, 0);
+    margin-bottom: 20%;
+    text-align: center;
+    font-family: 'Raleway';
+    border: none;
+    font-size: 100%;
+    position: absolute;
+    left: 35%;
+    bottom: -15%;
+    width: 30%;
+    cursor: pointer;
+}
+
+
+#game_creator > label, #left_column > label {
+    font-size: 150%;
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+#left_column > label {
+    position: relative;
+    left: 5%;
+    
+}
+
+#right_column {
+    position: absolute;
+    left: 53%;
+    height: 50%;
+    font-size: 150%;
+    width: 47%;
+}
+
+
+.container {
+  display: block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-indent: 0;
+  text-align: left;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  background-image: linear-gradient(to right,rgba(163, 146, 146, 0.301),rgb(41,33,33));
+  padding: 2.5% 0;
+}
+
+.container:nth-of-type(1),.container:nth-of-type(3),.container:nth-of-type(5),.container:nth-of-type(7),.container:nth-of-type(9) {
+  background-image: linear-gradient(to right, rgba(158, 148, 148, 0.432),rgb(41,33,33));
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+
+  }
+
+.bullets {
+    background-color: #eee;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    position: absolute;
+    left: -8%;
+    bottom: 35%;
+}
+
+.container:hover input ~ .bullets {
+    background-color: #ccc;
+  }
+
+
+.container .checkmark:after {
+    top: 9px;
+   left: 9px;
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+   background: white;
+}
+
+
+.container input:checked ~ .bullets {
+    background-color: rgb(243, 117, 33);
+  }
+
+  .container input:checked ~ .bullets:after {
+    display: block;
+  }
+
+  .bullets:after {
+    content: "";
+    position: absolute;
+    display: none;
+  } 
+
+#timelist {
+    position: relative;
+    left: 60%;
+    text-align: left;
+    width: 75%;
+    padding-bottom: 50px;
+    text-indent: unset;
+}
+
+#nav {
+    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
+    position: fixed;
+    z-index: 100;
+    color: white;
+
+}
+#nav li {
+    height: 16%;
+    width: 100%;
+    background-color: rgba(58, 54, 54, 0.158);
+    border-bottom: white 2px solid;
+    position: relative;
+    padding: 0;
+    
+}
+#nav ul {
+    list-style: none;
+    list-style-position: unset;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0%;
+    padding: 0;
+}
+#nav li button {
+    height: 100%;
+    width: 100%;
+    background-color: unset;
+    border: none;
+    color: white;
+    font-family: 'Raleway';
+    font-size: 1.5em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#copyright {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+
+
+ /* The container must be positioned relative: */
+ .custom-select {
+    position: relative;
+  }
+  
+#game_creator select {
+    position: relative;
+}
+
+  .custom-select select {
+    display: none; /*hide original SELECT element: */
+  }
+  
+  .select-selected {
+    background-image: linear-gradient(to right, rgb(41,33,33),rgb(32, 204, 55) 50%,rgb(41,33,33));
+    text-decoration-line: underline;
+    color: rgba(53, 52, 52, 0.2935);
+    border-left: none;
+    border-right: none;
+    border-top: white solid 1.5pt;
+    border-bottom: white solid 1.5pt;
+  }
+  
+  /* Style the arrow inside the select element: */
+  .select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+  }
+  
+  /* Point the arrow upwards when the select box is open (active): */
+  .select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+  }
+  
+  /* style the items (options), including the selected item: */
+  .select-items div,.select-selected {
+    background-color: none;
+    font-size: 150%;
+    text-align: center;
+    background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(32, 204, 55) 50%,rgb(41,33,33));
+    text-decoration-line: none;
+    color: rgba(53, 52, 52, 0.2935);
+    border-left: none;
+    border-right: none;
+    margin-left: 5%;
+    cursor: pointer;
+  }
+
+  
+  /* Style items (options): */
+  .select-items {
+    text-align: center;
+    margin-bottom: 2%;
+    color: rgba(53, 52, 52, 0.2935);
+    border: none;
+    text-decoration: none;
+    background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(32, 204, 55) 50%,rgb(41,33,33));
+  }
+
+  .select-items :nth-child(1), .select-items :nth-child(3),  .select-items :nth-child(5),  .select-items :nth-child(7),.select-items :nth-child(9),  .select-items :nth-child(11),  .select-items :nth-child(13) {
+    text-align: center;
+    color: rgba(53, 52, 52, 0.2935);
+    border: none;
+    text-decoration: none;
+    background-image:linear-gradient(to right, rgb(41,33,33) 5%,rgb(35, 206, 20) 50%,rgb(41,33,33) 95%);
+  }
+  
+  /* Hide the items when the select box is closed: */
+  .select-hide {
+    display: none;
+  }
+  
+  .select-items div:hover, .same-as-selected {
+    background-color: rgb(255,0,0);
+  } 
+
+  .custom_time {
+      font-size: 120%;
+      font: 'Raleway';
+      width: 110%;
+      position: relative;
+      right: 10%;
+      margin-top: 2%;
+
+  }
+
+  .custom_time input[type="number"], .custom_time input[type="text"] {
+      border: none;
+      background-color: rgb(20, 18, 22);
+      height: 35px;
+      line-height: 35px;
+      color: white;
+      text-align: right;
+      font-family: 'Raleway';
+      font-size: 120%;
+      -webkit-appearance: textfield;
+      -moz-appearance: textfield;
+        appearance: textfield;
+  }
+.custom_time input:nth-of-type(3), .custom_time input:nth-of-type(4) {
+    text-align: left;
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { 
+    appearance: none;
+  }
+
+.custom_time span {
+    color: red;
+    cursor: pointer;
+}
+
+#error {
+  color: red;
+  font-weight: 500;
+  position: absolute;
+  left: 0;
+  bottom: 10%;
+  width: 100%;
+}
