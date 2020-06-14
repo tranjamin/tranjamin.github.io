@@ -67,6 +67,35 @@ var b_h = new piece(0, "P", [8, 7], "b_h");
 var white_list = [w_rooka, w_knightb, w_bishopc, w_queen, w_king, w_bishopf, w_knightg, w_rookh, w_a, w_b, w_c, w_d, w_e, w_f, w_g, w_h];
 var black_list = [b_rooka, b_knightb, b_bishopc, b_queen, b_king, b_bishopf, b_knightg, b_rookh, b_a, b_b, b_c, b_d, b_e, b_f, b_g, b_h];
 
+function generate_position(mode) {
+    var w_return_array;
+    var b_return_array
+    var white_list2;
+    var black_list2;
+    var white_arr2;
+    var black_arr2;
+
+    if (mode.indexOf('Chess960') != -1) {
+        var original = [1,2,3,4,5,6,7,8];
+        var wbishop_pos = Math.ceil(Math.random() * 4) * 2;
+        var bbishop_pos = Math.ceil(Math.random() * 4) * 2 - 1;
+        original.splice(original.indexOf(wbishop_pos),1);
+        original.splice(original.indexOf(bbishop_pos),1);
+        var queen_pos = original[Math.floor(Math.random() * 6)]
+        original.splice(original.indexOf(queen_pos),1);
+        var wknight_pos = original[Math.floor(Math.random() * 5)]
+        original.splice(original.indexOf(wknight_pos),1);
+        var bknight_pos = original[Math.floor(Math.random() * 4)]
+        original.splice(original.indexOf(bknight_pos),1);
+        var wrook_pos = original[0];
+        var brook_pos = original[2];
+        var king_pos = original[1];
+        w_return_array = [[w_rooka.name,[wrook_pos,1]],[w_rookh.name,[brook_pos,1]],[w_knightb.name,[wknight_pos,1]],[w_knightg.name,[bknight_pos,1]],[w_bishopc.name,[wbishop_pos,1]],[w_bishopf.name,[bbishop_pos,1]],[w_queen.name,[queen_pos,1]],[w_king.name,[king_pos,1]]];
+        b_return_array = [[b_rooka.name,[wrook_pos,8]],[b_rookh.name,[brook_pos,8]],[b_knightb.name,[wknight_pos,8]],[b_knightg.name,[bknight_pos,8]],[b_bishopc.name,[wbishop_pos,8]],[b_bishopf.name,[bbishop_pos,8]],[b_queen.name,[queen_pos,8]],[b_king.name,[king_pos,8]]];
+    }
+    return [w_return_array,b_return_array];
+}
+
 function $(id) { return document.getElementById(id); }
 
 var username = "anon";
