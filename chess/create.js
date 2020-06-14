@@ -81,7 +81,10 @@ var options = $('options');
 if (getCookie('username') || sessionStorage.getItem('username')) {
     $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
 $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
+if (sessionStorage.getItem('user_id')) {user_id = sessionStorage.getItem('user_id')}
+else if (getCookie('user_id')) {user_id = getCookie('user_id')}
 
 update_graphics();
 window.addEventListener('resize', e => {
@@ -138,8 +141,9 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 
 function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time) {
-var white_time = [];
+var white_time = time;
 if (mode.indexOf('Armageddon') != -1) {
+    white_time = [];
     for (var i in time) {
         white_time.push([time[i][0],Math.round(time[i][1] * 6/5),Math.round(time[i][2] * 6/5)]);
     }
@@ -162,7 +166,7 @@ db.collection('chess').add({
     white_time: stringify(white_time),
     black_time: stringify(time),
     undo: stringify(undo)
-}).then(docRef => {user_id = docRef.id;}).catch(function(error) {
+}).then(docRef => {user_id = docRef.id; setCookie('user_id',user_id,2);sessionStorage.setItem('user_id',user_id);}).catch(function(error) {
     console.error("Error adding document: ", error);
     $('error').innerHTML = "Could not connect to server. Please try again later";
 });
@@ -184,7 +188,7 @@ else {
     white_time: stringify(white_time),
     black_time: stringify(time),
     undo: stringify(undo)
-    }).then(docRef => {user_id = docRef.id;}).catch(function(error) {
+    }).then(docRef => {user_id = docRef.id; setCookie('user_id',user_id,2);sessionStorage.setItem('user_id',user_id)}).catch(function(error) {
         console.error("Error adding document: ", error);
         $('error').innerHTML = "Could not connect to server. Please try again later";
     });
@@ -192,6 +196,7 @@ else {
 }
 
 stringify = (stringed_arr) => {
+    if(stringed_arr == null) {return null} else {
     var x = "";
     for (var y in stringed_arr) {
         if (y == stringed_arr.length - 1) {
@@ -200,7 +205,7 @@ stringify = (stringed_arr) => {
         else {
             x += "[" + String(stringed_arr[y]) + "],";
         }}
-    return x;
+    return x;}
 }
 
 objectify = (objectified_arr) => {
@@ -322,33 +327,31 @@ then close all select boxes: */
 document.addEventListener("click", closeAllSelect); 
 document.addEventListener("hover", closeAllSelect); 
 
-for (var i of document.getElementsByClassName('custom_time')) {
-var moves = i.getElementsByTagName('input')['moves'];
-var minutes = i.getElementsByTagName('input')['minutes'];
-var seconds = i.getElementsByTagName('input')['seconds'];
-var increment = i.getElementsByTagName('input')['increment'];
+for (var i of ([]).slice.call(document.getElementsByClassName('custom_time'))) {
+console.log('0')
+var moves = i.getElementsByTagName('input').moves;
+var minutes = i.getElementsByTagName('input').minutes;
+var seconds = i.getElementsByTagName('input').seconds;
+var increment = i.getElementsByTagName('input').increment;
 moves.addEventListener('keypress', e=> {
     if (moves.value.toString().length > 2) {
     e.preventDefault();
-    }
-  })
+    }})
 minutes.addEventListener('keypress', e=> {
     if (minutes.value.toString().length > 2) {
     e.preventDefault();
-    }
-  })
+    }})
 seconds.addEventListener('keypress', e=> {
     if (seconds.value.toString().length > 1) {
     e.preventDefault();
-    }
-  })
+    }})
 increment.addEventListener('keypress', e=> {
-    if (increment.value.toString().length > 1) {
+    console.log(increment.value.toString());
+    if (increment.value.toString().length > 2) {
     e.preventDefault();
-    }
-  })
-
+    }})
 }
+
 
 
 $('insert_new_phase').addEventListener('click', e=> {
@@ -357,6 +360,31 @@ $('insert_new_phase').addEventListener('click', e=> {
     new_item.innerHTML = "<span style='font-size: 50%;'>&#x2716</span>" + document.getElementsByClassName('custom_time')[0].innerHTML;
     $('custom').insertBefore(new_item,$('insert_new_phase'));
     new_item.getElementsByTagName('icon')[0].style.display = "none";
+
+    var i = document.getElementsByClassName('custom_time')[([]).slice.call(document.getElementsByClassName('custom_time')).length - 1];
+        console.log('0')
+        var moves = i.getElementsByTagName('input').moves;
+        var minutes = i.getElementsByTagName('input').minutes;
+        var seconds = i.getElementsByTagName('input').seconds;
+        var increment = i.getElementsByTagName('input').increment;
+        moves.addEventListener('keypress', e=> {
+            if (moves.value.toString().length > 2) {
+            e.preventDefault();
+            }})
+        minutes.addEventListener('keypress', e=> {
+            if (minutes.value.toString().length > 2) {
+            e.preventDefault();
+            }})
+        seconds.addEventListener('keypress', e=> {
+            if (seconds.value.toString().length > 1) {
+            e.preventDefault();
+            }})
+        increment.addEventListener('keypress', e=> {
+            console.log(increment.value.toString());
+            if (increment.value.toString().length > 2) {
+            e.preventDefault();
+            }})
+
 }) 
 
 $('custom').style.display = "none";
@@ -381,7 +409,6 @@ $('custom').addEventListener('click', e=> {
 $('game_creator').addEventListener('submit', e=> {
     e.preventDefault();
     $('error').innerHTML = "";
-    console.log('submit');
     var play_name = $('game_creator')['create_name'].value;
     var play_colour = $('game_creator')['create_play'].value;
     if (play_colour == "Random") {
@@ -414,7 +441,6 @@ $('game_creator').addEventListener('submit', e=> {
     var g_at_end = true;
     var valid_time = true;
     ([]).forEach.call(document.getElementsByClassName('custom_time'),(time,index) => {
-        console.log(index, arr_length - 1);
         var time_input = time.getElementsByTagName('input');
         if (!(new RegExp("(\\d+|[gG])")).test(time_input['moves'].value)) {
             valid_numbers = false;
@@ -444,7 +470,6 @@ $('game_creator').addEventListener('submit', e=> {
     }
 
     else {
-        console.log('allf')
     if (time_control == "Custom") {
         time_control = [];
         ([]).forEach.call(document.getElementsByClassName('custom_time'),time => {
@@ -475,30 +500,6 @@ $('game_creator').addEventListener('submit', e=> {
 })
 })
 
-
-/*$('game_creator').addEventListener('submit', e => {
-    e.preventDefault();
-    var create_name = $('game_creator').getElementsByTagName('input')[0].value;
-    var exists = false;
-    db.collection('chess').get().then(snapshot => {
-        snapshot.docs.forEach(doc => {
-            if (doc.data().name == create_name) {exists = true;}
-        })
-    }).then(() => {
-    console.log(exists)
-    if (exists) {
-        console.warn('name already exists');
-        $('game_creator').getElementsByTagName('input')[0].value = "";
-    }
-    else {
-        user_id = create_new_user(username,$('game_creator').getElementsByTagName('input')[0].value);
-        $('game_creator').getElementsByTagName('input')[0].value = "";
-        $('overlay').style.visibility = "hidden";
-        
-    }
-
-    })
-})*/
 
 //in the form [##/MM:SS+II]
 function convert_time_to_arr(str) {

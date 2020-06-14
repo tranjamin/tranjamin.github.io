@@ -32,7 +32,7 @@
         <h2 style="font-family: 'Philosopher';">Create Game</h2>
         <h4>Customise your game</h4>
         <form id="game_creator" name="game_creator">
-            <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
+            <input type='text' placeholder='Name your chess server' id='create_name' name="create_name" required autocomplete="off"><br>
             <br>
             <div id="left_column">
             <label name="create_play">Play as:</label>
@@ -107,9 +107,9 @@
                 <label class="container">Custom<input type="radio" name="create_time" value="Custom"><span class="bullets"></span></label>
                 <div id="custom">
                 <div class="custom_time"><icon style='font-size: 50%; visibility: hidden;'>&#x2716</icon>
-                <input type="text" name="moves" style="width: 75px;" pattern="(\d*|[gG])"> /
-                <input type="number" style="width: 75px;" name="minutes" min=0>:<input type="number" style="width: 50px" name="seconds" min=0> + 
-                <input type="number" min=0 style="width: 75px" name="increment">
+                <input type="text" name="moves" style="width: 75px;" pattern="(\d*|[gG])" autocomplete="off"> /
+                <input type="number" style="width: 70px;" name="minutes" min=0 max=999>:<input type="number" style="width: 50px" name="seconds" min=0 max=59> + 
+                <input type="number" min=0 max=999 style="width: 70px" name="increment">
                 </div>
                 <button id="insert_new_phase">Insert New Phase</button>
                 </div>
