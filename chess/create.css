@@ -310,3 +310,11 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     cursor: pointer;
 }
 
+#error {
+  color: red;
+  font-weight: 500;
+  position: absolute;
+  left: 0;
+  bottom: 10%;
+  width: 100%;
+}

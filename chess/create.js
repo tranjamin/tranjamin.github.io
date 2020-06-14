@@ -139,13 +139,11 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time) {
 var white_time = [];
-console.log(white_time);
 if (mode.indexOf('Armageddon') != -1) {
     for (var i in time) {
         white_time.push([time[i][0],Math.round(time[i][1] * 6/5),Math.round(time[i][2] * 6/5)]);
     }
 }
-console.log(white_time);
 if (play_colour) {
     
 db.collection('chess').add({
@@ -362,7 +360,6 @@ $('custom').style.display = "none";
 
 $('right_column').addEventListener('click', e => {
     if(e.target.parentNode.className) {
-        console.log(e.target.parentNode.getElementsByTagName('input')[0].value);
         if (e.target.parentNode.getElementsByTagName('input')[0].type == "radio" && e.target.parentNode.getElementsByTagName('input')[0].value != "Custom") {
             $('custom').style.display = "none";
         }
@@ -380,6 +377,8 @@ $('custom').addEventListener('click', e=> {
 
 $('game_creator').addEventListener('submit', e=> {
     e.preventDefault();
+    $('error').innerHTML = "";
+    console.log('submit');
     var play_name = $('game_creator')['create_name'].value;
     var play_colour = $('game_creator')['create_play'].value;
     if (play_colour == "Random") {
@@ -396,7 +395,53 @@ $('game_creator').addEventListener('submit', e=> {
     var other_user = $('game_creator')['create_invite'].value;
     var points = $('game_creator')['create_points'].value;
     var time_control = $('game_creator')['create_time'].value;
+
+    var exists = false
+    db.collection('chess').get().then(snapshot => {
+        snapshot.docs.forEach(doc => {if (doc.data().name == play_name) {exists = true;}})}).then(() => {
+    if (exists) {
+        console.warn('name already exists');
+        $('game_creator')['create_name'].value = "";
+        $('error').innerHTML = "Name already exists";
+    }
+    else {
     
+    var arr_length = ([]).slice.call(document.getElementsByClassName('custom_time')).length
+    var valid_numbers = true;
+    var g_at_end = true;
+    var valid_time = true;
+    ([]).forEach.call(document.getElementsByClassName('custom_time'),(time,index) => {
+        console.log(index, arr_length - 1);
+        var time_input = time.getElementsByTagName('input');
+        if (!(new RegExp("(\\d+|[gG])")).test(time_input['moves'].value)) {
+            valid_numbers = false;
+        }
+        if (((new RegExp("[gG]")).test(time_input['moves'].value) && index != arr_length - 1) || (!(new RegExp('[gG]')).test(time_input['moves'].value) && index == arr_length - 1)) {
+            g_at_end = false;
+        }
+        if (!time_input['minutes'].value == !time_input['seconds'].value) {
+            valid_time = false;
+        }
+    })
+
+    if (variation.indexOf('Armageddon') != -1 && time_control == "Unlimited") {
+        $('error').innerHTML = "'Armageddon' mode must be timed"
+    }
+    else if (variation.indexOf('Really Bad Chess') != -1 && points == "Rated") {
+        $('error').innerHTML = "'Really Bad Chess' mode cannot be rated"
+    }
+    else if (time_control == "Custom" && !valid_numbers) {
+        $('error').innerHTML = "Please enter a valid number of turns or G for game";
+    }
+    else if (time_control == "Custom" && !g_at_end) {
+        $('error').innerHTML = "G must be the last phase";
+    }
+    else if (time_control == "Custom" && !valid_time) {
+        $('error').innerHTML = "Please enter a nonzero time";
+    }
+
+    else {
+        console.log('allf')
     if (time_control == "Custom") {
         time_control = [];
         ([]).forEach.call(document.getElementsByClassName('custom_time'),time => {
@@ -420,6 +465,8 @@ $('game_creator').addEventListener('submit', e=> {
 
     
     create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control);
+}
+}})
 })
 
 

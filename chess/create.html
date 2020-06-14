@@ -107,15 +107,17 @@
                 <label class="container">Custom<input type="radio" name="create_time" value="Custom"><span class="bullets"></span></label>
                 <div id="custom">
                 <div class="custom_time"><icon style='font-size: 50%; visibility: hidden;'>&#x2716</icon>
-                <input type="text" min=1 name="moves" style="width: 75px;"> /
-                <input type="number" style="width: 75px;" name="minutes">:<input type="number" style="width: 50px" name="seconds"> + 
-                <input type="number" min=1 style="width: 75px" name="increment">
+                <input type="text" name="moves" style="width: 75px;" pattern="(\d*|[gG])"> /
+                <input type="number" style="width: 75px;" name="minutes" min=0>:<input type="number" style="width: 50px" name="seconds" min=0> + 
+                <input type="number" min=0 style="width: 75px" name="increment">
                 </div>
                 <button id="insert_new_phase">Insert New Phase</button>
                 </div>
             </div>
 
+            <div id="error"></div>
             <input type='submit' value='Create your board' name="game_creator">
+
             
         </form>
             </div>
