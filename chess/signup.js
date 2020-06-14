@@ -17,10 +17,6 @@ Flip Board
 // socket
 
 
-window.addEventListener('load', e => {
-    show_pieces();
-})
-
 function $(id) { return document.getElementById(id); }
 
 

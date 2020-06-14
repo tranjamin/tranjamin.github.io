@@ -45,6 +45,7 @@ html {
     left: 35%;
     bottom: -15%;
     width: 30%;
+    cursor: pointer;
 }
 
 
@@ -159,6 +160,7 @@ html {
     border-bottom: white 2px solid;
     position: relative;
     padding: 0;
+    
 }
 #nav ul {
     list-style: none;
@@ -178,6 +180,7 @@ html {
     font-family: 'Raleway';
     font-size: 1.5em;
     overflow: hidden;
+    cursor: pointer;
 }
 
 #copyright {
@@ -240,6 +243,7 @@ html {
     border-left: none;
     border-right: none;
     margin-left: 5%;
+    cursor: pointer;
   }
 
   
