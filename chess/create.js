@@ -144,8 +144,9 @@ if (mode.indexOf('Armageddon') != -1) {
         white_time.push([time[i][0],Math.round(time[i][1] * 6/5),Math.round(time[i][2] * 6/5)]);
     }
 }
+var rated = points == "Casual" ? false : true;
 if (play_colour) {
-    
+
 db.collection('chess').add({
     name: newname,
     black_user: null,
@@ -154,7 +155,7 @@ db.collection('chess').add({
     black_arr: stringify(black_arr),
     white_list: objectify(white_list),
     black_list: objectify(black_list),
-    points: points,
+    points: rated,
     mode: mode,
     visibility: visibility,
     invited_user: invited_user,
@@ -163,6 +164,7 @@ db.collection('chess').add({
     undo: stringify(undo)
 }).then(docRef => {user_id = docRef.id;}).catch(function(error) {
     console.error("Error adding document: ", error);
+    $('error').innerHTML = "Could not connect to server. Please try again later";
 });
 }
 else {
@@ -175,7 +177,7 @@ else {
     black_arr: stringify(black_arr),
     white_list: objectify(white_list),
     black_list: objectify(black_list),
-    points: points,
+    points: rated,
     mode: mode,
     visibility: visibility,
     invited_user: invited_user,
@@ -184,6 +186,7 @@ else {
     undo: stringify(undo)
     }).then(docRef => {user_id = docRef.id;}).catch(function(error) {
         console.error("Error adding document: ", error);
+        $('error').innerHTML = "Could not connect to server. Please try again later";
     });
 }
 }
@@ -446,7 +449,7 @@ $('game_creator').addEventListener('submit', e=> {
         time_control = [];
         ([]).forEach.call(document.getElementsByClassName('custom_time'),time => {
             var time2 = time.getElementsByTagName('input');
-            time_control.push(time2['moves'].value + "/" + (60 * parseInt(time2['minutes'].value) + parseInt(time2['seconds'].value)) + "+" + time2['increment'].value)
+            time_control.push(time2['moves'].value + "/" + (60 * (isNaN(parseInt(time2['minutes'].value)) ? 0 : parseInt(time2['minutes'].value)) + (isNaN(parseInt(time2['seconds'].value)) ? 0 : parseInt(time2['seconds'].value))) + "+" + time2['increment'].value)
           })
           
         time_control = convert_time_to_arr(time_control);
@@ -466,7 +469,10 @@ $('game_creator').addEventListener('submit', e=> {
     
     create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control);
 }
-}})
+}}).catch(error => {
+    console.error("Error adding document: ", error);
+    $('error').innerHTML = "Could not connect to server. Please try again later";
+})
 })
 
 
