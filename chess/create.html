@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link type="text/css" href="create.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+    <meta charset="utf8">
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+
+<li><button>Login/Signup<button></li>
+<li><button>My Games</button></li>
+<li><button>Create a Game</button></li>
+<li><button>Join Game</button></li>
+<li><button>How to Play</button></li>
+
+        </ul>
+        <div id="copyright">
+            &copy Benjamin Tran 2020<br>
+            Powered by Github and Google Firebase
+        </div>
+    </div>
+    </div>
+    <div id="overlay">
+        <h2 style="font-family: 'Philosopher';">Create Game</h2>
+        <h4>Customise your game</h4>
+        <form id="game_creator" name="game_creator">
+            <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
+            <br>
+            <div id="left_column">
+            <label name="create_play">Play as:</label>
+            <div class="custom-select">
+            <select type='dropdown' name="create_play">
+                <option>Random</option>
+                <option>Random</option>
+                <option>White</option>
+                <option>Black</option>
+            </select>
+            </div>
+            <br>
+            <label name="create_type">Game mode:</label>
+                <div class="custom-select">
+                    <select type="dropdown" id='create_type' name="create_type">
+                    <option>Classic</option>
+                    <option>Classic</option>
+                    <option>Chess960 &#9432</option>
+                    <option>Antichess &#9432</option>
+                    <option>Armageddon &#9432</option>
+                    <option>Atomic Chess &#9432</option>
+                    <option>Beirut Chess &#9432</option>
+                    <option>Bughouse Chess &#9432</option>
+                    <option>3 Check Checkmate &#9432</option>
+                    <option>Checkless Chess &#9432</option>
+                    <option>Circe Chess &#9432</option>
+                    <option>Horde Chess &#9432</option>
+                    <option>King of the Hill &#9432</option>
+                    <option>Really Bad Chess &#9432</option>
+                    <option>Schrodinger Chess &#9432</option>
+                    </select>
+                  </div>
+            <br>
+            <label name="create_public">Visiblity:</label>
+            <div class="custom-select">
+            <select type='dropdown' name="create_public">
+                <option>Private</option>
+                <option>Private</option>
+                <option>Public</option>
+            </select>
+            </div>
+            <br>
+            <label name="create_invite">Invite User:</label>
+            <div class="custom-select">
+                <select type='dropdown' name="create_invite">
+                    <option>None</option>
+                    <option>None</option>
+                    <option>Custom</option>
+                </select>
+                </div><br>
+            <label name="create_points">Mode:</label>
+            <div class="custom-select">
+                <select type='dropdown' name="create_points">
+                    <option>Casual</option>
+                    <option>Casual</option>
+                    <option>Rated</option>
+                </select>
+                </div>
+            
+            </div>
+            <div id="right_column">
+            <label name="create_time">Time Control: </label>
+                <label class="container">Unlimited<input type="radio" checked="checked" name="create_time"
+                        value="Unlimited"><span class="bullets"></span></label>
+                <label class="container">Classic (40/90+30 G/30+30)<input type="radio" name="create_time"
+                        value="Classic (40/90+30 G/30+30)"><span class="bullets"></span></label>
+                <label class="container">Classic (40/100+30 20/50+ G/15+)<input type="radio" name="create_time"
+                        value="Classic (40/100+30 20/50+30 G/15+30)"><span class="bullets"></span></label>
+                <label class="container">Rapid (G/25)<input type="radio" name="create_time" value="Rapid (G/25)"><span class="bullets"></span></label>
+                <label class="container">Blitz (G/5)<input type="radio" name="create_time" value="Blitz (G/5)"><span class="bullets"></span></label>
+                <label class="container">Bullet (G/1)<input type="radio" name="create_time" value="Bullet (G/1)"><span class="bullets"></span></label>
+                <label class="container">Custom<input type="radio" name="create_time" value="Custom"><span class="bullets"></span></label>
+                <div id="custom">
+                <div class="custom_time"><icon style='font-size: 50%; visibility: hidden;'>&#x2716</icon>
+                <input type="text" min=1 name="moves" style="width: 75px;"> /
+                <input type="number" style="width: 75px;" name="minutes">:<input type="number" style="width: 50px" name="seconds"> + 
+                <input type="number" min=1 style="width: 75px" name="increment">
+                </div>
+                <button id="insert_new_phase">Insert New Phase</button>
+                </div>
+            </div>
+
+            <input type='submit' value='Create your board' name="game_creator">
+            
+        </form>
+            </div>
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+            authDomain: "chess-10cd9.firebaseapp.com",
+            databaseURL: "https://chess-10cd9.firebaseio.com",
+            projectId: "chess-10cd9",
+            storageBucket: "chess-10cd9.appspot.com",
+            messagingSenderId: "897666750783",
+            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+            measurementId: "G-H57J99DFNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        firebase.analytics();
+
+    </script>
+
+    <script src='create.js'></script>
+</body>
+
+</html>

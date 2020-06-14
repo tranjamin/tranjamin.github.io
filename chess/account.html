@@ -12,22 +12,6 @@
 </head>
 
 <body>
-    <div id="nav">
-        <ul>
-
-<li><button>Login/Signup<button></li>
-<li><button>My Games</button></li>
-<li><button>Create a Game</button></li>
-<li><button>Join Game</button></li>
-<li><button>How to Play</button></li>
-
-        </ul>
-        <div id="copyright">
-            &copy Benjamin Tran 2020<br>
-            Powered by Github and Google Firebase
-        </div>
-    </div>
-
     <div id="chat_title">CHAT</div>
 
     <div id="message"></div>
@@ -55,11 +39,7 @@
             <input type='submit' value='Join Game' name="load_submit">
         </form>
     </div>
-    <div id="options">
-        <button>Start New Game</button><br>
-        <button>Load</button><br>
-        <button>Resign</button><br>
-        <button>Login / Signup</button>
+
         <form id="login" style="display: none;">
             <input name="username" type="text" placeholder="username"><br>
             <input name="password" type="password" placeholder="password"><br>
@@ -73,18 +53,8 @@
             <input name="signup" type="submit" value="Sign Up">
         </form>
     </div>
-    <image src="white_rookv2.jpg" class="piece" id="wR" style="display: none;"></image>
-    <image src="white_knightv2.jpg" class="piece" id="wN" style="display: none;"></image>
-    <image src="white_bishopv2.jpg" class="piece" id="wB" style="display: none;"></image>
-    <image src="white_queenv2.jpg" class="piece" id="wQ" style="display: none;"></image>
-    <image src="white_kingv2.jpg" class="piece" id="wK" style="display: none;"></image>
-    <image src="white_pawnv2.jpg" class="piece" id="wP" style="display: none;"></image>
-    <image src="black_rookv2.jpg" class="piece" id="bR" style="display: none;"></image>
-    <image src="black_knightv2.jpg" class="piece" id="bN" style="display: none;"></image>
-    <image src="black_bishopv2.jpg" class="piece" id="bB" style="display: none;"></image>
-    <image src="black_queenv2.jpg" class="piece" id="bQ" style="display: none;"></image>
-    <image src="black_kingv2.jpg" class="piece" id="bK" style="display: none;"></image>
-    <image src="black_pawnv2.jpg" class="piece" id="bP" style="display: none;"></image>
+    <form>
+        <input id="logout" value="Logout" type="submit" name="logout"></form>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 

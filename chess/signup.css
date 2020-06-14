@@ -75,6 +75,9 @@ body form input:first-of-type{
     background-color: red;
     position: absolute;
     z-index: 10;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Philosopher';
 }
 
 #overlay h2 {
@@ -95,34 +98,31 @@ body form input:first-of-type{
     text-align: center;
 }
 
-#overlay input[type=text] {
-    font-size: 200%;
-    text-align: center;
-    background-color: red;
-    margin-bottom: 2%;
-    text-decoration-line: underline;
-    color: rgba(53, 52, 52, 0.527)
-}
+
 #overlay input[type=submit] {
     background-color: rgb(255, 115, 0);
-    margin-bottom: 20%;
     text-align: right;
     font-family: 'Raleway';
     border: none;
     font-size: 100%;
 }
 
-#login {
-position: absolute;
-bottom: 5%;
-left: 15%;
-display: inline-block;
+#overlay form {
+    margin: 0;
 }
 
-#signup {
-position: absolute;
-bottom: 0%;
-right: 15%;
+#signup, #login {
+    text-align: center;
+}
+#signup input, #login input {
+    margin-bottom: 2.4%;
+    font-size: 1.1em;
+    border-bottom: solid white 1.5pt;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: rgba(0,0,0,0);
+    text-align: center;
 }
 
 #logout {
@@ -175,4 +175,8 @@ right: 15%;
     position: absolute;
     bottom: 5px;
     left: 5px;
+}
+
+.error {
+    color: white;
 }

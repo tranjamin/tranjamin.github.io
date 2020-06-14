@@ -14,15 +14,13 @@ Flip Board
 
 */
 
+
+
+
 var game = "";
 var undo = [];
 
-db.collection("users").get().then(function (snapshot) {
-    snapshot.docs.forEach(function (doc) {
-        //console.log(doc.data());
-        //name = console.log(doc.data()["name"]);
-    })
-})
+
 
 
 // socket
@@ -59,14 +57,19 @@ castle_rookh = true;
     xhttp.send();
   
 
-var username;
-var user_id;
+var username = "anon";
+var user_id = "";
 
 var msg = $('message');
 var msg_submit = $('submit_message');
 var msg_title = $('chat_title');
 var message_body = $("text");
 var options = $('options');
+
+if (getCookie('username') || sessionStorage.getItem('username')) {
+    $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
+$('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+}
 
 update_graphics();
 window.addEventListener('resize', e => {
@@ -105,6 +108,15 @@ function update_graphics() {
     overlay.style.top = canvas.getBoundingClientRect().top + parseInt(canvas.style['border-width'].slice(0, -2)) + "px";
     overlay.style.left = canvas.getBoundingClientRect().left + parseInt(canvas.style['border-width'].slice(0, -2)) + "px";
     overlay.style.width = canvas.width + "px";
+
+    //nav
+    var nav = $('nav');
+    nav.style.height = window.innerHeight + "px";
+    nav.style.width = screen.width * 0.125 + "px";
+    nav.style.top = 0;
+    nav.style.left = 0;
+
+
 }
 
 var blackwhite = 1;
@@ -763,10 +775,150 @@ options_list[3].addEventListener('click', e => {
 
 $('game_creator').addEventListener('submit', e => {
         e.preventDefault();
-        console.log($('game_creator').getElementsByTagName('input')[0].value);
+        var create_name = $('game_creator').getElementsByTagName('input')[0].value;
+        var exists = false;
+        db.collection('chess').get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+                if (doc.data().name == create_name) {exists = true;}
+            })
+        }).then(() => {
+        console.log(exists)
+        if (exists) {
+            console.warn('name already exists');
+            $('game_creator').getElementsByTagName('input')[0].value = "";
+        }
+        else {
+            user_id = create_new_user(username,$('game_creator').getElementsByTagName('input')[0].value);
+            $('game_creator').getElementsByTagName('input')[0].value = "";
+            $('overlay').style.visibility = "hidden";
+            
+        }
 
+        })
     })
 $('game_loader').addEventListener('submit', e => {
     e.preventDefault();
-    console.log($('game_loader').getElementsByTagName('input')[0].value);
+    var load_name = $('game_loader').getElementsByTagName('input')[0].value;
+    db.collection("chess").get().then(function (snapshot) {
+        snapshot.docs.forEach(function (doc) {
+            if (load_name == doc.data().name) {
+                console.warn('loaded successfully');
+                user_id = doc.id;
+                $('overlay').style.visibility = "hidden";
+            }
+        })
+    })
 })
+
+$('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
+    if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
+    else {
+        sessionStorage.clear();
+        document.cookie = "";
+        location.reload();}
+});
+$('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
+    window.location.assign('account.html')
+});
+$('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
+    window.location.assign('create.html')
+});
+$('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
+    window.location.assign('create.html')
+});
+$('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
+    window.location.assign('about.html')
+});
+
+
+
+function load_new_game(user,name) {
+    db.collection('chess');
+}
+
+function create_new_user(user,newname) {
+var random = Math.round(Math.random());
+if (random) {
+    
+db.collection('chess').add({
+    name: newname,
+    black_user: null,
+    white_user: user,
+    white_arr: stringify(white_arr),
+    black_arr: stringify(black_arr),
+    white_list: objectify(white_list),
+    black_list: objectify(black_list),
+    undo: stringify(undo)
+}).then(docRef => {user_id = docRef.id;}).catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+}
+else {
+
+    db.collection('chess').add({
+    name: newname,
+    white_user: null,
+    black_user: user,
+    white_arr: stringify(white_arr),
+    black_arr: stringify(black_arr),
+    white_list: objectify(white_list),
+    black_list: objectify(black_list),
+    undo: stringify(undo)
+    }).then(docRef => {user_id = docRef.id;}).catch(function(error) {
+        console.error("Error adding document: ", error);
+    });
+}
+}
+
+stringify = (stringed_arr) => {
+    var x = "";
+    for (var y in stringed_arr) {
+        if (y == stringed_arr.length - 1) {
+            x += "[" + String(stringed_arr[y]) + "]";
+        }
+        else {
+            x += "[" + String(stringed_arr[y]) + "],";
+        }}
+    return x;
+}
+
+objectify = (objectified_arr) => {
+    var x = "";
+    for (var y in objectified_arr) {
+        if (y == objectified_arr.length - 1) {
+        x += objectified_arr[y].name;}
+        else {
+            x += objectified_arr[y].name + ",";
+        }
+    }
+    return x;
+}
+
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function deleteAllCookies() {
+    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+}
