@@ -26,6 +26,20 @@ $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('
 $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 }
 
+db.collection('chess').get().then(snapshot => {
+    snapshot.forEach(doc => {
+        if (doc.data().visibility == "Private") {
+            var play_as = doc.data().randomised ? 'random' : null;
+            if (!doc.data().randomised) {
+            if (doc.data().black_user == null) {play_as = "black"}
+            if (doc.data().white_user == null) {play_as = "white"}}
+            var new_table = document.getElementsByTagName('table')[0].insertRow();
+            new_table.innerHTML = `<td>${doc.data().name}</td><td>${doc.data().admin}</td><td>${doc.data().mode}</td><td>${play_as}</td><td>${doc.data().points}</td><td>${doc.data().white_time}</td>`;
+        }
+    })
+})
+
+
 update_graphics();
 window.addEventListener('resize', e => {
     update_graphics()

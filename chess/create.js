@@ -170,7 +170,7 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 });
 
 
-function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time) {
+function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin) {
 var white_time = time;
 if (mode.indexOf('Armageddon') != -1) {
     white_time = [];
@@ -195,6 +195,8 @@ db.collection('chess').add({
     invited_user: invited_user,
     white_time: stringify(white_time),
     black_time: stringify(time),
+    randomised: randomised,
+    admin: admin,
     undo: stringify(undo)
 }).then(docRef => {user_id = docRef.id; setCookie('user_id',user_id,2);sessionStorage.setItem('user_id',user_id);}).catch(function(error) {
     console.error("Error adding document: ", error);
@@ -217,6 +219,8 @@ else {
     invited_user: invited_user,
     white_time: stringify(white_time),
     black_time: stringify(time),
+    randomised: randomised,
+    admin: admin,
     undo: stringify(undo)
     }).then(docRef => {user_id = docRef.id; setCookie('user_id',user_id,2);sessionStorage.setItem('user_id',user_id)}).catch(function(error) {
         console.error("Error adding document: ", error);
@@ -439,9 +443,11 @@ $('custom').addEventListener('click', e=> {
 $('game_creator').addEventListener('submit', e=> {
     e.preventDefault();
     $('error').innerHTML = "";
+    var is_random = false;
     var play_name = $('game_creator')['create_name'].value;
     var play_colour = $('game_creator')['create_play'].value;
     if (play_colour == "Random") {
+        is_random = true;
         play_colour = Math.round(Math.random());
     }
     else if (play_colour == "White") {
@@ -522,7 +528,7 @@ $('game_creator').addEventListener('submit', e=> {
     }
 
     
-    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control);
+    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,israndom,username);
 }
 }}).catch(error => {
     console.error("Error adding document: ", error);
