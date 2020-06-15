@@ -528,7 +528,7 @@ $('game_creator').addEventListener('submit', e=> {
     }
 
     
-    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,israndom,username);
+    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,is_random,username);
 }
 }}).catch(error => {
     console.error("Error adding document: ", error);

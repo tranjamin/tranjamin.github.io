@@ -100,6 +100,25 @@ table {
     width: 100%;
 }
 
+table tr td:nth-last-of-type(2) {
+    width: 20%;
+}
+table tr td:nth-last-of-type(2) {
+    width: 10%;
+}
+table tr td:nth-last-of-type(3) {
+    width: 10%;
+}
+table tr td:nth-last-of-type(4) {
+    width: 15%;
+}
+table tr td:nth-of-type(1) {
+    width: 30%;
+}
+table tr td:nth-of-type(2) {
+    width: 15%;
+}
+
 table th {
     word-wrap: break-word;
     background-color: rgba(255, 136, 0, 0.61);

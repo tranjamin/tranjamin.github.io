@@ -624,7 +624,7 @@ function revealPoints () {
         }
             //DOWNLOAD ACHIEVEMENT
     function countDownloads() {
-        console.log("firstFunction");
+        console.log("first");
         if (loggedIn) {
         var iterator = 0;
         var check;
