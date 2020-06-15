@@ -201,6 +201,7 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
             console.log(load_id);
             setCookie('load_id',load_id,2);
             sessionStorage.setItem('load_id',load_id);
+            window.location.assign('play.html');
         })
     }
 })
