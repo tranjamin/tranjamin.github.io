@@ -4,7 +4,7 @@
 <head>
     <title>Chess</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <link type="text/css" href="chess.css" rel="stylesheet">
+    <link type="text/css" href="play.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
         rel="stylesheet">
@@ -40,21 +40,6 @@
     </div>
     <canvas id="canvas1" style="border: white 2pt solid">
     </canvas>
-    </div>
-    <div id="overlay">
-        <h2>Welcome to Ben's Chess Website</h2>
-        <h4>Set up your own chess game or visit an existing one</h4>
-        <form id="game_creator" action="chess.php" method="POST">
-            <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
-            <div style="text-decoration: unset;"></div>
-            <input type='submit' value='Create your board' name="create_submit">
-        </form>
-        <form id="game_loader" action="chess.php" method="GET">
-            <input type='text' placeholder='Server Name' id='load_name' name="load_name"><br>
-            <div style='text-decoration: none;'></div>
-            <input type='submit' value='Join Game' name="load_submit">
-        </form>
-    </div>
     <div id="options">
         <button>Start New Game</button><br>
         <button>Load</button><br>
@@ -112,7 +97,7 @@
 
     </script>
 
-    <script src='chess.js'></script>
+    <script src='play.js'></script>
 </body>
 
 </html>

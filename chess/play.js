@@ -20,18 +20,6 @@ Flip Board
 var game = "";
 var undo = [];
 
-
-
-
-// socket
-
-var socket;
-var loaded;
-var ready;
-
-
-loaded = false;
-ready = false;
 window.addEventListener('load', e => {
     show_pieces();
 })
@@ -45,17 +33,6 @@ castle_rooka = true;
 castle_rookh = true;
 
 // sockets
-
-// AJAX
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-       console.log('READY');
-      }
-    };
-    xhttp.open("GET", "chess.php", true);
-    xhttp.send();
-  
 
 var username = "anon";
 var user_id = "";
@@ -103,12 +80,6 @@ function update_graphics() {
     options.style.width = window.innerWidth - msg.getBoundingClientRect().left - (canvas.getBoundingClientRect().left - msg.getBoundingClientRect().right) - canvas.getBoundingClientRect().right - parseInt(canvas.style["border-width"].slice(0, -2)) * 2 + "px";
     options.style.top = msg.style.top;
     options.style.right = msg.getBoundingClientRect().left + "px";
-
-    var overlay = $('overlay');
-    overlay.style.height = canvas.height + "px";
-    overlay.style.top = canvas.getBoundingClientRect().top + parseInt(canvas.style['border-width'].slice(0, -2)) + "px";
-    overlay.style.left = canvas.getBoundingClientRect().left + parseInt(canvas.style['border-width'].slice(0, -2)) + "px";
-    overlay.style.width = canvas.width + "px";
 
     //nav
     var nav = $('nav');
@@ -772,43 +743,6 @@ options_list[3].addEventListener('click', e => {
         previous_innerHTML = options_list[3].innerHTML;
         options_list[3].innerHTML = "";
     }
-})
-
-$('game_creator').addEventListener('submit', e => {
-        e.preventDefault();
-        var create_name = $('game_creator').getElementsByTagName('input')[0].value;
-        var exists = false;
-        db.collection('chess').get().then(snapshot => {
-            snapshot.docs.forEach(doc => {
-                if (doc.data().name == create_name) {exists = true;}
-            })
-        }).then(() => {
-        console.log(exists)
-        if (exists) {
-            console.warn('name already exists');
-            $('game_creator').getElementsByTagName('input')[0].value = "";
-        }
-        else {
-            user_id = create_new_user(username,$('game_creator').getElementsByTagName('input')[0].value);
-            $('game_creator').getElementsByTagName('input')[0].value = "";
-            $('overlay').style.visibility = "hidden";
-            
-        }
-
-        })
-    })
-$('game_loader').addEventListener('submit', e => {
-    e.preventDefault();
-    var load_name = $('game_loader').getElementsByTagName('input')[0].value;
-    db.collection("chess").get().then(function (snapshot) {
-        snapshot.docs.forEach(function (doc) {
-            if (load_name == doc.data().name) {
-                console.warn('loaded successfully');
-                user_id = doc.id;
-                $('overlay').style.visibility = "hidden";
-            }
-        })
-    })
 })
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
