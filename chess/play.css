@@ -86,14 +86,6 @@ body form input:first-of-type{
     font-family: 'Raleway';
 }
 
-#game_creator {
-    text-decoration-line: underline;
-    text-align: center;
-}
-#game_loader {    
-    text-decoration-line: underline;
-    text-align: center;
-}
 
 #overlay input[type=text] {
     font-size: 200%;

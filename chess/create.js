@@ -172,6 +172,14 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin) {
 var white_time = time;
+var tempb = [];
+var tempw = [];
+white_list.forEach(obj => {
+	tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+})
+black_list.forEach(obj => {
+    tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+})
 if (mode.indexOf('Armageddon') != -1) {
     white_time = [];
     for (var i in time) {
@@ -187,8 +195,8 @@ db.collection('chess').add({
     white_user: user,
     white_arr: stringify(white_arr),
     black_arr: stringify(black_arr),
-    white_list: objectify(white_list),
-    black_list: objectify(black_list),
+    white_list: tempw,
+    black_list: tempb,
     points: rated,
     mode: mode,
     visibility: visibility,
@@ -197,8 +205,15 @@ db.collection('chess').add({
     black_time: stringify(time),
     randomised: randomised,
     admin: admin,
+    messages: "",
+    turn: 1,
     undo: stringify(undo)
-}).then(docRef => {user_id = docRef.id; setCookie('user_id',user_id,2);sessionStorage.setItem('user_id',user_id);}).catch(function(error) {
+}).then(docRef => {
+    setCookie('game_id',docRef.id,2);
+    sessionStorage.setItem('game_id',docRef.id);
+    window.location.assign('play.html');
+
+}).catch(function(error) {
     console.error("Error adding document: ", error);
     $('error').innerHTML = "Could not connect to server. Please try again later";
 });
@@ -211,8 +226,8 @@ else {
     black_user: user,
     white_arr: stringify(white_arr),
     black_arr: stringify(black_arr),
-    white_list: objectify(white_list),
-    black_list: objectify(black_list),
+    white_list: tempw,
+    black_list: tempb,
     points: rated,
     mode: mode,
     visibility: visibility,
@@ -221,8 +236,14 @@ else {
     black_time: stringify(time),
     randomised: randomised,
     admin: admin,
+    messages: "",
+    turn: 1,
     undo: stringify(undo)
-    }).then(docRef => {user_id = docRef.id; setCookie('user_id',user_id,2);sessionStorage.setItem('user_id',user_id)}).catch(function(error) {
+    }).then(docRef => {
+        setCookie('game_id',docRef.id,2);
+        sessionStorage.setItem('game_id',docRef.id);
+        window.location.assign('play.html');
+    }).catch(function(error) {
         console.error("Error adding document: ", error);
         $('error').innerHTML = "Could not connect to server. Please try again later";
     });

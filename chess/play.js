@@ -74,22 +74,24 @@ function update_graphics() {
     canvas.style.top = window.innerHeight * 0.02 + "px";
 
     msg.style.height = canvas.getBoundingClientRect().height + "px";
-    msg.style.width = (window.innerWidth - canvas.width) / 2 * 0.96 + 'px';
+    msg.style.width = (window.innerWidth - canvas.width) / 2 * 0.5 + 'px';
     msg.style.top = window.innerHeight * 0.02 + "px";
+    msg.style.left = (canvas.getBoundingClientRect().left - msg.style.width.slice(0,-2)) * 0.98 + "px";
 
     msg_title.style.width = msg.style.width;
     msg_title.style.top = msg.style.top;
+    msg_title.style.left = msg.style.left;
     msg_submit.style.bottom = window.innerHeight - msg.getBoundingClientRect().bottom + "px";
-    $('message_form').childNodes[1].style.width = (window.innerWidth - canvas.width) / 2 * 0.9555 + 'px';
+    $('message_form').childNodes[1].style.width = msg.style.width.slice(0,-2) * 0.99 + "px";
+    msg_submit.style.left = msg.style.left;
+    msg_submit.style.width = msg.style.width;
+    $("message_form").childNodes[1].style.display = "absolute";
+    $("message_form").childNodes[1].style.bottom = 0;
 
     message_body.style.height = $("message_form").childNodes[1].getBoundingClientRect().top - msg_title.getBoundingClientRect().bottom + "px";
     message_body.style.width = msg.style.width;
     message_body.style.top = msg_title.getBoundingClientRect().bottom + "px";
-
-    options.style.height = msg.style.height;
-    options.style.width = window.innerWidth - msg.getBoundingClientRect().left - (canvas.getBoundingClientRect().left - msg.getBoundingClientRect().right) - canvas.getBoundingClientRect().right - parseInt(canvas.style["border-width"].slice(0, -2)) * 2 + "px";
-    options.style.top = msg.style.top;
-    options.style.right = msg.getBoundingClientRect().left + "px";
+    message_body.style.left = msg.style.left;
 
     //nav
     var nav = $('nav');
@@ -301,14 +303,22 @@ class piece {
         else {
             undo.push([this.name, original_pos, new_pos, 'castle', undefined]);
         }
-        if (send) {
-            console.log('sending')
-            socket.emit("position", {
-                pos: new_pos,
-                piece: this.name,
-                doublemove: doublemove
+        var tempb = [];
+        var tempw = [];
+        white_list.forEach(obj => {
+            tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+        })
+        black_list.forEach(obj => {
+            tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+        })
+
+            db.collection('chess').doc(game).update({
+                white_arr: stringify(white_arr),
+                black_arr: stringify(black_arr),
+                white_list: tempw,
+                black_list: tempb,
+                turn: blackwhite ? 0 : 1
             })
-        }
     }
 
     highlight(checktest = false, white_arrt = white_arr, black_arrt = black_arr, white_listt = white_arr, black_listt = black_arr, recursion = true) {
@@ -568,48 +578,70 @@ class piece {
 }
 
 
+
 //(rank (char --> int), file)
 
+var w_rooka;
+var w_knightb;
+var w_bishopc;
+var w_queen;
+var w_king;
+var w_bishopf;
+var w_knightg;
+var w_rookh;
 
+var w_a;
+var w_b;
+var w_c;
+var w_d;
+var w_e;
+var w_f;
+var w_g;
+var w_h;
 
-var w_rooka = new piece(1, "R", [1, 1], "w_rooka");
-var w_knightb = new piece(1, "N", [2, 1], "w_knightb");
-var w_bishopc = new piece(1, "B", [3, 1], "w_bishopc");
-var w_queen = new piece(1, "Q", [4, 1], "w_queen");
-var w_king = new piece(1, "K", [5, 1], "w_king");
-var w_bishopf = new piece(1, "B", [6, 1], "w_bishopf");
-var w_knightg = new piece(1, "N", [7, 1], "w_knightg");
-var w_rookh = new piece(1, "R", [8, 1], "w_rookh");
+var b_rooka;
+var b_knightb;
+var b_bishopc;
+var b_queen;
+var b_king;
+var b_bishopf;
+var b_knightg;
+var b_rookh;
 
-var w_a = new piece(1, "P", [1, 2], "w_a");
-var w_b = new piece(1, "P", [2, 2], "w_b");
-var w_c = new piece(1, "P", [3, 2], "w_c");
-var w_d = new piece(1, "P", [4, 2], "w_d");
-var w_e = new piece(1, "P", [5, 2], "w_e");
-var w_f = new piece(1, "P", [6, 2], "w_f");
-var w_g = new piece(1, "P", [7, 2], "w_g");
-var w_h = new piece(1, "P", [8, 2], "w_h");
+var b_a;
+var b_b;
+var b_c;
+var b_d;
+var b_e;
+var b_f;
+var b_g;
+var b_h; 
 
-var b_rooka = new piece(0, "R", [1, 8], "b_rooka");
-var b_knightb = new piece(0, "N", [2, 8], "b_knightb");
-var b_bishopc = new piece(0, "B", [3, 8], "b_bishopc");
-var b_queen = new piece(0, "Q", [4, 8], "b_queen");
-var b_king = new piece(0, "K", [5, 8], "b_king");
-var b_bishopf = new piece(0, "B", [6, 8], "b_bishopf");
-var b_knightg = new piece(0, "N", [7, 8], "b_knightg");
-var b_rookh = new piece(0, "R", [8, 8], "b_rookh");
+var white_list = [];
+var black_list = [];
 
-var b_a = new piece(0, "P", [1, 7], "b_a");
-var b_b = new piece(0, "P", [2, 7], "b_b");
-var b_c = new piece(0, "P", [3, 7], "b_c");
-var b_d = new piece(0, "P", [4, 7], "b_d");
-var b_e = new piece(0, "P", [5, 7], "b_e");
-var b_f = new piece(0, "P", [6, 7], "b_f");
-var b_g = new piece(0, "P", [7, 7], "b_g");
-var b_h = new piece(0, "P", [8, 7], "b_h");
-
-var white_list = [w_rooka, w_knightb, w_bishopc, w_queen, w_king, w_bishopf, w_knightg, w_rookh, w_a, w_b, w_c, w_d, w_e, w_f, w_g, w_h];
-var black_list = [b_rooka, b_knightb, b_bishopc, b_queen, b_king, b_bishopf, b_knightg, b_rookh, b_a, b_b, b_c, b_d, b_e, b_f, b_g, b_h];
+db.collection('chess').doc(game).onSnapshot(doc => {    
+    $('text').innerHTML = doc.data().messages;
+    white_arr = arrayify(doc.data().white_arr, Number);
+    black_arr = arrayify(doc.data().black_arr, Number);
+    turn = doc.data().turn;
+    white_list = [];
+    black_list = [];
+    // eval(`white_arr = [${doc.data().white_arr}]`);
+    for (var i of doc.data().white_list) {
+        var code = `${i.name} = new piece(${i.colour},"${i.type}",[${i.pos}],"${i.name}");`;
+        eval(code);
+        eval(`white_list.push(${i.name})`);
+    }
+    for (var i of doc.data().black_list) {
+        var code = `${i.name} = new piece(${i.colour},"${i.type}",[${i.pos}],"${i.name}");`;
+        eval(code);
+        eval(`black_list.push(${i.name})`);
+    }
+    undo = arrayify(doc.data().undo);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    show_pieces();
+})
 
 function show_pieces() {
     if (blackwhite) {
@@ -668,15 +700,27 @@ document.addEventListener('click', e => {
 
 });
 
-
+var msg_ready = true;
 $("message_form").addEventListener('submit', e => {
     e.preventDefault();
-    socket.emit('chat', {
-        message: $('message_form').childNodes[1].value,
-        handle: handle_colour
+    if ($('message_form').childNodes[1].value && msg_ready) {
+    msg_ready = false;
+    var handle;
+    if (blackwhite == 1) {handle = "white"}
+    else if (blackwhite == 0) {handle = "black"}
+    else {handle = "observer"}
+    var prev_html = "";
+    db.collection('chess').doc(game).get().then(doc => {
+        prev_html = doc.data().messages;
+    }).then(docRef => {
+    db.collection('chess').doc(game).update({
+        messages: prev_html + "<strong>" + handle + ":</strong> " + $('message_form').childNodes[1].value + "<br>"
+    }).then(docRef => {
+        $('message_form').childNodes[1].value = "";
+        msg_ready = true;
     })
-
-    $('message_form').childNodes[1].value = "";
+    
+    })}
 })
 
 function socket_data(socket) {
@@ -748,7 +792,7 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
     window.location.assign('about.html')
 });
 
-db.collection('chess').doc(game).
+
 
 
 
@@ -778,7 +822,7 @@ objectify = (objectified_arr) => {
     return x;
 }
 
-arrayify = (arr2,logs=false) => {
+arrayify = (arr2,type=String) => {
     var arr = arr2;
     /*
     if (arr[0] == '[') {
@@ -792,7 +836,6 @@ arrayify = (arr2,logs=false) => {
     var ret_arr = [];
     var index1;
     var inner = false;
-    if (logs) {console.log(original_arr.length);}
     for (var index in original_arr) {
         if (original_arr[index].includes('[')) {
             
@@ -812,8 +855,11 @@ arrayify = (arr2,logs=false) => {
             ret_arr.push(inter);
         }
         else if (!inner) {
-            
-            ret_arr.push(parseInt(original_arr[index]));
+            if (type == Number) {
+            ret_arr.push(parseInt(original_arr[index]));}
+            else {
+                ret_arr.push((original_arr[index]));
+            }
         }
     }
     return ret_arr;

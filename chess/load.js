@@ -210,8 +210,8 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 /**
  * relevancy.js v0.2
  **/
-
-(function(){
+relevant();
+function relevant (){
 	
 	var S = typeof module != 'undefined' && module && module.exports || (this.relevancy = {}),
 		toString = Object.prototype.toString,
@@ -433,5 +433,5 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 		return toString.call(a) == '[object Array]';
 	};
 
-}());
+}
 
