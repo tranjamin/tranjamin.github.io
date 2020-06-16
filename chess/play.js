@@ -20,6 +20,17 @@ Flip Board
 var game = "";
 var undo = [];
 
+if (getCookie('game_id'))
+ {
+     game = getCookie('game_id')
+ }
+else if (sessionStorage.getItem('game_id')) {
+    game = sessionStorage.getItem('game_id')
+}
+else {
+    console.error('Error getting game id');
+}
+
 window.addEventListener('load', e => {
     show_pieces();
 })
@@ -41,7 +52,6 @@ var msg = $('message');
 var msg_submit = $('submit_message');
 var msg_title = $('chat_title');
 var message_body = $("text");
-var options = $('options');
 
 if (getCookie('username') || sessionStorage.getItem('username')) {
     $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
@@ -716,34 +726,7 @@ function socket_data(socket) {
     })
 
 }
-var options_list = $('options').getElementsByTagName('button');
-options_list[0].addEventListener('click', e => {
-    // start new game
-})
-options_list[1].addEventListener('click', e => {
-    //load
-})
-options_list[2].addEventListener("click", e => {
-    //resign
-    if (observer) {
-        blackwhite = blackwhite ? black : white;
-    }
-})
-var previous_innerHTML;
-options_list[3].addEventListener('click', e => {
-    console.log('click');
-    if ($("login").style.display != "none") {
-        $('login').style.display = "none";
-        $('signup').style.display = "none";
-        options_list[3].innerHTML = previous_innerHTML;
-    }
-    else {
-        $('login').style.display = "initial";
-        $('signup').style.display = "initial";
-        previous_innerHTML = options_list[3].innerHTML;
-        options_list[3].innerHTML = "";
-    }
-})
+
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
@@ -765,45 +748,11 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
     window.location.assign('about.html')
 });
 
+db.collection('chess').doc(game).
 
 
-function load_new_game(user,name) {
-    db.collection('chess');
-}
 
-function create_new_user(user,newname) {
-var random = Math.round(Math.random());
-if (random) {
-    
-db.collection('chess').add({
-    name: newname,
-    black_user: null,
-    white_user: user,
-    white_arr: stringify(white_arr),
-    black_arr: stringify(black_arr),
-    white_list: objectify(white_list),
-    black_list: objectify(black_list),
-    undo: stringify(undo)
-}).then(docRef => {user_id = docRef.id;}).catch(function(error) {
-    console.error("Error adding document: ", error);
-});
-}
-else {
 
-    db.collection('chess').add({
-    name: newname,
-    white_user: null,
-    black_user: user,
-    white_arr: stringify(white_arr),
-    black_arr: stringify(black_arr),
-    white_list: objectify(white_list),
-    black_list: objectify(black_list),
-    undo: stringify(undo)
-    }).then(docRef => {user_id = docRef.id;}).catch(function(error) {
-        console.error("Error adding document: ", error);
-    });
-}
-}
 
 stringify = (stringed_arr) => {
     var x = "";
@@ -829,6 +778,46 @@ objectify = (objectified_arr) => {
     return x;
 }
 
+arrayify = (arr2,logs=false) => {
+    var arr = arr2;
+    /*
+    if (arr[0] == '[') {
+        arr = arr.slice(1)
+    }
+    if (arr[arr.length - 1] == ']') {
+        arr = arr.slice(0,-1)
+    }*/
+    arr = arr.split(',');
+    const original_arr = arr;
+    var ret_arr = [];
+    var index1;
+    var inner = false;
+    if (logs) {console.log(original_arr.length);}
+    for (var index in original_arr) {
+        if (original_arr[index].includes('[')) {
+            
+            index1 = index;
+            inner = true;
+        } 
+        else if (original_arr[index].includes(']'))
+        { 
+            inner = false;
+            var temp_arr = [];
+            original_arr.forEach(name => {temp_arr.push(name)})
+            temp_arr = temp_arr.splice(index1,(index-index1) + 1);
+            console.log(original_arr.length);
+            temp_arr = temp_arr.join(',');
+            temp_arr = temp_arr.split('[')[1].split(']')[0]
+            var inter =  arrayify(temp_arr);
+            ret_arr.push(inter);
+        }
+        else if (!inner) {
+            
+            ret_arr.push(parseInt(original_arr[index]));
+        }
+    }
+    return ret_arr;
+}
 
 
 function setCookie(cname, cvalue, exdays) {
