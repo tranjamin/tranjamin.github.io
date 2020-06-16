@@ -46,7 +46,6 @@ html {
 .rules {
     display: block;
     width: 95%;
-    overflow-y: scroll;
     min-height: 80%;
     background-color: rgba(75, 68, 68, 0.466);
     position: absolute;
@@ -131,4 +130,25 @@ table th:nth-last-of-type(1),table th:nth-last-of-type(3),table th:nth-last-of-t
 table td {
     padding: none;
     margin: none;
+}
+
+#search_private {
+    padding: 10%;
+    width: 80%;
+    height: 20%;
+    overflow: unset;
+}
+#search_private input:first-of-type {
+    width: 100%;
+    line-height: 200%;
+    font-size: 120%;
+    font-family: "Raleway"
+}
+#search_private input:last-of-type {
+    width: 101%;
+    border: none;
+    text-align: center;
+    margin-top: 1.5%;
+    font-size: 120%;
+    font-family: "Raleway"
 }

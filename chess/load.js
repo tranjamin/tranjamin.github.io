@@ -109,23 +109,23 @@ function deleteAllCookies() {
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
 }
 
-$('variant_rules').style.display = "none";
-$('time_rules').style.display = "none";
+$('load_private').style.display = "none";
+$('load_observer').style.display = "none";
 
 $('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e=> {
     $('load_public').style.display = "unset";
-    $('variant_rules').style.display = "none";
-    $('time_rules').style.display = "none";
+    $('load_private').style.display = "none";
+    $('load_observer').style.display = "none";
 })
 $('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e=> {
     $('load_public').style.display = "none";
-    $('variant_rules').style.display = "unset";
-    $('time_rules').style.display = "none";
+    $('load_private').style.display = "unset";
+    $('load_observer').style.display = "none";
 })
 $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e=> {
     $('load_public').style.display = "none";
-    $('variant_rules').style.display = "none";
-    $('time_rules').style.display = "unset";
+    $('load_private').style.display = "none";
+    $('load_observer').style.display = "unset";
 })
 
 $('search_public').addEventListener('keyup',e => {

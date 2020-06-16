@@ -32,8 +32,8 @@
     <h2>Join Game</h2>
         <ul id="rules_nav">
             <li>Search for Game</li>
-            <li>Invites</li>
-            <li>Your Games</li>
+            <li>Join a Private Game</li>
+            <li>Observe a Game</li>
         </ul>
         <div class="rules" id="load_public">
             <form id='search_public'>
@@ -44,9 +44,21 @@
                 <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
             </table>
         </div>
-        <div class="rules" id="variant_rules">
+        <div class="rules" id="load_private">
+            <form id='search_private'>
+                <input type="text" placeholder="Enter the name of a private game" name="search">
+                <input type="submit" value="Search"
+            </form>
         </div>
-        <div class="rules" id="time_rules">How to hug Lila</div>
+        <div class="rules" id="load_observer">
+            <form id='search_observer'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
+            </table>
+        </div>
     </div>
     
     <!-- The core Firebase JS SDK is always required and must be listed first -->
