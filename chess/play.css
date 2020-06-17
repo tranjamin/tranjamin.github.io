@@ -9,7 +9,7 @@ html {
 
 #canvas1 {
     position: absolute;
-    background-image: url("board.jpg");
+    background-color: white;
     background-repeat: no-repeat;
     background-size: contain;
     display: grid;
@@ -168,4 +168,25 @@ right: 15%;
     position: absolute;
     bottom: 5px;
     left: 5px;
+}
+
+#interface {
+    background-color: rgba(30,30,30,1);
+    position: absolute;
+    color: rgb(255, 255, 255);
+    font-family: 'Raleway';
+    font-size: 2em;
+}
+
+#interface div {
+    width: 100%;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+}
+.top {
+    position: absolute;
+    top: 0;
 }

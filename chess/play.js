@@ -32,6 +32,7 @@ else {
 }
 
 window.addEventListener('load', e => {
+    draw_board();
     show_pieces();
 })
 
@@ -57,15 +58,34 @@ if (getCookie('username') || sessionStorage.getItem('username')) {
     $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
 $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
 
 update_graphics();
 window.addEventListener('resize', e => {
-    update_graphics()
+    update_graphics();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    draw_board();
     show_pieces();
 
 })
+
+function draw_board() {
+    ctx.fillStyle = 'rgba(33,33,33,1)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+            if (((i % 2) && (j % 2)) || (!(i % 2) && !(j % 2))) {
+            ctx.fillStyle = 'rgba(255,105,0,1)';
+            ctx.fillRect(i * canvas.width / 8, j * canvas.height / 8, canvas.width / 8, canvas.height / 8);
+            ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            ctx.fillRect(i * canvas.width / 8, j * canvas.height / 8, canvas.width / 8, canvas.height / 8);
+        }
+        }
+    }
+}
 
 function update_graphics() {
     canvas.height = window.innerHeight * 0.95;
@@ -93,14 +113,22 @@ function update_graphics() {
     message_body.style.top = msg_title.getBoundingClientRect().bottom + "px";
     message_body.style.left = msg.style.left;
 
+    
+	var interface = $('interface');
+    interface.style.height = msg.style.height;
+    interface.style.top = msg.style.top;
+    interface.style.width = (window.innerWidth - canvas.getBoundingClientRect().right) * 0.95 + "px";
+    interface.style.left = canvas.getBoundingClientRect().right * 1.01 + "px";
+
+
+
     //nav
     var nav = $('nav');
     nav.style.height = window.innerHeight + "px";
     nav.style.width = screen.width * 0.125 + "px";
     nav.style.top = 0;
     nav.style.left = 0;
-
-
+    
 }
 
 var blackwhite = 1;
@@ -274,7 +302,7 @@ class piece {
             return false;
 
         }
-        console.log(capture_arr[capture]);
+        // console.log(capture_arr[capture]);
         if (!doublemove) {
             turn = turn ? 0 : 1;
             if (undo.length != 0) {
@@ -311,7 +339,29 @@ class piece {
         black_list.forEach(obj => {
             tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
         })
-
+        
+            if (capture_arr[capture]) {
+                switch (capture_arr[capture].type) {
+                    case 'K':
+                        $('self_box').innerHTML += '&#9818';
+                        break;
+                    case 'Q':
+                        $('self_box').innerHTML += '&#9819';
+                        break;
+                    case 'P':
+                        $('self_box').innerHTML += '&#9823';
+                        break;
+                    case 'B':
+                        $('self_box').innerHTML += '&#9821';
+                        break;
+                    case 'N':
+                        $('self_box').innerHTML += '&#9822';
+                        break;
+                    case 'R':
+                        $('self_box').innerHTML += '&#9820';
+                        break;
+                }
+            }
             db.collection('chess').doc(game).update({
                 white_arr: stringify(white_arr),
                 black_arr: stringify(black_arr),
@@ -627,6 +677,9 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     turn = doc.data().turn;
     white_list = [];
     black_list = [];
+    if (doc.data().white_user == username) {blackwhite = 1}
+    else if (doc.data().black_user == username) {blackwhite = 0}
+    else {blackwhite = 1; observer = true;}
     // eval(`white_arr = [${doc.data().white_arr}]`);
     for (var i of doc.data().white_list) {
         var code = `${i.name} = new piece(${i.colour},"${i.type}",[${i.pos}],"${i.name}");`;
@@ -639,11 +692,42 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         eval(`black_list.push(${i.name})`);
     }
     undo = arrayify(doc.data().undo);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     show_pieces();
+
+    if (blackwhite) {
+        $('self_time').style['background-color'] = 'white';
+        $('self_name').style['background-color'] = 'white';
+        $('self_box').style['background-color'] = 'white';
+        $('opposite_name').style['background-color'] = 'black';
+        $('opposite_time').style['background-color'] = 'black';
+        $('opposite_box').style['background-color'] = 'black';
+        $('self_name').style.color = 'black';
+        $('self_time').style.color = 'black';
+        $('self_box').style.color = 'black';
+        $('opposite_name').style.color = 'white';
+        $('opposite_time').style.color = 'white';
+        $('opposite_box').style.color = 'white';
+    }
+    else {
+        $('self_name').style['background-color'] = 'black';
+        $('self_time').style['background-color'] = 'black';
+        $('self_box').style['background-color'] = 'black';
+        $('opposite_name').style['background-color'] = 'white';
+        $('opposite_time').style['background-color'] = 'white';
+        $('opposite_box').style['background-color'] = 'white';
+        $('self_time').style.color = 'white';
+        $('self_name').style.color = 'white';
+        $('self_box').style.color = 'white';
+        $('opposite_name').style.color = 'black';
+        $('opposite_time').style.color = 'black';
+        $('opposite_box').style.color = 'black';
+    }
 })
 
 function show_pieces() {
+    draw_board();
     if (blackwhite) {
         for (let piece_showw of white_list) {
             var img = $(`w${piece_showw.type}`);
@@ -706,9 +790,9 @@ $("message_form").addEventListener('submit', e => {
     if ($('message_form').childNodes[1].value && msg_ready) {
     msg_ready = false;
     var handle;
-    if (blackwhite == 1) {handle = "white"}
+    if (observer) {handle = username}
+    else if (blackwhite == 1) {handle = "white"}
     else if (blackwhite == 0) {handle = "black"}
-    else {handle = "observer"}
     var prev_html = "";
     db.collection('chess').doc(game).get().then(doc => {
         prev_html = doc.data().messages;
@@ -848,7 +932,6 @@ arrayify = (arr2,type=String) => {
             var temp_arr = [];
             original_arr.forEach(name => {temp_arr.push(name)})
             temp_arr = temp_arr.splice(index1,(index-index1) + 1);
-            console.log(original_arr.length);
             temp_arr = temp_arr.join(',');
             temp_arr = temp_arr.split('[')[1].split(']')[0]
             var inter =  arrayify(temp_arr);

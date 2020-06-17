@@ -23,6 +23,7 @@ if (getCookie('username') || sessionStorage.getItem('username')) {
 $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
 $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
 
 sortData();
@@ -54,9 +55,6 @@ function update_graphics() {
     document.getElementsByClassName('rules')[0].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
     document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom + "px";
     document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom + "px";
-
-
-
 
 }
 
@@ -193,7 +191,19 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
         db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
             snapshot.forEach(doc => {
                 if (doc.data().name == load_name) {
-                    load_id = doc.id
+					load_id = doc.id;
+					if (doc.data().white_user == null) {
+						console.log(username);
+						db.collection('chess').doc(load_id).update({
+							white_user: username
+						})
+					}
+					else if (doc.data().black_user == null) {
+						console.log(username);
+						db.collection('chess').doc(load_id).update({
+							black_user: username
+						})
+					}
                 }
             })
         }).then(docRef => {
@@ -215,11 +225,24 @@ $('search_private').addEventListener('submit', e => {
 		exists = true;
 		setCookie('game_id',doc.id,2);
 		sessionStorage.setItem('game_id',doc.id);
-		window.location.assign('play.html');
+		if (doc.data().white_user == null) {
+			db.collection('chess').doc(doc.id).update({
+				white_user: username
+			})
+		}
+		else if (doc.data().black_user == null) {
+			db.collection('chess').doc(doc.id).update({
+				black_user: username
+			})
+		}
 	}	
 		)
 	}).then(docRef => {
-		if (!exists) {$('private_error').innerHTML = "Game does not exist";}
+		if (!exists) {
+			$('private_error').innerHTML = "Game does not exist"; }
+		else {
+		window.location.assign('play.html');
+		}
 	})
 })
 

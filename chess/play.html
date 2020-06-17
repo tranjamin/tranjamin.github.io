@@ -27,12 +27,6 @@
             Powered by Github and Google Firebase
         </div>
     </div>
-
-   
-    <canvas id="canvas1" style="border: white 2pt solid">
-    </canvas>
-    <div id="chat_title">CHAT</div>
-
     <div id="message"></div>
     <p id="text"></p>
     <div id="submit_message">
@@ -40,18 +34,37 @@
             <input type="text" placeholder="Write a message">
         </form>
     </div>
-    <image src="white_rookv2.jpg" class="piece" id="wR" style="display: none;"></image>
-    <image src="white_knightv2.jpg" class="piece" id="wN" style="display: none;"></image>
-    <image src="white_bishopv2.jpg" class="piece" id="wB" style="display: none;"></image>
-    <image src="white_queenv2.jpg" class="piece" id="wQ" style="display: none;"></image>
-    <image src="white_kingv2.jpg" class="piece" id="wK" style="display: none;"></image>
-    <image src="white_pawnv2.jpg" class="piece" id="wP" style="display: none;"></image>
-    <image src="black_rookv2.jpg" class="piece" id="bR" style="display: none;"></image>
-    <image src="black_knightv2.jpg" class="piece" id="bN" style="display: none;"></image>
-    <image src="black_bishopv2.jpg" class="piece" id="bB" style="display: none;"></image>
-    <image src="black_queenv2.jpg" class="piece" id="bQ" style="display: none;"></image>
-    <image src="black_kingv2.jpg" class="piece" id="bK" style="display: none;"></image>
-    <image src="black_pawnv2.jpg" class="piece" id="bP" style="display: none;"></image>
+   
+    <canvas id="canvas1" style="border: white 2pt solid">
+    </canvas>
+    <div id="chat_title">CHAT</div>
+    <div id="interface">
+        <div class="top">
+        <div id="opposite_name">Anon</div>
+        <div id="opposite_time">40:00</div>
+        <div id="opposite_box">&#9812&#9813&#9814&#9815&#9816&#9817</div>
+        <div id="tracking"></div>
+        </div>
+        <div class="bottom">
+        <div id="options"></div>
+        <div id="self_box">&#9818&#9819&#9820&#9821&#9822&#9823</div>
+        <div id="self_time">40:00</div>
+        <div id="self_name">Anon</div>
+        </div>
+    </div>
+
+    <image src="wrook.png" class="piece" id="wR" style="display: none;"></image>
+    <image src="wknight.png" class="piece" id="wN" style="display: none;"></image>
+    <image src="wbishop.png" class="piece" id="wB" style="display: none;"></image>
+    <image src="wqueen.png" class="piece" id="wQ" style="display: none;"></image>
+    <image src="wking.png" class="piece" id="wK" style="display: none;"></image>
+    <image src="wpawn.png" class="piece" id="wP" style="display: none;"></image>
+    <image src="brook.png" class="piece" id="bR" style="display: none;"></image>
+    <image src="bknight.png" class="piece" id="bN" style="display: none;"></image>
+    <image src="bbishop.png" class="piece" id="bB" style="display: none;"></image>
+    <image src="bqueen.png" class="piece" id="bQ" style="display: none;"></image>
+    <image src="bking.png" class="piece" id="bK" style="display: none;"></image>
+    <image src="bpawn.png" class="piece" id="bP" style="display: none;"></image>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 
