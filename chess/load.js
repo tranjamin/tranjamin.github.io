@@ -140,12 +140,11 @@ function sortData(input="", precision=0.3) {
     console.clear();
     var data_arr = {};
     var doc_name = [];
-    db.collection('chess').get().then(snapshot => {
+    db.collection('chess').where('visibility', '==', 'Public').get().then(snapshot => {
         snapshot.forEach(doc => {
             //console.log(doc.data().name, relevancy.weight(doc.data().name,input));
             if (
-                (relevancy.weight(doc.data().name,input) >= precision || input == "") &&  doc.data().visibility == "Public"
-            )
+                (relevancy.weight(doc.data().name,input) >= precision || input == ""))
             {data_arr[doc.data().name] = doc.data();            
             doc_name.push(doc.data().name);}
         })
@@ -191,7 +190,7 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
     if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
         var load_name = e.target.parentElement.cells[0].innerHTML;
         var load_id;
-        db.collection('chess').get().then(snapshot => {
+        db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
             snapshot.forEach(doc => {
                 if (doc.data().name == load_name) {
                     load_id = doc.id
@@ -204,6 +203,24 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
             window.location.assign('play.html');
         })
     }
+})
+
+$('search_private').addEventListener('submit', e => {
+	$('private_error').innerHTML = "";
+	e.preventDefault();
+	var exists = false;
+	var data = $('search_private').getElementsByTagName('input')[0].value;
+	db.collection('chess').where('visibility', '==', 'Private').where('name', '==', data).get().then(snapshot => {
+		snapshot.forEach(doc => {
+		exists = true;
+		setCookie('game_id',doc.id,2);
+		sessionStorage.setItem('game_id',doc.id);
+		window.location.assign('play.html');
+	}	
+		)
+	}).then(docRef => {
+		if (!exists) {$('private_error').innerHTML = "Game does not exist";}
+	})
 })
 
 
