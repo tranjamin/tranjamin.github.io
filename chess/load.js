@@ -248,7 +248,7 @@ function relevant (){
 
 	function Sorter(config, array) {
 
-		config || (config = {});
+		config || (config = {})
 
 		this._array = array;
 
@@ -262,7 +262,7 @@ function relevant (){
 
 		this._weights = {
 			matchInSubjectLength: 0.5,
-			matchInSubjectIndex: .25,
+			matchInSubjectIndex: 0.25,
 			matchInValueLength: 2,
 			matchInValueIndex: 0.25
 		}
@@ -380,7 +380,7 @@ function relevant (){
 			value = String(value);
 
 			if (value === subject) return 1;
-			if (value.toLowerCase() === subject.toLowerCase()) return .9;
+			if (value.toLowerCase() === subject.toLowerCase()) return 0.9;
 
 			var match = S._getLargestMatch(value, regex);
 
@@ -391,7 +391,7 @@ function relevant (){
 
 				matchInValueIndexScore = (1 - (
 					((match.index - lastBoundIndex) / (value.length - lastBoundIndex))
-				)) - ((upTillMatch.split(this.boundRegex).length-1) * .05),
+				)) - ((upTillMatch.split(this.boundRegex).length-1) * 0.05),
 
 				matchInValueLengthScore = match.length / value.length,
 
