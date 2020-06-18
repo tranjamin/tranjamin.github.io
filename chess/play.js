@@ -120,7 +120,9 @@ function update_graphics() {
     interface.style.width = (window.innerWidth - canvas.getBoundingClientRect().right) * 0.95 + "px";
     interface.style.left = canvas.getBoundingClientRect().right * 1.01 + "px";
 
-
+    var options = $('options');
+    options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
+    options.style.left = '0px';
 
     //nav
     var nav = $('nav');
@@ -672,8 +674,40 @@ var b_f;
 var b_g;
 var b_h; 
 
+function win() {
+    console.log('win');
+}
+function lose() {
+    console.log('lose');
+}
+function draw() {
+    console.log('draw')
+}
+
 var white_list = [];
 var black_list = [];
+
+$('options').getElementsByTagName('button')[1].addEventListener('click', e => {
+    if (e.target.innerHTML == '⚑') {
+        e.target.innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
+    }
+    else if (e.target.innerHTML == '✔') {
+        e.target.parentElement.innerHTML = '&#9873';
+        lose();
+    }
+    else if (e.target.innerHTML == '✘') {
+        e.target.parentElement.innerHTML = '&#9873';
+    }
+})
+$('options').getElementsByTagName('button')[2].addEventListener('click', e => {
+    console.log(e.target.innerHTML);
+    if (e.target.innerHTML == "🤝") {
+        e.target.innerHTML = '✘';
+    }
+    else {
+        e.target.innerHTML = '🤝';
+    }
+})
 
 db.collection('chess').doc(game).onSnapshot(doc => {    
     $('text').innerHTML = doc.data().messages;
@@ -887,8 +921,6 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 
 
-
-
 stringify = (stringed_arr) => {
     var x = "";
     for (var y in stringed_arr) {
@@ -954,6 +986,8 @@ arrayify = (arr2,type=String) => {
     }
     return ret_arr;
 }
+
+
 
 
 function setCookie(cname, cvalue, exdays) {
