@@ -748,6 +748,11 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     turn = doc.data().turn;
     white_list = [];
     black_list = [];
+    $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
+    $('opposite_time').innerHTML = blackwhite ? doc.data().black_count : doc.data().white_count;
+    $('self_time').innerHTML = $('self_time').innerHTML / 60 + ":" + (($('self_time').innerHTML % 60 < 10) ? "0" + $('self_time').innerHTML % 60 : $('self_time').innerHTML % 60);
+    $('opposite_time').innerHTML = $('opposite_time').innerHTML / 60 + ":" + (($('opposite_time').innerHTML % 60 < 10) ? "0" + $('opposite_time').innerHTML % 60 : $('opposite_time').innerHTML % 60);
+
     $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
     $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
     if (doc.data().white_user == username) {blackwhite = 1}
@@ -800,6 +805,12 @@ db.collection('chess').doc(game).onSnapshot(doc => {
 
     if (doc.data()['draw_query']) {
         $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
+    }
+
+    if (doc.data().timer[0] != blackwhite) {
+        db.collection('chess').doc(game).update({
+            timer: [blackwhite, new Date()]
+        })
     }
 })
 

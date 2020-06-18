@@ -212,6 +212,9 @@ db.collection('chess').add({
     result: null,
     turn: 1,
     invite: invite,
+    white_count: white_time[0][1],
+    black_count: time[0][1],
+    timer: [1,null],
     undo: stringify(undo)
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);

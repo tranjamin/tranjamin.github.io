@@ -1,0 +1,162 @@
+html {
+    background-color: black;
+}
+
+
+#overlay {
+    background-color: rgb(41, 33, 33);
+    position: absolute;
+    z-index: 10;
+    color: white;
+    height: 100%;
+}
+
+#overlay h2 {
+    text-align: center;
+    font-family: 'Philosopher';
+}
+
+#rules_nav {
+    font-family: "Raleway";
+    text-decoration: none;
+    list-style: none;
+    padding: 0 0;
+    margin: 0 2.5%;
+    text-align: center;
+    text-indent: 0;
+    position: absolute;
+    left: 0;
+    width: 95%;
+    padding: 0;
+    display: grid;
+    grid-template-areas: 'li1 li2 li3 li4';
+    background-color: rgba(255, 102, 0, 0.192);
+}
+
+#rules_nav li:nth-of-type(2) {
+    background-color: rgba(0, 255, 0, 0.192)
+}
+
+#rules_nav li {
+    text-indent: 0;
+    padding: 2% 0;
+    cursor: pointer;
+    width: 100%;
+}
+
+.rules {
+    display: block;
+    width: 95%;
+    min-height: 80%;
+    background-color: rgba(75, 68, 68, 0.466);
+    position: absolute;
+    top: 13.5%;
+    left: 2.5%;
+}
+
+#nav {
+    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
+    position: fixed;
+    z-index: 100;
+    color: white;
+
+}
+#nav li {
+    height: 16%;
+    width: 100%;
+    background-color: rgba(58, 54, 54, 0.158);
+    border-bottom: white 2px solid;
+    position: relative;
+    padding: 0;
+}
+#nav ul {
+    list-style: none;
+    list-style-position: unset;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0%;
+    padding: 0;
+}
+#nav li button {
+    height: 100%;
+    width: 100%;
+    background-color: unset;
+    border: none;
+    color: white;
+    font-family: 'Raleway';
+    font-size: 1.5em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#copyright {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+table {
+    width: 100%;
+}
+
+table tr td:nth-last-of-type(2) {
+    width: 20%;
+}
+table tr td:nth-last-of-type(2) {
+    width: 10%;
+}
+table tr td:nth-last-of-type(3) {
+    width: 10%;
+}
+table tr td:nth-last-of-type(4) {
+    width: 15%;
+}
+table tr td:nth-of-type(1) {
+    width: 30%;
+}
+table tr td:nth-of-type(2) {
+    width: 15%;
+}
+
+table th {
+    word-wrap: break-word;
+    background-color: rgba(255, 136, 0, 0.61);
+}
+
+table th:nth-last-of-type(1),table th:nth-last-of-type(3),table th:nth-last-of-type(5) {
+    background-color: rgba(255, 136, 0, 0.452);
+}
+
+table td {
+    padding: none;
+    margin: none;
+}
+
+#search_private {
+    padding: 10%;
+    width: 80%;
+    height: 20%;
+    overflow: unset;
+}
+#search_private input:first-of-type {
+    width: 100%;
+    line-height: 200%;
+    font-size: 120%;
+    font-family: "Raleway"
+}
+#search_private input:last-of-type {
+    width: 101%;
+    border: none;
+    text-align: center;
+    margin-top: 1.5%;
+    font-size: 120%;
+    font-family: "Raleway"
+}
+
+#private_error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    font-size: 120%;
+}

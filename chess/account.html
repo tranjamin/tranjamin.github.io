@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <title>Chess</title>
+    <title>My Account</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <link type="text/css" href="chess.css" rel="stylesheet">
+    <link type="text/css" href="account.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
         rel="stylesheet">
@@ -12,49 +12,64 @@
 </head>
 
 <body>
-    <div id="chat_title">CHAT</div>
+    <div id="nav">
+        <ul>
 
-    <div id="message"></div>
-    <p id="text"></p>
-    <div id="submit_message">
-        <form id="message_form">
-            <input type="text" placeholder="Write a message">
-            <input type="submit" value="Submit" style="visibility: hidden;">
-        </form>
+<li><button>Login/Signup<button></li>
+<li><button>My Games</button></li>
+<li><button>Create a Game</button></li>
+<li><button>Join Game</button></li>
+<li><button>How to Play</button></li>
+
+        </ul>
+        <div id="copyright">
+            &copy Benjamin Tran 2020<br>
+            Powered by Github and Google Firebase
+        </div>
     </div>
-    <canvas id="canvas1" style="border: white 2pt solid">
-    </canvas>
     </div>
     <div id="overlay">
-        <h2>Welcome to Ben's Chess Website</h2>
-        <h4>Set up your own chess game or visit an existing one</h4>
-        <form id="game_creator" action="chess.php" method="POST">
-            <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
-            <div style="text-decoration: unset;"></div>
-            <input type='submit' value='Create your board' name="create_submit">
-        </form>
-        <form id="game_loader" action="chess.php" method="GET">
-            <input type='text' placeholder='Server Name' id='load_name' name="load_name"><br>
-            <div style='text-decoration: none;'></div>
-            <input type='submit' value='Join Game' name="load_submit">
-        </form>
-    </div>
+    <h2>My Account</h2>
+        <ul id="rules_nav">
+            <li>Information</li>
+            <li>Current Games</li>
+            <li>Invites</li>
+            <li>Completed Games</li>
+            
+        </ul>
+        <div class="rules" id="info">
 
-        <form id="login" style="display: none;">
-            <input name="username" type="text" placeholder="username"><br>
-            <input name="password" type="password" placeholder="password"><br>
-            <input name="login" type="submit" value="Login">
-        </form>
-        <form id="signup" style="display: none;">
-            <input name="new_username" placeholder="create username"><br>
-            <input name="email" placeholder="enter email"><br>
-            <input name="new_password" placeholder="create password"><br>
-            <input name="confirm_password" placeholder="confirm password"><br>
-            <input name="signup" type="submit" value="Sign Up">
-        </form>
+        </div>
+        <div class="rules" id="load_current">
+            <form id='search_current'>
+                <input type="text" placeholder="Enter the name of a private game" name="search">
+                <input type="submit" value="Search">
+            </form>
+            <table>
+                <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
+            </table>
+            <div id="private_error"></div>
+        </div>
+        <div class="rules" id="load_invite">
+            <form id='search_invite'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
+            </table>
+        </div>
+        <div class="rules" id="load_past">
+            <form id='search_past'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
+            </table>
+        </div>
     </div>
-    <form>
-        <input id="logout" value="Logout" type="submit" name="logout"></form>
+    
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 
@@ -82,7 +97,7 @@
 
     </script>
 
-    <script src='chess.js'></script>
+    <script src='account.js'></script>
 </body>
 
 </html>
