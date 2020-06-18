@@ -26,7 +26,8 @@ $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
 
-sortData();
+sortData('load_public');
+sortData('load_observer');
 update_graphics();
 window.addEventListener('resize', e => {
     update_graphics()
@@ -128,13 +129,21 @@ $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e=> {
 
 $('search_public').addEventListener('keyup',e => {
     if ($('search_public')['increment'].value != "0") {
-    sortData($('search_public')['search'].value, $('search_public')['increment'].value);
+    sortData('load_public', $('search_public')['search'].value, $('search_public')['increment'].value);
     }
     else {
-    sortData($('search_public')['search'].value);
+    sortData('load_public', $('search_public')['search'].value);
     }
 });
-function sortData(input="", precision=0.3) {
+$('search_observer').addEventListener('keyup',e => {
+    if ($('search_observer')['increment'].value != "0") {
+    sortData('load_observer', $('search_observer')['search'].value, $('search_observer')['increment'].value);
+    }
+    else {
+    sortData('load_observer', $('search_observer')['search'].value);
+    }
+});
+function sortData(id, input="", precision=0.3) {
     console.clear();
     var data_arr = {};
     var doc_name = [];
@@ -149,12 +158,12 @@ function sortData(input="", precision=0.3) {
     }).then(docRef => {
         doc_name = relevancy.sort(doc_name, input);
         doc_name.splice(10, doc_name.length - 1);
-        var header = $('load_public').getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
-        $('load_public').getElementsByTagName('table')[0].innerHTML = "";
-        $('load_public').getElementsByTagName('table')[0].appendChild(header);    
+        var header = $(id).getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
+        $(id).getElementsByTagName('table')[0].innerHTML = "";
+        $(id).getElementsByTagName('table')[0].appendChild(header);    
         for (var element of doc_name) {
             var data = data_arr[element];
-            var new_table = $('load_public').getElementsByTagName('table')[0].insertRow();
+            var new_table = $(id).getElementsByTagName('table')[0].insertRow();
             var play_as = data.randomised ? 'Random' : null;
             var variation = data.mode;
             if (data.mode.indexOf(' Chess') > 0) {
@@ -206,6 +215,24 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 					}
                 }
             })
+        }).then(docRef => {
+            console.log(load_id);
+            setCookie('game_id',load_id,2);
+            sessionStorage.setItem('game_id',load_id);
+            window.location.assign('play.html');
+        })
+    }
+})
+
+$('load_observer').getElementsByTagName('table')[0].addEventListener('click', e => {
+    if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
+        var load_name = e.target.parentElement.cells[0].innerHTML;
+        var load_id;
+        db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
+            snapshot.forEach(doc => {
+                if (doc.data().name == load_name) {
+					load_id = doc.id;
+            }})
         }).then(docRef => {
             console.log(load_id);
             setCookie('game_id',load_id,2);
