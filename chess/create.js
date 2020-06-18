@@ -170,7 +170,7 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 });
 
 
-function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin) {
+function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin, invite) {
 var white_time = time;
 var tempb = [];
 var tempw = [];
@@ -211,6 +211,7 @@ db.collection('chess').add({
     draw_query: false,
     result: null,
     turn: 1,
+    invite: invite,
     undo: stringify(undo)
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
@@ -245,6 +246,7 @@ else {
     black_bank: "",
     draw_query: false,
     result: null,
+    invite: invite,
     turn: 1,
     undo: stringify(undo)
     }).then(docRef => {
@@ -415,7 +417,18 @@ increment.addEventListener('keypress', e=> {
     }})
 }
 
-
+$("invite").getElementsByClassName('select-selected')[0].addEventListener('click', e => {
+    if (e.target.innerHTML == "Custom") {
+        e.target.innerHTML = "<form><input type='text' id='custom_player' name='invite_player''></form>";
+        e.target.getElementsByTagName('input')[0].style['background-color'] = 'inherit';
+        e.target.getElementsByTagName('input')[0].style.border = 'none';
+        e.target.getElementsByTagName('input')[0].style.height = '100%';
+        e.target.getElementsByTagName('input')[0].style['text-align'] = 'center';
+        e.target.getElementsByTagName('input')[0].style['font-family'] = 'inherit';
+        e.target.getElementsByTagName('input')[0].style['font-size'] = 'inherit';
+        e.target.getElementsByTagName('input')[0].style.color = 'inherit';
+    }
+})
 
 $('insert_new_phase').addEventListener('click', e=> {
     var new_item = document.createElement("DIV");
@@ -488,10 +501,30 @@ $('game_creator').addEventListener('submit', e=> {
     var variation = $('game_creator')['create_type'].value;
     var visibility = $('game_creator')['create_public'].value;
     var other_user = $('game_creator')['create_invite'].value;
+    if (other_user == "Custom") {
+        other_user = document.getElementById('custom_player').value;
+    }
+    else {
+        other_user = null;
+    }
+
+
     var points = $('game_creator')['create_points'].value;
     var time_control = $('game_creator')['create_time'].value;
 
-    var exists = false
+    var exists = false;
+    var user_exists = false;
+    db.collection('account').where('username', '==', other_user).get().then(snapshot => {
+        if (other_user != null) {
+            snapshot.docs.forEach(doc => {
+                if (doc.data().username == other_user) {
+                user_exists = true;
+            }
+        })}
+        else {
+            user_exists = true;
+        }
+    }).then(snapshot => {
     db.collection('chess').get().then(snapshot => {
         snapshot.docs.forEach(doc => {if (doc.data().name == play_name) {exists = true;}})}).then(() => {
     if (exists) {
@@ -534,6 +567,9 @@ $('game_creator').addEventListener('submit', e=> {
         $('error').innerHTML = "Please enter a nonzero time";
     }
 
+    else if (!user_exists) {
+        $('error').innerHTML = "Invited user does not Exist";
+    }
     else {
     if (time_control == "Custom") {
         time_control = [];
@@ -557,11 +593,12 @@ $('game_creator').addEventListener('submit', e=> {
     }
 
     
-    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,is_random,username);
+    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,is_random,username,other_user);
 }
 }}).catch(error => {
     console.error("Error adding document: ", error);
     $('error').innerHTML = "Could not connect to server. Please try again later";
+})
 })
 })
 
