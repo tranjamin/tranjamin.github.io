@@ -362,12 +362,17 @@ class piece {
                         break;
                 }
             }
+            var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
+            var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
             db.collection('chess').doc(game).update({
                 white_arr: stringify(white_arr),
                 black_arr: stringify(black_arr),
                 white_list: tempw,
                 black_list: tempb,
-                turn: blackwhite ? 0 : 1
+                turn: blackwhite ? 0 : 1,
+                white_bank: white_bank,
+                black_bank: black_bank
+
             })
     }
 
@@ -677,6 +682,8 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     turn = doc.data().turn;
     white_list = [];
     black_list = [];
+    $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
+    $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
     if (doc.data().white_user == username) {blackwhite = 1}
     else if (doc.data().black_user == username) {blackwhite = 0}
     else {blackwhite = 1; observer = true;}

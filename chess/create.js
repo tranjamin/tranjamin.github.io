@@ -206,6 +206,8 @@ db.collection('chess').add({
     randomised: randomised,
     admin: admin,
     messages: "",
+    white_bank: "",
+    blac_bank: "",
     turn: 1,
     undo: stringify(undo)
 }).then(docRef => {
@@ -237,6 +239,8 @@ else {
     randomised: randomised,
     admin: admin,
     messages: "",
+    white_bank: "",
+    blac_bank: "",
     turn: 1,
     undo: stringify(undo)
     }).then(docRef => {
