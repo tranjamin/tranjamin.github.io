@@ -676,12 +676,21 @@ var b_h;
 
 function win() {
     console.log('win');
+    db.collection('chess').doc(game).update({
+        result: blackwhite ? 'white' : 'black'
+    })
 }
 function lose() {
     console.log('lose');
+    db.collection('chess').doc(game).update({
+        result: blackwhite ? 'black' : 'white'
+    })
 }
 function draw() {
-    console.log('draw')
+    console.log('draw');
+    db.collection('chess').doc(game).update({
+        result: 'draw'
+    })
 }
 
 var white_list = [];
@@ -700,12 +709,35 @@ $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     }
 })
 $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
-    console.log(e.target.innerHTML);
     if (e.target.innerHTML == "🤝") {
         e.target.innerHTML = '✘';
+        $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has offered a draw</i><br>`;
+        db.collection('chess').doc(game).update({
+            draw_query: true,
+            messages: $('text').innerHTML
+        })
     }
-    else {
+    else if (e.target.innerHTML == '✘') {
+        if (e.target.tagName == "button") {
         e.target.innerHTML = '🤝';
+        }
+        else {
+        e.target.parentElement.innerHTML = '🤝';
+    }
+        $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has revoked the draw</i><br>`;
+        db.collection('chess').doc(game).update({
+            draw_query: false,
+            messages: $('text').innerHTML
+        })
+    }
+    else if (e.target.innerHTML == '✔') {
+        e.target.parentElement.innerHTML = '🤝';
+        $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has accepted the draw</i><br>`;
+        db.collection('chess').doc(game).update({
+            draw_query: false,
+            messages: $('text').innerHTML
+        })
+        draw();
     }
 })
 
@@ -764,6 +796,10 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('opposite_name').style.color = 'black';
         $('opposite_time').style.color = 'black';
         $('opposite_box').style.color = 'black';
+    }
+
+    if (doc.data()['draw_query']) {
+        $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
 })
 

@@ -207,7 +207,9 @@ db.collection('chess').add({
     admin: admin,
     messages: "",
     white_bank: "",
-    blac_bank: "",
+    black_bank: "",
+    draw_query: false,
+    result: null,
     turn: 1,
     undo: stringify(undo)
 }).then(docRef => {
@@ -240,7 +242,9 @@ else {
     admin: admin,
     messages: "",
     white_bank: "",
-    blac_bank: "",
+    black_bank: "",
+    draw_query: false,
+    result: null,
     turn: 1,
     undo: stringify(undo)
     }).then(docRef => {
