@@ -186,6 +186,7 @@ if (mode.indexOf('Armageddon') != -1) {
         white_time.push([time[i][0],Math.round(time[i][1] * 6/5),Math.round(time[i][2] * 6/5)]);
     }
 }
+console.log(white_time)
 var rated = points == "Casual" ? false : true;
 if (play_colour) {
 
@@ -212,8 +213,8 @@ db.collection('chess').add({
     result: null,
     turn: 1,
     invite: invite,
-    white_count: white_time[0][1],
-    black_count: time[0][1],
+    white_count: white_time ? white_time[0][1] : null,
+    black_count: time ? time[0][1] : null,
     timer: [1,null],
     undo: stringify(undo)
 }).then(docRef => {
@@ -251,6 +252,8 @@ else {
     result: null,
     invite: invite,
     timer: [1,null],
+    white_count: white_time ? white_time[0][1] : null,
+    black_count: time ? time[0][1] : null,
     turn: 1,
     undo: stringify(undo)
     }).then(docRef => {

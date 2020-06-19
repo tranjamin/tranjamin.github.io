@@ -19,6 +19,7 @@ Flip Board
 
 var game = "";
 var undo = [];
+var clock;
 
 if (getCookie('game_id'))
  {
@@ -370,7 +371,9 @@ class piece {
 
             var time_left;
             db.collection('chess').doc(game).get().then(doc => {
-                elapsed_time -= doc.data().timer[1];
+                console.log(doc.data().timer[1].toDate() - 0);
+                console.log(elapsed_time - 0);
+                elapsed_time = elapsed_time - doc.data().timer[1].toDate();
                 elapsed_time /= 1000;
                 time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
                 time_left -= elapsed_time;
@@ -776,8 +779,9 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     black_list = [];
     $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
     $('opposite_time').innerHTML = blackwhite ? doc.data().black_count : doc.data().white_count;
-    $('self_time').innerHTML = $('self_time').innerHTML / 60 + ":" + (($('self_time').innerHTML % 60 < 10) ? "0" + $('self_time').innerHTML % 60 : $('self_time').innerHTML % 60);
-    $('opposite_time').innerHTML = $('opposite_time').innerHTML / 60 + ":" + (($('opposite_time').innerHTML % 60 < 10) ? "0" + $('opposite_time').innerHTML % 60 : $('opposite_time').innerHTML % 60);
+    $('self_time').innerHTML = time_to_str($('self_time').innerHTML);
+    $('opposite_time').innerHTML = time_to_str($('opposite_time').innerHTML);
+
 
     $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
     $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
@@ -833,12 +837,38 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
 
-    if (doc.data().timer[0] != blackwhite) {
+    if (doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite) {
+        var new_date = new Date()
         db.collection('chess').doc(game).update({
-            timer: [blackwhite, new Date()]
+            timer: [blackwhite, new_date]
         })
+        var original_date = new_date;
+        clock = setInterval(() => {
+            $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 1);
+        }, 1000);
     }
+
 })
+
+function time_to_str(time) {
+    var ret_string;
+    if (Math.floor(time / 60) != 0) {
+        ret_string = Math.floor(time / 60) + ":" + (((time % 60) < 10) ? "0" : "") + (time % 60).toFixed(0);
+    }
+    else {
+        if ((time % 60) < 10) {
+        ret_string = Math.floor(time / 60) + ":" + (((time % 60) < 10) ? "0" : "") + (time % 60).toFixed(3);
+        }
+        else {
+            ret_string = Math.floor(time / 60) + ":" + (((time % 60) < 10) ? "0" : "") + (time % 60).toFixed(2);
+        }
+    }
+    return ret_string;
+}
+
+function str_to_time(str) {
+    return parseInt(str.split(':')[0] * 60) + parseFloat(str.split(':')[1])
+}
 
 function show_pieces() {
     draw_board();

@@ -250,24 +250,37 @@ $('search_private').addEventListener('submit', e => {
 		exists = true;
 		setCookie('game_id',doc.id,2);
 		sessionStorage.setItem('game_id',doc.id);
-		if (doc.data().white_user == null) {
+		if (doc.data()['white_user'] == null) {
 			db.collection('chess').doc(doc.id).update({
 				white_user: username
+			}).then(() => {
+						if (!exists) {
+			$('private_error').innerHTML = "Game does not exist"; }
+		else {
+		window.location.assign('play.html');
+		}
 			})
 		}
-		else if (doc.data().black_user == null) {
+		else if (doc.data()['black_user'] == null) {
 			db.collection('chess').doc(doc.id).update({
 				black_user: username
-			})
-		}
-	}	
-		)
-	}).then(docRef => {
+			}).then(() => {
 		if (!exists) {
 			$('private_error').innerHTML = "Game does not exist"; }
 		else {
 		window.location.assign('play.html');
 		}
+			})
+		}
+		else {
+if (!exists) {
+			$('private_error').innerHTML = "Game does not exist"; }
+		else {
+		window.location.assign('play.html');
+		}
+		}
+	}
+		)
 	})
 })
 
