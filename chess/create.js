@@ -250,6 +250,7 @@ else {
     draw_query: false,
     result: null,
     invite: invite,
+    timer: [1,null],
     turn: 1,
     undo: stringify(undo)
     }).then(docRef => {

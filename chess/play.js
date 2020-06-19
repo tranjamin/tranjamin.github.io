@@ -215,6 +215,7 @@ class piece {
     }
 
     update(new_pos, send = true, doublemove = false) {
+        var elapsed_time = new Date();
         console.log('update');
         var original_pos = this.pos;
         var test_arr = this.colour ? white_arr : black_arr;
@@ -366,6 +367,16 @@ class piece {
             }
             var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
             var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
+
+            var time_left;
+            db.collection('chess').doc(game).get().then(doc => {
+                elapsed_time -= doc.data().timer[1];
+                elapsed_time /= 1000;
+                time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
+                time_left -= elapsed_time;
+
+            }).then(() => {
+                if (blackwhite) {
             db.collection('chess').doc(game).update({
                 white_arr: stringify(white_arr),
                 black_arr: stringify(black_arr),
@@ -373,9 +384,24 @@ class piece {
                 black_list: tempb,
                 turn: blackwhite ? 0 : 1,
                 white_bank: white_bank,
-                black_bank: black_bank
-
-            })
+                black_bank: black_bank,
+                white_count: time_left,
+                
+            })}
+                else {
+            db.collection('chess').doc(game).update({
+                white_arr: stringify(white_arr),
+                black_arr: stringify(black_arr),
+                white_list: tempw,
+                black_list: tempb,
+                turn: blackwhite ? 0 : 1,
+                white_bank: white_bank,
+                black_bank: black_bank,
+                black_count: time_left,
+                
+            })  
+                }
+        })
     }
 
     highlight(checktest = false, white_arrt = white_arr, black_arrt = black_arr, white_listt = white_arr, black_listt = black_arr, recursion = true) {
