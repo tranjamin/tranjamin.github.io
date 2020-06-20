@@ -217,7 +217,7 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
             console.log(load_id);
             setCookie('game_id',load_id,2);
             sessionStorage.setItem('game_id',load_id);
-            //window.location.assign('play.html');
+            window.location.assign('play.html');
         })
     }
 })

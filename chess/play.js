@@ -226,7 +226,8 @@ class piece {
         test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
         this.pos = new_pos;
         var capture_arr = this.colour ? black_list : white_list;
-        var original_capture_arr = capture_arr;
+        var original_capture_arr = [];
+        capture_arr.forEach(ele => {original_capture_arr.push(ele)});
         var capture = findArr(new_pos, opposite)
         if (capture != -1) {
             opposite.splice(findArr(new_pos, opposite), 1); //may be error
@@ -345,6 +346,7 @@ class piece {
         })
         
             if (capture_arr[capture]) {
+                console.log(original_capture_arr[capture])
                 switch (capture_arr[capture].type) {
                     case 'K':
                         $('self_box').innerHTML += '&#9818';
@@ -369,8 +371,9 @@ class piece {
             var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
             var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
 
-            var time_left;
+            var time_left = 0;
             db.collection('chess').doc(game).get().then(doc => {
+                if (doc.data()['white_time'] != null) {
                 console.log(doc.data().timer[1].toDate() - 0);
                 console.log(elapsed_time - 0);
                 elapsed_time = elapsed_time - doc.data().timer[1].toDate();
@@ -378,6 +381,7 @@ class piece {
                 time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
                 time_left -= elapsed_time;
                 clearInterval(clock);
+            }
 
             }).then(() => {
                 if (blackwhite) {
@@ -391,7 +395,8 @@ class piece {
                 black_bank: black_bank,
                 white_count: time_left,
                 
-            })}
+            }).catch(error => {console.log(error.lineNumber)})
+        }
                 else {
             db.collection('chess').doc(game).update({
                 white_arr: stringify(white_arr),
@@ -403,7 +408,7 @@ class piece {
                 black_bank: black_bank,
                 black_count: time_left,
                 
-            })  
+            }).catch(error => {console.log(error.lineNumber)})
                 }
         })
     }
@@ -837,8 +842,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     if (doc.data()['draw_query']) {
         $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
-
-    if (doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite) {
+    if (doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite && doc.data()['white_time'] != null) {
         var new_date = new Date()
         db.collection('chess').doc(game).update({
             timer: [blackwhite, new_date]
