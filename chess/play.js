@@ -844,12 +844,45 @@ db.collection('chess').doc(game).onSnapshot(doc => {
             timer: [blackwhite, new_date]
         })
         var original_date = new_date;
-        clock = setInterval(() => {
-            $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 1);
-        }, 1000);
+        if (parseInt($('self_time').innerHTML.split(':')[0])) {
+            interval1();
+        }
+        else {
+            if (parseFloat($('self_time').innerHTML.split(":")[1])) {
+                interval3();
+            }
+            else {
+                interval2();
+            }
+        }
+
     }
 
 })
+
+interval3 = () => {
+    clock = setInterval(() => {
+        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.001);
+    }, 1)
+}
+interval2 = () => {
+    clock = setInterval(() => {
+        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
+        if ($('self_time').innerHTML == "0:10.0") {
+            clearInterval(clock);
+            interval3();
+        }
+    }, 10)
+}
+interval1 = () => {
+    clock = setInterval(() => {
+        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 1);
+            if ($('self_time').innerHTML == "1:00") {
+                clearInterval(clock);
+                interval2();
+            }
+    }, 1000)
+}
 
 function time_to_str(time) {
     var ret_string;
