@@ -141,37 +141,41 @@ $('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e=> {
 
 $('search_current').addEventListener('keyup',e => {
     if ($('search_current')['increment'].value != "0") {
-    sortData('load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
+    sortData('current','load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
     }
     else {
-    sortData('load_current', $('search_current')['search'].value);
+    sortData('current','load_current', $('search_current')['search'].value);
     }
 });
 $('search_invite').addEventListener('keyup',e => {
     if ($('search_invite')['increment'].value != "0") {
-    sortData('load_invite', $('search_invite')['search'].value, $('search_invite')['increment'].value);
+    sortData('invites','load_invite', $('search_invite')['search'].value, $('search_invite')['increment'].value);
     }
     else {
-    sortData('load_invite', $('search_invite')['search'].value);
+    sortData('invites','load_invite', $('search_invite')['search'].value);
     }
 });
 $('search_past').addEventListener('keyup',e => {
     if ($('search_past')['increment'].value != "0") {
-    sortData('load_past', $('search_past')['search'].value, $('search_past')['increment'].value);
+    sortData('completed','load_past', $('search_past')['search'].value, $('search_past')['increment'].value);
     }
     else {
-    sortData('load_past', $('search_past')['search'].value);
+    sortData('completed','load_past', $('search_past')['search'].value);
     }
 });
-function sortData(id, input="", precision=0.3) {
+function sortData(conditional, id, input="", precision=0.3) {
     console.clear();
     var data_arr = {};
     var doc_name = [];
-    db.collection('chess').where('visibility', '==', 'Public').get().then(snapshot => {
+    db.collection('chess').get().then(snapshot => {
         snapshot.forEach(doc => {
             //console.log(doc.data().name, relevancy.weight(doc.data().name,input));
             if (
-                (relevancy.weight(doc.data().name,input) >= precision || input == ""))
+				(relevancy.weight(doc.data().name,input) >= precision || input == "")
+				&& ((conditional == "invites" && doc.data().invited_user == username) ||
+					(conditional == "current" && !doc.data().result) ||
+					(conditional =="completed" && doc.data().result)
+			))
             {data_arr[doc.data().name] = doc.data();            
             doc_name.push(doc.data().name);}
         })

@@ -170,7 +170,7 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 });
 
 
-function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin, invite) {
+function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin) {
 var white_time = time;
 var tempb = [];
 var tempw = [];
@@ -212,7 +212,6 @@ db.collection('chess').add({
     draw_query: false,
     result: null,
     turn: 1,
-    invite: invite,
     white_count: white_time ? white_time[0][1] : null,
     black_count: time ? time[0][1] : null,
     timer: [1,null],
@@ -250,7 +249,6 @@ else {
     black_bank: "",
     draw_query: false,
     result: null,
-    invite: invite,
     timer: [1,null],
     white_count: white_time ? white_time[0][1] : null,
     black_count: time ? time[0][1] : null,
@@ -600,7 +598,7 @@ $('game_creator').addEventListener('submit', e=> {
     }
 
     
-    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,is_random,username,other_user);
+    create_new_user(username,play_name,play_colour,variation,visibility,other_user,points,time_control,is_random,username);
 }
 }}).catch(error => {
     console.error("Error adding document: ", error);

@@ -26,8 +26,8 @@ $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
 
-sortData('load_public');
-sortData('load_observer');
+sortData('public', 'load_public');
+sortData('observer', 'load_observer');
 update_graphics();
 window.addEventListener('resize', e => {
     update_graphics()
@@ -129,31 +129,34 @@ $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e=> {
 
 $('search_public').addEventListener('keyup',e => {
     if ($('search_public')['increment'].value != "0") {
-    sortData('load_public', $('search_public')['search'].value, $('search_public')['increment'].value);
+    sortData('public', 'load_public', $('search_public')['search'].value, $('search_public')['increment'].value);
     }
     else {
-    sortData('load_public', $('search_public')['search'].value);
+    sortData('public', 'load_public', $('search_public')['search'].value);
     }
 });
 $('search_observer').addEventListener('keyup',e => {
     if ($('search_observer')['increment'].value != "0") {
-    sortData('load_observer', $('search_observer')['search'].value, $('search_observer')['increment'].value);
+    sortData('observer', 'load_observer', $('search_observer')['search'].value, $('search_observer')['increment'].value);
     }
     else {
-    sortData('load_observer', $('search_observer')['search'].value);
+    sortData('observer', 'load_observer', $('search_observer')['search'].value);
     }
 });
-function sortData(id, input="", precision=0.3) {
+function sortData(mode, id, input="", precision=0.3) {
     console.clear();
     var data_arr = {};
-    var doc_name = [];
+	var doc_name = [];
     db.collection('chess').where('visibility', '==', 'Public').get().then(snapshot => {
         snapshot.forEach(doc => {
-            //console.log(doc.data().name, relevancy.weight(doc.data().name,input));
+			//console.log(doc.data().name, relevancy.weight(doc.data().name,input));
+			if ((mode == "observer" && doc.data()['white_user'] != null && doc.data()['black_user'] != null) || 
+				(mode == "public" && (doc.data()['white_user'] == null || doc.data()['black_user'] == null))
+			) {
             if (
                 (relevancy.weight(doc.data().name,input) >= precision || input == ""))
             {data_arr[doc.data().name] = doc.data();            
-            doc_name.push(doc.data().name);}
+            doc_name.push(doc.data().name);}}
         })
     }).then(docRef => {
         doc_name = relevancy.sort(doc_name, input);
