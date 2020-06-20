@@ -377,6 +377,7 @@ class piece {
                 elapsed_time /= 1000;
                 time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
                 time_left -= elapsed_time;
+                clearInterval(clock);
 
             }).then(() => {
                 if (blackwhite) {
