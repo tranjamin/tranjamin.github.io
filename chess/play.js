@@ -666,6 +666,7 @@ class piece {
             return false;
 
         }
+        return onboard;
     }
 }
 
