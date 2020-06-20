@@ -215,17 +215,17 @@ class piece {
         }
     }
 
-    update(new_pos, send = true, doublemove = false) {
+    update(new_pos, send = true, doublemove = false, w_arr=white_arr, b_arr=black_arr, w_list=white_list, b_list=black_list) {
         var elapsed_time = new Date();
         console.log('update');
         var original_pos = this.pos;
-        var test_arr = this.colour ? white_arr : black_arr;
-        var opposite = this.colour ? black_arr : white_arr;
+        var test_arr = this.colour ? w_arr : b_arr;
+        var opposite = this.colour ? b_arr : wh_arr;
         var original_test_arr = test_arr;
         var original_opposite = opposite;
         test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
         this.pos = new_pos;
-        var capture_arr = this.colour ? black_list : white_list;
+        var capture_arr = this.colour ? b_list : w_list;
         var original_capture_arr = [];
         capture_arr.forEach(ele => {original_capture_arr.push(ele)});
         var capture = findArr(new_pos, opposite)
@@ -338,10 +338,10 @@ class piece {
         }
         var tempb = [];
         var tempw = [];
-        white_list.forEach(obj => {
+        w_list.forEach(obj => {
             tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
         })
-        black_list.forEach(obj => {
+        b_list.forEach(obj => {
             tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
         })
         
@@ -452,8 +452,7 @@ class piece {
                         options = [];
                     }
                 }
-                detectSquare(options, onboard, 1, white_arrt, black_arrt);
-                detectSquare(options, onboard, 0, white_arrt, black_arrt);
+                detectSquare(options, onboard, this.colour, white_arrt, black_arrt);
                 if (!(onboard.length == 2 || onboard.length == 4)) {
                     onboard = [];
                 }
