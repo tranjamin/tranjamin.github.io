@@ -177,7 +177,7 @@ detectSingle = (option, onboard2, colour, repeat, white_arrt = white_arr, black_
     }
 }
 
-check = (colour, w_list = white_list, b_list = black_list) => {
+check = (colour, w_list= white_list, b_list= black_list) => {
     var list = colour ? b_list : w_list;
     var check_nums = 0;
     var check_pieces = [];
@@ -863,6 +863,9 @@ db.collection('chess').doc(game).onSnapshot(doc => {
 interval3 = () => {
     clock = setInterval(() => {
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.001);
+        if (!parseFloat($('self_time').innerHTML.split(':')[0]) && !parseFloat($('self_time').innerHTML.split(':')[1])) {
+            $('status').innerHTML = "time lost";
+        }
     }, 1)
 }
 interval2 = () => {
