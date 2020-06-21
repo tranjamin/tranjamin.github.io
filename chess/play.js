@@ -177,17 +177,23 @@ detectSingle = (option, onboard2, colour, repeat, white_arrt = white_arr, black_
     }
 }
 
-check = (colour, w_list= white_list, b_list= black_list) => {
+check = (colour, w_list= white_list, b_list= black_list, w_arr= white_arr, b_arr= black_arr) => {
     var list = colour ? b_list : w_list;
     var check_nums = 0;
     var check_pieces = [];
     for (var piece of list) {
-        if (piece.highlight(true)) {
+        if (piece.highlight(true, w_arr, b_arr, w_list, b_list)) {
             check_nums++;
             check_pieces.push(piece);
         }
     }
     return [check_nums, check_pieces];
+}
+
+copy_arr = (arr) => {
+    var int = [];
+    arr.forEach(ele => {int.push(ele)})
+    return int;
 }
 
 class piece {
@@ -199,36 +205,44 @@ class piece {
 
     }
 
-    mock_update(new_pos, white_arrtemp, black_arrtemp, white_arrlist, black_arrlist) {
-        var original_pos = this.pos;
-        var test_arr = this.colour ? white_arrtemp : black_arrtemp;
-        var opposite = this.colour ? black_arrtemp : white_arrtemp;
-        var opp = this.colour ? black_arrlist : white_arrlist;
-        test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
-        for (let captured_pos in opp) {
-            if (arrEqual(opp[captured_pos].pos, new_pos)) {
-                opposite.splice(findArr(new_pos, opposite), 1);
-                opp.splice(captured_pos, 1);
-
-                break;
-            }
-        }
-    }
-
-    update(new_pos, send = true, doublemove = false, w_arr=white_arr, b_arr=black_arr, w_list=white_list, b_list=black_list) {
-        var elapsed_time = new Date();
-        console.log('update');
-        var original_pos = this.pos;
-        var test_arr = this.colour ? w_arr : b_arr;
-        var opposite = this.colour ? b_arr : wh_arr;
-        var original_test_arr = test_arr;
-        var original_opposite = opposite;
+    mock_update(new_pos) {
+        var original_pos = copy_arr(this.pos)
+        var test_arr = this.colour ? copy_arr(white_arr) : copy_arr(black_arr);
+        var opposite = this.colour ? copy_arr(black_arr) : copy_arr(white_arr);
+        var sel = this.colour ? copy_arr(white_list) : copy_arr(black_list);
+        var opp = this.colour ? copy_arr(black_list) : copy_arr(white_arr);
         test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
         this.pos = new_pos;
-        var capture_arr = this.colour ? b_list : w_list;
-        var original_capture_arr = [];
-        capture_arr.forEach(ele => {original_capture_arr.push(ele)});
-        var capture = findArr(new_pos, opposite)
+        var capture_arr = copy_arr(opp);
+        var original_capture_arr = copy_arr(capture_arr);
+        var capture = findArr(new_pos, opposite);
+        if (capture != -1) {
+            opposite.splice(findArr(new_pos, opposite), 1); //may be error
+            for (let captured_piece in capture_arr) {
+                if (arrEqual(capture_arr[captured_piece].pos, new_pos)) {
+                    capture_arr.splice(captured_piece, 1);
+                    break;
+                }
+            }
+        }
+        this.pos = original_pos;
+
+        return check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
+        }
+
+    update(new_pos, send = true, doublemove = false) {
+        var elapsed_time = new Date();
+        console.log('update');
+        var original_pos = copy_arr(this.pos);
+        var test_arr = this.colour ? white_arr : black_arr;
+        var opposite = this.colour ? black_arr : white_arr;
+        var original_test_arr = copy_arr(test_arr);
+        var original_opposite = copy_arr(opposite);
+        test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
+        this.pos = new_pos;
+        var capture_arr = this.colour ? black_list : white_list;
+        var original_capture_arr = copy_arr(capture_arr);
+        var capture = findArr(new_pos, opposite);
         if (capture != -1) {
             opposite.splice(findArr(new_pos, opposite), 1); //may be error
             for (let captured_piece in capture_arr) {
@@ -338,10 +352,10 @@ class piece {
         }
         var tempb = [];
         var tempw = [];
-        w_list.forEach(obj => {
+        white_list.forEach(obj => {
             tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
         })
-        b_list.forEach(obj => {
+        black_list.forEach(obj => {
             tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
         })
         
@@ -637,12 +651,31 @@ class piece {
 
         if (!checktest) {
             //check
+            if (check(this.colour)[0]) {
+            console.log('check, no castling');
+            if (this.type == "K") {
+                var temp_onboard = [];
+                for (var opt in onboard) {
+                    if(Math.abs(onboard[opt][0] - this.pos[0]) < 1) {
+                        temp_onboard.push(onboard[opt]);
+                    }
+                }
+            }
+
             if (check(this.colour)[0] == 2) {
                 console.log('doublecheck, king move only');
                 if (this.type != "K") { onboard = [] }
             }
-            else if (check(this.colour)[0] && check(this.colour)[1].type == "N") {
-                console.log('knight check');
+
+            if (check(this.colour)[1][0].type == "N" || check(this.colour)[1][0].type == "P") {
+                console.log('knight/pawn check');
+                var temp_onboard = [];
+                for (var opt in onboard) {
+                    if ((this.type == "K" || arrEqual(onboard[opt], check(this.colour)[1][0].pos))) {
+                        temp_onboard.push(onboard[opt])
+                    }
+                }
+                onboard = temp_onboard;}
             }
 
             for (let shade of onboard) {
