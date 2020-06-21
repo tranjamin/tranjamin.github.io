@@ -678,14 +678,16 @@ class piece {
             }
 
             for (let shade of onboard) {
+                if (!this.mock_update(shade)[0]) {
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
                 if (blackwhite) {
                     ctx.fillRect(canvas.width / 8 * (shade[0] - 1), canvas.height - canvas.height / 8 * (shade[1]), canvas.width / 8, canvas.height / 8);
                 }
                 else {
                     ctx.fillRect(canvas.width - (canvas.width / 8 * (shade[0])), canvas.height - canvas.height / 8 * (9 - shade[1]), canvas.width / 8, canvas.height / 8);
-                }
+                }}
             }
+
             canvas.addEventListener('click', intermediary);
         }
         else {
