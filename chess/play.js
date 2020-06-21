@@ -210,24 +210,23 @@ class piece {
         var test_arr = this.colour ? copy_arr(white_arr) : copy_arr(black_arr);
         var opposite = this.colour ? copy_arr(black_arr) : copy_arr(white_arr);
         var sel = this.colour ? copy_arr(white_list) : copy_arr(black_list);
-        var opp = this.colour ? copy_arr(black_list) : copy_arr(white_arr);
+        var opp = this.colour ? copy_arr(black_list) : copy_arr(white_list);
         test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
         this.pos = new_pos;
         var capture_arr = copy_arr(opp);
-        var original_capture_arr = copy_arr(capture_arr);
         var capture = findArr(new_pos, opposite);
         if (capture != -1) {
             opposite.splice(findArr(new_pos, opposite), 1); //may be error
             for (let captured_piece in capture_arr) {
                 if (arrEqual(capture_arr[captured_piece].pos, new_pos)) {
-                    capture_arr.splice(captured_piece, 1);
+                    capture_arr[captured_piece].delete = true;
                     break;
                 }
             }
         }
+        var ret = check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
         this.pos = original_pos;
-
-        return check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
+        return ret;
         }
 
     update(new_pos, send = true, doublemove = false) {
