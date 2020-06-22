@@ -26,8 +26,14 @@ $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
 
-sortData('load_current');
-sortData('load_invite');
+sortData('current', 'load_current');
+sortData('invites','load_invite');
+sortData('completed','load_past');
+
+/*db.collection('account').doc(user_id).get().then(doc => {
+	$('username').innerHTML = doc.username;
+})*/
+
 update_graphics();
 window.addEventListener('resize', e => {
     update_graphics()
@@ -164,7 +170,6 @@ $('search_past').addEventListener('keyup',e => {
     }
 });
 function sortData(conditional, id, input="", precision=0.3) {
-    console.clear();
     var data_arr = {};
     var doc_name = [];
     db.collection('chess').get().then(snapshot => {
@@ -172,16 +177,16 @@ function sortData(conditional, id, input="", precision=0.3) {
             //console.log(doc.data().name, relevancy.weight(doc.data().name,input));
             if (
 				(relevancy.weight(doc.data().name,input) >= precision || input == "")
-				&& ((conditional == "invites" && doc.data().invited_user == username) ||
-					(conditional == "current" && !doc.data().result) ||
-					(conditional =="completed" && doc.data().result)
+				&& ((conditional == "invites" && doc.data().invited_user == username && (doc.data().white_user == null || doc.data().black_user == null)) ||
+					(conditional == "current" && !doc.data().result && (doc.data().white_user == username || doc.data().black_user == username)) ||
+					(conditional =="completed" && doc.data().result && (doc.data().white_user == username || doc.data().black_user == username))
 			))
             {data_arr[doc.data().name] = doc.data();            
             doc_name.push(doc.data().name);}
         })
     }).then(docRef => {
         doc_name = relevancy.sort(doc_name, input);
-        doc_name.splice(10, doc_name.length - 1);
+		doc_name.splice(10, doc_name.length - 1);
         var header = $(id).getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
         $(id).getElementsByTagName('table')[0].innerHTML = "";
         $(id).getElementsByTagName('table')[0].appendChild(header);    

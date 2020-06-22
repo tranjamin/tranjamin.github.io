@@ -32,10 +32,6 @@ else {
     console.error('Error getting game id');
 }
 
-window.addEventListener('load', e => {
-    draw_board();
-    show_pieces();
-})
 
 function $(id) { return document.getElementById(id); }
 
@@ -62,7 +58,13 @@ $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
 
-update_graphics();
+window.addEventListener('load', e => {
+    update_graphics();
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    draw_board();
+    show_pieces();
+})
+
 window.addEventListener('resize', e => {
     update_graphics();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -114,7 +116,6 @@ function update_graphics() {
     message_body.style.top = msg_title.getBoundingClientRect().bottom + "px";
     message_body.style.left = msg.style.left;
 
-    
 	var interface = $('interface');
     interface.style.height = msg.style.height;
     interface.style.top = msg.style.top;
@@ -123,6 +124,7 @@ function update_graphics() {
 
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
+    console.log(options.style.bottom);
     options.style.left = '0px';
 
     //nav
@@ -895,7 +897,9 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         }
 
     }
-
+    update_graphics();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    show_pieces();
 })
 
 interval3 = () => {
