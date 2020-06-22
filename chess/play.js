@@ -124,7 +124,6 @@ function update_graphics() {
 
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
-    console.log(options.style.bottom);
     options.style.left = '0px';
 
     //nav
@@ -184,11 +183,12 @@ check = (colour, w_list= white_list, b_list= black_list, w_arr= white_arr, b_arr
     var check_nums = 0;
     var check_pieces = [];
     for (var piece of list) {
+        if (!piece.delete) {
         if (piece.highlight(true, w_arr, b_arr, w_list, b_list)) {
             check_nums++;
             check_pieces.push(piece);
         }
-    }
+    }}
     return [check_nums, check_pieces];
 }
 
@@ -217,17 +217,20 @@ class piece {
         this.pos = new_pos;
         var capture_arr = copy_arr(opp);
         var capture = findArr(new_pos, opposite);
+        var cap_piece;
         if (capture != -1) {
             opposite.splice(findArr(new_pos, opposite), 1); //may be error
             for (let captured_piece in capture_arr) {
                 if (arrEqual(capture_arr[captured_piece].pos, new_pos)) {
                     capture_arr[captured_piece].delete = true;
+                    cap_piece = capture_arr[captured_piece];
                     break;
                 }
             }
         }
         var ret = check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
         this.pos = original_pos;
+        if (capture != -1) {cap_piece.delete = false;}
         return ret;
         }
 
@@ -361,27 +364,28 @@ class piece {
         })
         
             if (capture_arr[capture]) {
-                console.log(original_capture_arr[capture])
+                console.log(original_capture_arr[capture].type)
                 switch (capture_arr[capture].type) {
                     case 'K':
-                        $('self_box').innerHTML += '&#9818';
+                        $('self_box').innerHTML += '♚';
                         break;
                     case 'Q':
-                        $('self_box').innerHTML += '&#9819';
+                        $('self_box').innerHTML += '♛';
                         break;
                     case 'P':
-                        $('self_box').innerHTML += '&#9823';
+                        $('self_box').innerHTML += '♟';
                         break;
                     case 'B':
                         $('self_box').innerHTML += '&#9821';
                         break;
                     case 'N':
-                        $('self_box').innerHTML += '&#9822';
+                        $('self_box').innerHTML += '♞';
                         break;
                     case 'R':
-                        $('self_box').innerHTML += '&#9820';
+                        $('self_box').innerHTML += '♜';
                         break;
                 }
+                console.log($("self_box").innerHTML)
             }
             var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
             var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
@@ -468,9 +472,10 @@ class piece {
                     }
                 }
                 detectSquare(options, onboard, this.colour, white_arrt, black_arrt);
-                if (!(onboard.length == 2 || onboard.length == 4)) {
+                if (!checktest) {console.log(onboard)}
+               /* if (!(onboard.length == 2 || onboard.length == 4)) {
                     onboard = [];
-                }
+                }*/
                 if (this.colour) {
                     var diagonal = [[this.pos[0] + 1, this.pos[1] + 1], [this.pos[0] - 1, this.pos[1] + 1]];
                     if (findArr(diagonal[0], black_arrt) != -1) { onboard.push(diagonal[0]) }
@@ -485,7 +490,7 @@ class piece {
                     if (this.colour) { onboard.push([enpassant.pos[0], this.pos[1] + 1]); }
                     else { onboard.push([enpassant.pos[0], this.pos[1] - 1]); }
                 }
-                // console.log(onboard);
+                if (!checktest) {console.log(options)}
                 break;
             case 'R':
             case 'Q':
@@ -632,25 +637,9 @@ class piece {
             }
         }}*/
 
-        var intermediary = (e) => {
-            var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
-            var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
-            if (findArr(square, onboard) != -1) {
-                this.update(square);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                show_pieces();
-                canvas.removeEventListener('click', intermediary);
-            }
-            else {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                show_pieces();
-                canvas.removeEventListener('click', intermediary);
-                document.elementFromPoint(e.clientX, e.clientY).click();
-            }
-
-        }
 
         if (!checktest) {
+            console.log(onboard);
             //check
             if (check(this.colour)[0]) {
             console.log('check, no castling');
@@ -678,7 +667,6 @@ class piece {
                 }
                 onboard = temp_onboard;}
             }
-
             for (let shade of onboard) {
                 if (!this.mock_update(shade)[0]) {
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
@@ -699,6 +687,23 @@ class piece {
                 if (arrEqual(check_piece, self_king.pos)) { return true; }
             }
             return false;
+
+        }
+        var intermediary = (e) => {
+            var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
+            var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
+            if (findArr(square, onboard) != -1) {
+                this.update(square);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                show_pieces();
+                canvas.removeEventListener('click', intermediary);
+            }
+            else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                show_pieces();
+                canvas.removeEventListener('click', intermediary);
+                document.elementFromPoint(e.clientX, e.clientY).click();
+            }
 
         }
         return onboard;
