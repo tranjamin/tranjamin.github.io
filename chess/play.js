@@ -364,31 +364,92 @@ class piece {
         })
         
             if (capture_arr[capture]) {
-                console.log(original_capture_arr[capture].type)
-                switch (capture_arr[capture].type) {
-                    case 'K':
-                        $('self_box').innerHTML += '♚';
+                switch (original_capture_arr[capture].type) {
+                    case "P":
+                        $('self_box').innerHTML += "♟";
                         break;
-                    case 'Q':
-                        $('self_box').innerHTML += '♛';
+                    case "Q":
+                        $('self_box').innerHTML += "♛";
                         break;
-                    case 'P':
-                        $('self_box').innerHTML += '♟';
+                    case "K":
+                        $('self_box').innerHTML += "♚";
                         break;
-                    case 'B':
-                        $('self_box').innerHTML += '&#9821';
+                    case "B":
+                        $('self_box').innerHTML += "♝";
                         break;
-                    case 'N':
-                        $('self_box').innerHTML += '♞';
+                    case "N":
+                        $('self_box').innerHTML += "♞";
                         break;
-                    case 'R':
-                        $('self_box').innerHTML += '♜';
+                    case "R":
+                        $('self_box').innerHTML += "♜";
                         break;
                 }
-                console.log($("self_box").innerHTML)
+
             }
             var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
             var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
+            var white_int = "";
+            var black_int = "";
+            white_bank.split("").forEach(ele => {
+                switch (ele) {
+                    case "♟":
+                        white_int += "P";
+                        break;
+                    case "♛":
+                        white_int += "Q";
+                        break;
+                    case "♚":
+                        white_int += "K";
+                        break;
+                    case "♝":
+                        white_int += "B";
+                        break;
+                    case "♞":
+                        white_int += "N";
+                        break;
+                    case "♜":
+                        white_int += "R";
+                        break;
+                }
+            })
+            black_bank.split("").forEach(ele => {
+                switch (ele) {
+                    case "♟":
+                        black_int += "P";
+                        break;
+                    case "♛":
+                        black_int += "Q";
+                        break;
+                    case "♚":
+                        black_int += "K";
+                        break;
+                    case "♝":
+                        black_int += "B";
+                        break;
+                    case "♞":
+                        black_int += "N";
+                        break;
+                    case "♜":
+                        black_int += "R";
+                        break;
+                }
+            })
+            var checkmate = true;
+            var result = null;
+            (this.colour ? black_list : white_list).forEach(ele => {
+                if (ele.highlight().length) {checkmate = false;}
+            })
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            show_pieces();
+            if (checkmate && check(this.colour ? 0 : 1)) {
+                win('Checkmate')
+            }
+            else if (checkmate && !check(this.colour ? 0 : 1)) {
+                draw('Stalemate')
+            }
+            else {
+                lose('Checkmate')
+            }
 
             var time_left = 0;
             db.collection('chess').doc(game).get().then(doc => {
@@ -410,10 +471,9 @@ class piece {
                 white_list: tempw,
                 black_list: tempb,
                 turn: blackwhite ? 0 : 1,
-                white_bank: white_bank,
-                black_bank: black_bank,
-                white_count: time_left,
-                
+                white_bank: white_int,
+                black_bank: black_int,
+                white_count: time_left
             }).catch(error => {console.log(error.lineNumber)})
         }
                 else {
@@ -423,10 +483,9 @@ class piece {
                 white_list: tempw,
                 black_list: tempb,
                 turn: blackwhite ? 0 : 1,
-                white_bank: white_bank,
-                black_bank: black_bank,
-                black_count: time_left,
-                
+                white_bank: white_int,
+                black_bank: black_int,
+                black_count: time_left
             }).catch(error => {console.log(error.lineNumber)})
                 }
         })
@@ -472,7 +531,6 @@ class piece {
                     }
                 }
                 detectSquare(options, onboard, this.colour, white_arrt, black_arrt);
-                if (!checktest) {console.log(onboard)}
                /* if (!(onboard.length == 2 || onboard.length == 4)) {
                     onboard = [];
                 }*/
@@ -667,8 +725,10 @@ class piece {
                 }
                 onboard = temp_onboard;}
             }
+            var int_onboard = [];
             for (let shade of onboard) {
                 if (!this.mock_update(shade)[0]) {
+                int_onboard.push(shade)
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
                 if (blackwhite) {
                     ctx.fillRect(canvas.width / 8 * (shade[0] - 1), canvas.height - canvas.height / 8 * (shade[1]), canvas.width / 8, canvas.height / 8);
@@ -676,8 +736,26 @@ class piece {
                 else {
                     ctx.fillRect(canvas.width - (canvas.width / 8 * (shade[0])), canvas.height - canvas.height / 8 * (9 - shade[1]), canvas.width / 8, canvas.height / 8);
                 }}
-            }
 
+            }
+            onboard = int_onboard;
+            var intermediary = (e) => {
+                var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
+                var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
+                if (findArr(square, onboard) != -1) {
+                    this.update(square);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    show_pieces();
+                    canvas.removeEventListener('click', intermediary);
+                }
+                else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    show_pieces();
+                    canvas.removeEventListener('click', intermediary);
+                    document.elementFromPoint(e.clientX, e.clientY).click();
+                }
+    
+            }
             canvas.addEventListener('click', intermediary);
         }
         else {
@@ -689,23 +767,7 @@ class piece {
             return false;
 
         }
-        var intermediary = (e) => {
-            var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
-            var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
-            if (findArr(square, onboard) != -1) {
-                this.update(square);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                show_pieces();
-                canvas.removeEventListener('click', intermediary);
-            }
-            else {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                show_pieces();
-                canvas.removeEventListener('click', intermediary);
-                document.elementFromPoint(e.clientX, e.clientY).click();
-            }
 
-        }
         return onboard;
     }
 }
@@ -832,6 +894,56 @@ db.collection('chess').doc(game).onSnapshot(doc => {
 
     $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
     $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
+
+    var self_int = "";
+    var opp_int = "";
+    $('self_box').innerHTML = $('self_box').innerHTML.split("").forEach(ele => {
+        switch (ele) {
+            case "P":
+                self_int += "♟";
+                break;
+            case "Q":
+                self_int += "♛";
+                break;
+            case "K":
+                self_int += "♚";
+                break;
+            case "B":
+                self_int += "♝";
+                break;
+            case "N":
+                self_int += "♞";
+                break;
+            case "R":
+                self_int += "♜";
+                break;
+        }
+    })
+    $('self_box').innerHTML = self_int
+    $('opposite_box').innerHTML = $('opposite_box').innerHTML.split("").forEach(ele => {
+        switch (ele) {
+            case "P":
+                opp_int += "♟";
+                break;
+            case "Q":
+                opp_int += "♛";
+                break;
+            case "K":
+                opp_int += "♚";
+                break;
+            case "B":
+                opp_int += "♝";
+                break;
+            case "N":
+                opp_int += "♞";
+                break;
+            case "R":
+                opp_int += "♜";
+                break;
+        }
+    })
+    $('opposite_box').innerHTML = opp_int
+
     if (doc.data().white_user == username) {blackwhite = 1}
     else if (doc.data().black_user == username) {blackwhite = 0}
     else {blackwhite = 1; observer = true;}

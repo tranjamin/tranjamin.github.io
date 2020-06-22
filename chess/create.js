@@ -215,6 +215,8 @@ db.collection('chess').add({
     white_count: white_time ? white_time[0][1] : null,
     black_count: time ? time[0][1] : null,
     timer: [1,null],
+    result: null,
+    moves: 0,
     undo: stringify(undo)
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
@@ -253,6 +255,8 @@ else {
     white_count: white_time ? white_time[0][1] : null,
     black_count: time ? time[0][1] : null,
     turn: 1,
+    result: null,
+    moves: 0,
     undo: stringify(undo)
     }).then(docRef => {
         setCookie('game_id',docRef.id,2);
