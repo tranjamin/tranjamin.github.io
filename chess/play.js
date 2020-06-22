@@ -57,7 +57,9 @@ $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('
 $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
-
+if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
+	user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
+	}
 window.addEventListener('load', e => {
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -813,21 +815,45 @@ var b_g;
 var b_h; 
 
 function win() {
+    var original_wins;
     console.log('win');
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'white' : 'black'
     })
+    db.collection('account').doc(user_id).get().then(doc => {
+        original_wins = doc.data().wins;
+    }).then(docRef => {
+        db.colection('account').doc(user_id).update({
+            wins: original_wins + 1
+        })
+    })
 }
 function lose() {
+    var original_losses;
     console.log('lose');
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'black' : 'white'
     })
+    db.collection('account').doc(user_id).get().then(doc => {
+        original_losses = doc.data().losses;
+    }).then(docRef => {
+        db.colection('account').doc(user_id).update({
+            losses: original_losses + 1
+        })
+    })
 }
 function draw() {
+    var original_draws;
     console.log('draw');
     db.collection('chess').doc(game).update({
         result: 'draw'
+    })
+    db.collection('account').doc(user_id).get().then(doc => {
+        original_draws = doc.data().draws;
+    }).then(docRef => {
+        db.colection('account').doc(user_id).update({
+            draws: original_draws + 1
+        })
     })
 }
 
