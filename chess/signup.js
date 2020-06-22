@@ -68,6 +68,7 @@ $('login').addEventListener('submit', e=> {
             if (doc.data().username == login_name && doc.data().password == login_pass) {login_successful = true; 
                 username = login_name; 
                 user_id = doc.id;
+                console.log(user_id)
                 console.log('successful');
                 setCookie('username',username,5);
                 setCookie('user_id',user_id,5);
@@ -112,8 +113,11 @@ $('signup').addEventListener('submit', e=> {
             db.collection('account').add({
                 username: signup_username,
                 email: signup_email,
-                password: signup_password
-        
+                password: signup_password,
+                wins: 0,
+                losses: 0,
+                draws: 0,   
+                ranking: 0     
             })
 
         }

@@ -25,6 +25,9 @@ $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('
 $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
 username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 }
+if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
+	user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
+	}
 
 sortData('current', 'load_current');
 sortData('invites','load_invite');
@@ -261,6 +264,19 @@ $('load_invite').getElementsByTagName('table')[0].addEventListener('click', e =>
             snapshot.forEach(doc => {
                 if (doc.data().name == load_name) {
 					load_id = doc.id;
+					console.log('logging')
+					if (doc.data().white_user == null) {
+						console.log(username);
+						db.collection('chess').doc(load_id).update({
+							white_user: username
+						})
+					}
+					else if (doc.data().black_user == null) {
+						console.log(username);
+						db.collection('chess').doc(load_id).update({
+							black_user: username
+						})
+					}
             }})
         }).then(docRef => {
             console.log(load_id);
@@ -269,6 +285,14 @@ $('load_invite').getElementsByTagName('table')[0].addEventListener('click', e =>
             window.location.assign('play.html');
         })
     }
+})
+
+db.collection('account').doc(user_id).onSnapshot(doc => {
+	$('wins').innerHTML = doc.data().wins;
+	$('losses').innerHTML = doc.data().losses;
+	$('draws').innerHTML = doc.data().draws;
+	$('percents').innerHTML = !isNaN(doc.data().wins / (doc.data().wins + doc.data().draws)) ? (doc.data().wins / (doc.data().wins + doc.data().draws) * 100 + "%") : "-" ;
+	$('rankings').innerHTML = doc.data().ranking;
 })
 
 

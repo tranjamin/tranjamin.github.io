@@ -160,3 +160,45 @@ table td {
     text-align: center;
     font-size: 120%;
 }
+
+
+#stats {
+    display: grid;
+    grid-template-areas: 'wins losses draws';
+    text-align: center;
+    font-family: 'Philosopher';
+    font-size: 150%;
+}
+#win {
+    grid-area: 'wins';
+    display: inline;
+    padding: 5% 0;
+}
+#loss {
+    grid-area: 'losses';
+    display: inline;
+    padding: 5% 0;
+}
+#draw {
+    grid-area: 'draws';
+    display: inline;
+    padding: 5% 0;
+}
+#percent, #ranking {
+    width: 100%;
+    text-align: center;
+    font-size: 150%;
+    margin: 5% 0 0 0;
+    padding: 0;
+    height: 100%;
+}
+#percents, #rankings {
+    font-size: 150%;
+    width: 100%;
+    padding: 0;
+    display: block;
+}
+#wins, #losses, #draws {
+    display: inline;
+    font-size: 150%;
+}
