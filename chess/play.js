@@ -20,6 +20,7 @@ Flip Board
 var game = "";
 var undo = [];
 var clock;
+var mode;
 
 if (getCookie('game_id'))
  {
@@ -814,47 +815,151 @@ var b_f;
 var b_g;
 var b_h; 
 
-function win() {
+function win(message) {
+    $("status").innerHTML = `You Won by ${message}`;
     var original_wins;
+    var other_user;
+    var other_id;
+    var other_losses;
+    var elo;
+    var other_elo;
     console.log('win');
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'white' : 'black'
     })
     db.collection('account').doc(user_id).get().then(doc => {
         original_wins = doc.data().wins;
+        elo = doc.data().ranking
     }).then(docRef => {
-        db.colection('account').doc(user_id).update({
+        db.collection('account').doc(user_id).update({
             wins: original_wins + 1
         })
+    }).then(docRef => {
+    db.collection('chess').doc(game).get().then(doc => {
+        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
+    }).then(docRef => {
+        db.collection('account').where('username','==',other_user).get().then(snapshots => {
+            snapshots.forEach(doc => {
+                other_id = doc.id;
+                other_losses = doc.data().losses;
+                other_elo = doc.data().ranking;
+            })
+        }).then(docRef => {
+            var r = 10**(elo/400);
+            var other_r = 10**(other_elo/400);
+            var e = r / (r + other_r);
+            var other_e = other_r / (r + other_r);
+            var new_elo = elo + 32 * (1 - e);
+            var new_other_elo = other_elo + 32 * (0 - other_e);
+            db.collection('account').doc(other_id).update({
+                losses: other_losses + 1,
+                ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
+            })
+            db.collection('account').doc(user_id).update({
+                ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
+            })
+        })
     })
+})
 }
-function lose() {
+function lose(message) {
+    $("status").innerHTML = `You Lost by ${message}`;
     var original_losses;
+    var other_user;
+    var other_id;
+    var other_wins;
+    var elo;
+    var other_elo;
     console.log('lose');
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'black' : 'white'
     })
     db.collection('account').doc(user_id).get().then(doc => {
         original_losses = doc.data().losses;
+        elo = doc.data().ranking
     }).then(docRef => {
-        db.colection('account').doc(user_id).update({
+        db.collection('account').doc(user_id).update({
             losses: original_losses + 1
         })
+    }).then(docRef => {
+    db.collection('chess').doc(game).get().then(doc => {
+        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
+    }).then(docRef => {
+        db.collection('account').where('username','==',other_user).get().then(snapshots => {
+            snapshots.forEach(doc => {
+                other_id = doc.id;
+                other_wins = doc.data().wins;
+                other_elo = doc.data().ranking;
+            })
+        }).then(docRef => {
+            var r = 10**(elo/400);
+            var other_r = 10**(other_elo/400);
+            var e = r / (r + other_r);
+            var other_e = other_r / (r + other_r);
+            var new_elo = elo + 32 * (0 - e);
+            var new_other_elo = other_elo + 32 * (1 - other_e);
+            db.collection('account').doc(other_id).update({
+                wins: other_wins + 1,
+                ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
+            })
+            db.collection('account').doc(user_id).update({
+                ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
+            })
+        })
     })
+})
 }
-function draw() {
+function draw(message) {
+    if (mode.indexOf('Armageddon') != -1) {
+        if (blackwhite) {lose('Draw')}
+        else {win('Draw')}
+    }
+    else {
+    $("status").innerHTML = `You Drew by ${message}`;
     var original_draws;
+    var other_id;
+    var other_user;
+    var other_draws;
+    var elo;
+    var other_elo;
     console.log('draw');
     db.collection('chess').doc(game).update({
         result: 'draw'
     })
     db.collection('account').doc(user_id).get().then(doc => {
         original_draws = doc.data().draws;
+        elo = doc.data().ranking;
     }).then(docRef => {
-        db.colection('account').doc(user_id).update({
+        db.collection('account').doc(user_id).update({
             draws: original_draws + 1
         })
+    }).then(docRef => {
+    db.collection('chess').doc(game).get().then(doc => {
+        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
+    }).then(docRef => {
+        db.collection('account').where('username','==',other_user).get().then(snapshots => {
+            snapshots.forEach(doc => {
+                other_id = doc.id;
+                other_draws = doc.data().draws;
+                other_elo = doc.data().ranking
+            })
+        }).then(docRef => {
+            var r = 10**(elo/400);
+            var other_r = 10**(other_elo/400);
+            var e = r / (r + other_r);
+            var other_e = other_r / (r + other_r);
+            var new_elo = elo + 32 * (0 - e);
+            var new_other_elo = other_elo + 32 * (1 - other_e);
+            db.collection('account').doc(other_id).update({
+                draws: other_draws + 1,
+                ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
+            })
+            db.collection('account').doc(user_id).update({
+                ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
+            })
+        })
     })
+})}
 }
 
 var white_list = [];
@@ -866,7 +971,7 @@ $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     }
     else if (e.target.innerHTML == '✔') {
         e.target.parentElement.innerHTML = '&#9873';
-        lose();
+        lose('Resignation');
     }
     else if (e.target.innerHTML == '✘') {
         e.target.parentElement.innerHTML = '&#9873';
@@ -910,6 +1015,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     white_arr = arrayify(doc.data().white_arr, Number);
     black_arr = arrayify(doc.data().black_arr, Number);
     turn = doc.data().turn;
+    mode = doc.data().mode;
     white_list = [];
     black_list = [];
     $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
