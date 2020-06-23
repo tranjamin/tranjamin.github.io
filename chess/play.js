@@ -234,7 +234,9 @@ class piece {
         var ret = check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
         if (mode.indexOf('Checkless') != -1) {
             var ret2 = check(this.colour ? 0 : 1, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr)
-            console.log([ret[0],ret[1],ret2])
+
+            this.pos = original_pos;
+            if (capture != -1) {cap_piece.delete = false;}
             return [ret[0],ret[1],ret2]
         }
         this.pos = original_pos;
@@ -443,24 +445,55 @@ class piece {
                 }
             })
             var checkmate = true;
-            var result = null;
             (this.colour ? black_list : white_list).forEach(ele => {
                 if (ele.highlight().length) {checkmate = false;}
             })
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             show_pieces();
+            
             if (checkmate && check(this.colour ? 0 : 1)) {
                 win('Checkmate')
             }
             else if (checkmate && !check(this.colour ? 0 : 1)) {
                 draw('Stalemate')
             }
-            else {
-                lose('Checkmate')
-            }
 
             var time_left = 0;
+            var original_moves;
+            var original_white_checks;
+            var original_black_checks;
+            var original_fifty;
             db.collection('chess').doc(game).get().then(doc => {
+                original_moves = doc.data().moves + 1;
+                original_white_checks = doc.data().black_checks;
+                original_black_checks = doc.data().black_checks;
+                original_fifty = doc.data().fifty_moves;
+                if (blackwhite) {
+                    if (check(0)[0]) {
+                        original_white_checks ++;
+                        if (original_white_checks == 3 && mode.indexOf('3 Check') != -1) {
+                            win('3 Check');
+                        }
+                    }
+                }
+                else {
+                    if (check(1)[0]) {
+                        original_black_checks ++;
+                        if (original_black_checks == 3 && mode.indexOf('3 Check') != -1) {
+                            win('3 Check');
+                        }
+                    }
+                }
+                if (capture_arr[capture] || this.type == "P") {
+                    original_fifty = 0;
+                }
+                else {
+                    console.log(original_fifty)
+                    original_fifty ++;
+                }
+                if (original_fifty == 50) {
+                    draw('Fifty Moves');
+                }
                 if (doc.data()['white_time'] != null) {
                 console.log(doc.data().timer[1].toDate() - 0);
                 console.log(elapsed_time - 0);
@@ -478,10 +511,13 @@ class piece {
                 black_arr: stringify(black_arr),
                 white_list: tempw,
                 black_list: tempb,
-                turn: blackwhite ? 0 : 1,
+                turn: 0,
                 white_bank: white_int,
                 black_bank: black_int,
-                white_count: time_left
+                white_count: time_left,
+                white_checks: original_white_checks,
+                moves: original_moves,
+                fifty_moves: original_fifty
             }).catch(error => {console.log(error.lineNumber)})
         }
                 else {
@@ -490,10 +526,13 @@ class piece {
                 black_arr: stringify(black_arr),
                 white_list: tempw,
                 black_list: tempb,
-                turn: blackwhite ? 0 : 1,
+                turn: 1,
                 white_bank: white_int,
                 black_bank: black_int,
-                black_count: time_left
+                black_count: time_left,
+                black_checks: original_black_checks,
+                moves: original_moves,
+                fifty_moves: original_fifty
             }).catch(error => {console.log(error.lineNumber)})
                 }
         })
@@ -735,7 +774,9 @@ class piece {
             }
             var int_onboard = [];
             for (let shade of onboard) {
-                if ((!this.mock_update(shade)[0] && mode.indexOf('Checkless') == -1) || (mode.indexOf('Checkless') != -1 && !this.mock_update(shade)[0] && !this.mock_update(shade)[2][0])) {
+                if ((!this.mock_update(shade)[0] && mode.indexOf('Checkless') == -1) 
+                || (mode.indexOf('Checkless') != -1 && !this.mock_update(shade)[0] && !this.mock_update(shade)[2][0])
+                ) {
                 int_onboard.push(shade)
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
                 if (blackwhite) {

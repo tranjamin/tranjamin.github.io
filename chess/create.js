@@ -68,8 +68,6 @@ var white_list = [w_rooka, w_knightb, w_bishopc, w_queen, w_king, w_bishopf, w_k
 var black_list = [b_rooka, b_knightb, b_bishopc, b_queen, b_king, b_bishopf, b_knightg, b_rookh, b_a, b_b, b_c, b_d, b_e, b_f, b_g, b_h];
 
 function generate_position(mode) {
-    if (mode.indexOf('Classic') != -1) {
-    }
     if (mode.indexOf('Chess960') != -1) {
         var original = [1,2,3,4,5,6,7,8];
         w_bishopc.pos = [Math.ceil(Math.random() * 4) * 2, 1];
@@ -93,6 +91,9 @@ function generate_position(mode) {
         b_knightg.pos = [w_knightg.pos[0], 8]
         b_queen.pos = [w_queen.pos[0], 8]
         b_king.pos = [w_king.pos[0], 8]
+    }
+    else {
+
     }
 }
 
@@ -189,12 +190,19 @@ if (mode.indexOf('Armageddon') != -1) {
 }
 console.log(white_time);
 var rated = points == "Casual" ? false : true;
+var white_user;
+var black_user;
 if (play_colour) {
-
+    white_user = user;
+    black_user = null; }
+else {
+    white_user = null;
+    black_user = user;
+}
 db.collection('chess').add({
     name: newname,
-    black_user: null,
-    white_user: user,
+    black_user: black_user,
+    white_user: white_user,
     white_arr: stringify(white_arr),
     black_arr: stringify(black_arr),
     white_list: tempw,
@@ -216,8 +224,10 @@ db.collection('chess').add({
     white_count: white_time ? white_time[0][1] : null,
     black_count: time ? time[0][1] : null,
     timer: [1,null],
-    result: null,
+    white_checks: 0,
+    black_checks: 0,
     moves: 0,
+    fifty_moves: 0,
     undo: stringify(undo)
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
@@ -228,46 +238,6 @@ db.collection('chess').add({
     console.error("Error adding document: ", error);
     $('error').innerHTML = "Could not connect to server. Please try again later";
 });
-}
-else {
-
-    db.collection('chess').add({
-    name: newname,
-    white_user: null,
-    black_user: user,
-    white_arr: stringify(white_arr),
-    black_arr: stringify(black_arr),
-    white_list: tempw,
-    black_list: tempb,
-    points: rated,
-    mode: mode,
-    visibility: visibility,
-    invited_user: invited_user,
-    white_time: stringify(white_time),
-    black_time: stringify(time),
-    randomised: randomised,
-    admin: admin,
-    messages: "",
-    white_bank: "",
-    black_bank: "",
-    draw_query: false,
-    result: null,
-    timer: [1,null],
-    white_count: white_time ? white_time[0][1] : null,
-    black_count: time ? time[0][1] : null,
-    turn: 1,
-    result: null,
-    moves: 0,
-    undo: stringify(undo)
-    }).then(docRef => {
-        setCookie('game_id',docRef.id,2);
-        sessionStorage.setItem('game_id',docRef.id);
-        window.location.assign('play.html');
-    }).catch(function(error) {
-        console.error("Error adding document: ", error);
-        $('error').innerHTML = "Could not connect to server. Please try again later";
-    });
-}
 }
 
 stringify = (stringed_arr) => {

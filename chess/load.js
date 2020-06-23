@@ -207,20 +207,25 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 					if (doc.data().white_user == null) {
 						db.collection('chess').doc(load_id).update({
 							white_user: username
+						}).then(docRef => {
+							console.log('t2')
+							setCookie('game_id',load_id,2);
+							sessionStorage.setItem('game_id',load_id);
+							window.location.assign('play.html');
 						})
 					}
 					else if (doc.data().black_user == null) {
 						db.collection('chess').doc(load_id).update({
 							black_user: username
+						}).then(docRef => {
+							console.log('t2')
+							setCookie('game_id',load_id,2);
+							sessionStorage.setItem('game_id',load_id);
+							window.location.assign('play.html');
 						})
 					}
                 }
             })
-        }).then(docRef => {
-            console.log(load_id);
-            setCookie('game_id',load_id,2);
-            sessionStorage.setItem('game_id',load_id);
-            window.location.assign('play.html');
         })
     }
 })
