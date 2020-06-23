@@ -232,6 +232,11 @@ class piece {
             }
         }
         var ret = check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
+        if (mode.indexOf('Checkless') != -1) {
+            var ret2 = check(this.colour ? 0 : 1, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr)
+            console.log([ret[0],ret[1],ret2])
+            return [ret[0],ret[1],ret2]
+        }
         this.pos = original_pos;
         if (capture != -1) {cap_piece.delete = false;}
         return ret;
@@ -730,7 +735,7 @@ class piece {
             }
             var int_onboard = [];
             for (let shade of onboard) {
-                if (!this.mock_update(shade)[0]) {
+                if ((!this.mock_update(shade)[0] && mode.indexOf('Checkless') == -1) || (mode.indexOf('Checkless') != -1 && !this.mock_update(shade)[0] && !this.mock_update(shade)[2][0])) {
                 int_onboard.push(shade)
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
                 if (blackwhite) {
@@ -948,8 +953,8 @@ function draw(message) {
             var other_r = 10**(other_elo/400);
             var e = r / (r + other_r);
             var other_e = other_r / (r + other_r);
-            var new_elo = elo + 32 * (0 - e);
-            var new_other_elo = other_elo + 32 * (1 - other_e);
+            var new_elo = elo + 32 * (0.5 - e);
+            var new_other_elo = other_elo + 32 * (0.5 - other_e);
             db.collection('account').doc(other_id).update({
                 draws: other_draws + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
