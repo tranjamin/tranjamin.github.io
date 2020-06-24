@@ -258,6 +258,7 @@ class piece {
         var original_capture_arr = copy_arr(capture_arr);
         var capture = findArr(new_pos, opposite);
         if (capture != -1) {
+            if (mode.indexOf('Circe') == -1) {
             opposite.splice(findArr(new_pos, opposite), 1); //may be error
             for (let captured_piece in capture_arr) {
                 if (arrEqual(capture_arr[captured_piece].pos, new_pos)) {
@@ -266,6 +267,95 @@ class piece {
                 }
             }
         }
+            else {
+                opposite.splice(findArr(new_pos, opposite), 1); //may be error
+                for (let captured_piece in capture_arr) {
+                    if (arrEqual(capture_arr[captured_piece].pos, new_pos)) {
+                        var new_square;
+                        switch (capture_arr[captured_piece].name) {
+                            case "w_king":
+                                new_square = [5,1]
+                                break;
+                            case "b_king":
+                                new_square = [5,8]
+                                break;
+                            case "w_queen":
+                                new_square = [4,1]
+                                break;
+                            case "b_queen":
+                                new_square = [4,8]
+                                break;
+                            case "w_bishopc":
+                                new_square = [3,1]
+                                break;
+                            case "w_bishopf":
+                                new_square = [6,1]
+                                break;
+                            case "b_bishopc":
+                                new_square = [3,8]
+                                break;
+                            case "b_bishopf":
+                                new_square = [6,8]
+                                break;
+                            case "w_knightb":
+                            case "w_knightg":
+                                if ((this.pos[0] + this.pos[1]) % 2) {
+                                    new_square = [2,1]
+                                }
+                                else {
+                                    new_square = [7,1]
+                                }
+                                break;
+                            case "b_knightb":
+                            case "b_knightg":
+                                if ((this.pos[0] + this.pos[1]) % 2) {
+                                    new_square = [7,8]
+                                }
+                                else {
+                                    new_square = [2,8]
+                                }
+                                break;
+                            case "w_rooka":
+                            case "w_rookh":
+                                if ((this.pos[0] + this.pos[1]) % 2) {
+                                    new_square = [8,1]
+                                }
+                                else {
+                                    new_square = [1,1]
+                                }
+                                break;
+                            case "b_rooka":
+                            case "b_rookh":
+                                if ((this.pos[0] + this.pos[1]) % 2) {
+                                    new_square = [1,8]
+                                }
+                                else {
+                                    new_square = [8,8]
+                                }
+                                break;
+                            default:
+                                if (blackwhite) {
+                                    new_square = [this.pos[0],7]
+                                }
+                                else {
+                                    new_square = [this.pos[0],2]
+                                }
+                                                      
+                        }
+                        if (findArr(new_square, black_arr) != -1 || findArr(new_square, white_arr) != -1) {
+                            capture_arr.splice(captured_piece, 1);
+                            break;
+                        }
+                        else {
+                            capture_arr[captured_piece].pos = new_square;
+                            opposite.push(new_square);
+                            capture = -1;
+                            break;
+                        }
+                        }
+                    }
+                }
+            }
         enpassant = undefined;
         if (this.type == "K" && this.colour == blackwhite) {
             // console.log("not doublemove");
@@ -457,6 +547,11 @@ class piece {
             else if (checkmate && !check(this.colour ? 0 : 1)) {
                 draw('Stalemate')
             }
+            if (mode.indexOf("King") != -1) {
+                if (this.type == "K" && findArr(this.pos,[[4,4],[4,5],[5,4],[5,5]]) != -1) {
+                    win('Reaching the Hill');
+                }
+            }
 
             var time_left = 0;
             var original_moves;
@@ -495,8 +590,8 @@ class piece {
                     draw('Fifty Moves');
                 }
                 if (doc.data()['white_time'] != null) {
-                console.log(doc.data().timer[1].toDate() - 0);
-                console.log(elapsed_time - 0);
+                //console.log(doc.data().timer[1].toDate() - 0);
+                //console.log(elapsed_time - 0);
                 elapsed_time = elapsed_time - doc.data().timer[1].toDate();
                 elapsed_time /= 1000;
                 time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
@@ -595,7 +690,6 @@ class piece {
                     if (this.colour) { onboard.push([enpassant.pos[0], this.pos[1] + 1]); }
                     else { onboard.push([enpassant.pos[0], this.pos[1] - 1]); }
                 }
-                if (!checktest) {console.log(options)}
                 break;
             case 'R':
             case 'Q':

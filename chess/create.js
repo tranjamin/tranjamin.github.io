@@ -92,8 +92,12 @@ function generate_position(mode) {
         b_queen.pos = [w_queen.pos[0], 8]
         b_king.pos = [w_king.pos[0], 8]
     }
-    else {
-
+    else if (mode.indexOf('Really') != -1) {
+        for (var ele of white_list.concat(black_list)) {
+            if (ele.type != "K") {
+                ele.type = (['P','R','Q','B','N'])[Math.floor(Math.random() * 5)]
+            }
+        }
     }
 }
 
