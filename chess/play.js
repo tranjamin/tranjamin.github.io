@@ -685,7 +685,9 @@ class piece {
                     if (findArr(diagonal[0], white_arrt) != -1) { onboard.push(diagonal[0]) }
                     if (findArr(diagonal[1], white_arrt) != -1) { onboard.push(diagonal[1]) }
                 }
+                if (!checktest) {console.log('enpsnt')}
                 if (enpassant && enpassant.pos[1] == this.pos[1] && Math.abs(enpassant.pos[0] - this.pos[0]) == 1) {
+                    if (!checktest) {console.log('enpsnt')}
                     if (this.colour) { onboard.push([enpassant.pos[0], this.pos[1] + 1]); }
                     else { onboard.push([enpassant.pos[0], this.pos[1] - 1]); }
                 }
@@ -756,7 +758,9 @@ class piece {
                 ]
 
                 if (this.colour) {
-                    if (castle_rooka && w_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1 && !check(this.colour)[0]) {
+                    if (castle_rooka && w_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
+                        if (checktest || (!checktest && !check(this.colour)[0] && !this.mock_update([4,1])[0] && !this.mock_update([3,1])[0] && !this.mock_update([2,1])[0]))
+                        {
                         var castle_check = []
                         detectSingle([3, 1], castle_check, 0, white_arrt, black_arrt);
                         detectSingle([2, 1], castle_check, 0, white_arrt, black_arrt);
@@ -767,22 +771,27 @@ class piece {
                         if (castle_check.length == 6) {
                             options.push([3, 1]);
                         }
-                    }
-                    if (castle_rookh && w_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1 && !check(this.colour)[0]) {
-                        var castle_check2 = []
+                    }}
+                    if (castle_rookh && w_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
+                        if (checktest || (!checktest && !check(this.colour)[0] && !this.mock_update([6,1])[0] && !this.mock_update([7,1])[0])) {
+                        var castle_check2 = [];
                         detectSingle([6, 1], castle_check2, 0, white_arrt, black_arrt);
                         detectSingle([7, 1], castle_check2, 1, white_arrt, black_arrt);
                         detectSingle([6, 1], castle_check2, 1, white_arrt, black_arrt);
+                        detectSingle([7, 1], castle_check2, 0, white_arrt, black_arrt);
                         if (castle_check2.length == 4) {
                             options.push([7, 1]);
                         }
-                    }
+                    } 
+                }
                 }
                 else {
-                    if (castle_rooka) {
+                    if (castle_rooka && b_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
+                        if (checktest || (!checktest && !check(this.colour)[0] && !this.mock_update([4,8])[0] && !this.mock_update([3,8])[0] && !this.mock_update([2,8])[0]))
+                        {
                         var castle_check = []
-                        detectSingle([2, 8], castle_check, 0, white_arrt, black_arrt);
                         detectSingle([3, 8], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([2, 8], castle_check, 0, white_arrt, black_arrt);
                         detectSingle([4, 8], castle_check, 0, white_arrt, black_arrt);
                         detectSingle([2, 8], castle_check, 1, white_arrt, black_arrt);
                         detectSingle([3, 8], castle_check, 1, white_arrt, black_arrt);
@@ -790,17 +799,19 @@ class piece {
                         if (castle_check.length == 6) {
                             options.push([3, 8]);
                         }
-                    }
-                    if (castle_rookh) {
-                        var castle_check2 = []
-                        detectSingle([7, 8], castle_check2, 0, white_arrt, black_arrt);
+                    }}
+                    if (castle_rookh && b_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
+                        if (checktest || (!checktest && !check(this.colour)[0] && !this.mock_update([6,8])[0] && !this.mock_update([7,8])[0])) {
+                        var castle_check2 = [];
                         detectSingle([6, 8], castle_check2, 0, white_arrt, black_arrt);
                         detectSingle([7, 8], castle_check2, 1, white_arrt, black_arrt);
                         detectSingle([6, 8], castle_check2, 1, white_arrt, black_arrt);
+                        detectSingle([7, 8], castle_check2, 0, white_arrt, black_arrt);
                         if (castle_check2.length == 4) {
                             options.push([7, 8]);
                         }
-                    }
+                    } 
+                }
                 }
 
 
@@ -808,24 +819,6 @@ class piece {
                 // console.log(onboard);
                 break;
         }
-
-        //first attempt
-        /*
-        if (recursion) {
-        for (let checkcheck in onboard) {
-            console.log('1 recursion')
-            var tempwhite = white_arr;
-            var tempblack = black_arr;
-            var tempwhitelist = white_list;
-            var tempblacklist = black_list;
-            this.mock_update(onboard[checkcheck],tempwhite,tempblack,tempwhitelist,tempblacklist);
-            console.log(tempwhite)
-            console.log(tempblack)
-            for (let checkpiece of this.colour ? tempblacklist : tempwhitelist) { 
-                if (checkpiece.highlight(true,tempwhite,tempblack,tempwhitelist,tempblacklist,false)) {onboard.slice(checkcheck,1);break;}
-            }
-        }}*/
-
 
         if (!checktest) {
             //console.log(onboard);
