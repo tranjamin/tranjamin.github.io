@@ -171,7 +171,6 @@ detectSquare = (options, onboard2, colour, white_arrt = white_arr, black_arrt = 
 }
 
 detectSingle = (option, onboard2, colour, repeat, white_arrt = white_arr, black_arrt = black_arr) => {
-    //console.log(option);
     var choose = colour ? white_arrt : black_arrt;
     var opposite = colour ? black_arrt : white_arrt;
     if ((0 < option[0] && option[0] < 9 && 0 < option[1] && option[1] < 9)) {
@@ -583,7 +582,7 @@ class piece {
                     original_fifty = 0;
                 }
                 else {
-                    console.log(original_fifty)
+                    //console.log(original_fifty)
                     original_fifty ++;
                 }
                 if (original_fifty == 50) {
@@ -694,59 +693,51 @@ class piece {
             case 'R':
             case 'Q':
                 var options = [];
-                var repeat1 = true;
                 for (var i = this.pos[0] - 1; i > 0; i--) {
-                    var ret = detectSingle([i, this.pos[1]], options, this.colour, repeat1, white_arrt, black_arrt);
-                    if (ret == "block") { break; }
-                    else if (ret == "repeat") { repeat1 = false; }
+                    var ret = detectSingle([i, this.pos[1]], options, this.colour, true, white_arrt, black_arrt);
+                    if (ret == "block") {break; }
+                    else if (ret == "repeat") {break; }
                 }
-                var repeat2 = true;
                 for (var i = this.pos[0] + 1; i < 9; i++) {
-                    var ret2 = detectSingle([i, this.pos[1]], options, this.colour, repeat2, white_arrt, black_arrt);
-                    if (ret2 == "block") { break; }
-                    else if (ret2 == "repeat") { repeat2 = false; }
+                    var ret2 = detectSingle([i, this.pos[1]], options, this.colour, true, white_arrt, black_arrt);
+                    if (ret2 == "block") {break; }
+                    else if (ret2 == "repeat") {break; }
+                    if (!checktest) {console.log([i, this.pos[1]], ret2)}
                 }
-                var repeat3 = true;
                 for (var i = this.pos[1] + 1; i < 9; i++) {
-                    var ret3 = detectSingle([this.pos[0], i], options, this.colour, repeat3, white_arrt, black_arrt);
-                    if (ret3 == "block") { break; }
-                    else if (ret3 == "repeat") { repeat3 = false; }
+                    var ret3 = detectSingle([this.pos[0], i], options, this.colour, true, white_arrt, black_arrt);
+                    if (ret3 == "block") {break; }
+                    else if (ret3 == "repeat") {break; }
                 }
-                var repeat4 = true;
                 for (var i = this.pos[1] - 1; i > 0; i--) {
-                    var ret4 = detectSingle([this.pos[0], i], options, this.colour, repeat4, white_arrt, black_arrt);
-                    if (ret4 == "block") { break; }
-                    else if (ret4 == "repeat") { repeat4 = false; }
+                    var ret4 = detectSingle([this.pos[0], i], options, this.colour, true, white_arrt, black_arrt);
+                    if (ret4 == "block") {break; }
+                    else if (ret4 == "repeat") {break; }
                 }
-                // console.log(options);
+                if (!checktest) {console.log(options)}
                 onboard = onboard.concat(options);
-                if (this.type == "R") { break; }
+                if (this.type == "R") {break;}
             case 'B':
-            case 'Q':
                 var optionsq = [];
-                var repeat1 = true;
-                var repeat2 = true;
                 for (var i = this.pos[0] - 1; i > 0; i--) {
-                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, repeat1, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
                     if (retb == "block") { break; }
-                    else if (retb == "repeat") { repeat1 = false; }
+                    else if (retb == "repeat") {break;}
                 }
                 for (var i = this.pos[0] - 1; i > 0; i--) {
-                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, repeat2, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
                     if (retb == "block") { break; }
-                    else if (retb == "repeat") { repeat2 = false; }
-                }
-                var repeat3 = true;
-                var repeat4 = true;
-                for (var i = this.pos[0] + 1; i < 9; i++) {
-                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, repeat3, white_arrt, black_arrt);
-                    if (retb == "block") { break; }
-                    else if (retb == "repeat") { repeat3 = false; }
+                    else if (retb == "repeat") {break;}
                 }
                 for (var i = this.pos[0] + 1; i < 9; i++) {
-                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, repeat4, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
                     if (retb == "block") { break; }
-                    else if (retb == "repeat") { repeat4 = false; }
+                    else if (retb == "repeat") {break;}
+                }
+                for (var i = this.pos[0] + 1; i < 9; i++) {
+                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
+                    if (retb == "block") { break; }
+                    else if (retb == "repeat") {break;}
                 }
 
                 // console.log(options);
@@ -765,7 +756,7 @@ class piece {
                 ]
 
                 if (this.colour) {
-                    if (castle_rooka) {
+                    if (castle_rooka && w_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1 && !check(this.colour)[0]) {
                         var castle_check = []
                         detectSingle([3, 1], castle_check, 0, false, white_arrt, black_arrt);
                         detectSingle([2, 1], castle_check, 0, false, white_arrt, black_arrt);
@@ -777,7 +768,7 @@ class piece {
                             options.push([3, 1]);
                         }
                     }
-                    if (castle_rookh) {
+                    if (castle_rookh && w_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1 && !check(this.colour)[0]) {
                         var castle_check2 = []
                         detectSingle([7, 1], castle_check2, 0, false, white_arrt, black_arrt);
                         detectSingle([6, 1], castle_check2, 0, false, white_arrt, black_arrt);
@@ -838,7 +829,7 @@ class piece {
 
 
         if (!checktest) {
-            console.log(onboard);
+            //console.log(onboard);
             //check
             if (check(this.colour)[0]) {
             console.log('check, no castling');
