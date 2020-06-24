@@ -355,7 +355,7 @@ class piece {
                     }
                 }
             }
-        enpassant = undefined;
+        enpassant = null;
         if (this.type == "K" && this.colour == blackwhite) {
             // console.log("not doublemove");
             castle_rooka = false;
@@ -411,7 +411,7 @@ class piece {
                 }
             }
             if (Math.abs(this.pos[1] - original_pos[1]) == 2) {
-                enpassant = this;
+                enpassant = this.pos;
             }
         }
 
@@ -589,13 +589,11 @@ class piece {
                     draw('Fifty Moves');
                 }
                 if (doc.data()['white_time'] != null) {
-                //console.log(doc.data().timer[1].toDate() - 0);
-                //console.log(elapsed_time - 0);
-                elapsed_time = elapsed_time - doc.data().timer[1].toDate();
+                /*elapsed_time = elapsed_time - (doc.data().timer[1] ? doc.data().timer[1].toDate() : elapsed_time);
                 elapsed_time /= 1000;
                 time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
                 time_left -= elapsed_time;
-                clearInterval(clock);
+                clearInterval(clock);*/
             }
 
             }).then(() => {
@@ -608,10 +606,11 @@ class piece {
                 turn: 0,
                 white_bank: white_int,
                 black_bank: black_int,
-                white_count: time_left,
+                white_count: str_to_time($('self_time').innerHTML),
                 white_checks: original_white_checks,
                 moves: original_moves,
-                fifty_moves: original_fifty
+                fifty_moves: original_fifty,
+                enpassant: enpassant
             }).catch(error => {console.log(error.lineNumber)})
         }
                 else {
@@ -623,10 +622,11 @@ class piece {
                 turn: 1,
                 white_bank: white_int,
                 black_bank: black_int,
-                black_count: time_left,
+                black_count: str_to_time($('self_time').innerHTML),
                 black_checks: original_black_checks,
                 moves: original_moves,
-                fifty_moves: original_fifty
+                fifty_moves: original_fifty,
+                enpassant: enpassant
             }).catch(error => {console.log(error.lineNumber)})
                 }
         })
@@ -685,11 +685,9 @@ class piece {
                     if (findArr(diagonal[0], white_arrt) != -1) { onboard.push(diagonal[0]) }
                     if (findArr(diagonal[1], white_arrt) != -1) { onboard.push(diagonal[1]) }
                 }
-                if (!checktest) {console.log('enpsnt')}
-                if (enpassant && enpassant.pos[1] == this.pos[1] && Math.abs(enpassant.pos[0] - this.pos[0]) == 1) {
-                    if (!checktest) {console.log('enpsnt')}
-                    if (this.colour) { onboard.push([enpassant.pos[0], this.pos[1] + 1]); }
-                    else { onboard.push([enpassant.pos[0], this.pos[1] - 1]); }
+                if (enpassant && enpassant[1] == this.pos[1] && Math.abs(enpassant[0] - this.pos[0]) == 1) {
+                    if (this.colour) { onboard.push([enpassant[0], this.pos[1] + 1]); }
+                    else { onboard.push([enpassant[0], this.pos[1] - 1]); }
                 }
                 break;
             case 'R':
@@ -1133,6 +1131,20 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
     }
 })
 
+db.collection('chess').doc(game).get().then(doc => {
+    var new_white_count = doc.data().white_count;
+    var new_black_count = doc.data().black_count;
+    if (blackwhite) {
+        new_white_count -= (doc.data().timer[1].toDate() - (new Date()))/1000
+    }
+    else {
+        new_black_count -= (doc.data().timer[1].toDate() - (new Date()))/1000
+    }
+    db.collection('chess').doc(game).update({
+        white_count: new_white_count,
+        black_count: new_black_count
+    })
+})
 db.collection('chess').doc(game).onSnapshot(doc => {    
     $('text').innerHTML = doc.data().messages;
     white_arr = arrayify(doc.data().white_arr, Number);
@@ -1141,6 +1153,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     mode = doc.data().mode;
     white_list = [];
     black_list = [];
+    enpassant = doc.data().enpassant;
     $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
     $('opposite_time').innerHTML = blackwhite ? doc.data().black_count : doc.data().white_count;
     $('self_time').innerHTML = time_to_str($('self_time').innerHTML);
@@ -1250,13 +1263,16 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     if (doc.data()['draw_query']) {
         $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
-    if (doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite && doc.data()['white_time'] != null) {
+    if (doc.data()['white_time'] != null && doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite) {
         var new_date = new Date()
         db.collection('chess').doc(game).update({
             timer: [blackwhite, new_date]
         })
         var original_date = new_date;
-        if (parseInt($('self_time').innerHTML.split(':')[0])) {
+        if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
+
+        }
+        else if (parseInt($('self_time').innerHTML.split(':')[0])) {
             interval1();
         }
         else {
@@ -1269,6 +1285,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         }
 
     }
+
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     show_pieces();
@@ -1276,16 +1293,19 @@ db.collection('chess').doc(game).onSnapshot(doc => {
 
 interval3 = () => {
     clock = setInterval(() => {
-        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.001);
+        console.log('int3')
+        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
         if (!parseFloat($('self_time').innerHTML.split(':')[0]) && !parseFloat($('self_time').innerHTML.split(':')[1])) {
-            $('status').innerHTML = "time lost";
+            clearInterval(clock);
+            lose('Time')
         }
-    }, 1)
+    }, 10)
 }
 interval2 = () => {
     clock = setInterval(() => {
+        console.log('int2')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
-        if ($('self_time').innerHTML == "0:10.0") {
+        if ($('self_time').innerHTML == "0:10.00") {
             clearInterval(clock);
             interval3();
         }
@@ -1293,6 +1313,7 @@ interval2 = () => {
 }
 interval1 = () => {
     clock = setInterval(() => {
+        console.log('int1')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 1);
             if ($('self_time').innerHTML == "1:00") {
                 clearInterval(clock);
@@ -1308,7 +1329,7 @@ function time_to_str(time) {
     }
     else {
         if ((time % 60) < 10) {
-        ret_string = Math.floor(time / 60) + ":" + (((time % 60) < 10) ? "0" : "") + (time % 60).toFixed(3);
+        ret_string = Math.floor(time / 60) + ":" + (((time % 60) < 10) ? "0" : "") + (time % 60).toFixed(2);
         }
         else {
             ret_string = Math.floor(time / 60) + ":" + (((time % 60) < 10) ? "0" : "") + (time % 60).toFixed(2);
@@ -1370,8 +1391,6 @@ document.addEventListener('click', e => {
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
-        // console.log(clicked.colour,turn,blackwhite);
-        // console.log(clicked);
         if (clicked.colour == turn && clicked.colour == blackwhite && !observer) { //change this back to multiplayer
             clicked.highlight();
         }
