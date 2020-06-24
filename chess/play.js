@@ -170,12 +170,12 @@ detectSquare = (options, onboard2, colour, white_arrt = white_arr, black_arrt = 
     }
 }
 
-detectSingle = (option, onboard2, colour, repeat, white_arrt = white_arr, black_arrt = black_arr) => {
+detectSingle = (option, onboard2, colour, white_arrt = white_arr, black_arrt = black_arr) => {
     var choose = colour ? white_arrt : black_arrt;
     var opposite = colour ? black_arrt : white_arrt;
     if ((0 < option[0] && option[0] < 9 && 0 < option[1] && option[1] < 9)) {
         if (findArr(option, choose) == -1 && findArr(option, opposite) == -1) { onboard2.push(option); return 'blank'; }
-        if (findArr(option, choose) == -1 && findArr(option, opposite) != -1 && repeat) { onboard2.push(option); return 'repeat'; }
+        if (findArr(option, choose) == -1 && findArr(option, opposite) != -1) { onboard2.push(option); return 'repeat'; }
         else { return 'block'; }
     }
 }
@@ -648,9 +648,9 @@ class piece {
                 if (this.colour) {
                     var space = [];
                     options = [[this.pos[0], this.pos[1] + 1]];
-                    if (detectSingle(options[0], space, 0, false, white_arrt, black_arrt) == "blank" && detectSingle(options[0], space, 1, false, white_arrt, black_arrt) == "blank") {
+                    if (detectSingle(options[0], space, 0, white_arrt, black_arrt) == "blank" && detectSingle(options[0], space, 1, white_arrt, black_arrt) == "blank") {
                         options = [[this.pos[0], this.pos[1] + 1]];
-                        if (this.pos[1] == 2 && detectSingle(options[0], space, 0, false, white_arrt, black_arrt) == "blank" && detectSingle([options[0][0], options[0][1] + 1], space, 1, false, white_arrt, black_arrt) == "blank") {
+                        if (this.pos[1] == 2 && detectSingle(options[0], space, 0, white_arrt, black_arrt) == "blank" && detectSingle([options[0][0], options[0][1] + 1], space, 1, white_arrt, black_arrt) == "blank") {
                             options.push([this.pos[0], this.pos[1] + 2]);
                         }
                     }
@@ -661,9 +661,9 @@ class piece {
                 else {
                     var space = [];
                     options = [[this.pos[0], this.pos[1] - 1]];
-                    if (detectSingle(options[0], space, 0, false, white_arrt, black_arrt) == "blank" && detectSingle(options[0], space, 1, false, white_arrt, black_arrt) == "blank") {
+                    if (detectSingle(options[0], space, 0, white_arrt, black_arrt) == "blank" && detectSingle(options[0], space, 1, white_arrt, black_arrt) == "blank") {
                         options = [[this.pos[0], this.pos[1] - 1]];
-                        if (this.pos[1] == 7 && detectSingle(options[0], space, 0, false, white_arrt, black_arrt) == "blank" && detectSingle([options[0][0], options[0][1] - 1], space, 1, false, white_arrt, black_arrt) == "blank") {
+                        if (this.pos[1] == 7 && detectSingle(options[0], space, 0, white_arrt, black_arrt) == "blank" && detectSingle([options[0][0], options[0][1] - 1], space, 1, white_arrt, black_arrt) == "blank") {
                             options.push([this.pos[0], this.pos[1] - 2]);
                         }
                     }
@@ -694,23 +694,23 @@ class piece {
             case 'Q':
                 var options = [];
                 for (var i = this.pos[0] - 1; i > 0; i--) {
-                    var ret = detectSingle([i, this.pos[1]], options, this.colour, true, white_arrt, black_arrt);
+                    var ret = detectSingle([i, this.pos[1]], options, this.colour, white_arrt, black_arrt);
                     if (ret == "block") {break; }
                     else if (ret == "repeat") {break; }
                 }
                 for (var i = this.pos[0] + 1; i < 9; i++) {
-                    var ret2 = detectSingle([i, this.pos[1]], options, this.colour, true, white_arrt, black_arrt);
+                    var ret2 = detectSingle([i, this.pos[1]], options, this.colour, white_arrt, black_arrt);
                     if (ret2 == "block") {break; }
                     else if (ret2 == "repeat") {break; }
                     if (!checktest) {console.log([i, this.pos[1]], ret2)}
                 }
                 for (var i = this.pos[1] + 1; i < 9; i++) {
-                    var ret3 = detectSingle([this.pos[0], i], options, this.colour, true, white_arrt, black_arrt);
+                    var ret3 = detectSingle([this.pos[0], i], options, this.colour, white_arrt, black_arrt);
                     if (ret3 == "block") {break; }
                     else if (ret3 == "repeat") {break; }
                 }
                 for (var i = this.pos[1] - 1; i > 0; i--) {
-                    var ret4 = detectSingle([this.pos[0], i], options, this.colour, true, white_arrt, black_arrt);
+                    var ret4 = detectSingle([this.pos[0], i], options, this.colour, white_arrt, black_arrt);
                     if (ret4 == "block") {break; }
                     else if (ret4 == "repeat") {break; }
                 }
@@ -720,22 +720,22 @@ class piece {
             case 'B':
                 var optionsq = [];
                 for (var i = this.pos[0] - 1; i > 0; i--) {
-                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, white_arrt, black_arrt);
                     if (retb == "block") { break; }
                     else if (retb == "repeat") {break;}
                 }
                 for (var i = this.pos[0] - 1; i > 0; i--) {
-                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, white_arrt, black_arrt);
                     if (retb == "block") { break; }
                     else if (retb == "repeat") {break;}
                 }
                 for (var i = this.pos[0] + 1; i < 9; i++) {
-                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] - (this.pos[0] - i)], optionsq, this.colour, white_arrt, black_arrt);
                     if (retb == "block") { break; }
                     else if (retb == "repeat") {break;}
                 }
                 for (var i = this.pos[0] + 1; i < 9; i++) {
-                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, true, white_arrt, black_arrt);
+                    var retb = detectSingle([i, this.pos[1] + (this.pos[0] - i)], optionsq, this.colour, white_arrt, black_arrt);
                     if (retb == "block") { break; }
                     else if (retb == "repeat") {break;}
                 }
@@ -758,22 +758,21 @@ class piece {
                 if (this.colour) {
                     if (castle_rooka && w_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1 && !check(this.colour)[0]) {
                         var castle_check = []
-                        detectSingle([3, 1], castle_check, 0, false, white_arrt, black_arrt);
-                        detectSingle([2, 1], castle_check, 0, false, white_arrt, black_arrt);
-                        detectSingle([4, 1], castle_check, 0, false, white_arrt, black_arrt);
-                        detectSingle([2, 1], castle_check, 1, false, white_arrt, black_arrt);
-                        detectSingle([3, 1], castle_check, 1, false, white_arrt, black_arrt);
-                        detectSingle([4, 1], castle_check, 1, false, white_arrt, black_arrt);
+                        detectSingle([3, 1], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([2, 1], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([4, 1], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([2, 1], castle_check, 1, white_arrt, black_arrt);
+                        detectSingle([3, 1], castle_check, 1, white_arrt, black_arrt);
+                        detectSingle([4, 1], castle_check, 1, white_arrt, black_arrt);
                         if (castle_check.length == 6) {
                             options.push([3, 1]);
                         }
                     }
                     if (castle_rookh && w_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1 && !check(this.colour)[0]) {
                         var castle_check2 = []
-                        detectSingle([7, 1], castle_check2, 0, false, white_arrt, black_arrt);
-                        detectSingle([6, 1], castle_check2, 0, false, white_arrt, black_arrt);
-                        detectSingle([7, 1], castle_check2, 1, false, white_arrt, black_arrt);
-                        detectSingle([6, 1], castle_check2, 1, false, white_arrt, black_arrt);
+                        detectSingle([6, 1], castle_check2, 0, white_arrt, black_arrt);
+                        detectSingle([7, 1], castle_check2, 1, white_arrt, black_arrt);
+                        detectSingle([6, 1], castle_check2, 1, white_arrt, black_arrt);
                         if (castle_check2.length == 4) {
                             options.push([7, 1]);
                         }
@@ -782,22 +781,22 @@ class piece {
                 else {
                     if (castle_rooka) {
                         var castle_check = []
-                        detectSingle([2, 8], castle_check, 0, false, white_arrt, black_arrt);
-                        detectSingle([3, 8], castle_check, 0, false, white_arrt, black_arrt);
-                        detectSingle([4, 8], castle_check, 0, false, white_arrt, black_arrt);
-                        detectSingle([2, 8], castle_check, 1, false, white_arrt, black_arrt);
-                        detectSingle([3, 8], castle_check, 1, false, white_arrt, black_arrt);
-                        detectSingle([4, 8], castle_check, 1, false, white_arrt, black_arrt);
+                        detectSingle([2, 8], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([3, 8], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([4, 8], castle_check, 0, white_arrt, black_arrt);
+                        detectSingle([2, 8], castle_check, 1, white_arrt, black_arrt);
+                        detectSingle([3, 8], castle_check, 1, white_arrt, black_arrt);
+                        detectSingle([4, 8], castle_check, 1, white_arrt, black_arrt);
                         if (castle_check.length == 6) {
                             options.push([3, 8]);
                         }
                     }
                     if (castle_rookh) {
                         var castle_check2 = []
-                        detectSingle([7, 8], castle_check2, 0, false, white_arrt, black_arrt);
-                        detectSingle([6, 8], castle_check2, 0, false, white_arrt, black_arrt);
-                        detectSingle([7, 8], castle_check2, 1, false, white_arrt, black_arrt);
-                        detectSingle([6, 8], castle_check2, 1, false, white_arrt, black_arrt);
+                        detectSingle([7, 8], castle_check2, 0, white_arrt, black_arrt);
+                        detectSingle([6, 8], castle_check2, 0, white_arrt, black_arrt);
+                        detectSingle([7, 8], castle_check2, 1, white_arrt, black_arrt);
+                        detectSingle([6, 8], castle_check2, 1, white_arrt, black_arrt);
                         if (castle_check2.length == 4) {
                             options.push([7, 8]);
                         }
