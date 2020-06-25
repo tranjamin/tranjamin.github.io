@@ -244,6 +244,7 @@ class piece {
         }
 
     update(new_pos, send = true, doublemove = false) {
+        clearInterval(clock);
         var elapsed_time = new Date();
         console.log('update');
         var original_pos = copy_arr(this.pos);
@@ -1132,19 +1133,44 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
 })
 
 db.collection('chess').doc(game).get().then(doc => {
+    if (doc.data().white_time != null && doc.data().timer[1] != null) {
     var new_white_count = doc.data().white_count;
     var new_black_count = doc.data().black_count;
+    console.log(doc.data().white_count);
+    console.log(new Date() - doc.data().timer[1].toDate())
     if (blackwhite) {
-        new_white_count -= (doc.data().timer[1].toDate() - (new Date()))/1000
+        new_white_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
+        $('self_time').innerHTML = time_to_str(new_white_count);
     }
     else {
-        new_black_count -= (doc.data().timer[1].toDate() - (new Date()))/1000
+        new_black_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
+        $('self_time').innerHTML = time_to_str(new_black_count);
     }
     db.collection('chess').doc(game).update({
         white_count: new_white_count,
         black_count: new_black_count
+    }).then(docRef => {
+        if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
+        clearInterval(clock)
+        if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
+
+        }
+        else if (parseInt($('self_time').innerHTML.split(':')[0])) {
+            interval1();
+        }
+        else {
+            if (parseFloat($('self_time').innerHTML.split(":")[1])) {
+                interval3();
+            }
+            else {
+                interval2();
+            }
+        }
+    }
     })
+}
 })
+
 db.collection('chess').doc(game).onSnapshot(doc => {    
     $('text').innerHTML = doc.data().messages;
     white_arr = arrayify(doc.data().white_arr, Number);
@@ -1269,6 +1295,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
             timer: [blackwhite, new_date]
         })
         var original_date = new_date;
+        clearInterval(clock)
         if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
 
         }
@@ -1295,7 +1322,7 @@ interval3 = () => {
     clock = setInterval(() => {
         console.log('int3')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
-        if (!parseFloat($('self_time').innerHTML.split(':')[0]) && !parseFloat($('self_time').innerHTML.split(':')[1])) {
+        if ($('self_time').innerHTML == "0:00.00") {
             clearInterval(clock);
             lose('Time')
         }
