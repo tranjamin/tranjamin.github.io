@@ -1093,6 +1093,7 @@ $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     }
     else if (e.target.innerHTML == '✔') {
         e.target.parentElement.innerHTML = '&#9873';
+        $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has resigned</i><br>`;
         lose('Resignation');
     }
     else if (e.target.innerHTML == '✘') {
@@ -1104,18 +1105,24 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
         e.target.innerHTML = '✘';
         $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has offered a draw</i><br>`;
         db.collection('chess').doc(game).update({
-            draw_query: true,
+            draw_query: (blackwhite ? "white" : "black"),
             messages: $('text').innerHTML
         })
     }
     else if (e.target.innerHTML == '✘') {
-        if (e.target.tagName == "button") {
+        if (e.target.parentElement.childElementCount == 2) {
+            $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has declined the draw</i><br>`;
+        }
+        else { 
+            $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has revoked the draw</i><br>`;
+        }
+        if (e.target.parentElement.tagName != "BUTTON") {
         e.target.innerHTML = '🤝';
         }
         else {
         e.target.parentElement.innerHTML = '🤝';
     }
-        $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has revoked the draw</i><br>`;
+        
         db.collection('chess').doc(game).update({
             draw_query: false,
             messages: $('text').innerHTML
@@ -1128,7 +1135,7 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
             draw_query: false,
             messages: $('text').innerHTML
         })
-        draw();
+        draw('Agreement');
     }
 })
 
@@ -1295,7 +1302,14 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     }
 
     if (doc.data()['draw_query']) {
-        $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
+        if (doc.data()['draw_query'] != (blackwhite ? 'white' : 'black')) {
+        $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";}
+        else {
+        $('options').getElementsByTagName('button')[2].innerHTML = "✘";
+        }
+    }
+    else {
+        $('options').getElementsByTagName('button')[2].innerHTML = "🤝";
     }
     if (doc.data()['white_time'] != null && doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite) {
         var new_date = new Date()
