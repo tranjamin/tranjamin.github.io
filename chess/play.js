@@ -1136,19 +1136,27 @@ db.collection('chess').doc(game).get().then(doc => {
     if (doc.data().white_time != null && doc.data().timer[1] != null) {
     var new_white_count = doc.data().white_count;
     var new_black_count = doc.data().black_count;
-    console.log(doc.data().white_count);
-    console.log(new Date() - doc.data().timer[1].toDate())
     if (blackwhite) {
         new_white_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
         $('self_time').innerHTML = time_to_str(new_white_count);
+        if (new_white_count <= 0) {
+            new_white_count = 0;
+            lose('Time');
+        }
     }
     else {
         new_black_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
         $('self_time').innerHTML = time_to_str(new_black_count);
+        if (new_black_count <= 0) {
+            new_black_count = 0;
+            lose('Time');
+        }
     }
+
     db.collection('chess').doc(game).update({
         white_count: new_white_count,
-        black_count: new_black_count
+        black_count: new_black_count,
+        timer: [blackwhite, new Date()]
     }).then(docRef => {
         if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
         clearInterval(clock)
