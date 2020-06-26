@@ -21,6 +21,7 @@ var game = "";
 var undo = [];
 var clock;
 var mode;
+var done = false;
 
 if (getCookie('game_id'))
  {
@@ -1088,6 +1089,7 @@ var white_list = [];
 var black_list = [];
 
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
+    if (!done) {
     if (e.target.innerHTML == '⚑') {
         e.target.innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
@@ -1098,9 +1100,10 @@ $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     }
     else if (e.target.innerHTML == '✘') {
         e.target.parentElement.innerHTML = '&#9873';
-    }
+    }}
 })
 $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
+    if (!done) {
     if (e.target.innerHTML == "🤝") {
         e.target.innerHTML = '✘';
         $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has offered a draw</i><br>`;
@@ -1136,7 +1139,7 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
             messages: $('text').innerHTML
         })
         draw('Agreement');
-    }
+    }}
 })
 
 db.collection('chess').doc(game).get().then(doc => {
@@ -1194,6 +1197,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     mode = doc.data().mode;
     white_list = [];
     black_list = [];
+    done = doc.data().result ? true : false;
     enpassant = doc.data().enpassant;
     $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
     $('opposite_time').innerHTML = blackwhite ? doc.data().black_count : doc.data().white_count;
@@ -1416,6 +1420,7 @@ function show_pieces() {
 }
 
 document.addEventListener('click', e => {
+    if (!done) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
     // console.log(square);
@@ -1444,7 +1449,7 @@ document.addEventListener('click', e => {
             clicked.highlight();
         }
     }
-
+    }
 });
 
 var msg_ready = true;
