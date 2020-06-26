@@ -756,167 +756,75 @@ class piece {
                     [this.pos[0] + 0, this.pos[1] + 1],
                     [this.pos[0] + 0, this.pos[1] - 1],
                 ]
-
-                if (this.colour) {
-                    if (castle_rooka && w_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
+                if (!checktest) {
+                    if (castle_rooka && (blackwhite ? w_rooka : b_rooka) && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
                         var accepted = true;
                         var king_options = [];
                         var rook_options = [];
-                        for (var i = 0; i <= Math.abs(this.pos[0] - 3); i++) {
+                        for (var i = 1; i <= Math.abs(this.pos[0] - 3); i++) {
                             if (this.pos[0] < 3) {
-                                king_options.push([this.pos[0] + i, 1])
+                                king_options.push([this.pos[0] + i, this.colour ? 1 : 8])
                             }
                             else {
-                                king_options.push([this.pos[0] - i, 1])
+                                king_options.push([this.pos[0] - i, this.colour ? 1 : 8])
                             }
                         }
-                        for (var i = 0; i <= Math.abs(w_rooka.pos[0] - 4); i++) {
+                        for (var i = 1; i <= Math.abs(w_rooka.pos[0] - 4); i++) {
                             if (this.pos[0] < 3) {
-                                rook_options.push([w_rooka.pos[0] + i, 1])
+                                rook_options.push([w_rooka.pos[0] - i, this.colour ? 1 : 8])
                             }
                             else {
-                                rook_options.push([w_rooka.pos[0] - i, 1])
+                                rook_options.push([w_rooka.pos[0] + i, this.colour ? 1 : 8])
                             }
                         }
+                        rook_options.splice(findArr(blackwhite ? w_rooka.pos : b_rooka.pos, rook_options), 1)
                         for (var pos of king_options) {
-                            if (findArr(pos, white_arr.concat(black_arr)) || this.mock_update(pos)[0]) {accepted = false;}
+                            if ((findArr(pos, white_arr.concat(black_arr)) != -1 && !arrEqual(pos, blackwhite ? w_rooka.pos : b_rooka.pos)) || this.mock_update(pos)[0]) {accepted = false;}
                         }
                         for(var pos of rook_options) {
-                            if (findArr(pos, white_arr.concat(black_arr))) {accepted = false;}
+                            if (findArr(pos, white_arr.concat(black_arr)) != -1) {accepted = false;}
                         }
-                        if (checktest || (!checktest && accepted))
-                        {
-                        var castle_check = [];
-                        detectSingle([3, 1], castle_check, 0, white_arrt, black_arrt);
-                        detectSingle([2, 1], castle_check, 0, white_arrt, black_arrt);
-                        detectSingle([4, 1], castle_check, 0, white_arrt, black_arrt);
-                        detectSingle([2, 1], castle_check, 1, white_arrt, black_arrt);
-                        detectSingle([3, 1], castle_check, 1, white_arrt, black_arrt);
-                        detectSingle([4, 1], castle_check, 1, white_arrt, black_arrt);
-                        if (castle_check.length == 6) {
-                            options.push([3, 1]);
-                        }
-                    }}
-                    if (castle_rookh && w_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
+                        if (checktest || (!checktest && accepted && !check(this.colour)[0])) {
+                            options.push([3, this.colour ? 1 : 8]);
+                    }
+                
+                }
+                    if (castle_rookh && (blackwhite ? w_rookh : b_rookh) && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
                         var accepted = true;
                         var king_options = [];
                         var rook_options = [];
-                        for (var i = 0; i <= Math.abs(this.pos[0] - 7); i++) {
+                        for (var i = 1; i <= Math.abs(this.pos[0] - 7); i++) {
                             if (this.pos[0] < 7) {
-                                king_options.push([this.pos[0] + i, 1])
+                                king_options.push([this.pos[0] + i, this.colour ? 1 : 8])
                             }
                             else {
-                                king_options.push([this.pos[0] - i, 1])
+                                king_options.push([this.pos[0] - i, this.colour ? 1 : 8])
                             }
                         }
-                        for (var i = 0; i <= Math.abs(w_rooka.pos[0] - 6); i++) {
+                        for (var i = 1; i <= Math.abs(w_rooka.pos[0] - 6); i++) {
                             if (this.pos[0] < 6) {
-                                rook_options.push([w_rooka.pos[0] + i, 1])
+                                rook_options.push([w_rooka.pos[0] - i, this.colour ? 1 : 8])
                             }
                             else {
-                                rook_options.push([w_rooka.pos[0] - i, 1])
+                                rook_options.push([w_rooka.pos[0] + i, this.colour ? 1 : 8])
                             }
                         }
+                        rook_options.splice(findArr(blackwhite ? w_rookh.pos : b_rookh.pos, rook_options), 1)
                         for (var pos of king_options) {
-                            if (findArr(pos, white_arr.concat(black_arr)) || this.mock_update(pos)[0]) {accepted = false;}
+                            console.log(pos);
+                            if ((findArr(pos, white_arr.concat(black_arr)) != -1  && !arrEqual(pos, blackwhite ? w_rooka.pos : b_rooka.pos))|| this.mock_update(pos)[0]) {accepted = false;}
                         }
                         for(var pos of rook_options) {
-                            if (findArr(pos, white_arr.concat(black_arr))) {accepted = false;}
+                            if (findArr(pos, white_arr.concat(black_arr)) != -1) {accepted = false;}
                         }
-                        if (checktest || (!checktest && accepted)) {
-                        var castle_check2 = [];
-                        detectSingle([6, 1], castle_check2, 0, white_arrt, black_arrt);
-                        detectSingle([7, 1], castle_check2, 1, white_arrt, black_arrt);
-                        detectSingle([6, 1], castle_check2, 1, white_arrt, black_arrt);
-                        detectSingle([7, 1], castle_check2, 0, white_arrt, black_arrt);
-                        if (castle_check2.length == 4) {
-                            options.push([7, 1]);
-                        }
+                        if (checktest || (!checktest && accepted && !check(this.colour)[0])) {
+                            options.push([7, this.colour ? 1 : 8]);
                     } 
                 }
-                }
-                else {
-                    if (castle_rooka && b_rooka && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
-                        var accepted = true;
-                        var king_options = [];
-                        var rook_options = [];
-                        for (var i = 0; i <= Math.abs(this.pos[0] - 3); i++) {
-                            if (this.pos[0] < 3) {
-                                king_options.push([this.pos[0] + i, 8])
-                            }
-                            else {
-                                king_options.push([this.pos[0] - i, 8])
-                            }
-                        }
-                        for (var i = 0; i <= Math.abs(w_rooka.pos[0] - 4); i++) {
-                            if (this.pos[0] < 3) {
-                                rook_options.push([w_rooka.pos[0] + i, 8])
-                            }
-                            else {
-                                rook_options.push([w_rooka.pos[0] - i, 8])
-                            }
-                        }
-                        for (var pos of king_options) {
-                            if (findArr(pos, white_arr.concat(black_arr)) || this.mock_update(pos)[0]) {accepted = false;}
-                        }
-                        for(var pos of rook_options) {
-                            if (findArr(pos, white_arr.concat(black_arr))) {accepted = false;}
-                        }
-                        if (checktest || (!checktest && accepted))
-                        {
-                        var castle_check = []
-                        detectSingle([3, 8], castle_check, 0, white_arrt, black_arrt);
-                        detectSingle([2, 8], castle_check, 0, white_arrt, black_arrt);
-                        detectSingle([4, 8], castle_check, 0, white_arrt, black_arrt);
-                        detectSingle([2, 8], castle_check, 1, white_arrt, black_arrt);
-                        detectSingle([3, 8], castle_check, 1, white_arrt, black_arrt);
-                        detectSingle([4, 8], castle_check, 1, white_arrt, black_arrt);
-                        if (castle_check.length == 6) {
-                            options.push([3, 8]);
-                        }
-                    }}
-                    if (castle_rookh && b_rookh && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
-                        var accepted = true;
-                        var king_options = [];
-                        var rook_options = [];
-                        for (var i = 0; i <= Math.abs(this.pos[0] - 7); i++) {
-                            if (this.pos[0] < 7) {
-                                king_options.push([this.pos[0] + i, 8])
-                            }
-                            else {
-                                king_options.push([this.pos[0] - i, 8])
-                            }
-                        }
-                        for (var i = 0; i <= Math.abs(w_rooka.pos[0] - 6); i++) {
-                            if (this.pos[0] < 6) {
-                                rook_options.push([w_rooka.pos[0] + i, 8])
-                            }
-                            else {
-                                rook_options.push([w_rooka.pos[0] - i, 8])
-                            }
-                        }
-                        for (var pos of king_options) {
-                            if (findArr(pos, white_arr.concat(black_arr)) || this.mock_update(pos)[0]) {accepted = false;}
-                        }
-                        for(var pos of rook_options) {
-                            if (findArr(pos, white_arr.concat(black_arr))) {accepted = false;}
-                        }
-                        if (checktest || (!checktest && accepted)) {
-                        var castle_check2 = [];
-                        detectSingle([6, 8], castle_check2, 0, white_arrt, black_arrt);
-                        detectSingle([7, 8], castle_check2, 1, white_arrt, black_arrt);
-                        detectSingle([6, 8], castle_check2, 1, white_arrt, black_arrt);
-                        detectSingle([7, 8], castle_check2, 0, white_arrt, black_arrt);
-                        if (castle_check2.length == 4) {
-                            options.push([7, 8]);
-                        }
-                    } 
-                }
-                }
-
+            }
 
                 detectSquare(options, onboard, this.colour, white_arrt, black_arrt);
-                // console.log(onboard);
+                if (!checktest) {console.log(onboard)};
                 break;
         }
 
