@@ -756,6 +756,7 @@ class piece {
                     [this.pos[0] + 0, this.pos[1] + 1],
                     [this.pos[0] + 0, this.pos[1] - 1],
                 ]
+                detectSquare(options, onboard, this.colour, white_arrt, black_arrt);
                 if (!checktest) {
                     if (castle_rooka && (blackwhite ? w_rooka : b_rooka) && mode.indexOf('Antichess') == -1 && mode.indexOf('Really') == -1) {
                         var accepted = true;
@@ -785,7 +786,7 @@ class piece {
                             if (findArr(pos, white_arr.concat(black_arr)) != -1) {accepted = false;}
                         }
                         if (checktest || (!checktest && accepted && !check(this.colour)[0])) {
-                            options.push([3, this.colour ? 1 : 8]);
+                            onboard.push([3, this.colour ? 1 : 8]);
                     }
                 
                 }
@@ -811,19 +812,18 @@ class piece {
                         }
                         rook_options.splice(findArr(blackwhite ? w_rookh.pos : b_rookh.pos, rook_options), 1)
                         for (var pos of king_options) {
-                            console.log(pos);
-                            if ((findArr(pos, white_arr.concat(black_arr)) != -1  && !arrEqual(pos, blackwhite ? w_rooka.pos : b_rooka.pos))|| this.mock_update(pos)[0]) {accepted = false;}
+                            console.log(findArr(pos, white_arr.concat(black_arr)));
+                            if ((findArr(pos, white_arr.concat(black_arr)) != -1  && !arrEqual(pos, blackwhite ? w_rookh.pos : b_rookh.pos))|| this.mock_update(pos)[0]) {accepted = false;}
                         }
                         for(var pos of rook_options) {
                             if (findArr(pos, white_arr.concat(black_arr)) != -1) {accepted = false;}
                         }
                         if (checktest || (!checktest && accepted && !check(this.colour)[0])) {
-                            options.push([7, this.colour ? 1 : 8]);
-                    } 
+                            onboard.push([7, this.colour ? 1 : 8]);
+                    }
                 }
             }
 
-                detectSquare(options, onboard, this.colour, white_arrt, black_arrt);
                 if (!checktest) {console.log(onboard)};
                 break;
         }
