@@ -240,7 +240,7 @@ class piece {
             return [ret[0],ret[1],ret2]
         }
         this.pos = original_pos;
-        if (capture != -1) {cap_piece.delete = false;}
+        if (cap_piece && mode.indexOf("Atomic") != -1) {cap_piece.delete = false;}
         return ret;
         }
 
@@ -440,7 +440,6 @@ class piece {
                     else {
                         undo.push([this.name, original_pos, new_pos, "", undefined]);
                     }
-                    // console.log('turn',turn);
                 }
             }
             else {
@@ -465,7 +464,8 @@ class piece {
         })
         
             if (capture_arr[capture]) {
-                switch (original_capture_arr[capture].type) {
+                function convert_to_bank (type) {
+                switch (type) {
                     case "P":
                         $('self_box').innerHTML += "♟";
                         break;
@@ -485,7 +485,42 @@ class piece {
                         $('self_box').innerHTML += "♜";
                         break;
                 }
-
+                }
+                console.log(capture);
+                convert_to_bank(original_capture_arr[capture].type);
+                if (mode.indexOf('Atomic') != -1) {
+                    var explosion = [
+                        [this.pos[0] + 1,this.pos[1] + 1],
+                        [this.pos[0] - 1,this.pos[1] + 1],
+                        [this.pos[0],this.pos[1] + 1],
+                        [this.pos[0] + 1,this.pos[1] - 1],
+                        [this.pos[0] - 1,this.pos[1] - 1],
+                        [this.pos[0],this.pos[1] - 1],
+                        [this.pos[0] + 1,this.pos[1]],
+                        [this.pos[0] - 1,this.pos[1]]
+                    ];
+                    for (var frag of explosion) {
+                        if (findArr(frag, white_arr.concat(black_arr)) != -1) {
+                            console.log('frag', frag)
+                            for (var casualty of white_list.concat(black_list)) {
+                                if (casualty.type != "P" && arrEqual(casualty.pos,frag)) {
+                                    if (casualty.colour) {
+                                        white_list.splice(white_list.indexOf(casualty), 1);
+                                        white_arr.splice(findArr(casualty, white_arr), 1);
+                                        console.log('casualty', white_list.indexOf(casualty));
+                                    }
+                                    else {
+                                        black_list.splice(black_list.indexOf(casualty), 1);
+                                        black_arr.splice(findArr(casualty, black_arr), 1);
+                                        console.log('casualty', black_list.indexOf(casualty));
+                                    }
+                                }
+                            }
+                        }
+                     }
+                    (blackwhite ? white_list : black_list).splice((blackwhite ? white_list : black_list).indexOf(this), 1);
+                    (blackwhite ? white_arr : black_arr).splice(findArr(this.pos, (blackwhite ? white_arr : black_arr)), 1);
+                }
             }
             var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
             var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
@@ -802,12 +837,12 @@ class piece {
                                 king_options.push([this.pos[0] - i, this.colour ? 1 : 8])
                             }
                         }
-                        for (var i = 1; i <= Math.abs(w_rooka.pos[0] - 6); i++) {
+                        for (var i = 1; i <= Math.abs(w_rookh.pos[0] - 6); i++) {
                             if (this.pos[0] < 6) {
-                                rook_options.push([w_rooka.pos[0] - i, this.colour ? 1 : 8])
+                                rook_options.push([w_rookh.pos[0] - i, this.colour ? 1 : 8])
                             }
                             else {
-                                rook_options.push([w_rooka.pos[0] + i, this.colour ? 1 : 8])
+                                rook_options.push([w_rookh.pos[0] + i, this.colour ? 1 : 8])
                             }
                         }
                         rook_options.splice(findArr(blackwhite ? w_rookh.pos : b_rookh.pos, rook_options), 1)
@@ -1429,13 +1464,10 @@ document.addEventListener('click', e => {
     if (!done) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
-    // console.log(square);
     var clicked_piece_white = findArr(square, white_arr);
     var clicked_piece_black = findArr(square, black_arr);
-    // console.log(clicked_piece_white,clicked_piece_black);
     var clicked;
     if (clicked_piece_white == -1 && clicked_piece_black == -1) {
-        // console.log('blank space');
     }
     else {
         if (clicked_piece_white != -1) {
