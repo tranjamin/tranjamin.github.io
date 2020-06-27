@@ -1270,14 +1270,12 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     else {blackwhite = 1; observer = true;}
     // eval(`white_arr = [${doc.data().white_arr}]`);
     for (var i of doc.data().white_list) {
-        var code = `${i.name} = new piece(${i.colour},"${i.type}",[${i.pos}],"${i.name}");`;
-        eval(code);
-        eval(`white_list.push(${i.name})`);
+        window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
+        white_list.push(window[i.name])
     }
     for (var i of doc.data().black_list) {
-        var code = `${i.name} = new piece(${i.colour},"${i.type}",[${i.pos}],"${i.name}");`;
-        eval(code);
-        eval(`black_list.push(${i.name})`);
+        window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
+        black_list.push(window[i.name])
     }
     undo = arrayify(doc.data().undo);
 
