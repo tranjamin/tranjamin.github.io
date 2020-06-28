@@ -570,6 +570,7 @@ class piece {
                         break;
                 }
             })
+
             var checkmate = true;
             (this.colour ? black_list : white_list).forEach(ele => {
                 if (ele.highlight().length) {checkmate = false;}
@@ -608,6 +609,18 @@ class piece {
                 original_white_checks = doc.data().black_checks;
                 original_black_checks = doc.data().black_checks;
                 original_fifty = doc.data().fifty_moves;
+                var prev_bound;
+                arrayify(doc.data()[blackwhite ? white_time : black_time]).forEach(segment => {
+                    if (!isNaN(parseInt(segment[0])) && parseInt(segment[0]) == Math.floor(original_moves / 2) + 1) {
+                        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) + parseFloat(segment[1]) * 60)
+                    }
+                    prev_bound = parseInt(segment[0]);
+                    if (prev_bound && prev_bound <= doc.data().moves && doc.data().moves < parseInt(segment[0])) {
+                        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) + parseFloat(segment[2]))
+                    }
+                })
+
+
                 if (blackwhite) {
                     if (check(0)[0]) {
                         original_white_checks ++;
@@ -1492,6 +1505,7 @@ document.addEventListener('click', e => {
     if (!done) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
+    console.log(square);
     var clicked_piece_white = findArr(square, white_arr);
     var clicked_piece_black = findArr(square, black_arr);
     var clicked;
