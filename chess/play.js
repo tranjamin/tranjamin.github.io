@@ -577,11 +577,20 @@ class piece {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             show_pieces();
             
-            if (checkmate && check(this.colour ? 0 : 1)) {
+            if (checkmate && check(this.colour ? 0 : 1)[0] && mode.indexOf('Anti') == -1) {
                 win('Checkmate')
             }
-            else if (checkmate && !check(this.colour ? 0 : 1)) {
+            else if (checkmate && !check(this.colour ? 0 : 1)[0] && mode.indexOf('Anti') == -1) {
                 draw('Stalemate')
+            }
+            if (mode.indexOf("Anti") != -1) {
+                var antimate = true;
+                for (var anti of (blackwhite ? white_list : black_list)) {
+                    if (anti.highlight(true).length) {antimate = false}
+                }
+                if (antimate) {
+                    win('Stalemate')
+                }
             }
             if (mode.indexOf("King") != -1) {
                 if (this.type == "K" && findArr(this.pos,[[4,4],[4,5],[5,4],[5,5]]) != -1) {
@@ -862,9 +871,26 @@ class piece {
                 if (!checktest) {console.log(onboard);}
                 break;
         }
+        if (!checktest) {
         if (mode.indexOf('Anti') != -1) {
-
+            var forced_moves = [];
+            var capturable = false;
+            for (var pce of (blackwhite ? white_list : black_list)) {
+                for (var pce_options of pce.highlight(true)) {
+                    if (findArr(pce_options, blackwhite ? black_arr : white_arr) != -1) {
+                        capturable = true;
+                        break;
+                    }
+                }
+            }
+            if (capturable) {
+                for (var cap_opt of onboard) {
+                    if (findArr(cap_opt, blackwhite ? black_arr : white_arr) != -1) {forced_moves.push(cap_opt)}
+                }
+                onboard = forced_moves;
+            }
         }
+    }
 
         if (!checktest) {
             //console.log(onboard);
@@ -930,14 +956,13 @@ class piece {
             }
             canvas.addEventListener('click', intermediary);
         }
-        else {
+        else if (mode.indexOf('Anti') == -1) {
             //  console.log(onboard);
             var self_king = this.colour ? b_king : w_king;
             for (let check_piece of onboard) {
                 if (arrEqual(check_piece, self_king.pos)) { return true; }
             }
             return false;
-
         }
 
         return onboard;
