@@ -186,7 +186,7 @@ check = (colour, w_list= white_list, b_list= black_list, w_arr= white_arr, b_arr
     var check_nums = 0;
     var check_pieces = [];
     for (var piece of list) {
-        if (!piece.delete) {
+        if (!piece.delete && mode.indexOf('Anti') == -1) {
         if (piece.highlight(true, w_arr, b_arr, w_list, b_list)) {
             check_nums++;
             check_pieces.push(piece);
@@ -837,12 +837,12 @@ class piece {
                                 king_options.push([this.pos[0] - i, this.colour ? 1 : 8])
                             }
                         }
-                        for (var i = 1; i <= Math.abs(w_rookh.pos[0] - 6); i++) {
+                        for (var i = 1; i <= Math.abs((blackwhite ? w_rookh : b_rookh).pos[0] - 6); i++) {
                             if (this.pos[0] < 6) {
-                                rook_options.push([w_rookh.pos[0] - i, this.colour ? 1 : 8])
+                                rook_options.push([(blackwhite ? w_rookh : b_rookh).pos[0] - i, this.colour ? 1 : 8])
                             }
                             else {
-                                rook_options.push([w_rookh.pos[0] + i, this.colour ? 1 : 8])
+                                rook_options.push([(blackwhite ? w_rookh : b_rookh).pos[0] + i, this.colour ? 1 : 8])
                             }
                         }
                         rook_options.splice(findArr(blackwhite ? w_rookh.pos : b_rookh.pos, rook_options), 1)
@@ -859,8 +859,11 @@ class piece {
                 }
             }
 
-                if (!checktest) {console.log(onboard)};
+                if (!checktest) {console.log(onboard);}
                 break;
+        }
+        if (mode.indexOf('Anti') != -1) {
+
         }
 
         if (!checktest) {
@@ -1256,22 +1259,22 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('self_box').innerHTML = $('self_box').innerHTML.split("").forEach(ele => {
         switch (ele) {
             case "P":
-                self_int += "♟";
+                self_int += "<icon>♟</icon>";
                 break;
             case "Q":
-                self_int += "♛";
+                self_int += "<icon>♛</icon>";
                 break;
             case "K":
-                self_int += "♚";
+                self_int += "<icon>♚</icon>";
                 break;
             case "B":
-                self_int += "♝";
+                self_int += "<icon>♝</icon>";
                 break;
             case "N":
-                self_int += "♞";
+                self_int += "<icon>♞</icon>";
                 break;
             case "R":
-                self_int += "♜";
+                self_int += "<icon>♜</icon>";
                 break;
         }
     })
@@ -1279,22 +1282,22 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('opposite_box').innerHTML = $('opposite_box').innerHTML.split("").forEach(ele => {
         switch (ele) {
             case "P":
-                opp_int += "♟";
+                opp_int += "<icon>♟</icon>";
                 break;
             case "Q":
-                opp_int += "♛";
+                opp_int += "<icon>♛</icon>";
                 break;
             case "K":
-                opp_int += "♚";
+                opp_int += "<icon>♚</icon>";
                 break;
             case "B":
-                opp_int += "♝";
+                opp_int += "<icon>♝</icon>";
                 break;
             case "N":
-                opp_int += "♞";
+                opp_int += "<icon>♞</icon>";
                 break;
             case "R":
-                opp_int += "♜";
+                opp_int += "<icon>♜</icon>";
                 break;
         }
     })
@@ -1489,6 +1492,109 @@ document.addEventListener('click', e => {
     }
     }
 });
+$('self_box').addEventListener('click', e => {
+    if (mode.indexOf("Crazyhouse") != -1 && turn == blackwhite) {
+    var target = e.target;
+    var crazy_type;
+    switch (e.target.innerHTML) {
+        case "♟":
+            crazy_type = "P";
+            break;
+        case "♛":
+            crazy_type = "Q";
+            break;
+        case "♚":
+            crazy_type = "K";
+            break;
+        case "♝":
+            crazy_type = "B";
+            break;
+        case "♞":
+            crazy_type = "N";
+            break;
+        case "♜":
+            crazy_type = "R";
+            break;
+    }
+    var spaces = [];
+    var free_spaces = [];
+    var noncheck_spaces = [];
+    for (var i = 1; i <= 8; i++) {
+        for (var j = 1; j <= 8; j++) {
+            spaces.push([i,j]);
+        }
+    }
+    for (var space of spaces) {
+        if (findArr(space, white_arr.concat(black_arr)) == -1) {
+            if ((crazy_type == "P" && space[1] != (blackwhite ? 8 : 1)) || crazy_type != "P") {
+            free_spaces.push(space);
+        }
+        }
+    }
+    if (check(blackwhite)[0]) {
+    for (var free of free_spaces) {
+        if (blackwhite) {
+            var w_crazytemp = new piece (1, 'P', free, "w_crazytemp");
+            white_list.push(w_crazytemp);
+            white_arr.push(free);
+            if (!check(blackwhite)[0]) {noncheck_spaces.push(free);}
+            white_list.pop();
+            white_arr.pop();
+        }
+        else {
+            var b_crazytemp = new piece (0, 'P', free, "b_crazytemp");
+            black_list.push(b_crazytemp);
+            black_arr.push(free);
+            if (!check(blackwhite)[0]) {noncheck_spaces.push(free);}
+            black_list.pop();
+            black_arr.pop();
+        }
+    }
+}
+    else {
+        noncheck_spaces = free_spaces;
+    }
+    for (var shade of noncheck_spaces) {
+    ctx.fillStyle = 'rgba(250,250,250,0.5)';
+    if (blackwhite) {
+        ctx.fillRect(canvas.width / 8 * (shade[0] - 1), canvas.height - canvas.height / 8 * (shade[1]), canvas.width / 8, canvas.height / 8);
+    }
+    else {
+        ctx.fillRect(canvas.width - (canvas.width / 8 * (shade[0])), canvas.height - canvas.height / 8 * (9 - shade[1]), canvas.width / 8, canvas.height / 8);
+    }
+}
+var intermediary = (e) => {
+    var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
+    var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
+    if (findArr(square, noncheck_spaces) != -1) {
+        var recent_addition = false;
+        var addition_number = 1;
+        if (blackwhite) {
+            while (!recent_addition) {
+                if (typeof(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]) == undefined) {recent_addition = true;}
+                else {addition_number++;}
+            }
+        }
+        window[(blackwhite ? "w" : "b") + '_crazy' + addition_number] = new piece (blackwhite, crazy_type, square, (blackwhite ? "w" : "b") + '_crazy' + addition_number);
+        (blackwhite ? white_list : black_list).push(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]);
+        (blackwhite ? white_arr : black_arr).push(square);
+        target.parentElement.removeChild(target);
+        window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        show_pieces();
+        canvas.removeEventListener('click', intermediary);
+    }
+    else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        show_pieces();
+        canvas.removeEventListener('click', intermediary);
+        document.elementFromPoint(e.clientX, e.clientY).click();
+    }
+
+}
+canvas.addEventListener('click', intermediary);    
+}
+})
 
 var msg_ready = true;
 $("message_form").addEventListener('submit', e => {
