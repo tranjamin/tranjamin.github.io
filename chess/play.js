@@ -240,7 +240,7 @@ class piece {
             return [ret[0],ret[1],ret2]
         }
         this.pos = original_pos;
-        if (cap_piece && mode.indexOf("Atomic") != -1) {cap_piece.delete = false;}
+        if (cap_piece && mode.indexOf("Atomic") == -1) {cap_piece.delete = false;}
         return ret;
         }
 
