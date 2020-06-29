@@ -579,10 +579,24 @@ class piece {
             show_pieces();
             
             if (checkmate && check(this.colour ? 0 : 1)[0] && mode.indexOf('Anti') == -1) {
-                win('Checkmate')
+                if (mode.indexOf('Crazyhouse') == -1) {win('Checkmate')}
+                else {
+                    if ((check(this.colour ? 0 : 1)[0] == 2) || (!$('self_box').innerHTML || (
+                        check(this.colour ? 0 : 1)[1].type == "K" ||
+                        (Math.abs(check(this.colour ? 0 : 1)[1].pos[0] - (blackwhite ? w_king : black_king).pos[0]) <= 1 &&
+                         Math.abs(check(this.colour ? 0 : 1)[1].pos[0] - (blackwhite ? w_king : black_king).pos[0]) <= 1)
+                    ))) {
+                        win('Checkmate');
+                    }
+                }
             }
             else if (checkmate && !check(this.colour ? 0 : 1)[0] && mode.indexOf('Anti') == -1) {
-                draw('Stalemate')
+                if (mode.indexOf('Crazyhouse') == -1) {draw('Stalemate')}
+                else {
+                    if (!$('self_box').innerHTML && white_list.concat(black_list) != 64) {
+                        draw('Stalemate')
+                    }
+                }
             }
             if (mode.indexOf("Anti") != -1) {
                 var antimate = true;
