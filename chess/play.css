@@ -210,3 +210,7 @@ right: 15%;
     right: 0%;
 
 }
+
+#self_box icon, #opposite_box icon {
+    cursor: pointer;
+}

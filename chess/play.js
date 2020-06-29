@@ -605,20 +605,25 @@ class piece {
             var original_black_checks;
             var original_fifty;
             db.collection('chess').doc(game).get().then(doc => {
-                original_moves = doc.data().moves + 1;
                 original_white_checks = doc.data().black_checks;
                 original_black_checks = doc.data().black_checks;
                 original_fifty = doc.data().fifty_moves;
-                var prev_bound;
-                arrayify(doc.data()[blackwhite ? white_time : black_time]).forEach(segment => {
-                    if (!isNaN(parseInt(segment[0])) && parseInt(segment[0]) == Math.floor(original_moves / 2) + 1) {
-                        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) + parseFloat(segment[1]) * 60)
+                var prev_bound = 0;
+                var prev_total = 0;
+                arrayify(blackwhite ? doc.data().white_time : doc.data().black_time).forEach(segment => {
+                    prev_bound = prev_total;
+                    prev_total += parseInt(segment[0]);
+                    if ((!isNaN(prev_total) && prev_total == Math.floor(doc.data().moves / 2) + 1) || (isNaN(prev_total) && Math.floor(doc.data().moves / 2) == prev_bound + 1)) {
+                        $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) + parseFloat(segment[1]))
                     }
-                    prev_bound = parseInt(segment[0]);
-                    if (prev_bound && prev_bound <= doc.data().moves && doc.data().moves < parseInt(segment[0])) {
+                    if (prev_bound <= (Math.floor(doc.data().moves / 2)) && ((Math.floor(doc.data().moves / 2)) < prev_total || isNaN(prev_total))) {
                         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) + parseFloat(segment[2]))
                     }
+
+                    
+                    
                 })
+                original_moves = doc.data().moves + 1;
 
 
                 if (blackwhite) {
@@ -1534,6 +1539,7 @@ document.addEventListener('click', e => {
 $('self_box').addEventListener('click', e => {
     if (mode.indexOf("Crazyhouse") != -1 && turn == blackwhite) {
     var target = e.target;
+    e.target.style.color = 'red';
     var crazy_type;
     switch (e.target.innerHTML) {
         case "♟":
@@ -1621,6 +1627,7 @@ var intermediary = (e) => {
         window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
+        target.style.color = 'black';
         canvas.removeEventListener('click', intermediary);
     }
     else {
@@ -1628,6 +1635,7 @@ var intermediary = (e) => {
         show_pieces();
         canvas.removeEventListener('click', intermediary);
         document.elementFromPoint(e.clientX, e.clientY).click();
+        target.style.color = 'black';
     }
 
 }
