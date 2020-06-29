@@ -240,7 +240,7 @@ class piece {
             return [ret[0],ret[1],ret2]
         }
         this.pos = original_pos;
-        if (cap_piece && mode.indexOf("Atomic") == -1) {cap_piece.delete = false;}
+        if (cap_piece) {cap_piece.delete = false;}
         return ret;
         }
 
@@ -434,7 +434,7 @@ class piece {
                     undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined];
                 }
                 else {
-                    if (capture != -1) {
+                    if (capture_arr[capture]) {
                         undo.push([this.name, original_pos, new_pos, "", capture_arr[capture].name]);
                     }
                     else {
@@ -454,14 +454,6 @@ class piece {
         else {
             undo.push([this.name, original_pos, new_pos, 'castle', undefined]);
         }
-        var tempb = [];
-        var tempw = [];
-        white_list.forEach(obj => {
-            tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
-        })
-        black_list.forEach(obj => {
-            tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
-        })
         
             if (capture_arr[capture]) {
                 function convert_to_bank (type) {
@@ -500,20 +492,29 @@ class piece {
                         [this.pos[0] - 1,this.pos[1]]
                     ];
                     for (var frag of explosion) {
+                        if (frag[0] > 8 || frag[0] < 1 || frag[1] > 8 || frag[1] < 1) {
+                            explosion.splice(findArr(frag, explosion), 1);
+                        }
+                    }
+                    console.log(explosion);
+                    for (var frag of explosion) {
                         if (findArr(frag, white_arr.concat(black_arr)) != -1) {
                             console.log('frag', frag)
                             for (var casualty of white_list.concat(black_list)) {
                                 if (casualty.type != "P" && arrEqual(casualty.pos,frag)) {
                                     if (casualty.colour) {
+                                        console.log('casualty', casualty, white_list.length)
                                         white_list.splice(white_list.indexOf(casualty), 1);
-                                        white_arr.splice(findArr(casualty, white_arr), 1);
-                                        console.log('casualty', white_list.indexOf(casualty));
+                                        white_arr.splice(findArr(casualty.pos, white_arr), 1);
+                                        console.log('casualty', white_list.length);
                                     }
                                     else {
+                                        console.log('casualty', casualty, black_list.length)
                                         black_list.splice(black_list.indexOf(casualty), 1);
-                                        black_arr.splice(findArr(casualty, black_arr), 1);
-                                        console.log('casualty', black_list.indexOf(casualty));
+                                        black_arr.splice(findArr(casualty.pos, black_arr), 1);
+                                        console.log('casualty', black_list.length);
                                     }
+                                    if (casualty.type == "K") {win('Exploding the King')}
                                 }
                             }
                         }
@@ -613,6 +614,15 @@ class piece {
                 }
             }
 
+            var tempb = [];
+            var tempw = [];
+            white_list.forEach(obj => {
+                tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+            })
+            black_list.forEach(obj => {
+                tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+            })
+
             var time_left = 0;
             var original_moves;
             var original_white_checks;
@@ -624,6 +634,7 @@ class piece {
                 original_fifty = doc.data().fifty_moves;
                 var prev_bound = 0;
                 var prev_total = 0;
+                if (doc.data().white_time != null) {
                 arrayify(blackwhite ? doc.data().white_time : doc.data().black_time).forEach(segment => {
                     prev_bound = prev_total;
                     prev_total += parseInt(segment[0]);
@@ -637,6 +648,7 @@ class piece {
                     
                     
                 })
+            }
                 original_moves = doc.data().moves + 1;
 
 
@@ -925,8 +937,6 @@ class piece {
     }
 
         if (!checktest) {
-            //console.log(onboard);
-            //check
             if (check(this.colour)[0]) {
             console.log('check, no castling');
             if (this.type == "K") {
@@ -955,8 +965,11 @@ class piece {
             }
             var int_onboard = [];
             for (let shade of onboard) {
-                if ((!this.mock_update(shade)[0] && mode.indexOf('Checkless') == -1) 
-                || (mode.indexOf('Checkless') != -1 && !this.mock_update(shade)[0] && !this.mock_update(shade)[2][0])
+                if (!this.mock_update(shade)[0] && ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) 
+                || (mode.indexOf('Checkless') != -1 && !this.mock_update(shade)[2][0]) ||
+                (mode.indexOf('Atomic') != -1 && (findArr(shade, white_arr.concat(black_arr)) == -1 || (findArr(shade, white_arr.concat(black_arr)) == -1 && (
+                    (this.type != "K" || !(Math.abs(shade[0] - (blackwhite ? w_king[0] : b_king[0])) <= 1 && Math.abs(shade[1] - (blackwhite ? w_king[1] : b_king[1])) <= 1))
+                )))))
                 ) {
                 int_onboard.push(shade)
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
@@ -1524,7 +1537,6 @@ document.addEventListener('click', e => {
     if (!done) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
-    console.log(square);
     var clicked_piece_white = findArr(square, white_arr);
     var clicked_piece_black = findArr(square, black_arr);
     var clicked;
@@ -1778,6 +1790,7 @@ objectify = (objectified_arr) => {
 }
 
 arrayify = (arr2,type=String) => {
+    if (arr2 != null) {
     var arr = arr2;
     /*
     if (arr[0] == '[') {
@@ -1816,7 +1829,10 @@ arrayify = (arr2,type=String) => {
             }
         }
     }
-    return ret_arr;
+    return ret_arr;}
+    else {
+        return null;
+    }
 }
 
 
