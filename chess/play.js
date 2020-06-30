@@ -186,10 +186,17 @@ check = (colour, w_list= white_list, b_list= black_list, w_arr= white_arr, b_arr
     var check_nums = 0;
     var check_pieces = [];
     for (var piece of list) {
-        if (!piece.delete && mode.indexOf('Anti') == -1) {
+        if (!piece.delete && mode.indexOf('Anti') == -1 && (mode.indexOf('Dusanny') == -1 || (mode.indexOf('Dusanny') != -1 && !colour))) {
+        if (mode.indexOf('Checkless') == -1) {
         if (piece.highlight(true, w_arr, b_arr, w_list, b_list)) {
             check_nums++;
             check_pieces.push(piece);
+        }}
+        else {
+        if (piece.highlight(true, w_arr, b_arr, w_list, b_list)[1]) {
+            check_nums++;
+            check_pieces.push(piece);
+        }    
         }
     }}
     return [check_nums, check_pieces];
@@ -232,12 +239,19 @@ class piece {
             }
         }
         var ret = check(this.colour, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr);
+
         if (mode.indexOf('Checkless') != -1) {
             var ret2 = check(this.colour ? 0 : 1, this.colour ? sel : opp, this.colour ? opp : sel, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr)
-
+            var checkmate = true;
+            (this.colour ? black_list : white_list).forEach(ele => {
+                if (ele.highlight(true, this.colour ? test_arr : opposite, this.colour ? opposite : test_arr)[0].length) {checkmate = false;}
+            })
             this.pos = original_pos;
             if (capture != -1) {cap_piece.delete = false;}
-            return [ret[0],ret[1],ret2]
+            //console.log('retuuuuuuuuurn', [ret[0],ret[1],ret2, checkmate])
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            show_pieces();
+            return [ret[0],ret[1],ret2, checkmate]
         }
         this.pos = original_pos;
         if (cap_piece) {cap_piece.delete = false;}
@@ -570,16 +584,17 @@ class piece {
                         black_int += "R";
                         break;
                 }
-            })
-
+            }) 
+            mode = 'Classic';
             var checkmate = true;
             (this.colour ? black_list : white_list).forEach(ele => {
                 if (ele.highlight().length) {checkmate = false;}
             })
+            mode = "Checkless Chess";
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             show_pieces();
             
-            if (checkmate && check(this.colour ? 0 : 1)[0] && mode.indexOf('Anti') == -1) {
+            if (mode.indexOf('Anti') == -1 && checkmate && check(this.colour ? 0 : 1)[0]) {
                 if (mode.indexOf('Crazyhouse') == -1) {win('Checkmate')}
                 else {
                     if ((check(this.colour ? 0 : 1)[0] == 2) || (!$('self_box').innerHTML || (
@@ -723,7 +738,6 @@ class piece {
     }
 
     highlight(checktest = false, white_arrt = white_arr, black_arrt = black_arr, white_listt = white_arr, black_listt = black_arr, recursion = true) {
-        // console.log('highlight');
         var onboard = [];
         switch (this.colour, this.type) {
             case 'N':
@@ -900,7 +914,7 @@ class piece {
                         }
                         rook_options.splice(findArr(blackwhite ? w_rookh.pos : b_rookh.pos, rook_options), 1)
                         for (var pos of king_options) {
-                            console.log(findArr(pos, white_arr.concat(black_arr)));
+                            //console.log(findArr(pos, white_arr.concat(black_arr)));
                             if ((findArr(pos, white_arr.concat(black_arr)) != -1  && !arrEqual(pos, blackwhite ? w_rookh.pos : b_rookh.pos))|| this.mock_update(pos)[0]) {accepted = false;}
                         }
                         for(var pos of rook_options) {
@@ -912,8 +926,6 @@ class piece {
                 }
             }
 
-                if (!checktest) {console.log(onboard);}
-                break;
         }
         if (!checktest) {
         if (mode.indexOf('Anti') != -1) {
@@ -964,21 +976,24 @@ class piece {
                 onboard = temp_onboard;}
             }
             var int_onboard = [];
+
             for (let shade of onboard) {
-                if (!this.mock_update(shade)[0] && ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) 
-                || (mode.indexOf('Checkless') != -1 && !this.mock_update(shade)[2][0]) ||
-                (mode.indexOf('Atomic') != -1 && (findArr(shade, white_arr.concat(black_arr)) == -1 || (findArr(shade, white_arr.concat(black_arr)) == -1 && (
+                var checkless_mock;
+                if (mode.indexOf('Checkless') != -1) {checkless_mock = this.mock_update(shade);}
+                if ((!this.mock_update(shade)[0] && ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) 
+                || (mode.indexOf('Atomic') != -1 && (findArr(shade, white_arr.concat(black_arr)) == -1 || (findArr(shade, white_arr.concat(black_arr)) == -1 && (
                     (this.type != "K" || !(Math.abs(shade[0] - (blackwhite ? w_king[0] : b_king[0])) <= 1 && Math.abs(shade[1] - (blackwhite ? w_king[1] : b_king[1])) <= 1))
-                )))))
+                )))))) || (mode.indexOf('Checkless') != -1 && !checkless_mock[0] && (!checkless_mock[2][0] || checkless_mock[3])) 
                 ) {
-                int_onboard.push(shade)
+                int_onboard.push(shade) }}
+            for (let shade of int_onboard) {
                 ctx.fillStyle = 'rgba(250,250,250,0.5)';
                 if (blackwhite) {
                     ctx.fillRect(canvas.width / 8 * (shade[0] - 1), canvas.height - canvas.height / 8 * (shade[1]), canvas.width / 8, canvas.height / 8);
                 }
                 else {
                     ctx.fillRect(canvas.width - (canvas.width / 8 * (shade[0])), canvas.height - canvas.height / 8 * (9 - shade[1]), canvas.width / 8, canvas.height / 8);
-                }}
+                }
 
             }
             onboard = int_onboard;
@@ -1001,14 +1016,51 @@ class piece {
             }
             canvas.addEventListener('click', intermediary);
         }
-        else if (mode.indexOf('Anti') == -1) {
-            //  console.log(onboard);
+        else if (mode.indexOf('Checkless') != -1) {
+            mode = "Classic";
+            if (check(this.colour)[0]) {
+                if (this.type == "K") {
+                    var temp_onboard = [];
+                    for (var opt in onboard) {
+                        if(Math.abs(onboard[opt][0] - this.pos[0]) < 1) {
+                            temp_onboard.push(onboard[opt]);
+                        }
+                    }
+                }
+    
+                if (check(this.colour)[0] == 2) {
+                    if (this.type != "K") { onboard = [] }
+                }
+    
+                if (check(this.colour)[1][0].type == "N" || check(this.colour)[1][0].type == "P") {
+                    var temp_onboard = [];
+                    for (var opt in onboard) {
+                        if ((this.type == "K" || arrEqual(onboard[opt], check(this.colour)[1][0].pos))) {
+                            temp_onboard.push(onboard[opt])
+                        }
+                    }
+                    onboard = temp_onboard;}
+                }
+                var int_onboard = [];
+                for (let shade of onboard) {
+                    if (!this.mock_update(shade)[0]) {
+                    int_onboard.push(shade) }}
+            mode = "Checkless Chess";
+            //console.log('onboarrrrrd', int_onboard)
+            var self_king = this.colour ? b_king : w_king;
+            for (let check_piece of onboard) {
+                if (arrEqual(check_piece, self_king.pos)) { return [int_onboard, true]; }
+            }
+            return [int_onboard, false];
+        }
+        else if ((mode.indexOf('Anti') == -1 && mode.indexOf('Dusanny') == -1) || mode.indexOf('Dusanny') != -1 && !blackwhite) {
             var self_king = this.colour ? b_king : w_king;
             for (let check_piece of onboard) {
                 if (arrEqual(check_piece, self_king.pos)) { return true; }
             }
             return false;
         }
+
 
         return onboard;
     }

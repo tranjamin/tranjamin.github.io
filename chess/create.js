@@ -99,6 +99,16 @@ function generate_position(mode) {
             }
         }
     }
+    else if (mode.indexOf('Dusanny') != -1) {
+        white_list = [];
+        white_arr = [];
+        for (var i = 1; i <= 8; i++) {
+            for (var j = 1; j <= 4; j++) {
+                white_list.push(new piece(1, "P", [i,j], ('w_pawn' + i) + j));
+                white_arr.push([i,j]);
+            }
+        }
+    }
 }
 
 function $(id) { return document.getElementById(id); }
