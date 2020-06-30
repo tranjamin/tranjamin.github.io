@@ -585,12 +585,18 @@ class piece {
                         break;
                 }
             }) 
-            mode = 'Classic';
+            if (mode.indexOf('Checkless Chess') != -1) {mode = 'Classic';
             var checkmate = true;
             (this.colour ? black_list : white_list).forEach(ele => {
                 if (ele.highlight().length) {checkmate = false;}
             })
-            mode = "Checkless Chess";
+            mode = "Checkless Chess";}
+            else {
+                var checkmate = true;
+                (this.colour ? black_list : white_list).forEach(ele => {
+                    if (ele.highlight().length) {checkmate = false;}
+                })                
+            }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             show_pieces();
             
@@ -789,9 +795,12 @@ class piece {
                     if (findArr(diagonal[0], white_arrt) != -1) { onboard.push(diagonal[0]) }
                     if (findArr(diagonal[1], white_arrt) != -1) { onboard.push(diagonal[1]) }
                 }
-                if (enpassant && enpassant[1] == this.pos[1] && Math.abs(enpassant[0] - this.pos[0]) == 1) {
+                if (enpassant && enpassant[1] == this.pos[1] && Math.abs(enpassant[0] - this.pos[0]) == 1 && (mode.indexOf("Dusanny") == -1 || !blackwhite)) {
                     if (this.colour) { onboard.push([enpassant[0], this.pos[1] + 1]); }
                     else { onboard.push([enpassant[0], this.pos[1] - 1]); }
+                }
+                else {
+                    enpassant = null;
                 }
                 break;
             case 'R':
