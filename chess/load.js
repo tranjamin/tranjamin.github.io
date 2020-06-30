@@ -143,6 +143,22 @@ $('search_observer').addEventListener('keyup',e => {
     sortData('observer', 'load_observer', $('search_observer')['search'].value);
     }
 });
+
+db.collection('chess').onSnapshot(ref => {
+	if ($('search_public')['increment'].value != "0") {
+		sortData('public', 'load_public', $('search_public')['search'].value, $('search_public')['increment'].value);
+		}
+		else {
+		sortData('public', 'load_public', $('search_public')['search'].value);
+		}
+	if ($('search_observer')['increment'].value != "0") {
+		sortData('observer', 'load_observer', $('search_observer')['search'].value, $('search_observer')['increment'].value);
+		}
+		else {
+		sortData('observer', 'load_observer', $('search_observer')['search'].value);
+		}
+})
+
 function sortData(mode, id, input="", precision=0.3) {
     console.clear();
     var data_arr = {};

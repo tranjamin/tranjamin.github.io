@@ -172,6 +172,27 @@ $('search_past').addEventListener('keyup',e => {
     sortData('completed','load_past', $('search_past')['search'].value);
     }
 });
+db.collection('chess').onSnapshot(ref => {
+	if ($('search_current')['increment'].value != "0") {
+		sortData('current','load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
+		}
+		else {
+		sortData('current','load_current', $('search_current')['search'].value);
+		}
+	if ($('search_invite')['increment'].value != "0") {
+		sortData('invites','load_invite', $('search_invite')['search'].value, $('search_invite')['increment'].value);
+		}
+		else {
+		sortData('invites','load_invite', $('search_invite')['search'].value);
+		}
+    if ($('search_past')['increment'].value != "0") {
+		sortData('completed','load_past', $('search_past')['search'].value, $('search_past')['increment'].value);
+		}
+		else {
+		sortData('completed','load_past', $('search_past')['search'].value);
+		}
+})
+
 function sortData(conditional, id, input="", precision=0.3) {
     var data_arr = {};
     var doc_name = [];
