@@ -1443,15 +1443,25 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
     $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
 
+    var white_elo;
+    var black_elo;
+    db.collection('account').where('username', '==', doc.data().white_user).get().then(snapshot => {
+        snapshot.forEach(doc => {white_elo = doc.data().ranking})
+    }).then(() => {
+        db.collection('account').where('username', '==', doc.data().black_user).get().then(snapshot => {
+            snapshot.forEach(doc => {
+                black_elo = doc.data().ranking})
+            console.log(black_elo);
+        }).then(() => {
     if (blackwhite) {
-        $('self_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().white_user;
-        $('opposite_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().black_user;
+        $('self_name').innerHTML = ((turn == blackwhite) ? "&#9654 " : "") + doc.data().white_user + " (" + white_elo + ")";
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + doc.data().black_user + " (" + black_elo + ")";
     }
     else {
-        $('self_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().black_user;
-        $('opposite_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().white_user;
+        $('self_name').innerHTML = ((turn == blackwhite) ? "&#9654 " : "") + doc.data().black_user + " (" + black_elo + ")";
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + doc.data().white_user + " (" + white_elo + ")";
     }
-
+    })})
     var self_int = "";
     var opp_int = "";
     $('self_box').innerHTML = $('self_box').innerHTML.split("").forEach(ele => {
