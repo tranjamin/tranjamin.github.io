@@ -259,6 +259,67 @@ class piece {
         }
 
     update(new_pos, send = true, doublemove = false) {
+        if (this.type == "P" && new_pos[1] == (this.colour ? 8 : 1)) {
+            ctx.fillStyle = "rgb(255,255,255)";
+            console.log(new_pos[0]) 
+            var promote_div = document.createElement('DIV');
+            promote_div.setAttribute('id', 'promote')
+            document.getElementsByClassName('bottom')[0].insertBefore(promote_div, document.getElementsByClassName('bottom')[0].childNodes[0])      
+            var promote_queen = document.createElement("button")  
+            promote_queen.innerHTML = '♛';
+            $("promote").appendChild(promote_queen);
+            var promote_rook = document.createElement("button")  
+            promote_rook.innerHTML = "♜";
+            $("promote").appendChild(promote_rook);
+            var promote_bishop = document.createElement("button")  
+            promote_bishop.innerHTML = "♝";
+            $("promote").appendChild(promote_bishop);
+            var promote_knight = document.createElement("button")  
+            promote_knight.innerHTML = "♞";
+            $("promote").appendChild(promote_knight);
+            if (mode.indexOf('Anti') != -1) {
+            var promote_king = document.createElement("button")  
+            promote_king.innerHTML = "♚";
+            $("promote").appendChild(promote_king);
+            }
+            var promote_options = $('promote');
+            promote_options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + $('options').getBoundingClientRect().height + "px";
+            promote_options.style.left = '0px';
+            if (mode.indexOf('Anti') != -1) {
+                promote_options.childNodes.forEach(classElement => {
+                    classElement.style.width = "18.2%";
+                })
+            }
+            $('promote').addEventListener('click', e => {
+                var new_type;
+                switch (e.target.innerHTML) {
+                    case "♛":
+                        new_type = "Q";
+                        break;
+                    case "♚":
+                        new_type = "K";
+                        break;
+                    case "♝":
+                        new_type = "B";
+                        break;
+                    case "♞":
+                        new_type = "N";
+                        break;
+                    case "♜":
+                        new_type = "R";
+                        break;
+                }
+                this.update2(new_pos, send, doublemove, new_type)
+
+            })
+        
+
+    }
+    else {
+        this.update2(new_pos, send, doublemove)
+    }
+}
+    update2(new_pos, send = true, doublemove = false, pawn_type=null) {
         clearInterval(clock);
         var elapsed_time = new Date();
         console.log('update');
@@ -272,6 +333,9 @@ class piece {
         var capture_arr = this.colour ? black_list : white_list;
         var original_capture_arr = copy_arr(capture_arr);
         var capture = findArr(new_pos, opposite);
+        if (this.type == "P" && new_pos[1] == (this.colour ? 8 : 1)) {
+            this.type = pawn_type;
+        }
         if (capture != -1) {
             if (mode.indexOf('Circe') == -1) {
             opposite.splice(findArr(new_pos, opposite), 1); //may be error
@@ -408,28 +472,13 @@ class piece {
                 else { castle_rookh = false; }
             }
         }
-        if (this.type == "P") {
-            if (this.colour) {
-                if (new_pos[1] == 8) { this.type = "Q" }
-
-            }
-            else {
-                if (new_pos[1] == 1) { this.type = "Q" }
-
-            }
-            if (new_pos[0] != original_pos[0] && capture == -1) {
-                test_arr.splice(findArr([new_pos[0], original_pos[1]], opposite), 1);
-                for (let captured_piece in capture_arr) {
-                    if (arrEqual(capture_arr[captured_piece].pos, [new_pos[0], original_pos[1]])) {
-                        capture_arr.splice(captured_piece, 1);
-                        break;
-                    }
-                }
-            }
-            if (Math.abs(this.pos[1] - original_pos[1]) == 2) {
-                enpassant = this.pos;
-            }
+                
+        if (this.type == "P" && Math.abs(this.pos[1] - original_pos[1]) == 2) {
+            enpassant = this.pos;
         }
+
+
+
 
         if (check(this.colour)[0]) {
             console.log('in check')
@@ -585,6 +634,7 @@ class piece {
                         break;
                 }
             }) 
+
             if (mode.indexOf('Checkless Chess') != -1) {mode = 'Classic';
             var checkmate = true;
             (this.colour ? black_list : white_list).forEach(ele => {
@@ -741,6 +791,9 @@ class piece {
             }).catch(error => {console.log(error.lineNumber)})
                 }
         })
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //show_pieces();
+
     }
 
     highlight(checktest = false, white_arrt = white_arr, black_arrt = black_arr, white_listt = white_arr, black_listt = black_arr, recursion = true) {
@@ -795,12 +848,9 @@ class piece {
                     if (findArr(diagonal[0], white_arrt) != -1) { onboard.push(diagonal[0]) }
                     if (findArr(diagonal[1], white_arrt) != -1) { onboard.push(diagonal[1]) }
                 }
-                if (enpassant && enpassant[1] == this.pos[1] && Math.abs(enpassant[0] - this.pos[0]) == 1 && (mode.indexOf("Dusanny") == -1 || !blackwhite)) {
+                if (enpassant && enpassant[1] == this.pos[1] && Math.abs(enpassant[0] - this.pos[0]) == 1) {
                     if (this.colour) { onboard.push([enpassant[0], this.pos[1] + 1]); }
                     else { onboard.push([enpassant[0], this.pos[1] - 1]); }
-                }
-                else {
-                    enpassant = null;
                 }
                 break;
             case 'R':
@@ -1007,12 +1057,11 @@ class piece {
             }
             onboard = int_onboard;
             var intermediary = (e) => {
+                console.log('inter clicker')
                 var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
                 var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
                 if (findArr(square, onboard) != -1) {
-                    this.update(square);
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    show_pieces();
+                    this.update(square)
                     canvas.removeEventListener('click', intermediary);
                 }
                 else {
@@ -1020,6 +1069,8 @@ class piece {
                     show_pieces();
                     canvas.removeEventListener('click', intermediary);
                     document.elementFromPoint(e.clientX, e.clientY).click();
+                    try {document.getElementsByClassName('bottom')[0].removeChild($('promote'));}
+                    catch (TypeError) {}
                 }
     
             }
@@ -1448,8 +1499,8 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     }
     undo = arrayify(doc.data().undo);
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    show_pieces();
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //show_pieces();
 
     if (blackwhite) {
         $('self_time').style['background-color'] = 'white';
@@ -1595,6 +1646,7 @@ function show_pieces() {
 }
 
 document.addEventListener('click', e => {
+    console.log('document clicker');
     if (!done) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
@@ -1615,8 +1667,9 @@ document.addEventListener('click', e => {
                 if (arrEqual(check.pos, square)) { clicked = check; break; }
             }
         }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        show_pieces();
+        console.log('clearing');
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //show_pieces();
         if (clicked.colour == turn && clicked.colour == blackwhite && !observer) { //change this back to multiplayer
             clicked.highlight();
         }
@@ -1800,7 +1853,6 @@ function socket_data(socket) {
     })
 
 }
-
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}

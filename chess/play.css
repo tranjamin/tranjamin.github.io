@@ -191,10 +191,10 @@ right: 15%;
     top: 0;
 }
 
-#options {
+#options, #promote {
     width: 100%;
     background-color: rgba(0,0,0,0);
-    display: absolute;
+    position: absolute;
     padding: 0;
     text-align: center;
 }
@@ -205,6 +205,16 @@ right: 15%;
     display: inline-block;
     cursor: pointer;
     margin: 1% 0;
+    padding: 0;
+    position: relative;
+    right: 0%;
+}
+#promote button {
+    width: 23%;
+    font-size: 75%;
+    display: inline-block;
+    cursor: pointer;
+    margin: 1% 0.75%;
     padding: 0;
     position: relative;
     right: 0%;
