@@ -1423,6 +1423,9 @@ db.collection('chess').doc(game).get().then(doc => {
 })
 
 db.collection('chess').doc(game).onSnapshot(doc => {    
+    if (doc.data().white_user == username) {blackwhite = 1}
+    else if (doc.data().black_user == username) {blackwhite = 0}
+    else {blackwhite = 1; observer = true;}
     $('text').innerHTML = doc.data().messages;
     white_arr = arrayify(doc.data().white_arr, Number);
     black_arr = arrayify(doc.data().black_arr, Number);
@@ -1437,9 +1440,17 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('self_time').innerHTML = time_to_str($('self_time').innerHTML);
     $('opposite_time').innerHTML = time_to_str($('opposite_time').innerHTML);
 
-
     $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
     $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
+
+    if (blackwhite) {
+        $('self_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().white_user;
+        $('opposite_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().black_user;
+    }
+    else {
+        $('self_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().black_user;
+        $('opposite_name').innerHTML = (turn == blackwhite) ? "#&9654" : "" + doc.data().white_user;
+    }
 
     var self_int = "";
     var opp_int = "";
@@ -1490,9 +1501,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     })
     $('opposite_box').innerHTML = opp_int
 
-    if (doc.data().white_user == username) {blackwhite = 1}
-    else if (doc.data().black_user == username) {blackwhite = 0}
-    else {blackwhite = 1; observer = true;}
     // eval(`white_arr = [${doc.data().white_arr}]`);
     for (var i of doc.data().white_list) {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
