@@ -258,7 +258,7 @@ class piece {
         return ret;
         }
 
-    update(new_pos, send = true, doublemove = false) {
+    update(new_pos, doublemove = false, inter) {
         if (this.type == "P" && new_pos[1] == (this.colour ? 8 : 1)) {
             ctx.fillStyle = "rgb(255,255,255)";
             console.log(new_pos[0]) 
@@ -309,17 +309,17 @@ class piece {
                         new_type = "R";
                         break;
                 }
-                this.update2(new_pos, send, doublemove, new_type)
+                this.update2(new_pos, doublemove, new_type, inter)
 
             })
         
 
     }
     else {
-        this.update2(new_pos, send, doublemove)
+        this.update2(new_pos, doublemove, null, inter)
     }
 }
-    update2(new_pos, send = true, doublemove = false, pawn_type=null) {
+    update2(new_pos, doublemove = false, pawn_type=null, inter) {
         clearInterval(clock);
         var elapsed_time = new Date();
         console.log('update');
@@ -444,18 +444,18 @@ class piece {
                 // console.log(this.colour)
                 if (this.colour) {
                     if (new_pos[0] == 3) {
-                        w_rooka.update([4, 1], true, true);
+                        w_rooka.update([4, 1], true, null, inter);
                     }
                     else {
-                        w_rookh.update([6, 1], true, true);
+                        w_rookh.update([6, 1], true, null, inter);
                     }
                 }
                 else {
                     if (new_pos[0] == 3) {
-                        b_rooka.update([4, 8], true, true);
+                        b_rooka.update([4, 8], true, null, inter);
                     }
                     else {
-                        b_rookh.update([6, 8], true, true);
+                        b_rookh.update([6, 8], true, null, inter);
                     }
                 }
             }
@@ -793,7 +793,7 @@ class piece {
         })
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         //show_pieces();
-
+        canvas.removeEventListener('click', inter);
     }
 
     highlight(checktest = false, white_arrt = white_arr, black_arrt = black_arr, white_listt = white_arr, black_listt = black_arr, recursion = true) {
@@ -1038,11 +1038,17 @@ class piece {
 
             for (let shade of onboard) {
                 var checkless_mock;
+                console.log(shade);
                 if (mode.indexOf('Checkless') != -1) {checkless_mock = this.mock_update(shade);}
-                if ((!this.mock_update(shade)[0] && ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) 
-                || (mode.indexOf('Atomic') != -1 && (findArr(shade, white_arr.concat(black_arr)) == -1 || (findArr(shade, white_arr.concat(black_arr)) == -1 && (
-                    (this.type != "K" || !(Math.abs(shade[0] - (blackwhite ? w_king[0] : b_king[0])) <= 1 && Math.abs(shade[1] - (blackwhite ? w_king[1] : b_king[1])) <= 1))
-                )))))) || (mode.indexOf('Checkless') != -1 && !checkless_mock[0] && (!checkless_mock[2][0] || checkless_mock[3])) 
+                if ((!this.mock_update(shade)[0] && 
+                    ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) || 
+                    (mode.indexOf('Atomic') != -1 && findArr(shade, this.colour ? white_arr : black_arr) == -1 && (
+                        findArr(shade, this.colour ? black_arr : white_arr) == -1 || (
+                        ((this.type != "K" && (Math.abs(shade[0] - (this.colour ? w_king.pos[0] : b_king.pos[0])) > 1 || Math.abs(shade[1] - (this.colour ? w_king.pos[1] : b_king.pos[1])) > 1))
+                )))
+                )
+                )
+                ) || (mode.indexOf('Checkless') != -1 && !checkless_mock[0] && (!checkless_mock[2][0] || checkless_mock[3])) 
                 ) {
                 int_onboard.push(shade) }}
             for (let shade of int_onboard) {
@@ -1061,8 +1067,7 @@ class piece {
                 var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
                 var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
                 if (findArr(square, onboard) != -1) {
-                    this.update(square)
-                    canvas.removeEventListener('click', intermediary);
+                    this.update(square, false, intermediary)
                 }
                 else {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1764,7 +1769,7 @@ var intermediary = (e) => {
         (blackwhite ? white_list : black_list).push(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]);
         (blackwhite ? white_arr : black_arr).push(square);
         target.parentElement.removeChild(target);
-        window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square);
+        window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square, false, intermediary);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
         target.style.color = 'black';
@@ -1831,25 +1836,6 @@ function socket_data(socket) {
         if (!$('text').innerHTML.includes("<em><strong>" + data + ":</strong> ... </em><br>")) {
             $('text').innerHTML += "<em><strong>" + data + ":</strong> ... </em><br>";
         }
-    })
-
-    socket.on('player', data => {
-        handle_colour = data;
-        if (data == "white") { blackwhite = 1; observer = false; }
-        else if (data == "black") { blackwhite = 0; observer = false; }
-        else if (data == "observer") { blackwhite = -1; observer = true; }
-        ready = true;
-        if (loaded) { show_pieces() }
-    })
-    socket.on('position', data => {
-        var chosen_list = blackwhite ? black_list : white_list;
-        chosen_list.forEach(element => {
-            if (element.name == data.piece) {
-                element.update(data.pos, false, data.doublemove);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                show_pieces();
-            }
-        })
     })
 
 }
