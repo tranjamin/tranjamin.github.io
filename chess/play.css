@@ -191,7 +191,7 @@ right: 15%;
     top: 0;
 }
 
-#options, #promote {
+#options, #promote, #beirut_button {
     width: 100%;
     background-color: rgba(0,0,0,0);
     position: absolute;
@@ -219,6 +219,17 @@ right: 15%;
     position: relative;
     right: 0%;
 
+}
+#beirut_button button {
+    width: 97%;
+    font-size: 75%;
+    display: inline-block;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    color: black;
+    border: 0;
+    font-family: 'Raleway';
 }
 
 #self_box icon, #opposite_box icon {

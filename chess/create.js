@@ -242,6 +242,8 @@ db.collection('chess').add({
     black_checks: 0,
     moves: 0,
     fifty_moves: 0,
+    white_beirut_piece: null,
+    black_beirut_piece: null,
     undo: stringify(undo)
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);

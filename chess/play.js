@@ -22,6 +22,7 @@ var undo = [];
 var clock;
 var mode;
 var done = false;
+var pre_selection = false;
 
 if (getCookie('game_id'))
  {
@@ -1435,6 +1436,55 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     black_list = [];
     done = doc.data().result ? true : false;
     enpassant = doc.data().enpassant;
+
+    if (mode.indexOf('Beirut') != -1) {
+        var choose_beirut = document.createElement("DIV");
+        choose_beirut.setAttribute('id', 'beirut_button');
+        var beirut_button = document.createElement("BUTTON");
+        beirut_button.innerHTML = "Choose Your Suicide Piece";
+        choose_beirut.appendChild(beirut_button);
+        document.getElementsByClassName('bottom')[0].insertBefore(choose_beirut, document.getElementsByClassName('bottom')[0].childNodes[0]);
+        var beirut_options = $('beirut_button');
+        beirut_options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + 2 * $('options').getBoundingClientRect().height + "px";
+        beirut_options.style.left = '0px';
+        var beirut_listener = (e) => {
+            var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
+            var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
+            var clicked_piece_white = findArr(square, white_arr);
+            var clicked_piece_black = findArr(square, black_arr);
+            var clicked;
+            if (clicked_piece_white == -1 && clicked_piece_black == -1) {
+            }
+            else {
+                if (clicked_piece_white != -1) {
+                    for (var check of white_list) {
+                        if (arrEqual(check.pos, square)) { clicked = check; }
+                    }
+                }
+                else {
+                    for (var check of black_list) {
+                        if (arrEqual(check.pos, square)) { clicked = check; break; }
+                    }
+                }
+                if (clicked.colour == turn && clicked.colour == blackwhite && !observer) {
+                    clicked.highlight();
+                }
+            }
+        }
+        beirut_options.addEventListener('click', e => {
+            if (beirut_options.childNodes[0].innerHTML == "Choose Your Suicide Piece") {
+            ctx.fillStyle = 'rgba(250,250,250,0.5)';
+            ctx.fillRect(0, canvas.height / 4 * 3, canvas.width, canvas.height / 4);
+            beirut_options.childNodes[0].innerHTML = "Click To Select Your Piece";
+        }
+            else {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                show_pieces();
+                beirut_options.childNodes[0].innerHTML = "Choose Your Suicide Piece";
+            }
+        })
+    }
+
     $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
     $('opposite_time').innerHTML = blackwhite ? doc.data().black_count : doc.data().white_count;
     $('self_time').innerHTML = time_to_str($('self_time').innerHTML);
@@ -1455,11 +1505,11 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         }).then(() => {
     if (blackwhite) {
         $('self_name').innerHTML = ((turn == blackwhite) ? "&#9654 " : "") + doc.data().white_user + " (" + white_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + doc.data().black_user + " (" + black_elo + ")";
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + " (" + black_elo + ")"));
     }
     else {
         $('self_name').innerHTML = ((turn == blackwhite) ? "&#9654 " : "") + doc.data().black_user + " (" + black_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + doc.data().white_user + " (" + white_elo + ")";
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + " (" + white_elo + ")"));
     }
     })})
     var self_int = "";
@@ -1669,7 +1719,6 @@ function show_pieces() {
 }
 
 document.addEventListener('click', e => {
-    console.log('document clicker');
     if (!done) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
@@ -1686,14 +1735,10 @@ document.addEventListener('click', e => {
         }
         else {
             for (var check of black_list) {
-                // console.log(check.pos,square);
                 if (arrEqual(check.pos, square)) { clicked = check; break; }
             }
         }
-        console.log('clearing');
-        //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //show_pieces();
-        if (clicked.colour == turn && clicked.colour == blackwhite && !observer) { //change this back to multiplayer
+        if (clicked.colour == turn && clicked.colour == blackwhite && !observer) {
             clicked.highlight();
         }
     }
