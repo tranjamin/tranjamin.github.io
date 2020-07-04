@@ -260,7 +260,7 @@ class piece {
         return ret;
         }
 
-    update(new_pos, doublemove = false, inter) {
+    update(new_pos, doublemove = false, inter=null, selfkill=false) {
         if (this.type == "P" && new_pos[1] == (this.colour ? 8 : 1)) {
             ctx.fillStyle = "rgb(255,255,255)";
             console.log(new_pos[0]) 
@@ -311,17 +311,17 @@ class piece {
                         new_type = "R";
                         break;
                 }
-                this.update2(new_pos, doublemove, new_type, inter)
+                this.update2(new_pos, doublemove, new_type, inter, selfkill)
 
             })
         
 
     }
     else {
-        this.update2(new_pos, doublemove, null, inter)
+        this.update2(new_pos, doublemove, null, inter, selfkill)
     }
 }
-    update2(new_pos, doublemove = false, pawn_type=null, inter) {
+    update2(new_pos, doublemove = false, pawn_type=null, inter, selfkill) {
         clearInterval(clock);
         var elapsed_time = new Date();
         console.log('update');
@@ -587,6 +587,10 @@ class piece {
                     (blackwhite ? white_list : black_list).splice((blackwhite ? white_list : black_list).indexOf(this), 1);
                     (blackwhite ? white_arr : black_arr).splice(findArr(this.pos, (blackwhite ? white_arr : black_arr)), 1);
                 }
+            }
+            if (selfkill) {
+            (blackwhite ? white_list : black_list).splice((blackwhite ? white_list : black_list).indexOf(this), 1);
+            (blackwhite ? white_arr : black_arr).splice(findArr(this.pos, (blackwhite ? white_arr : black_arr)), 1);                
             }
             var white_bank = blackwhite ? $('self_box').innerHTML : $('opposite_box').innerHTML;
             var black_bank = blackwhite ? $('opposite_box').innerHTML : $('self_box').innerHTML;
@@ -1442,6 +1446,16 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     done = doc.data().result ? true : false;
     enpassant = doc.data().enpassant;
 
+    for (var i of doc.data().white_list) {
+        window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
+        white_list.push(window[i.name])
+    }
+    for (var i of doc.data().black_list) {
+        window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
+        black_list.push(window[i.name])
+    }
+    undo = arrayify(doc.data().undo);
+
     if (mode.indexOf('Beirut') != -1) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
@@ -1454,13 +1468,19 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         }
         var beirut_button = $('beirut_button').childNodes[0];
         beirut_button.innerHTML = !pre_selection ? "Choose Your Suicide Piece" : "Explode Your Suicide Piece";
-        if (pre_selection && turn == blackwhite) {
+        if (pre_selection && turn != blackwhite) {
             beirut_button.style.opacity = "0.7";
             beirut_button.style.color = "grey";
         }
         else if (pre_selection) {
+            if (Math.abs(window[beirut_piece].pos[0] - (blackwhite ? w_king.pos[0] : b_king.pos[0])) > 1 || Math.abs(window[beirut_piece].pos[1] - (blackwhite ? w_king.pos[1] : b_king.pos[1])) > 1) {
             beirut_button.style.opacity = "1";
             beirut_button.style.color = "black";         
+        }
+            else {
+            beirut_button.style.opacity = "0.7";
+            beirut_button.style.color = "grey";
+            }
         }
         var beirut_options = $('beirut_button');
         beirut_options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + 2 * $('options').getBoundingClientRect().height + "px";
@@ -1513,13 +1533,45 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                 canvas.removeEventListener('click', beirut_listener)
             }
             else {
+                if (blackwhite == turn && beirut_piece && (Math.abs(window[beirut_piece].pos[0] - (blackwhite ? w_king.pos[0] : b_king.pos[0])) > 1 || Math.abs(window[beirut_piece].pos[1] - (blackwhite ? w_king.pos[1] : b_king.pos[1])) > 1)) {
                 console.log('explosion');
-                if (blackwhite != turn && beirut_piece) {
-                    window[beirut_piece].update(window[beirut_piece])
-                    console.log(beirut_piece)
-                }
+                    var explosion = [
+                        [window[beirut_piece].pos[0] + 1,window[beirut_piece].pos[1] + 1],
+                        [window[beirut_piece].pos[0] - 1,window[beirut_piece].pos[1] + 1],
+                        [window[beirut_piece].pos[0],window[beirut_piece].pos[1] + 1],
+                        [window[beirut_piece].pos[0] + 1,window[beirut_piece].pos[1] - 1],
+                        [window[beirut_piece].pos[0] - 1,window[beirut_piece].pos[1] - 1],
+                        [window[beirut_piece].pos[0],window[beirut_piece].pos[1] - 1],
+                        [window[beirut_piece].pos[0] + 1,window[beirut_piece].pos[1]],
+                        [window[beirut_piece].pos[0] - 1,window[beirut_piece].pos[1]]
+                    ];
+                    for (var frag of explosion) {
+                        if (frag[0] > 8 || frag[0] < 1 || frag[1] > 8 || frag[1] < 1) {
+                            explosion.splice(findArr(frag, explosion), 1);
+                        }
+                    }
+                    for (var frag of explosion) {
+                        if (findArr(frag, white_arr.concat(black_arr)) != -1) {
+                            console.log('frag', frag)
+                            for (var casualty of white_list.concat(black_list)) {
+                                if (arrEqual(casualty.pos,frag)) {
+                                    if (casualty.colour) {
+                                        white_list.splice(white_list.indexOf(casualty), 1);
+                                        white_arr.splice(findArr(casualty.pos, white_arr), 1);
+                                    }
+                                    else {
+                                        black_list.splice(black_list.indexOf(casualty), 1);
+                                        black_arr.splice(findArr(casualty.pos, black_arr), 1);
+                                    }
+                                    if (casualty.type == "K") {win('Exploding the King')}
+                                }
+                            }
+                        }
+                        }
+                    window[beirut_piece].update(window[beirut_piece].pos, false, null, true)
             }
-        })
+        }
+    })
     }
     else {
         pre_selection = true;
@@ -1601,19 +1653,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     })
     $('opposite_box').innerHTML = opp_int
 
-    // eval(`white_arr = [${doc.data().white_arr}]`);
-    for (var i of doc.data().white_list) {
-        window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
-        white_list.push(window[i.name])
-    }
-    for (var i of doc.data().black_list) {
-        window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
-        black_list.push(window[i.name])
-    }
-    undo = arrayify(doc.data().undo);
-
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //show_pieces();
 
     if (blackwhite) {
         $('self_time').style['background-color'] = 'white';
