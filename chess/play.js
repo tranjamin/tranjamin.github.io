@@ -23,6 +23,7 @@ var clock;
 var mode;
 var done = false;
 var pre_selection = false;
+var beirut_piece = null;
 
 if (getCookie('game_id'))
  {
@@ -794,7 +795,7 @@ class piece {
         })
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         //show_pieces();
-        canvas.removeEventListener('click', inter);
+        if (inter != null) {canvas.removeEventListener('click', inter)};
     }
 
     highlight(checktest = false, white_arrt = white_arr, black_arrt = black_arr, white_listt = white_arr, black_listt = black_arr, recursion = true) {
@@ -1377,6 +1378,10 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
 })
 
 db.collection('chess').doc(game).get().then(doc => {
+    if (doc.data().white_user == username) {blackwhite = 1}
+    else if (doc.data().black_user == username) {blackwhite = 0}
+    else {blackwhite = 1; observer = true;}
+
     if (doc.data().white_time != null && doc.data().timer[1] != null) {
     var new_white_count = doc.data().white_count;
     var new_black_count = doc.data().black_count;
@@ -1438,12 +1443,25 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     enpassant = doc.data().enpassant;
 
     if (mode.indexOf('Beirut') != -1) {
-        var choose_beirut = document.createElement("DIV");
-        choose_beirut.setAttribute('id', 'beirut_button');
-        var beirut_button = document.createElement("BUTTON");
-        beirut_button.innerHTML = "Choose Your Suicide Piece";
-        choose_beirut.appendChild(beirut_button);
-        document.getElementsByClassName('bottom')[0].insertBefore(choose_beirut, document.getElementsByClassName('bottom')[0].childNodes[0]);
+        pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
+        beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
+        if (!$('beirut_button')) {
+            var choose_beirut = document.createElement("DIV");
+            choose_beirut.setAttribute('id', 'beirut_button');
+            var beirut_button = document.createElement("BUTTON");
+            choose_beirut.appendChild(beirut_button);
+            document.getElementsByClassName('bottom')[0].insertBefore(choose_beirut, document.getElementsByClassName('bottom')[0].childNodes[0]);
+        }
+        var beirut_button = $('beirut_button').childNodes[0];
+        beirut_button.innerHTML = !pre_selection ? "Choose Your Suicide Piece" : "Explode Your Suicide Piece";
+        if (pre_selection && turn == blackwhite) {
+            beirut_button.style.opacity = "0.7";
+            beirut_button.style.color = "grey";
+        }
+        else if (pre_selection) {
+            beirut_button.style.opacity = "1";
+            beirut_button.style.color = "black";         
+        }
         var beirut_options = $('beirut_button');
         beirut_options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + 2 * $('options').getBoundingClientRect().height + "px";
         beirut_options.style.left = '0px';
@@ -1466,23 +1484,45 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                         if (arrEqual(check.pos, square)) { clicked = check; break; }
                     }
                 }
-                if (clicked.colour == turn && clicked.colour == blackwhite && !observer) {
-                    clicked.highlight();
+                if (clicked.colour == blackwhite && clicked.type != "K") {
+                    console.log(clicked);
+                    if (blackwhite) {
+                        db.collection('chess').doc(game).update({
+                            white_beirut_piece: clicked.name
+                    })}
+                    else {
+                        db.collection('chess').doc(game).update({
+                            black_beirut_piece: clicked.name
+                    })}
                 }
             }
         }
         beirut_options.addEventListener('click', e => {
             if (beirut_options.childNodes[0].innerHTML == "Choose Your Suicide Piece") {
             ctx.fillStyle = 'rgba(250,250,250,0.5)';
-            ctx.fillRect(0, canvas.height / 4 * 3, canvas.width, canvas.height / 4);
+            ctx.fillRect(0, canvas.height / 4 * 3, canvas.width, canvas.height / 8);
+            ctx.fillRect(0, canvas.height / 8 * 7, canvas.width * 3 / 8, canvas.height / 8);
+            ctx.fillRect(canvas.width * 4 / 8, canvas.height / 8 * 7, canvas.width * 4 / 8, canvas.height / 8);
             beirut_options.childNodes[0].innerHTML = "Click To Select Your Piece";
+            canvas.addEventListener('click', beirut_listener)
         }
-            else {
+            else if (beirut_options.childNodes[0].innerHTML == "Click To Select Your Piece") {
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 show_pieces();
                 beirut_options.childNodes[0].innerHTML = "Choose Your Suicide Piece";
+                canvas.removeEventListener('click', beirut_listener)
+            }
+            else {
+                console.log('explosion');
+                if (blackwhite != turn && beirut_piece) {
+                    window[beirut_piece].update(window[beirut_piece])
+                    console.log(beirut_piece)
+                }
             }
         })
+    }
+    else {
+        pre_selection = true;
     }
 
     $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
@@ -1719,7 +1759,7 @@ function show_pieces() {
 }
 
 document.addEventListener('click', e => {
-    if (!done) {
+    if (!done && (mode.indexOf('Beirut') == -1 || pre_selection)) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
     var clicked_piece_white = findArr(square, white_arr);
@@ -1836,7 +1876,6 @@ var intermediary = (e) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
         target.style.color = 'black';
-        canvas.removeEventListener('click', intermediary);
     }
     else {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
