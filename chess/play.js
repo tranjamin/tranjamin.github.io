@@ -545,6 +545,7 @@ class piece {
                 }
                 console.log(capture);
                 convert_to_bank(original_capture_arr[capture].type);
+                console.log('inner', $('self_box').innerHTML);
                 if (mode.indexOf('Atomic') != -1) {
                     var explosion = [
                         [this.pos[0] + 1,this.pos[1] + 1],
@@ -1467,7 +1468,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
             document.getElementsByClassName('bottom')[0].insertBefore(choose_beirut, document.getElementsByClassName('bottom')[0].childNodes[0]);
         }
         var beirut_button = $('beirut_button').childNodes[0];
-        beirut_button.innerHTML = !pre_selection ? "Choose Your Suicide Piece" : "Explode Your Suicide Piece";
+        beirut_button.innerHTML = !pre_selection ? "Choose Your Suicide Piece" : ("Detonate on " + formatPos(window[beirut_piece].pos));
         if (pre_selection && turn != blackwhite) {
             beirut_button.style.opacity = "0.7";
             beirut_button.style.color = "grey";
@@ -2003,7 +2004,36 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 
 
-
+formatPos = (pos) => {
+    var letter;
+    switch (pos[0]) {
+        case 1:
+            letter = 'a'; 
+            break;
+        case 2:
+            letter = 'b'; 
+            break;
+        case 3:
+            letter = 'c'; 
+            break;
+        case 4:
+            letter = 'd'; 
+            break;
+        case 5:
+            letter = 'e'; 
+            break;
+        case 6:
+            letter = 'f'; 
+            break;
+        case 7:
+            letter = 'g'; 
+            break;
+        case 8:
+            letter = 'h'; 
+            break;
+    }
+    return letter + pos[1];
+}
 
 stringify = (stringed_arr) => {
     var x = "";
