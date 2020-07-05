@@ -257,7 +257,6 @@ db.collection('chess').add({
 }
 
 stringify = (stringed_arr) => {
-    if(stringed_arr == null) {return null} else {
     var x = "";
     for (var y in stringed_arr) {
         if (y == stringed_arr.length - 1) {
@@ -266,7 +265,28 @@ stringify = (stringed_arr) => {
         else {
             x += "[" + String(stringed_arr[y]) + "],";
         }}
-    return x;}
+    return x;
+}
+stringify2 = (stringed_arr) => {
+    var x = "";
+    for (var y in stringed_arr) {
+        if (y == stringed_arr.length - 1) {
+            if (typeof(stringed_arr[y]) == "object") {
+                x += stringify(stringed_arr[y])
+            }
+            else {
+            x += String(stringed_arr[y]);
+            }
+        }
+        else {
+            if (typeof(stringed_arr[y]) == "object") {
+                x += stringify(stringed_arr[y]) + ","
+            }
+            else {
+            x += String(stringed_arr[y]) + ",";
+            }
+        }}
+    return "[" + x + "]";
 }
 
 objectify = (objectified_arr) => {

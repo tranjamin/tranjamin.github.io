@@ -7,9 +7,6 @@ Castling
 Promotion
 
 This Version does not Include:
-Check / Checkmate
-Underpromotion
-Undo
 Flip Board
 
 */
@@ -763,7 +760,6 @@ class piece {
                 time_left -= elapsed_time;
                 clearInterval(clock);*/
             }
-
             }).then(() => {
                 if (blackwhite) {
             db.collection('chess').doc(game).update({
@@ -778,7 +774,8 @@ class piece {
                 white_checks: original_white_checks,
                 moves: original_moves,
                 fifty_moves: original_fifty,
-                enpassant: enpassant
+                enpassant: enpassant,
+                undo: stringify(undo)
             }).catch(error => {console.log(error.lineNumber)})
         }
                 else {
@@ -794,7 +791,8 @@ class piece {
                 black_checks: original_black_checks,
                 moves: original_moves,
                 fifty_moves: original_fifty,
-                enpassant: enpassant
+                enpassant: enpassant,
+                undo: stringify(undo)
             }).catch(error => {console.log(error.lineNumber)})
                 }
         })
@@ -2035,7 +2033,7 @@ formatPos = (pos) => {
     return letter + pos[1];
 }
 
-stringify = (stringed_arr) => {
+/*stringify = (stringed_arr) => {
     var x = "";
     for (var y in stringed_arr) {
         if (y == stringed_arr.length - 1) {
@@ -2043,6 +2041,27 @@ stringify = (stringed_arr) => {
         }
         else {
             x += "[" + String(stringed_arr[y]) + "],";
+        }}
+    return x;
+}*/
+stringify = (stringed_arr) => {
+    var x = "";
+    for (var y in stringed_arr) {
+        if (y == stringed_arr.length - 1) {
+            if (typeof(stringed_arr[y]) == "object") {
+                x += "[" + stringify(stringed_arr[y]) + "]"
+            }
+            else {
+            x += String(stringed_arr[y]);
+            }
+        }
+        else {
+            if (typeof(stringed_arr[y]) == "object") {
+                x += "[" + stringify(stringed_arr[y]) + "],"
+            }
+            else {
+            x += String(stringed_arr[y]) + ",";
+            }
         }}
     return x;
 }
