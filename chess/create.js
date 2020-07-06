@@ -225,8 +225,8 @@ db.collection('chess').add({
     mode: mode,
     visibility: visibility,
     invited_user: invited_user,
-    white_time: stringify(white_time),
-    black_time: stringify(time),
+    white_time: stringify(white_time) ? stringify(white_time) : null,
+    black_time: stringify(time) ? stringify(time) : null,
     randomised: randomised,
     admin: admin,
     messages: "",
@@ -255,7 +255,7 @@ db.collection('chess').add({
     $('error').innerHTML = "Could not connect to server. Please try again later";
 });
 }
-
+/*
 stringify = (stringed_arr) => {
     var x = "";
     for (var y in stringed_arr) {
@@ -266,13 +266,13 @@ stringify = (stringed_arr) => {
             x += "[" + String(stringed_arr[y]) + "],";
         }}
     return x;
-}
-stringify2 = (stringed_arr) => {
+}*/
+stringify = (stringed_arr) => {
     var x = "";
     for (var y in stringed_arr) {
         if (y == stringed_arr.length - 1) {
             if (typeof(stringed_arr[y]) == "object") {
-                x += stringify(stringed_arr[y])
+                x += "[" + stringify(stringed_arr[y]) + "]"
             }
             else {
             x += String(stringed_arr[y]);
@@ -280,13 +280,13 @@ stringify2 = (stringed_arr) => {
         }
         else {
             if (typeof(stringed_arr[y]) == "object") {
-                x += stringify(stringed_arr[y]) + ","
+                x += "[" + stringify(stringed_arr[y]) + "],"
             }
             else {
             x += String(stringed_arr[y]) + ",";
             }
         }}
-    return "[" + x + "]";
+    return x;
 }
 
 objectify = (objectified_arr) => {

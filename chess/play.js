@@ -12,7 +12,57 @@ Flip Board
 */
 
 
+//undo format
+// [piece_name, start_pos (@ options), end_pos, doublemove arr, capture_piece, check (0/1/2), promote_type, (null/rank/file), circe]
 
+formatMove = (move) => {
+    var return_move = "";
+    if (!move[3]) {
+    if (move[0].indexOf('rook') != -1) {return_move += "R"}
+    else if (move[0].indexOf('bishop') != -1) {return_move += "B"}
+    else if (move[0].indexOf('knight') != -1) {return_move += "K"}
+    else if (move[0].indexOf('queen') != -1) {return_move += "Q"}
+    else if (move[0].indexOf('king') != -1) {return_move += "K"}
+    else {
+        return_move += formatPos(move[1])[0]
+    }
+    if (move[7]) {
+        if (move[7] == "rank") {
+            return_move += formatPos(move[1])[1]
+        }
+        else {
+            return_move += formatPos(move[1])[0]
+        }
+    }
+    if (move[4] && move[4] != 'undefined') {
+        return_move += "x";
+    }
+    if (move[1] == "@") {
+        return_move += "@";
+    }
+    if (move[0].length == 3) {
+        if (move[4] && move[4] != 'undefined') {
+        return_move += formatPos(move[2])
+        }
+        else {
+        return_move += formatPos(move[2])[1]}
+        if (move[6]) {
+            return_move += "=" + move[6]
+        }
+    }
+    else {
+        return_move += formatPos(move[2])
+    }
+    if (move[5] == 1) {return_move += "+"}
+    else if (move[5] == 2) {return_move += "#"}
+    if (move[8]) {return_move += "(" + formatMove(move[8]) + ")"}
+}
+    else {
+        if (move[0].indexOf('h') != -1) {return_move = "O-O"}
+        else {return_move = "O-O-O"}
+    }
+    return return_move;
+}
 
 var game = "";
 var undo = [];
@@ -1454,6 +1504,19 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         black_list.push(window[i.name])
     }
     undo = arrayify(doc.data().undo);
+    for (var prev_turn of undo) {
+        if (prev_turn[0] == (blackwhite ? 'w_king' : 'b_king')) {
+            castle_rooka = false;
+            castle_rookh = false;
+            break;
+        }
+        else if (prev_turn[0] == (blackwhite ? 'w_rooka' : 'b_rooka')) {
+            castle_rooka = false;
+        }
+        else if (prev_turn[0] == (blackwhite ? 'w_rookh' : 'b_rookh')) {
+            castle_rookh = false;
+        }
+    }
 
     if (mode.indexOf('Beirut') != -1) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
@@ -1735,6 +1798,7 @@ interval2 = () => {
     clock = setInterval(() => {
         console.log('int2')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
+        if ($('self_time').innerHTML.split)
         if ($('self_time').innerHTML == "0:10.00") {
             clearInterval(clock);
             interval3();
@@ -2004,7 +2068,7 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 formatPos = (pos) => {
     var letter;
-    switch (pos[0]) {
+    switch (parseInt(pos[0])) {
         case 1:
             letter = 'a'; 
             break;
@@ -2081,34 +2145,32 @@ objectify = (objectified_arr) => {
 arrayify = (arr2,type=String) => {
     if (arr2 != null) {
     var arr = arr2;
-    /*
-    if (arr[0] == '[') {
-        arr = arr.slice(1)
-    }
-    if (arr[arr.length - 1] == ']') {
-        arr = arr.slice(0,-1)
-    }*/
     arr = arr.split(',');
     const original_arr = arr;
     var ret_arr = [];
     var index1;
+    var num_open = 0;
+    var num_closed = 0;
     var inner = false;
     for (var index in original_arr) {
         if (original_arr[index].includes('[')) {
-            
-            index1 = index;
+            num_open += original_arr[index].match(/\[/g).length;
+            if (!inner) {index1 = index};
             inner = true;
         } 
-        else if (original_arr[index].includes(']'))
-        { 
+        if (original_arr[index].includes(']'))
+        {
+            num_closed += original_arr[index].match(/\]/g).length;
+            if (num_closed == num_open) {
             inner = false;
             var temp_arr = [];
             original_arr.forEach(name => {temp_arr.push(name)})
             temp_arr = temp_arr.splice(index1,(index-index1) + 1);
             temp_arr = temp_arr.join(',');
-            temp_arr = temp_arr.split('[')[1].split(']')[0]
+            temp_arr = temp_arr.slice(1, temp_arr.length - 1)
             var inter =  arrayify(temp_arr);
             ret_arr.push(inter);
+        }
         }
         else if (!inner) {
             if (type == Number) {
