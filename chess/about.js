@@ -61,25 +61,15 @@ function update_graphics() {
 }
 
 
+
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
+    if ($('nav').getElementsByTagName('button')[0].innerHTML == "<a href='signup.html'>Login/Signup</a>") {window.location.assign('signup.html')}
     else {
         sessionStorage.clear();
         deleteAllCookies();
         location.reload();}
 });
-$('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
-    window.location.assign('account.html')
-});
-$('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
-    window.location.assign('create.html')
-});
-$('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
-    window.location.assign('load.html')
-});
-$('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
-    window.location.assign('about.html')
-});
+
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
