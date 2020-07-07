@@ -14,7 +14,6 @@ Flip Board
 
 */
 
-var undo = [];
 var white_arr = [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]];
 var black_arr = [[1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7], [8, 7]];
 
@@ -244,7 +243,7 @@ db.collection('chess').add({
     fifty_moves: 0,
     white_beirut_piece: null,
     black_beirut_piece: null,
-    undo: stringify(undo)
+    undo: null,
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
     sessionStorage.setItem('game_id',docRef.id);

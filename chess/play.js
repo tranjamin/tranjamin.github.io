@@ -12,58 +12,6 @@ Flip Board
 */
 
 
-//undo format
-// [piece_name, start_pos (@ options), end_pos, doublemove arr, capture_piece, check (0/1/2), promote_type, (null/rank/file), circe]
-
-formatMove = (move) => {
-    var return_move = "";
-    if (!move[3]) {
-    if (move[0].indexOf('rook') != -1) {return_move += "R"}
-    else if (move[0].indexOf('bishop') != -1) {return_move += "B"}
-    else if (move[0].indexOf('knight') != -1) {return_move += "K"}
-    else if (move[0].indexOf('queen') != -1) {return_move += "Q"}
-    else if (move[0].indexOf('king') != -1) {return_move += "K"}
-    else {
-        return_move += formatPos(move[1])[0]
-    }
-    if (move[7]) {
-        if (move[7] == "rank") {
-            return_move += formatPos(move[1])[1]
-        }
-        else {
-            return_move += formatPos(move[1])[0]
-        }
-    }
-    if (move[4] && move[4] != 'undefined') {
-        return_move += "x";
-    }
-    if (move[1] == "@") {
-        return_move += "@";
-    }
-    if (move[0].length == 3) {
-        if (move[4] && move[4] != 'undefined') {
-        return_move += formatPos(move[2])
-        }
-        else {
-        return_move += formatPos(move[2])[1]}
-        if (move[6]) {
-            return_move += "=" + move[6]
-        }
-    }
-    else {
-        return_move += formatPos(move[2])
-    }
-    if (move[5] == 1) {return_move += "+"}
-    else if (move[5] == 2) {return_move += "#"}
-    if (move[8]) {return_move += "(" + formatMove(move[8]) + ")"}
-}
-    else {
-        if (move[0].indexOf('h') != -1) {return_move = "O-O"}
-        else {return_move = "O-O-O"}
-    }
-    return return_move;
-}
-
 var game = "";
 var undo = [];
 var clock;
@@ -71,6 +19,7 @@ var mode;
 var done = false;
 var pre_selection = false;
 var beirut_piece = null;
+var moves_back = 0;
 
 if (getCookie('game_id'))
  {
@@ -539,34 +488,67 @@ class piece {
 
         }
         // console.log(capture_arr[capture]);
+        // [piece_name, start_pos (@ options), end_pos, doublemove arr, capture_piece, check (0/1/2), promote_type, (null/rank/file), circe]
         if (!doublemove) {
             turn = turn ? 0 : 1;
             if (undo.length != 0) {
                 if (undo[undo.length - 1][3] == "castle") {
-                    undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined];
+                    undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined, 0, null, null, null];
                 }
                 else {
                     if (capture_arr[capture]) {
-                        undo.push([this.name, original_pos, new_pos, "", capture_arr[capture].name]);
+                        undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], 0, null, null, null]);
                     }
                     else {
-                        undo.push([this.name, original_pos, new_pos, "", undefined]);
+                        undo.push([this.name, original_pos, new_pos, "", undefined, 0, null, null, null]);
                     }
                 }
             }
             else {
                 if (capture != -1) {
-                    undo.push([this.name, original_pos, new_pos, "", capture_arr[capture].name]);
+                    undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], 0, null, null, null]);
                 }
                 else {
-                    undo.push([this.name, original_pos, new_pos, "", undefined]);
+                    undo.push([this.name, original_pos, new_pos, "", undefined, 0, null, null, null]);
                 }
             }
         }
         else {
-            undo.push([this.name, original_pos, new_pos, 'castle', undefined]);
+            undo.push([this.name, original_pos, new_pos, 'castle', undefined, 0, null, null, null]);
         }
-        
+        undo[undo.length - 1][5] = check(this.colour ? 0 : 1);
+        undo[undo.length - 1][6] = (pawn_type != null && new_pos[1] == (this.colour ? 8 : 1)) ? pawn_type : null;
+        if (this.type != "P" && pawn_type == null) {
+            var same_type = [];
+            var same_pos = [];
+            var same_one = false;
+            var same_two = false;
+            for (var test_type of (this.colour ? white_list : black_list)) {
+                if (test_type.type == this.type && test_type != this) {same_type.push(test_type)}
+            }
+            if (same_type.length > 1) {
+                same_type.forEach(test_square => {
+                    if (new_pos, findArr(test_square.highlight)) {
+                        same_pos.push(test_square.pos)
+                    }
+                })
+                same_pos.forEach(repetition => {
+                    if (repetition[0] == new_pos[0]) {same_one = true;}
+                    if (repetition[1] == new_pos[1]) {same_one = true;}
+                })
+                if (same_one && same_two) {undo[undo.length - 1][7] = 'both'}
+                else if (same_one) {undo[undo.length - 1][7] = 'rank'}
+                else if (same_two) {undo[undo.length - 1][7] = 'file'}
+                else {undo[undo.length - 1][7] = null}
+            }
+            else {
+                undo[undo.length - 1][7] = null;
+            }
+        }
+        else {
+            undo[undo.length - 1][7] = null;
+        }
+
             if (capture_arr[capture]) {
                 function convert_to_bank (type) {
                 switch (type) {
@@ -590,7 +572,6 @@ class piece {
                         break;
                 }
                 }
-                console.log(capture);
                 convert_to_bank(original_capture_arr[capture].type);
                 console.log('inner', $('self_box').innerHTML);
                 if (mode.indexOf('Atomic') != -1) {
@@ -705,14 +686,14 @@ class piece {
             show_pieces();
             
             if (mode.indexOf('Anti') == -1 && checkmate && check(this.colour ? 0 : 1)[0]) {
-                if (mode.indexOf('Crazyhouse') == -1) {win('Checkmate')}
+                if (mode.indexOf('Crazyhouse') == -1) {win('Checkmate'); undo[undo.length - 1][5] = 2;}
                 else {
                     if ((check(this.colour ? 0 : 1)[0] == 2) || (!$('self_box').innerHTML || (
                         check(this.colour ? 0 : 1)[1].type == "K" ||
                         (Math.abs(check(this.colour ? 0 : 1)[1].pos[0] - (blackwhite ? w_king : black_king).pos[0]) <= 1 &&
                          Math.abs(check(this.colour ? 0 : 1)[1].pos[0] - (blackwhite ? w_king : black_king).pos[0]) <= 1)
                     ))) {
-                        win('Checkmate');
+                        win('Checkmate'); undo[undo.length - 1][5] = 2;
                     }
                 }
             }
@@ -986,12 +967,12 @@ class piece {
                                 king_options.push([this.pos[0] - i, this.colour ? 1 : 8])
                             }
                         }
-                        for (var i = 1; i <= Math.abs(w_rooka.pos[0] - 4); i++) {
+                        for (var i = 1; i <= Math.abs((blackwhite ? w_rooka.pos[0] : b_rooka.pos[0]) - 4); i++) {
                             if (this.pos[0] < 3) {
-                                rook_options.push([w_rooka.pos[0] - i, this.colour ? 1 : 8])
+                                rook_options.push([(blackwhite ? w_rooka.pos[0] : b_rooka.pos[0]) - i, this.colour ? 1 : 8])
                             }
                             else {
-                                rook_options.push([w_rooka.pos[0] + i, this.colour ? 1 : 8])
+                                rook_options.push([(blackwhite ? w_rooka.pos[0] : b_rooka.pos[0]) + i, this.colour ? 1 : 8])
                             }
                         }
                         rook_options.splice(findArr(blackwhite ? w_rooka.pos : b_rooka.pos, rook_options), 1)
@@ -1375,7 +1356,20 @@ function draw(message) {
 
 var white_list = [];
 var black_list = [];
+$('options').getElementsByTagName('button')[0].addEventListener('click', e => {
+    if (moves_back != undo.length) {
+    moves_back ++;
+    formatUndo(undo[undo.length - moves_back])
+    }
+})
+$('options').getElementsByTagName('button')[3].addEventListener('click', e => {
+    if (moves_back >= 1) {
+        moves_back --;
+        formatRedo(undo[undo.length - moves_back - 1])    
+    };
 
+    
+})
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     if (!done) {
     if (e.target.innerHTML == '⚑') {
@@ -1504,6 +1498,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         black_list.push(window[i.name])
     }
     undo = arrayify(doc.data().undo);
+    if (doc.data().undo) {
     for (var prev_turn of undo) {
         if (prev_turn[0] == (blackwhite ? 'w_king' : 'b_king')) {
             castle_rooka = false;
@@ -1517,7 +1512,16 @@ db.collection('chess').doc(game).onSnapshot(doc => {
             castle_rookh = false;
         }
     }
-
+    $('tracking').innerHTML = "";
+    undo.forEach((prev_turn, ind) => {
+        if (!(ind % 2)) {$('tracking').innerHTML += '<b>' + ((ind / 2) + 1) + ". </b>"}
+        $('tracking').innerHTML += formatMove(prev_turn) + " "
+    })
+    if (undo.length % 2) {$('tracking').innerHTML += "..."}
+}
+    else {
+        undo = [];
+    }
     if (mode.indexOf('Beirut') != -1) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
@@ -1861,7 +1865,7 @@ function show_pieces() {
 }
 
 document.addEventListener('click', e => {
-    if (!done && (mode.indexOf('Beirut') == -1 || pre_selection)) {
+    if (!done && (mode.indexOf('Beirut') == -1 || pre_selection) && !moves_back) {
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
     var clicked_piece_white = findArr(square, white_arr);
@@ -1887,7 +1891,7 @@ document.addEventListener('click', e => {
     }
 });
 $('self_box').addEventListener('click', e => {
-    if (mode.indexOf("Crazyhouse") != -1 && turn == blackwhite) {
+    if (mode.indexOf("Crazyhouse") != -1 && turn == blackwhite && !done && !moves_back) {
     var target = e.target;
     e.target.style.color = 'red';
     var crazy_type;
@@ -1909,6 +1913,9 @@ $('self_box').addEventListener('click', e => {
             break;
         case "♜":
             crazy_type = "R";
+            break;
+        default:
+            crazy_type = "Q";
             break;
     }
     var spaces = [];
@@ -1964,12 +1971,11 @@ var intermediary = (e) => {
     if (findArr(square, noncheck_spaces) != -1) {
         var recent_addition = false;
         var addition_number = 1;
-        if (blackwhite) {
             while (!recent_addition) {
-                if (typeof(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]) == undefined) {recent_addition = true;}
+                if (typeof(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]) == 'undefined') {recent_addition = true;}
                 else {addition_number++;}
             }
-        }
+        console.log('addition #', square)
         window[(blackwhite ? "w" : "b") + '_crazy' + addition_number] = new piece (blackwhite, crazy_type, square, (blackwhite ? "w" : "b") + '_crazy' + addition_number);
         (blackwhite ? white_list : black_list).push(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]);
         (blackwhite ? white_arr : black_arr).push(square);
@@ -2143,7 +2149,7 @@ objectify = (objectified_arr) => {
 }
 
 arrayify = (arr2,type=String) => {
-    if (arr2 != null) {
+    if (arr2 != null && arr2 != "") {
     var arr = arr2;
     arr = arr.split(',');
     const original_arr = arr;
@@ -2186,9 +2192,163 @@ arrayify = (arr2,type=String) => {
     }
 }
 
+//undo format
+// [piece_name, start_pos (@ options), end_pos, doublemove arr, capture_piece, check (0/1/2), promote_type, (null/rank/file), circe]
 
+formatMove = (move) => {
+    var return_move = "";
+    if (!move[3]) {
+    if (move[0].indexOf('rook') != -1) {return_move += "R"}
+    else if (move[0].indexOf('bishop') != -1) {return_move += "B"}
+    else if (move[0].indexOf('knight') != -1) {return_move += "K"}
+    else if (move[0].indexOf('queen') != -1) {return_move += "Q"}
+    else if (move[0].indexOf('king') != -1) {return_move += "K"}
+    else {
+        return_move += formatPos(move[1])[0]
+    }
+    if (move[7]) {
+        if (move[7] == "both") {
+            return_move += formatPos(move[1])
+        }
+        else if (move[7] == "rank") {
+            return_move += formatPos(move[1])[1]
+        }
+        else {
+            return_move += formatPos(move[1])[0]
+        }
+    }
+    if (move[4] && move[4] != 'undefined') {
+        return_move += "x";
+    }
+    if (move[1] == "@") {
+        return_move += "@";
+    }
+    if (move[0].length == 3) {
+        if (move[4] && move[4] != 'undefined') {
+        return_move += formatPos(move[2])
+        }
+        else {
+        return_move += formatPos(move[2])[1]}
+        if (move[6]) {
+            return_move += "=" + move[6]
+        }
+    }
+    else {
+        return_move += formatPos(move[2])
+    }
+    if (move[5] == 1) {return_move += "+"}
+    else if (move[5] == 2) {return_move += "#"}
+    if (move[8]) {return_move += "(" + formatMove(move[8]) + ")"}
+}
+    else {
+        if (move[0].indexOf('h') != -1) {return_move = "O-O"}
+        else {return_move = "O-O-O"}
+    }
+    return return_move;
+}
 
+formatUndo = (undo_arr) => {
+    if (undo_arr[3]) {
+        switch (undo_arr[0]) {
+            case "w_rooka":
+                w_rooka.pos = [1,1];
+                w_king.pos = [5,1];
+                break;
+            case "b_rooka":
+                b_rooka.pos = [1,8];
+                b_king.pos = [5,8];
+                break;
+            case "w_rookh":
+                w_rookh.pos = [8,1];
+                w_king.pos = [5,1];
+                break;
+            case "b_rookh":
+                b_rookh.pos = [8,8];
+                b_king.pos = [5,8];
+                break;
+        }
+    }
+    else {
+        window[undo_arr[0]].pos = undo_arr[1];
+        if (window[undo_arr[0]].colour) {
+            white_arr.splice(undo_arr[2], 1, undo_arr[1])
+        }
+        else {
+            black_arr.splice(undo_arr[2], 1, undo_arr[1])
+        }
+        if (undo_arr[4] && undo_arr[4] != "undefined") {
+                window[undo_arr[4][3]] = new piece(undo_arr[4][0], undo_arr[4][1], undo_arr[4][2], undo_arr[4][3]);
+                if (parseInt(undo_arr[4][0])) {
+                    white_list.push(window[undo_arr[4][3]])
+                    white_arr.push(undo_arr[4][2])
+                }
+                else {
+                    black_list.push(window[undo_arr[4][3]])
+                    black_arr.push(undo_arr[4][2])
+            }
+        }
+        if (undo_arr[6]) {
+            window[undo_arr[0]].type = "P";
+        }
+    }
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    show_pieces();
+}
 
+formatRedo = (redo_arr) => {
+    if (!redo_arr[3]) {
+    if (window[redo_arr[0]].colour) {
+        white_arr.splice(findArr(window[redo_arr[0]].pos, white_arr), 1, redo_arr[2])
+    }
+    else {
+        black_arr.splice(findArr(window[redo_arr[0]].pos, black_arr), 1, redo_arr[2])
+}
+    window[redo_arr[0]].pos = redo_arr[2];
+    if (redo_arr[6]) {
+        window[redo_arr[0]].type = redo_arr[6];
+    }
+    if (redo_arr[4] && redo_arr[4] != "undefined") {
+        if (parseInt(redo_arr[4][0])) {
+            var remove_index;
+            white_list.forEach((pce, ind) => {
+                if (pce.name == redo_arr[4][3]) {remove_index = ind}
+            })
+            white_list.splice(remove_index, 1)
+            white_arr.splice(findArr(redo_arr[4][2], white_arr), 1)
+        }
+        else {
+            var remove_index;
+            black_list.forEach((pce, ind) => {
+                if (pce.name == redo_arr[4][3]) {remove_index = ind}
+            })
+            black_list.splice(remove_index, 1)
+            black_arr.splice(findArr(redo_arr[4][2], black_arr), 1)
+        }
+    }
+}
+    else {
+        switch(redo_arr[0]) {
+            case "w_rooka":
+                w_king.pos = [3,1];
+                window[redo_arr[0]].pos = [4,1];
+                break;
+            case "w_rookh":
+                w_king.pos = [7,1];
+                window[redo_arr[0]].pos = [6,1];
+                break;
+            case "b_rooka":
+                b_king.pos = [3,8];
+                window[redo_arr[0]].pos = [4,8];
+                break;
+            case "b_rookh":
+                b_king.pos = [7,1];
+                window[redo_arr[0]].pos = [6,1];
+                break;
+        }
+    }
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    show_pieces();
+}
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
