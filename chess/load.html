@@ -15,11 +15,12 @@
     <div id="nav">
         <ul>
 
-<li><button>Login/Signup<button></li>
-<li><button>My Games</button></li>
-<li><button><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a></button></li>
-<li><button><a href="join.html" style="text-decoration: none; color: white;">Join Game</a></button></li>
-<li><button><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></button></li>
+            <li><button><a href="signup.html">Login/Signup</a><button></li>
+            <li><button>My Games</button></li>
+            <li><button><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a></button>
+            </li>
+            <li><button><a href="join.html" style="text-decoration: none; color: white;">Join Game</a></button></li>
+            <li><button><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></button></li>
 
         </ul>
         <div id="copyright">
@@ -29,7 +30,7 @@
     </div>
     </div>
     <div id="overlay">
-    <h2>Join Game</h2>
+        <h2>Join Game</h2>
         <ul id="rules_nav">
             <li>Search for Game</li>
             <li>Join a Private Game</li>
@@ -41,7 +42,14 @@
                 <input type="number" min=0 max=1 step=0.005 name="increment">
             </form>
             <table>
-                <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Mode</th>
+                    <th>Play as</th>
+                    <th>Ranked</th>
+                    <th>Time</th>
+                </tr>
             </table>
         </div>
         <div class="rules" id="load_private">
@@ -57,11 +65,18 @@
                 <input type="number" min=0 max=1 step=0.005 name="increment">
             </form>
             <table>
-                <tr><th>Name</th><th>Admin</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time</th></tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Mode</th>
+                    <th>Play as</th>
+                    <th>Ranked</th>
+                    <th>Time</th>
+                </tr>
             </table>
         </div>
     </div>
-    
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 
