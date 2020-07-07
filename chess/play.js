@@ -493,30 +493,30 @@ class piece {
             turn = turn ? 0 : 1;
             if (undo.length != 0) {
                 if (undo[undo.length - 1][3] == "castle") {
-                    undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined, check(this.colour ? 0 : 1), null, null, null];
+                    undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined, 0, null, null, null];
                 }
                 else {
                     if (capture_arr[capture]) {
-                        undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], check(this.colour ? 0 : 1), null, null, null]);
+                        undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], 0, null, null, null]);
                     }
                     else {
-                        undo.push([this.name, original_pos, new_pos, "", undefined, check(this.colour ? 0 : 1), null, null, null]);
+                        undo.push([this.name, original_pos, new_pos, "", undefined, 0, null, null, null]);
                     }
                 }
             }
             else {
                 if (capture != -1) {
-                    undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], check(this.colour ? 0 : 1), null, null, null]);
+                    undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], 0, null, null, null]);
                 }
                 else {
-                    undo.push([this.name, original_pos, new_pos, "", undefined, check(this.colour ? 0 : 1), null, null, null]);
+                    undo.push([this.name, original_pos, new_pos, "", undefined, 0, null, null, null]);
                 }
             }
         }
         else {
-            undo.push([this.name, original_pos, new_pos, 'castle', undefined, check(this.colour ? 0 : 1), null, null, null]);
+            undo.push([this.name, original_pos, new_pos, 'castle', undefined, 0, null, null, null]);
         }
-        undo[undo.length - 1][5] = check(this.colour ? 0 : 1);
+        undo[undo.length - 1][5] = check(this.colour ? 0 : 1)[0];
         undo[undo.length - 1][6] = (pawn_type != null && new_pos[1] == (this.colour ? 8 : 1)) ? pawn_type : null;
         if (this.type != "P" && pawn_type == null) {
             var same_type = [];
@@ -690,8 +690,8 @@ class piece {
                 else {
                     if ((check(this.colour ? 0 : 1)[0] == 2) || (!$('self_box').innerHTML || (
                         check(this.colour ? 0 : 1)[1].type == "K" ||
-                        (Math.abs(check(this.colour ? 0 : 1)[1].pos[0] - (blackwhite ? w_king : black_king).pos[0]) <= 1 &&
-                         Math.abs(check(this.colour ? 0 : 1)[1].pos[0] - (blackwhite ? w_king : black_king).pos[0]) <= 1)
+                        (Math.abs(check(this.colour ? 0 : 1)[1][0].pos[0] - (blackwhite ? w_king : b_king).pos[0]) <= 1 &&
+                         Math.abs(check(this.colour ? 0 : 1)[1][0].pos[0] - (blackwhite ? w_king : b_king).pos[0]) <= 1)
                     ))) {
                         win('Checkmate'); undo[undo.length - 1][5] = 2;
                     }
@@ -1891,8 +1891,12 @@ document.addEventListener('click', e => {
     }
 });
 $('self_box').addEventListener('click', e => {
+    var event_for_crazyhouse = 0;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    show_pieces();
     if (mode.indexOf("Crazyhouse") != -1 && turn == blackwhite && !done && !moves_back) {
     var target = e.target;
+    e.target.parentElement.childNodes.forEach(child => {child.style.color = "inherit";})
     e.target.style.color = 'red';
     var crazy_type;
     switch (e.target.innerHTML) {
@@ -1966,6 +1970,9 @@ $('self_box').addEventListener('click', e => {
     }
 }
 var intermediary = (e) => {
+    event_for_crazyhouse ++;
+    if (event_for_crazyhouse > 2) {
+    console.log('listening to int')
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
     if (findArr(square, noncheck_spaces) != -1) {
@@ -1983,18 +1990,19 @@ var intermediary = (e) => {
         window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square, false, intermediary);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
-        target.style.color = 'black';
+        target.style.color = 'inherit';
     }
     else {
+        event_for_crazyhouse = 0;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
-        canvas.removeEventListener('click', intermediary);
+        document.removeEventListener('click', intermediary);
         document.elementFromPoint(e.clientX, e.clientY).click();
-        target.style.color = 'black';
+        target.style.color = 'inherit';
     }
-
+    }
 }
-canvas.addEventListener('click', intermediary);    
+document.addEventListener('click', intermediary);    
 }
 })
 
@@ -2200,7 +2208,7 @@ formatMove = (move) => {
     if (!move[3]) {
     if (move[0].indexOf('rook') != -1) {return_move += "R"}
     else if (move[0].indexOf('bishop') != -1) {return_move += "B"}
-    else if (move[0].indexOf('knight') != -1) {return_move += "K"}
+    else if (move[0].indexOf('knight') != -1) {return_move += "N"}
     else if (move[0].indexOf('queen') != -1) {return_move += "Q"}
     else if (move[0].indexOf('king') != -1) {return_move += "K"}
     else {
