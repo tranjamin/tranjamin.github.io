@@ -493,28 +493,28 @@ class piece {
             turn = turn ? 0 : 1;
             if (undo.length != 0) {
                 if (undo[undo.length - 1][3] == "castle") {
-                    undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined, 0, null, null, null];
+                    undo[undo.length - 1][3] = [this.name, original_pos, new_pos, "", undefined, check(this.colour ? 0 : 1), null, null, null];
                 }
                 else {
                     if (capture_arr[capture]) {
-                        undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], 0, null, null, null]);
+                        undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], check(this.colour ? 0 : 1), null, null, null]);
                     }
                     else {
-                        undo.push([this.name, original_pos, new_pos, "", undefined, 0, null, null, null]);
+                        undo.push([this.name, original_pos, new_pos, "", undefined, check(this.colour ? 0 : 1), null, null, null]);
                     }
                 }
             }
             else {
                 if (capture != -1) {
-                    undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], 0, null, null, null]);
+                    undo.push([this.name, original_pos, new_pos, "", [original_capture_arr[capture].colour, original_capture_arr[capture].type, original_capture_arr[capture].pos, original_capture_arr[capture].name], check(this.colour ? 0 : 1), null, null, null]);
                 }
                 else {
-                    undo.push([this.name, original_pos, new_pos, "", undefined, 0, null, null, null]);
+                    undo.push([this.name, original_pos, new_pos, "", undefined, check(this.colour ? 0 : 1), null, null, null]);
                 }
             }
         }
         else {
-            undo.push([this.name, original_pos, new_pos, 'castle', undefined, 0, null, null, null]);
+            undo.push([this.name, original_pos, new_pos, 'castle', undefined, check(this.colour ? 0 : 1), null, null, null]);
         }
         undo[undo.length - 1][5] = check(this.colour ? 0 : 1);
         undo[undo.length - 1][6] = (pawn_type != null && new_pos[1] == (this.colour ? 8 : 1)) ? pawn_type : null;
