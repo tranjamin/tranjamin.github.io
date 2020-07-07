@@ -68,13 +68,11 @@ $('login').addEventListener('submit', e=> {
             if (doc.data().username == login_name && doc.data().password == login_pass) {login_successful = true; 
                 username = login_name; 
                 user_id = doc.id;
-                console.log(user_id)
-                console.log('successful');
                 setCookie('username',username,5);
                 setCookie('user_id',user_id,5);
                 sessionStorage.setItem('username',username);
                 sessionStorage.setItem('user_id',user_id);
-                location.reload();
+                window.location.assign('account.html');
 
             
             }
@@ -118,6 +116,14 @@ $('signup').addEventListener('submit', e=> {
                 losses: 0,
                 draws: 0,   
                 ranking: 0     
+            }).then(docRef => {
+                username = signup_username; 
+                user_id = docRef.id;
+                setCookie('username',username,5);
+                setCookie('user_id',user_id,5);
+                sessionStorage.setItem('username',username);
+                sessionStorage.setItem('user_id',user_id);
+                window.location.assign('account.html');
             })
 
         }
