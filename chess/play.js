@@ -1378,9 +1378,15 @@ $('options').getElementsByTagName('button')[0].addEventListener('click', e => {
     if (moves_back != undo.length) {
     moves_back ++;
     formatUndo(undo[undo.length - moves_back])
-    $('options').getElementsByTagName('button')[3].style['opacity'] = 1
+    $('options').getElementsByTagName('button')[3].style.opacity = 1
+    $('options').getElementsByTagName('button')[3].style.cursor = 'pointer';
+    $('options').getElementsByTagName('button')[7].style.opacity = 1
+    $('options').getElementsByTagName('button')[7].style.cursor = 'pointer';
     if (moves_back == undo.length) {
-        $('options').getElementsByTagName('button')[0].style['opacity'] = 0.6        
+        $('options').getElementsByTagName('button')[0].style.opacity = 0.6;
+        $('options').getElementsByTagName('button')[0].style.cursor = 'default';       
+        $('options').getElementsByTagName('button')[4].style.opacity = 0.6;
+        $('options').getElementsByTagName('button')[4].style.cursor = 'default';  
     }
     }
 })
@@ -1388,14 +1394,54 @@ $('options').getElementsByTagName('button')[3].addEventListener('click', e => {
     if (moves_back >= 1) {
         moves_back --;
         formatRedo(undo[undo.length - moves_back - 1])
-        $('options').getElementsByTagName('button')[0].style['opacity'] = 1
+        $('options').getElementsByTagName('button')[0].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[0].style.cursor = 'pointer';  
+        $('options').getElementsByTagName('button')[4].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[4].style.cursor = 'pointer';  
         if (moves_back == 0) {
-            $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6
+            $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
+            $('options').getElementsByTagName('button')[3].style.cursor = 'default';
+            $('options').getElementsByTagName('button')[7].style['opacity'] = 0.6;
+            $('options').getElementsByTagName('button')[7].style.cursor = 'default';
         }    
     };
 
     
 })
+$('options').getElementsByTagName('button')[4].addEventListener('click', e => {
+    if (moves_back != undo.length) {
+    while (moves_back != undo.length) {
+    moves_back ++;
+    formatUndo(undo[undo.length - moves_back])}
+    $('options').getElementsByTagName('button')[3].style.opacity = 1
+    $('options').getElementsByTagName('button')[3].style.cursor = 'pointer';
+    $('options').getElementsByTagName('button')[7].style.opacity = 1
+    $('options').getElementsByTagName('button')[7].style.cursor = 'pointer';
+    $('options').getElementsByTagName('button')[0].style.opacity = 0.6;
+    $('options').getElementsByTagName('button')[0].style.cursor = 'default';       
+    $('options').getElementsByTagName('button')[4].style.opacity = 0.6;
+    $('options').getElementsByTagName('button')[4].style.cursor = 'default';  
+    }
+})
+$('options').getElementsByTagName('button')[7].addEventListener('click', e => {
+    if (moves_back >= 1) {
+        while (moves_back >= 1) {
+        moves_back --;
+        formatRedo(undo[undo.length - moves_back - 1])
+    }
+        $('options').getElementsByTagName('button')[0].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[0].style.cursor = 'pointer';  
+        $('options').getElementsByTagName('button')[4].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[4].style.cursor = 'pointer';  
+        $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
+        $('options').getElementsByTagName('button')[3].style.cursor = 'default';
+        $('options').getElementsByTagName('button')[7].style['opacity'] = 0.6;
+        $('options').getElementsByTagName('button')[7].style.cursor = 'default';  
+    };
+
+    
+})
+
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     if (!done) {
     if (e.target.innerHTML == '⚑') {
@@ -1518,7 +1564,10 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     }
     enpassant = doc.data().enpassant;
     moves_back = 0;
-    $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6    
+    $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
+    $('options').getElementsByTagName('button')[3].style.cursor = 'default'; 
+    $('options').getElementsByTagName('button')[7].style['opacity'] = 0.6;
+    $('options').getElementsByTagName('button')[7].style.cursor = 'default';     
 
     for (var i of doc.data().white_list) {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
