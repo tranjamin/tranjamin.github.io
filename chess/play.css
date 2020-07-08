@@ -20,13 +20,13 @@ html {
 }
 
 #message {
-background-color: lightgreen;
+background-color: rgba(155, 149, 149, 0.514);
 display: block;
 position: absolute;
 }
 
 #chat_title {
-background-color: green;
+background-color: rgba(51, 42, 42, 0.589);
 text-align: center;
 font-size: 1.7em;
 padding: 1% 0;
@@ -42,12 +42,13 @@ position: fixed;
 z-index: 4;
 }
 body form input:first-of-type{
-    background-color: rgb(209, 253, 228);
+    background-color: rgb(184, 135, 45);
     border: none;
 }
 #text {
     position: absolute;
     z-index: 3;
+    color: rgb(235, 231, 231);
 }
 #text:hover {
     overflow: scroll;

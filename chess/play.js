@@ -1225,7 +1225,8 @@ function win(message) {
     var other_elo;
     console.log('win');
     db.collection('chess').doc(game).update({
-        result: blackwhite ? 'white' : 'black'
+        result: blackwhite ? 'white' : 'black',
+        result_method: message
     })
     db.collection('account').doc(user_id).get().then(doc => {
         original_wins = doc.data().wins;
@@ -1272,7 +1273,8 @@ function lose(message) {
     var other_elo;
     console.log('lose');
     db.collection('chess').doc(game).update({
-        result: blackwhite ? 'black' : 'white'
+        result: blackwhite ? 'black' : 'white',
+        result_method: message
     })
     db.collection('account').doc(user_id).get().then(doc => {
         original_losses = doc.data().losses;
@@ -1322,9 +1324,11 @@ function draw(message) {
     var other_draws;
     var elo;
     var other_elo;
+    var is_it_rated;
     console.log('draw');
     db.collection('chess').doc(game).update({
-        result: 'draw'
+        result: 'draw',
+        result_method: message
     })
     db.collection('account').doc(user_id).get().then(doc => {
         original_draws = doc.data().draws;
@@ -1336,6 +1340,7 @@ function draw(message) {
     }).then(docRef => {
     db.collection('chess').doc(game).get().then(doc => {
         other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
+        is_it_rated = doc.data().points
     }).then(docRef => {
         db.collection('account').where('username','==',other_user).get().then(snapshots => {
             snapshots.forEach(doc => {
@@ -1344,12 +1349,17 @@ function draw(message) {
                 other_elo = doc.data().ranking
             })
         }).then(docRef => {
+            if (is_it_rated) {
             var r = 10**(elo/400);
             var other_r = 10**(other_elo/400);
             var e = r / (r + other_r);
             var other_e = other_r / (r + other_r);
             var new_elo = elo + 32 * (0.5 - e);
-            var new_other_elo = other_elo + 32 * (0.5 - other_e);
+            var new_other_elo = other_elo + 32 * (0.5 - other_e);}
+            else {
+            var new_other_elo = other_elo;
+            var new_elo = elo;
+            }
             db.collection('account').doc(other_id).update({
                 draws: other_draws + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
@@ -1368,12 +1378,20 @@ $('options').getElementsByTagName('button')[0].addEventListener('click', e => {
     if (moves_back != undo.length) {
     moves_back ++;
     formatUndo(undo[undo.length - moves_back])
+    $('options').getElementsByTagName('button')[3].style['opacity'] = 1
+    if (moves_back == undo.length) {
+        $('options').getElementsByTagName('button')[0].style['opacity'] = 0.6        
+    }
     }
 })
 $('options').getElementsByTagName('button')[3].addEventListener('click', e => {
     if (moves_back >= 1) {
         moves_back --;
-        formatRedo(undo[undo.length - moves_back - 1])    
+        formatRedo(undo[undo.length - moves_back - 1])
+        $('options').getElementsByTagName('button')[0].style['opacity'] = 1
+        if (moves_back == 0) {
+            $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6
+        }    
     };
 
     
@@ -1495,7 +1513,12 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     white_list = [];
     black_list = [];
     done = doc.data().result ? true : false;
+    if (done) {
+        $('status').innerHTML = `You ${doc.data().result == "draw" ? "Drew" : ((doc.data().result == 'white' ? 1 : 0) == blackwhite ? 'Won' : 'Lost')} by ${doc.data().result_method}`; 
+    }
     enpassant = doc.data().enpassant;
+    moves_back = 0;
+    $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6    
 
     for (var i of doc.data().white_list) {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
@@ -1530,6 +1553,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     else {
         undo = [];
     }
+
     if (mode.indexOf('Beirut') != -1) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
@@ -1670,12 +1694,12 @@ db.collection('chess').doc(game).onSnapshot(doc => {
             console.log(black_elo);
         }).then(() => {
     if (blackwhite) {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "&#9654 " : "") + doc.data().white_user + " (" + white_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + " (" + black_elo + ")"));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + " (" + white_elo + ")";
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + " (" + black_elo + ")"));
     }
     else {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "&#9654 " : "") + doc.data().black_user + " (" + black_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "&#9654 " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + " (" + white_elo + ")"));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + " (" + black_elo + ")";
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + " (" + white_elo + ")"));
     }
     })})
     var self_int = "";
