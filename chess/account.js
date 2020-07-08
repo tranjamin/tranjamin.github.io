@@ -258,21 +258,8 @@ $('load_current').getElementsByTagName('table')[0].addEventListener('click', e =
 		var load_id;
 		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 			snapshot.forEach(doc => {
-				if (doc.data().name == load_name) {
 					load_id = doc.id;
-					if (doc.data().white_user == null) {
-						console.log(username);
-						db.collection('chess').doc(load_id).update({
-							white_user: username
-						})
-					}
-					else if (doc.data().black_user == null) {
-						console.log(username);
-						db.collection('chess').doc(load_id).update({
-							black_user: username
-						})
-					}
-				}
+			
 			})
 		}).then(docRef => {
 			console.log(load_id);
@@ -289,31 +276,32 @@ $('load_invite').getElementsByTagName('table')[0].addEventListener('click', e =>
 		var load_id;
 		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 			snapshot.forEach(doc => {
-				if (doc.data().name == load_name) {
 					load_id = doc.id;
 					console.log('logging')
 					if (doc.data().white_user == null) {
 						console.log(username);
 						db.collection('chess').doc(load_id).update({
 							white_user: username
-						})
+						}).then(docRef => {
+							console.log(load_id);
+							setCookie('game_id', load_id, 2);
+							sessionStorage.setItem('game_id', load_id);
+							window.location.assign('play.html');})
 					}
 					else if (doc.data().black_user == null) {
 						console.log(username);
 						db.collection('chess').doc(load_id).update({
 							black_user: username
-						})
+						}).then(docRef => {
+							console.log(load_id);
+							setCookie('game_id', load_id, 2);
+							sessionStorage.setItem('game_id', load_id);
+							window.location.assign('play.html');})
 					}
-				}
 			})
-		}).then(docRef => {
-			console.log(load_id);
-			setCookie('game_id', load_id, 2);
-			sessionStorage.setItem('game_id', load_id);
-			window.location.assign('play.html');
 		})
 	}
-})
+	})
 
 db.collection('account').doc(user_id).onSnapshot(doc => {
 	$('wins').innerHTML = doc.data().wins;
