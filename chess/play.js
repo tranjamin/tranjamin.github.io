@@ -1626,7 +1626,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('options').getElementsByTagName('button')[3].style.cursor = 'default'; 
     $('options').getElementsByTagName('button')[7].style['opacity'] = 0.6;
     $('options').getElementsByTagName('button')[7].style.cursor = 'default';   
-    if (!undo.length)   {
+    if (!undo || !undo.length)   {
         $('options').getElementsByTagName('button')[0].style['opacity'] = 0.6;
         $('options').getElementsByTagName('button')[0].style.cursor = 'default'; 
         $('options').getElementsByTagName('button')[4].style['opacity'] = 0.6;

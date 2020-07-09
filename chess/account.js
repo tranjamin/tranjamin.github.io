@@ -62,11 +62,13 @@ function update_graphics() {
 	document.getElementsByClassName('rules')[1].style.top = $('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
 	document.getElementsByClassName('rules')[2].style.top = $('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
 	document.getElementsByClassName('rules')[3].style.top = $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
+	document.getElementsByClassName('rules')[4].style.top = $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
 
 	document.getElementsByClassName('rules')[0].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
 	document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom + "px";
 	document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom + "px";
 	document.getElementsByClassName('rules')[3].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom + "px";
+	document.getElementsByClassName('rules')[4].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[4].getBoundingClientRect().bottom + "px";
 
 }
 
@@ -124,30 +126,42 @@ function deleteAllCookies() {
 $('load_current').style.display = "none";
 $('load_past').style.display = "none";
 $('load_invite').style.display = "none";
+$('settings').style.display = "none";	
 
 $('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e => {
 	$('load_current').style.display = "none";
 	$('load_past').style.display = "none";
 	$('load_invite').style.display = "none";
-	$('info').style.display = "unset"
+	$('info').style.display = "unset";
+	$('settings').style.display = "none";	
 })
 $('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e => {
 	$('load_past').style.display = "none";
 	$('load_invite').style.display = "none";
 	$('info').style.display = "none";
 	$('load_current').style.display = "unset";
+	$('settings').style.display = "none";	
 })
 $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e => {
 	$('load_past').style.display = "none";
 	$('load_current').style.display = "none";
 	$('info').style.display = "none";
 	$('load_invite').style.display = "unset";
+	$('settings').style.display = "none";	
 })
 $('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
 	$('load_invite').style.display = "none";
 	$('load_current').style.display = "none";
 	$('info').style.display = "none";
 	$('load_past').style.display = "unset";
+	$('settings').style.display = "none";	
+})
+$('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
+	$('load_invite').style.display = "none";
+	$('load_current').style.display = "none";
+	$('info').style.display = "none";
+	$('load_past').style.display = "none";
+	$('settings').style.display = "unset";	
 })
 
 $('search_current').addEventListener('keyup', e => {

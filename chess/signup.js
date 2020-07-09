@@ -65,7 +65,7 @@ $('login').addEventListener('submit', e=> {
     db.collection('account').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
             console.log(doc.data());
-            if ((doc.data().username == login_name || doc.data().email == login_name) && doc.data().password == login_pass) {login_successful = true; 
+            if ((doc.data().username == login_name || (doc.data().email == login_name && doc.data().email)) && doc.data().password == login_pass) {login_successful = true; 
                 username = doc.data().username; 
                 user_id = doc.id;
                 setCookie('username',username,5);
