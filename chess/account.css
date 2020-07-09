@@ -203,5 +203,25 @@ table td {
     font-size: 150%;
 }
 #settings {
-    
+    font-family: 'Raleway';
+}
+#settings form input[type=text] {
+    margin-bottom: 2.4%;
+    font-size: 1.1em;
+    border-bottom: solid white 1.5pt;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: rgba(0,0,0,0);
+    text-align: center;
+    color: rgb(255, 215, 193);
+}
+#settings input[type=submit] {
+    background-color: rgb(46, 41, 41);
+    color: rgb(255, 255, 255);
+    text-align: right;
+    font-family: 'Raleway';
+    border: none;
+    font-size: 100%;
+    cursor: pointer;
 }

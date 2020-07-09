@@ -17,6 +17,7 @@ function $(id) { return document.getElementById(id); }
 
 var username = "anon";
 var user_id = "";
+var email;
 
 
 if (getCookie('username') || sessionStorage.getItem('username')) {
@@ -156,12 +157,40 @@ $('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
 	$('load_past').style.display = "unset";
 	$('settings').style.display = "none";	
 })
+
 $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 	$('load_invite').style.display = "none";
 	$('load_current').style.display = "none";
 	$('info').style.display = "none";
 	$('load_past').style.display = "none";
 	$('settings').style.display = "unset";	
+	db.collection('account').doc(user_id).get().then(doc => {
+		email = doc.data().email
+		$('settings').getElementsByTagName('form')[0].innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+		$('settings').getElementsByTagName('form')[2].innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
+	})
+})
+$('settings').getElementsByTagName('form')[0].addEventListener('submit', e => {
+	e.preventDefault();
+	if (e.target.childElementCount == 2) {
+	e.target.innerHTML = `<label for="username">Username: </label><input name="username" type="text" value=""><input type="submit" value="Change">`
+}
+	else {
+	username = e.target['username'].value;
+	db.collection('account').doc(user_id).update({username: username})
+	e.target.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+	}
+})
+$('settings').getElementsByTagName('form')[2].addEventListener('submit', e => {
+	e.preventDefault();
+	if (e.target.childElementCount == 2) {
+	e.target.innerHTML = `<label for="email">Email: </label><input name="email" type="text" value=""><input type="submit" value="Change">`
+}
+	else {
+	email = e.target['email'].value;
+	db.collection('account').doc(user_id).update({email: email})
+	e.target.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
+	}
 })
 
 $('search_current').addEventListener('keyup', e => {
