@@ -36,12 +36,12 @@
 
 
         <form id="login">
-            <input name="username" type="text" placeholder="username or email"><br>
-            <input name="password" type="password" placeholder="password"><br>
+            <input name="username" type="text" placeholder="username or email" required><br>
+            <input name="password" type="password" placeholder="password" required><br>
             <input name="login" type="submit" value="Login">
         </form>
         <p id="login_error" class="error"></p>
-        or
+        or<br><br>
         <form id="signup">
             <input name="new_username" placeholder="create username" required><br>
             <input name="email" placeholder="enter email (optional)"><br>
@@ -49,8 +49,31 @@
             <input name="confirm_password" placeholder="confirm password" type='password' required><br>
             <input name="signup" type="submit" value="Sign Up">
         </form>
-        <div id="signup_error" class="error"></div>
+        <div id="signup_error" class="error"></div><br>
+        <div id="forgot_password">
+            Forgot Your Password?
+        </div>
     </div>
+    <div id="overlay2" style="visibility: hidden;">
+        <h2>Reset Your Password</h2>
+        <h4>You must have set your email to reset your password</h4>
+        <form id="reset">
+            <input name="reset_address" type="text" placeholder="enter your email or username" required><br>
+            <input type="submit" value="Send Email">
+        </form><br><br>
+        <form id="reset_code">
+            <input name="reset_code" type="text" placeholder="enter your code here" required><br>
+            <input type="submit" value="Reset Password">
+        </form>
+        <p id="reset_error" class="error"></p><br><br>
+        <div id="change_password" style="visibility: hidden;">
+            <form id="new_password">
+                <input name="create_newpassword" type="text" placeholder="create a new password" required><br>
+                <input name="confirm_newpassword" type="text" placeholder="confirm new password" required><br>
+                <input type="submit" value="Change Password">
+            </form>
+            <p id="newpassword_error" class="error"></p>
+        </div>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 

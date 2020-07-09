@@ -53,8 +53,9 @@ body form input:first-of-type{
     overflow: scroll;
 }
 
-#overlay {
-    background-color: red;
+#overlay, #overlay2 {
+    background-color: rgb(41, 33, 33);
+    color: white;
     position: absolute;
     z-index: 10;
     text-align: center;
@@ -62,11 +63,11 @@ body form input:first-of-type{
     font-family: 'Philosopher';
 }
 
-#overlay h2 {
+#overlay h2, #overlay2 h2 {
     text-align: center;
     font-family: 'Philosopher';
 }
-#overlay h4 {
+#overlay h4, #overlay2 h4 {
     text-align: center;
     font-family: 'Raleway';
 }
@@ -81,8 +82,9 @@ body form input:first-of-type{
 }
 
 
-#overlay input[type=submit] {
-    background-color: rgb(255, 115, 0);
+#overlay input[type=submit], #overlay2 input[type=submit] {
+    background-color: rgb(46, 41, 41);
+    color: rgb(255, 115, 0);
     text-align: right;
     font-family: 'Raleway';
     border: none;
@@ -90,14 +92,14 @@ body form input:first-of-type{
     cursor: pointer;
 }
 
-#overlay form {
+#overlay form, #overlay2 form {
     margin: 0;
 }
 
-#signup, #login {
+#signup, #login, #overlay2 {
     text-align: center;
 }
-#signup input, #login input {
+#signup input, #login input, #overlay2 input {
     margin-bottom: 2.4%;
     font-size: 1.1em;
     border-bottom: solid white 1.5pt;
@@ -106,6 +108,10 @@ body form input:first-of-type{
     border-right: none;
     background-color: rgba(0,0,0,0);
     text-align: center;
+    color: rgb(255, 215, 193);
+}
+#overlay2 input[type=text] {
+    width: 60%;
 }
 
 #logout {
@@ -162,5 +168,9 @@ body form input:first-of-type{
 }
 
 .error {
-    color: white;
+    color: red;
+}
+
+#forgot_password {
+    cursor: pointer;
 }

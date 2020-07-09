@@ -25,6 +25,7 @@ function $(id) { return document.getElementById(id); }
 
 var username = "anon";
 var user_id = "";
+var successful_email;
 
 
 var options = $('options');
@@ -46,6 +47,11 @@ function update_graphics() {
     overlay.style.width = overlay.style.height;
     overlay.style.left = (window.innerWidth - overlay.style.width.slice(0,-2)) / 2 + "px";
     overlay.style.top = window.innerHeight * 0.02 + "px";
+    var overlay2 = $('overlay2');
+    overlay2.style.height = overlay.style.height;
+    overlay2.style.width = overlay.style.width;
+    overlay2.style.left = overlay.style.left;
+    overlay2.style.top = overlay.style.top;
 
     //nav
     var nav = $('nav');
@@ -145,6 +151,44 @@ $('signup').addEventListener('submit', e=> {
     }
 })
 
+$('forgot_password').addEventListener('click', e => {
+    $('overlay2').style.visibility = "visible";
+})
+var random_str = "";
+$('reset').addEventListener('submit', e => {
+    e.preventDefault();
+    var char_str = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',1,2,3,4,5,6,7,8,9,0]
+    random_str = "";
+    for (var i = 0; i < 15; i++) {
+        random_str += char_str[Math.floor(Math.random() * 62)];
+    }
+    sendEmail($('reset')['reset_address'].value, 'Reset Your Password', 'To reset your password, use the following code: ' + random_str);
+})
+$('reset_code').addEventListener('submit', e => {
+    e.preventDefault();
+    if (e.target['reset_code'].value == random_str) {
+        $('change_password').style.visibility = "visible";
+        $('reset_error').innerHTML = "";
+    }
+    else {
+        $('reset_error').innerHTML = "Reset Code is Incorrect";
+    }
+})
+$('new_password').addEventListener('submit', e => {
+    e.preventDefault();
+    if (e.target['create_newpassword'].value == e.target['confirm_newpassword']) {
+        $('newpassword_error').innerHTML = ""
+        db.collection('account').doc(user_id).update({
+            password: e.target['create_newpassword']
+        }).then(docRef => {
+            location.assign('account.html');
+        })
+    }
+    else {
+        $('newpassword_error').innerHTML = "Passwords do not match";
+    }
+})
+
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if ($('nav').getElementsByTagName('button')[0].innerHTML == "<a href='signup.html'>Login/Signup</a>") {window.location.assign('signup.html')}
     else {
@@ -165,16 +209,15 @@ $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
     location.assign('about.html');
 });
 
-var successful_email;
-function sendEmail (email_address) {
+function sendEmail (email_address, subject, body) {
     Email.send({
         Host: "smtp.gmail.com",
         Username: "tranjaminchess.noreply@gmail.com",
         Password: 'Tranjaminchess',
         To: email_address,
         From: "tranjaminchess.noreply@gmail.com",
-        Subject: "Confirm Your Account",
-        Body: "Thank You for Confirming Your Account",
+        Subject: subject,
+        Body: body
     }).then(error => {successful_email = error})
 }
 
