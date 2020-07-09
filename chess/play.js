@@ -1962,8 +1962,39 @@ function str_to_time(str) {
     return parseInt(str.split(':')[0] * 60) + parseFloat(str.split(':')[1])
 }
 
-function show_pieces() {
+function show_pieces(for_or_back=1) {
     draw_board();
+    if (undo.length) {
+    if (for_or_back) {
+    if (blackwhite) {
+        ctx.fillStyle = "rgba(255,0,0,0.8)";
+        ctx.fillRect((undo[undo.length - moves_back - 1][1][0]) * canvas.width / 8, (undo[undo.length - moves_back - 1][1][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+        ctx.fillStyle = "rgba(255,0,0,0.4)";
+        ctx.fillRect((undo[undo.length - moves_back - 1][2][0]) * canvas.width / 8, (undo[undo.length - moves_back - 1][2][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+    
+    }
+        else {
+            ctx.fillStyle = "rgba(255,0,0,0.8)";
+            ctx.fillRect((8 - undo[undo.length - moves_back - 1][1][0]) * canvas.width / 8, (undo[undo.length - moves_back - 1][1][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+            ctx.fillStyle = "rgba(255,0,0,0.4)";
+            ctx.fillRect((8 - undo[undo.length - moves_back - 1][2][0]) * canvas.width / 8, (undo[undo.length - moves_back - 1][2][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+        }        
+        }
+    else {
+        if (blackwhite) {
+            ctx.fillStyle = "rgba(255,0,0,0.8)";
+            ctx.fillRect((undo[undo.length - moves_back][2][0]) * canvas.width / 8, (undo[undo.length - moves_back][2][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+            ctx.fillStyle = "rgba(255,0,0,0.4)";
+            ctx.fillRect((undo[undo.length - moves_back][1][0]) * canvas.width / 8, (undo[undo.length - moves_back][1][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+        }
+            else {
+                ctx.fillStyle = "rgba(255,0,0,0.8)";
+                ctx.fillRect((8 - undo[undo.length - moves_back][2][0]) * canvas.width / 8, (undo[undo.length - moves_back][2][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+                ctx.fillStyle = "rgba(255,0,0,0.4)";
+                ctx.fillRect((8 - undo[undo.length - moves_back][1][0]) * canvas.width / 8, (undo[undo.length - moves_back][1][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);                                
+            }        
+            }        
+    }
     if (blackwhite) {
         for (let piece_showw of white_list) {
             var img = $(`w${piece_showw.type}`);
@@ -2402,7 +2433,7 @@ formatUndo = (undo_arr) => {
         }
     }
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    show_pieces();
+    show_pieces(0);
 }
 
 formatRedo = (redo_arr) => {
