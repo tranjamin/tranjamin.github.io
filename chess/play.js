@@ -1458,12 +1458,22 @@ $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
     $('closable_interface').getElementsByTagName('div')[0].innerHTML = "Submit Feedback";
     $('closable_interface').getElementsByTagName('div')[1].innerHTML = `
     <form>
-<textarea style='resize: none' rows='10' cols='50'></textarea>
+<textarea style="resize: none; font-family: 'Raleway';" rows='10' cols='50' placeholder='Report any bugs, glitches, technical faults or display errors here'></textarea>
         <input type='submit' value='Submit Feedback'>
     </form>
     `;
     $('closable_interface').style.visibility = "visible";
     $('closable_interface').previousElementSibling.style.visibility = "visible";
+    $('closable_interface').getElementsByTagName('form')[0].addEventListener('submit', e => {
+        e.preventDefault();
+        db.collection('feedback').add({
+            username: username,
+            user_id: user_id,
+            feedback: e.target.getElementsByTagName('textarea')[0].value
+        })
+        $('closable_interface').style.visibility = "hidden";
+        $('closable_interface').previousElementSibling.style.visibility = "hidden";
+    })
 })
 
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
@@ -1599,6 +1609,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     }
     enpassant = doc.data().enpassant;
     moves_back = 0;
+    undo = arrayify(doc.data().undo);
     $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
     $('options').getElementsByTagName('button')[3].style.cursor = 'default'; 
     $('options').getElementsByTagName('button')[7].style['opacity'] = 0.6;
@@ -1609,6 +1620,12 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('options').getElementsByTagName('button')[4].style['opacity'] = 0.6;
         $('options').getElementsByTagName('button')[4].style.cursor = 'default';         
     }
+    else {
+        $('options').getElementsByTagName('button')[0].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[0].style.cursor = 'pointer'; 
+        $('options').getElementsByTagName('button')[4].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[4].style.cursor = 'pointer';           
+    }
 
     for (var i of doc.data().white_list) {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
@@ -1618,7 +1635,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
         black_list.push(window[i.name])
     }
-    undo = arrayify(doc.data().undo);
     if (doc.data().undo) {
     for (var prev_turn of undo) {
         if (prev_turn[0] == (blackwhite ? 'w_king' : 'b_king')) {
@@ -1968,9 +1984,9 @@ function show_pieces(for_or_back=1) {
     if (for_or_back) {
     if (blackwhite) {
         ctx.fillStyle = "rgba(255,0,0,0.8)";
-        ctx.fillRect((undo[undo.length - moves_back - 1][1][0]) * canvas.width / 8, (undo[undo.length - moves_back - 1][1][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+        ctx.fillRect((undo[undo.length - moves_back - 1][1][0] - 1) * canvas.width / 8, (8 - undo[undo.length - moves_back - 1][1][1]) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
         ctx.fillStyle = "rgba(255,0,0,0.4)";
-        ctx.fillRect((undo[undo.length - moves_back - 1][2][0]) * canvas.width / 8, (undo[undo.length - moves_back - 1][2][1] - 1) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
+        ctx.fillRect((undo[undo.length - moves_back - 1][2][0] - 1) * canvas.width / 8, (8 - undo[undo.length - moves_back - 1][2][1]) * canvas.width / 8,canvas.width / 8, canvas.height / 8);
     
     }
         else {

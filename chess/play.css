@@ -276,4 +276,5 @@ right: 15%;
     border: none;
     width: 96%;
     margin: 2%;
+    overflow: hidden;
 }
