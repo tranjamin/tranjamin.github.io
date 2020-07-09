@@ -49,9 +49,13 @@ body form input:first-of-type{
     position: absolute;
     z-index: 3;
     color: rgb(235, 231, 231);
+    overflow: hidden;
+    scrollbar-color: rgb(0,0,0,0.2) rgb(0,0,0,0.1);
+    padding: 0;
+    margin: 0;
 }
 #text:hover {
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 #options {
@@ -200,7 +204,7 @@ right: 15%;
     text-align: center;
 }
 
-#options button {
+#options button, #closable_interface button {
     width: 23%;
     font-size: 75%;
     display: inline-block;
@@ -241,4 +245,35 @@ right: 15%;
     overflow: scroll;
     font-family: 'Times New Roman';
     font-size: 75%;
+}
+
+#status {
+    overflow: hidden;
+    text-align: center;
+}
+
+#closable_interface {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    font-family: 'Philosopher';
+    font-size: 200%;
+    border-radius: 1%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.8)
+}
+#close_cross {
+    position: absolute;
+    z-index: 2;
+    font-family: 'Philosopher';
+    color: white;
+    font-size: 150%;
+    cursor: pointer;
+}
+
+#closable_interface button {
+    background-color: white;
+    border: none;
+    width: 96%;
+    margin: 2%;
 }

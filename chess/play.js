@@ -50,6 +50,7 @@ var msg = $('message');
 var msg_submit = $('submit_message');
 var msg_title = $('chat_title');
 var message_body = $("text");
+var popup = $('closable_interface');
 
 if (getCookie('username') || sessionStorage.getItem('username')) {
     $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
@@ -135,7 +136,18 @@ function update_graphics() {
     nav.style.top = 0;
     nav.style.left = 0;
     
+    popup.style.height = canvas.height * 0.4 + "px";
+    popup.style.width = canvas.width * 0.6 + "px";
+    popup.style.top = canvas.getBoundingClientRect().top + canvas.height * 0.3 + "px";
+    popup.style.left = canvas.getBoundingClientRect().left + canvas.height * 0.2 + "px";
+    popup.previousElementSibling.style.right = popup.getBoundingClientRect().left + "px";
+    popup.previousElementSibling.style.top = popup.getBoundingClientRect().top + "px";
 }
+
+popup.previousElementSibling.addEventListener('click', e => {
+    e.target.nextElementSibling.style.visibility = "hidden";
+    e.target.style.visibility = "hidden";
+})
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if ($('nav').getElementsByTagName('button')[0].innerHTML == "<a href='signup.html'>Login/Signup</a>") {window.location.assign('signup.html')}
@@ -1442,6 +1454,18 @@ $('options').getElementsByTagName('button')[7].addEventListener('click', e => {
     
 })
 
+$('options').getElementsByTagName('button')[6].addEventListener('click', e => {
+    $('closable_interface').getElementsByTagName('div')[0].innerHTML = "Submit Feedback";
+    $('closable_interface').getElementsByTagName('div')[1].innerHTML = `
+    <form>
+<textarea style='resize: none' rows='10' cols='50'></textarea>
+        <input type='submit' value='Submit Feedback'>
+    </form>
+    `;
+    $('closable_interface').style.visibility = "visible";
+    $('closable_interface').previousElementSibling.style.visibility = "visible";
+})
+
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     if (!done) {
     if (e.target.innerHTML == '⚑') {
@@ -1552,6 +1576,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     else if (doc.data().black_user == username) {blackwhite = 0}
     else {blackwhite = 1; observer = true;}
     $('text').innerHTML = doc.data().messages;
+    $('text').scrollTop = $('text').scrollHeight;
     white_arr = arrayify(doc.data().white_arr, Number);
     black_arr = arrayify(doc.data().black_arr, Number);
     turn = doc.data().turn;
@@ -1562,12 +1587,28 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     if (done) {
         $('status').innerHTML = `You ${doc.data().result == "draw" ? "Drew" : ((doc.data().result == 'white' ? 1 : 0) == blackwhite ? 'Won' : 'Lost')} by ${doc.data().result_method}`; 
     }
+    if (done) {
+        popup.getElementsByTagName('div')[0].innerHTML = $('status').innerHTML;
+        popup.getElementsByTagName('div')[1].innerHTML = "<button>Rematch</button>"
+        popup.style.visibility = "visible";
+        popup.previousElementSibling.style.visibility = "visible";
+    }
+    else {
+        popup.style.visibility = "hidden";
+        popup.previousElementSibling.style.visibility = "hidden";
+    }
     enpassant = doc.data().enpassant;
     moves_back = 0;
     $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
     $('options').getElementsByTagName('button')[3].style.cursor = 'default'; 
     $('options').getElementsByTagName('button')[7].style['opacity'] = 0.6;
-    $('options').getElementsByTagName('button')[7].style.cursor = 'default';     
+    $('options').getElementsByTagName('button')[7].style.cursor = 'default';   
+    if (!undo.length)   {
+        $('options').getElementsByTagName('button')[0].style['opacity'] = 0.6;
+        $('options').getElementsByTagName('button')[0].style.cursor = 'default'; 
+        $('options').getElementsByTagName('button')[4].style['opacity'] = 0.6;
+        $('options').getElementsByTagName('button')[4].style.cursor = 'default';         
+    }
 
     for (var i of doc.data().white_list) {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
