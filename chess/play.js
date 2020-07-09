@@ -156,6 +156,18 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         deleteAllCookies();
         location.reload();}
 });
+$('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
+    location.assign('signup.html');
+});
+$('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
+location.assign('create.html');
+});
+$('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
+location.assign('load.html');
+});
+$('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
+location.assign('about.html');
+});
 
 var blackwhite = 1;
 var observer = blackwhite == -1 ? true : false;

@@ -65,8 +65,8 @@ $('login').addEventListener('submit', e=> {
     db.collection('account').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
             console.log(doc.data());
-            if (doc.data().username == login_name && doc.data().password == login_pass) {login_successful = true; 
-                username = login_name; 
+            if ((doc.data().username == login_name || doc.data().email == login_name) && doc.data().password == login_pass) {login_successful = true; 
+                username = doc.data().username; 
                 user_id = doc.id;
                 setCookie('username',username,5);
                 setCookie('user_id',user_id,5);
@@ -100,10 +100,11 @@ $('signup').addEventListener('submit', e=> {
     var signup_confirm = signup_arr[3].value;
     var signup_decline = "";
     if (signup_password == signup_confirm) {
+    if (signup_username != "anon") {
     db.collection('account').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
             if (doc.data().username == signup_username) {signup_decline = 'Username'}
-            if (doc.data().email == signup_email && !signup_decline) {signup_decline = 'Email'}
+            if (signup_email && doc.data().email == signup_email && !signup_decline) {signup_decline = 'Email'}
         })
     }).then(() => {   
         if (!signup_decline) {
@@ -132,6 +133,11 @@ $('signup').addEventListener('submit', e=> {
             $('login_error').innerHTML = "";
         }
     })
+}
+    else {
+        $('signup_error').innerHTML = "'anon' cannot be used since it is the placeholder name";
+        $('login_error').innerHTML = "";
+    }
     }
     else {
         $('signup_error').innerHTML = "Passwords do not Match";
@@ -146,6 +152,31 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         deleteAllCookies();
         location.reload();}
 });
+$('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
+        location.assign('signup.html');
+});
+$('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
+    location.assign('create.html');
+});
+$('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
+    location.assign('load.html');
+});
+$('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
+    location.assign('about.html');
+});
+
+var successful_email;
+function sendEmail (email_address) {
+    Email.send({
+        Host: "smtp.gmail.com",
+        Username: "tranjaminchess.noreply@gmail.com",
+        Password: 'Tranjaminchess',
+        To: email_address,
+        From: "tranjaminchess.noreply@gmail.com",
+        Subject: "Confirm Your Account",
+        Body: "Thank You for Confirming Your Account",
+    }).then(error => {successful_email = error})
+}
 
 
 function setCookie(cname, cvalue, exdays) {
