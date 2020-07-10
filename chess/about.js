@@ -81,6 +81,9 @@ location.assign('load.html');
 $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 location.assign('about.html');
 });
+$('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
+    location.assign('statement.html');
+});
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();

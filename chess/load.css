@@ -93,6 +93,9 @@ html {
     position: absolute;
     bottom: 5px;
     left: 5px;
+    font-size: 50%;
+    font-family: 'Times New Roman';
+    text-align: left;
 }
 
 table {

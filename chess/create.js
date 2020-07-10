@@ -183,6 +183,9 @@ location.assign('load.html');
 $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 location.assign('about.html');
 });
+$('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
+    location.assign('statement.html');
+});
 
 
 function create_new_user(user,newname,play_colour,mode,visibility,invited_user,points,time, randomised, admin) {

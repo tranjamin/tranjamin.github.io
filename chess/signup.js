@@ -208,6 +208,9 @@ $('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
 $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
     location.assign('about.html');
 });
+$('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
+    location.assign('statement.html');
+});
 
 function sendEmail (email_address, subject, body) {
     Email.send({

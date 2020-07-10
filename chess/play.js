@@ -168,6 +168,9 @@ location.assign('load.html');
 $('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 location.assign('about.html');
 });
+$('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
+    location.assign('statement.html');
+});
 
 var blackwhite = 1;
 var observer = blackwhite == -1 ? true : false;
