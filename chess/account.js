@@ -19,7 +19,6 @@ var username = "anon";
 var user_id = "";
 var email;
 
-
 if (getCookie('username') || sessionStorage.getItem('username')) {
 	$('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
 	$('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
@@ -195,15 +194,32 @@ $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
 }
 	else {
 	username = e.target['username'].value;
-	db.collection('account').doc(user_id).update({username: username})
-	e.target.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
-	e.target.nextElementSibling.style.display = "none";
+	var username_exists = false;
+	db.collection('account').get().then(snapshot => {
+		snapshot.docs.forEach(doc => {
+			if (username == doc.data().username) {
+				username_exists = true;
+			}
+		})
+	}).then(docRef => {
+		if (username_exists) {
+		username = e.target['username'].value = "";
+		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Username already exists";
+		}
+		else {
+		db.collection('account').doc(user_id).update({username: username})
+		e.target.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+		e.target.nextElementSibling.style.display = "none";
+		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
+	}
+	})
 	}
 })
 $('settings').getElementsByTagName('form')[2].addEventListener('submit', e => {
 	e.preventDefault();
 	e.target.previousElementSibling.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
 	e.target.style.display = "none";
+	e.target.nextElementSibling.innerHTML = "";
 
 })
 $('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
@@ -214,10 +230,26 @@ $('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
 }
 	else {
 	email = e.target['email'].value;
+	var email_exists = false;
+	db.collection('account').get().then(snapshot => {
+		snapshot.docs.forEach(doc => {
+			if (email == doc.data().email) {
+				email_exists = true;
+			}
+		})
+	}).then(docRef => {
+		if (email_exists) {
+			e.target['email'].value = "";
+			e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Email already exists";
+		}
+		else {
 	db.collection('account').doc(user_id).update({email: email})
 	e.target.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`;
 	e.target.nextElementSibling.style.display = "none";
-	}
+	e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
+}
+	})
+}
 })
 $('settings').getElementsByTagName('form')[4].addEventListener('submit', e => {
 	e.preventDefault();
@@ -228,13 +260,21 @@ $('settings').getElementsByTagName('form')[4].addEventListener('submit', e => {
 $('settings').getElementsByTagName('form')[5].addEventListener('submit', e => {
 	e.preventDefault();
 	if (e.target.childElementCount == 2) {
-	e.target.innerHTML = `<label for="password">Password: </label><input name="password" type="text" value=""><br><label for="confirm" style="padding: 0 0 0 5%;">Confirm Password: </label><input name="confirm" type="text" value=""><br>
+	e.target.innerHTML = `<label for="password">Password: </label><input name="password" type="password" value=""><br><label for="confirm" style="padding: 0 0 0 5%;">Confirm Password: </label><input name="confirm" type="password" value=""><br>
 	<br><input type="submit" value="Change">`;
 	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
-	e.target.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
-	e.target.nextElementSibling.style.display = "none";
+	if (e.target['password'].value == e.target['confirm'].value) {
+		e.target.nextElementSibling.style.display = "none";
+		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
+		db.collection('account').doc(user_id).update({password: e.target['password'].value});
+		e.target.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
+	}
+	else  {
+		e.target['confirm'].value = "";
+		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Passwords do not match";
+	}
 	}
 })
 $('settings').getElementsByTagName('form')[6].addEventListener('submit', e => {
