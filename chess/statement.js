@@ -59,10 +59,13 @@ function update_graphics() {
 update_graphics();
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].innerHTML == "<a href='signup.html'>Login/Signup</a>") {window.location.assign('signup.html')}
+    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
     else {
         sessionStorage.clear();
         deleteAllCookies();
+        setCookie(user_id, "", 0);
+        setCookie(username, "", 0);
+        
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
