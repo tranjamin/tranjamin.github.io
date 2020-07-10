@@ -61,10 +61,11 @@ update_graphics();
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
     else {
-        sessionStorage.clear();
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('user_id')
         deleteAllCookies();
-        setCookie(user_id, "", 0);
-        setCookie(username, "", 0);
+        setCookie('user_id', "", 0);
+        setCookie('username', "", 0);
         
         location.reload();}
 });
