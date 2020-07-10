@@ -34,6 +34,7 @@ body form input:first-of-type{
 }
 #overlay h5 {
     text-indent: 5%;
+    padding-left: 5%;
 }
 
 #nav {
