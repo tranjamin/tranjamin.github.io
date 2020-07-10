@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>that 
+    <title>Our Statement</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link type="text/css" href="statement.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+    <meta charset="utf8">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+    
+            <li><button><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a><button></li>
+            <li><button><a href="account.html" style="text-decoration: none; color: white;">My Games</a></button></li>
+            <li><button><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a></button>
+            </li>
+            <li><button><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></button></li>
+            <li><button><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></button></li>
+            <li><button><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br>
+                <div id="copyright">
+                    &copy Benjamin Tran 2020<br>
+                    Powered by Github and Google Firebase
+                </div>
+            </a></button></li>
+        </ul>
+    </div>
+
+    <div id="overlay">
+        <h2>Privacy Policy</h2>
+        <h4>1. TRACKING AND COOKIES</h4>
+        <h5>We use non-tracking cookies and sessions for your own convenience, allowing us to keep you logged in even if you close your browser or move to a different webpage. These cookies are only used on our website and do not store any personal data that you have not associated with your account. By disabling cookies, this website will still function as required, but you will be automatically logged out every time you close the browser. Cookies have a default lifespan of 2 days.</h5>
+        <h4>2. PERSONAL PRIVACY</h4>
+        <h5>Depite our best efforts to ensure your personal data remains private, we cannot guarantee it will be safe from hackers. Do not enter any sensitive data including usernames and passwords that are used for other important accounts. You are not obliged to enter your email address, which is only used in case you forget your password, and we take no responsibility for any sensitive data that is lost.</h5>
+        <h4>3. Intellectual Property</h4>
+        <h5>This is a non-for-profit organisation that does not display advertising. All intellectual propery on this website, including the programming, is property of Benjamin Tran, with the following exceptions:
+            <ul>Chess piece images (Wikimedia, under the Creative Commons License)</ul>
+            <ul>Relevancy.js and all substituents (property of James Padolsey)</ul>
+        All intellectual property, including the programming, copyrighted to Benjamin Tran is labelled for non-commercial reuse with modification; any of the aforementioned code can be manipulated and reused in different programs, provided it is for experimental or education use.
+        </h5>
+    </div>
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+            authDomain: "chess-10cd9.firebaseapp.com",
+            databaseURL: "https://chess-10cd9.firebaseio.com",
+            projectId: "chess-10cd9",
+            storageBucket: "chess-10cd9.appspot.com",
+            messagingSenderId: "897666750783",
+            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+            measurementId: "G-H57J99DFNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        firebase.analytics();
+
+    </script>
+    <script src='statement.js'></script>
+</body>
+
+</html>

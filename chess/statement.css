@@ -1,0 +1,79 @@
+html {
+    background-color: black
+}
+
+body form input:first-of-type{
+    background-color: rgb(209, 253, 228);
+    border: none;
+}
+#text {
+    position: absolute;
+    z-index: 3;
+}
+#text:hover {
+    overflow: scroll;
+}
+
+#overlay {
+    background-color: rgb(41, 33, 33);
+    color: white;
+    position: absolute;
+    z-index: 10;
+    font-weight: bold;
+    font-family: 'Philosopher';
+}
+
+#overlay h2 {
+    font-family: 'Philosopher';
+    text-align: center;
+}
+#overlay h4 {
+    text-align: left;
+    font-family: 'Raleway';
+    text-indent: 10%;
+}
+#overlay h5 {
+    text-indent: 5%;
+}
+
+#nav {
+    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
+    position: fixed;
+    z-index: 100;
+    color: white;
+
+}
+#nav li {
+    height: 16%;
+    width: 100%;
+    background-color: rgba(58, 54, 54, 0.158);
+    border-bottom: white 2px solid;
+    position: relative;
+    padding: 0;
+}
+#nav ul {
+    list-style: none;
+    list-style-position: unset;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0%;
+    padding: 0;
+}
+#nav li button {
+    height: 100%;
+    width: 100%;
+    background-color: unset;
+    border: none;
+    color: white;
+    font-family: 'Raleway';
+    font-size: 1.5em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#copyright {
+    font-size: 50%;
+    font-family: 'Times New Roman';
+    text-align: left;
+}
