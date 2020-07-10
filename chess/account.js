@@ -189,7 +189,7 @@ $('settings').getElementsByTagName('form')[0].addEventListener('submit', e => {
 $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
 	e.preventDefault();
 	if (e.target.childElementCount == 2) {
-	e.target.innerHTML = `<label for="username">Username: </label><input name="username" type="text" value=""><input type="submit" value="Change">`;
+	e.target.innerHTML = `<label for="username">Username: </label><input name="username" type="text" value="" required><input type="submit" value="Change">`;
 	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
@@ -225,7 +225,7 @@ $('settings').getElementsByTagName('form')[2].addEventListener('submit', e => {
 $('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
 	e.preventDefault();
 	if (e.target.childElementCount == 2) {
-	e.target.innerHTML = `<label for="email">Email: </label><input name="email" type="text" value=""><input type="submit" value="Change">`;
+	e.target.innerHTML = `<label for="email">Email: </label><input name="email" type="text" value="" required><input type="submit" value="Change">`;
 	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
@@ -260,7 +260,7 @@ $('settings').getElementsByTagName('form')[4].addEventListener('submit', e => {
 $('settings').getElementsByTagName('form')[5].addEventListener('submit', e => {
 	e.preventDefault();
 	if (e.target.childElementCount == 2) {
-	e.target.innerHTML = `<label for="password">Password: </label><input name="password" type="password" value=""><br><label for="confirm" style="padding: 0 0 0 5%;">Confirm Password: </label><input name="confirm" type="password" value=""><br>
+	e.target.innerHTML = `<label for="password">Password: </label><input name="password" type="password" value="" required><br><label for="confirm" style="padding: 0 0 0 5%;">Confirm Password: </label><input name="confirm" type="password" value="" required><br>
 	<br><input type="submit" value="Change">`;
 	e.target.nextElementSibling.style.display = "unset";
 }

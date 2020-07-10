@@ -71,7 +71,7 @@ $('login').addEventListener('submit', e=> {
     db.collection('account').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
             console.log(doc.data());
-            if ((doc.data().username == login_name || (doc.data().email == login_name && doc.data().email)) && doc.data().password == login_pass) {login_successful = true; 
+            if ((login_name == (e.target['username_or_email'].value == 'Username' ? doc.data().username : doc.data().email)) && doc.data().password == login_pass) {login_successful = true; 
                 username = doc.data().username; 
                 user_id = doc.id;
                 setCookie('username',username,5);
@@ -88,7 +88,7 @@ $('login').addEventListener('submit', e=> {
                 $('signup_error').innerHTML = "";
             }
             else {
-                $('login_error').innerHTML = "Username and Password is Incorrect";
+                $('login_error').innerHTML = "Username or Password is Incorrect";
                 $('signup_error').innerHTML = "";
         }
         }).catch(error => {

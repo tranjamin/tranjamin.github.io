@@ -38,6 +38,10 @@
         <form id="login">
             <input name="username" type="text" placeholder="username or email" required><br>
             <input name="password" type="password" placeholder="password" required><br>
+            <input name="username_or_email" type="radio" value="Username" checked="checked">
+            <label for="username_or_emails">Username</label>
+            <input name="username_or_email" type="radio" value="Email">
+            <label for="username_or_email">Email</label><br>
             <input name="login" type="submit" value="Login">
         </form>
         <p id="login_error" class="error"></p>
