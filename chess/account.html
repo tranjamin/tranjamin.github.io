@@ -104,19 +104,36 @@
             </table>
         </div>
         <div class="rules" id="settings">
-            <form>
+            <br>
+                <form>
+                    <label for="confirm">Enter Your Password to Proceed</label><br>
+                    <input name="confirm" type='password'><br>
+                    <input type="submit" value="Proceed">
+                </form>
+                <p style="width: 100%; text-align: center; color: red;"></p>
+            <br><br><br>
+            <form style="visibility: hidden;">
                 <label for="username">Username: </label>
                 <input name="username" type="text" value="">
                 <input type="submit" value="Change">
             </form>
-            <form><input type="submit" value="Cancel"></form>
-            <br>
-            <form>
+            <form style="display: none;"><input type="submit" value="Cancel"></form><br>
+            <p style="width: 100%; text-align: center; color: red;"></p>
+            <br><br>
+            <form style="visibility: hidden;">
                 <label for="email">Email: </label>
                 <input name="email" type="text" value="">
                 <input type="submit" value="Change">
             </form>
-            <form><input type="submit" value="Cancel"></form>
+            <form style="display: none;"><input type="submit" value="Cancel"></form><br>
+            <p style="width: 100%; text-align: center; color: red;"></p>
+            <br><br>
+            <form style="visibility: hidden;">
+                <label for="password">Password: ******</label>
+                <input type="submit" value="Change">
+            </form>
+            <form style="display: none;"><input type="submit" value="Cancel"></form><br>
+            <p style="width: 100%; text-align: center; color: red;"></p>
     </div>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->

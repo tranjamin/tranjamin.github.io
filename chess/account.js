@@ -166,32 +166,83 @@ $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 	$('settings').style.display = "unset";	
 	db.collection('account').doc(user_id).get().then(doc => {
 		email = doc.data().email
-		$('settings').getElementsByTagName('form')[0].innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
-		$('settings').getElementsByTagName('form')[2].innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
+		$('settings').getElementsByTagName('form')[1].innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+		$('settings').getElementsByTagName('form')[3].innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
 	})
 })
+
 $('settings').getElementsByTagName('form')[0].addEventListener('submit', e => {
 	e.preventDefault();
+	db.collection('account').doc(user_id).get().then(doc => {
+		if (doc.data().password == $('settings').getElementsByTagName('form')[0]['confirm'].value) {
+			e.target.style.display = "none";		
+			e.target.nextElementSibling.style.display = "none";	
+			$('settings').getElementsByTagName('form')[1].style.visibility = "visible";		
+			$('settings').getElementsByTagName('form')[3].style.visibility = "visible";	
+			$('settings').getElementsByTagName('form')[5].style.visibility = "visible";	
+			e.target.nextElementSibling.innerHTML = "";	
+		}
+		else {
+			e.target.nextElementSibling.innerHTML = "Password is incorrect"
+		}
+	})
+})
+$('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
+	e.preventDefault();
 	if (e.target.childElementCount == 2) {
-	e.target.innerHTML = `<label for="username">Username: </label><input name="username" type="text" value=""><input type="submit" value="Change">`
+	e.target.innerHTML = `<label for="username">Username: </label><input name="username" type="text" value=""><input type="submit" value="Change">`;
+	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
 	username = e.target['username'].value;
 	db.collection('account').doc(user_id).update({username: username})
 	e.target.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+	e.target.nextElementSibling.style.display = "none";
 	}
 })
 $('settings').getElementsByTagName('form')[2].addEventListener('submit', e => {
 	e.preventDefault();
+	e.target.previousElementSibling.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+	e.target.style.display = "none";
+
+})
+$('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
+	e.preventDefault();
 	if (e.target.childElementCount == 2) {
-	e.target.innerHTML = `<label for="email">Email: </label><input name="email" type="text" value=""><input type="submit" value="Change">`
+	e.target.innerHTML = `<label for="email">Email: </label><input name="email" type="text" value=""><input type="submit" value="Change">`;
+	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
 	email = e.target['email'].value;
 	db.collection('account').doc(user_id).update({email: email})
-	e.target.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
+	e.target.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`;
+	e.target.nextElementSibling.style.display = "none";
 	}
 })
+$('settings').getElementsByTagName('form')[4].addEventListener('submit', e => {
+	e.preventDefault();
+	e.target.previousElementSibling.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`;
+	e.target.style.display = "none";
+})
+
+$('settings').getElementsByTagName('form')[5].addEventListener('submit', e => {
+	e.preventDefault();
+	if (e.target.childElementCount == 2) {
+	e.target.innerHTML = `<label for="password">Password: </label><input name="password" type="text" value=""><br><label for="confirm" style="padding: 0 0 0 5%;">Confirm Password: </label><input name="confirm" type="text" value=""><br>
+	<br><input type="submit" value="Change">`;
+	e.target.nextElementSibling.style.display = "unset";
+}
+	else {
+	e.target.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
+	e.target.nextElementSibling.style.display = "none";
+	}
+})
+$('settings').getElementsByTagName('form')[6].addEventListener('submit', e => {
+	e.preventDefault();
+	e.target.previousElementSibling.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
+	e.target.style.display = "none";
+})
+
 
 $('search_current').addEventListener('keyup', e => {
 	if ($('search_current')['increment'].value != "0") {

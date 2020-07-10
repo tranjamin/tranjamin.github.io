@@ -205,7 +205,7 @@ table td {
 #settings {
     font-family: 'Raleway';
 }
-#settings form input[type=text] {
+#settings form input[type=text], #settings form input[type=password] {
     margin-bottom: 2.4%;
     font-size: 1.1em;
     border-bottom: solid white 1.5pt;
@@ -215,6 +215,7 @@ table td {
     background-color: rgba(0,0,0,0);
     text-align: center;
     color: rgb(255, 215, 193);
+    display: inline;
 }
 #settings input[type=submit] {
     background-color: rgb(46, 41, 41);
@@ -224,4 +225,33 @@ table td {
     border: none;
     font-size: 100%;
     cursor: pointer;
+    margin-left: 5%;
+}
+
+#settings form {
+    display: inline;
+}
+#settings form:nth-of-type(2), #settings form:nth-of-type(4), #settings form:nth-of-type(6) {
+    padding: 0 0 0 5%;
+}
+#settings form:nth-of-type(1) input[type=password] {
+    text-align: center;
+    width: 60%;
+    position: relative;
+    left: 20%;
+}
+#settings form:nth-of-type(1) label {
+    display: block;
+    text-align: center;
+    width: 60%;
+    position: relative;
+    left: 20%;
+}
+#settings form:nth-of-type(1) input[type=submit] {
+    text-align: center;
+    width: 20%;
+    position: relative;
+    left: 40%;
+    margin: 0;
+    padding: 0;
 }
