@@ -215,7 +215,6 @@ table td {
     background-color: rgba(0,0,0,0);
     text-align: center;
     color: rgb(255, 215, 193);
-    display: inline;
 }
 #settings input[type=submit] {
     background-color: rgb(46, 41, 41);
