@@ -68,8 +68,13 @@
         <h4>You must have set your email to reset your password</h4>
         <form id="reset">
             <input name="reset_address" type="text" placeholder="enter your email or username" required><br>
+            <input name="reset_config" type="radio" value="Email" checked="checked">
+            <label for="reset_config">Email</label>
+            <input name="reset_config" type="radio" value="Username">
+            <label for="reset_config">Username</label><br>
             <input type="submit" value="Send Email">
-        </form><br><br>
+        </form>
+        <p id="email_error" class="error"></p><br>
         <form id="reset_code">
             <input name="reset_code" type="text" placeholder="enter your code here" required><br>
             <input type="submit" value="Reset Password">

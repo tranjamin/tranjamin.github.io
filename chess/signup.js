@@ -162,7 +162,41 @@ $('reset').addEventListener('submit', e => {
     for (var i = 0; i < 15; i++) {
         random_str += char_str[Math.floor(Math.random() * 62)];
     }
-    sendEmail($('reset')['reset_address'].value, 'Reset Your Password', 'To reset your password, use the following code: ' + random_str);
+    var address;
+    if (e.target['reset_config'].value == "Email") {
+        db.collection('account').where('email', '==', e.target['reset_address'].value).get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+                address = doc.data().email;
+            })
+        }).then(docRef => {
+            if (address) {
+                sendEmail(address, 'Reset Your Password', 'To reset your password, use the following code: ' + random_str);
+                e.target.nextElementSibling.innerHTML = ""; 
+                console.log('sending');
+            }    
+            else {
+                e.target['reset_address'].value = "";
+                e.target.nextElementSibling.innerHTML = "Username/Email not found"
+            }            
+        })
+    }
+    else {
+        db.collection('account').where('username', '==', e.target['reset_address'].value).get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+                address = doc.data().email;
+            })
+        }).then(docRef => {
+            if (address) {
+                sendEmail(address, 'Reset Your Password', 'To reset your password, use the following code: ' + random_str);
+                e.target.nextElementSibling.innerHTML = "";
+                console.log('sending');
+            }
+            else {
+                e.target['reset_address'].value = "";
+                e.target.nextElementSibling.innerHTML = "Username/Email not found"
+            }            
+        })     
+    }
 })
 $('reset_code').addEventListener('submit', e => {
     e.preventDefault();
@@ -190,7 +224,7 @@ $('new_password').addEventListener('submit', e => {
 })
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
+    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0]) {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id')
