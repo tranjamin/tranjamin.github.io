@@ -165,7 +165,7 @@ function update_graphics() {
 
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
+    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id')
