@@ -549,8 +549,6 @@ class piece {
         }
 
 
-
-
         if (check(this.colour)[0]) {
             console.log('in check')
             test_arr = original_test_arr;
@@ -560,8 +558,7 @@ class piece {
             return false;
 
         }
-        // console.log(capture_arr[capture]);
-        // [piece_name, start_pos (@ options), end_pos, doublemove arr, capture_piece, check (0/1/2), promote_type, (null/rank/file), circe]
+
         if (!doublemove) {
             turn = turn ? 0 : 1;
             if (undo.length != 0) {
@@ -807,6 +804,7 @@ class piece {
             var original_white_checks;
             var original_black_checks;
             var original_fifty;
+            if (!doublemove) {
             db.collection('chess').doc(game).get().then(doc => {
                 original_white_checks = doc.data().black_checks;
                 original_black_checks = doc.data().black_checks;
@@ -857,13 +855,6 @@ class piece {
                 if (original_fifty == 50) {
                     draw('Fifty Moves');
                 }
-                if (doc.data()['white_time'] != null) {
-                /*elapsed_time = elapsed_time - (doc.data().timer[1] ? doc.data().timer[1].toDate() : elapsed_time);
-                elapsed_time /= 1000;
-                time_left = blackwhite ? doc.data()['white_count'] : doc.data()['black_count'];
-                time_left -= elapsed_time;
-                clearInterval(clock);*/
-            }
             }).then(() => {
                 if (blackwhite) {
             db.collection('chess').doc(game).update({
@@ -900,8 +891,7 @@ class piece {
             }).catch(error => {console.log(error.lineNumber)})
                 }
         })
-        //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //show_pieces();
+    }
         if (inter != null) {canvas.removeEventListener('click', inter)};
     }
 
