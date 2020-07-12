@@ -184,7 +184,6 @@ $('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
 	$('load_past').style.display = "unset";
 	$('settings').style.display = "none";	
 })
-
 $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 	$('load_invite').style.display = "none";
 	$('load_current').style.display = "none";
@@ -284,7 +283,6 @@ $('settings').getElementsByTagName('form')[4].addEventListener('submit', e => {
 	e.target.previousElementSibling.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`;
 	e.target.style.display = "none";
 })
-
 $('settings').getElementsByTagName('form')[5].addEventListener('submit', e => {
 	e.preventDefault();
 	if (e.target.childElementCount == 2) {
@@ -311,7 +309,6 @@ $('settings').getElementsByTagName('form')[6].addEventListener('submit', e => {
 	e.target.style.display = "none";
 })
 
-
 $('search_current').addEventListener('keyup', e => {
 	if ($('search_current')['increment'].value != "0") {
 		sortData('current', 'load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
@@ -336,6 +333,7 @@ $('search_past').addEventListener('keyup', e => {
 		sortData('completed', 'load_past', $('search_past')['search'].value);
 	}
 });
+
 db.collection('chess').onSnapshot(ref => {
 	if ($('search_current')['increment'].value != "0") {
 		sortData('current', 'load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
@@ -433,13 +431,11 @@ $('load_current').getElementsByTagName('table')[0].addEventListener('click', e =
 		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 			snapshot.forEach(doc => {
 					load_id = doc.id;
+					setCookie('game_id', load_id, 2);
+					sessionStorage.setItem('game_id', load_id);
+					window.location.assign('play.html');
 			
 			})
-		}).then(docRef => {
-			console.log(load_id);
-			setCookie('game_id', load_id, 2);
-			sessionStorage.setItem('game_id', load_id);
-			window.location.assign('play.html');
 		})
 	}
 })
@@ -451,23 +447,18 @@ $('load_invite').getElementsByTagName('table')[0].addEventListener('click', e =>
 		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 			snapshot.forEach(doc => {
 					load_id = doc.id;
-					console.log('logging')
 					if (doc.data().white_user == null) {
-						console.log(username);
 						db.collection('chess').doc(load_id).update({
 							white_user: username
 						}).then(docRef => {
-							console.log(load_id);
 							setCookie('game_id', load_id, 2);
 							sessionStorage.setItem('game_id', load_id);
 							window.location.assign('play.html');})
 					}
 					else if (doc.data().black_user == null) {
-						console.log(username);
 						db.collection('chess').doc(load_id).update({
 							black_user: username
 						}).then(docRef => {
-							console.log(load_id);
 							setCookie('game_id', load_id, 2);
 							sessionStorage.setItem('game_id', load_id);
 							window.location.assign('play.html');})
@@ -733,4 +724,3 @@ function relevant() {
 	};
 
 }
-
