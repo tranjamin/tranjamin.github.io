@@ -18,6 +18,13 @@ function $(id) { return document.getElementById(id); }
 var username = "anon";
 var user_id = "";
 
+var cookies_allowed = true;
+if (getCookie('cookie_allowed')) {
+    cookies_allowed = true;
+}
+else {
+    cookies_allowed = false;
+}
 
 if (getCookie('username') || sessionStorage.getItem('username')) {
 $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
@@ -90,10 +97,12 @@ $('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
 
 
 function setCookie(cname, cvalue, exdays) {
+    if (cookie_allowed) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 }
 
 function getCookie(cname) {
