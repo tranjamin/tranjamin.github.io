@@ -241,10 +241,20 @@ right: 15%;
     cursor: pointer;
 }
 
-#tracking {
+#tracking, #info {
     overflow: scroll;
     font-family: 'Times New Roman';
     font-size: 75%;
+}
+.top > table {
+    background-color: rgb(68, 54, 54);
+    text-align: center;
+    width: 100%;
+    font-size: 70%;
+}
+.top > table tr td {
+    width: 50%;
+    cursor: pointer;
 }
 
 #status {

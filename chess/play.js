@@ -142,11 +142,14 @@ function update_graphics() {
     popup.style.left = canvas.getBoundingClientRect().left + canvas.height * 0.2 + "px";
     popup.previousElementSibling.style.right = popup.getBoundingClientRect().left + "px";
     popup.previousElementSibling.style.top = popup.getBoundingClientRect().top + "px";
+
+    $('tracking').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
+    $('info').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
 }
 
 popup.previousElementSibling.addEventListener('click', e => {
-    e.target.nextElementSibling.style.visibility = "hidden";
-    e.target.style.visibility = "hidden";
+    e.target.nextElementSibling.style.display = "none";
+    e.target.style.display = "none";
 })
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
@@ -175,6 +178,17 @@ location.assign('about.html');
 $('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
     location.assign('statement.html');
 });
+
+$('tracking').previousElementSibling.addEventListener('click', e => {
+    if (e.target.innerHTML == "Moves") {
+        $('tracking').style.display = "block";
+        $('info').style.display = "none";
+    }
+    else {
+        $('tracking').style.display = "none";
+        $('info').style.display = "block";
+    }
+})
 
 var blackwhite = 1;
 var observer = blackwhite == -1 ? true : false;
@@ -1474,6 +1488,8 @@ $('options').getElementsByTagName('button')[7].addEventListener('click', e => {
 })
 
 $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
+    console.log('clicking');
+    $('closable_interface').style.display = "inline";
     $('closable_interface').getElementsByTagName('div')[0].innerHTML = "Submit Feedback";
     $('closable_interface').getElementsByTagName('div')[1].innerHTML = `
     <form>
@@ -1481,8 +1497,9 @@ $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
         <input type='submit' value='Submit Feedback'>
     </form>
     `;
-    $('closable_interface').style.visibility = "visible";
-    $('closable_interface').previousElementSibling.style.visibility = "visible";
+    $('closable_interface').previousElementSibling.style.display = "inline";
+    popup.previousElementSibling.style.right = popup.getBoundingClientRect().left + "px";
+    popup.previousElementSibling.style.top = popup.getBoundingClientRect().top + "px";
     $('closable_interface').getElementsByTagName('form')[0].addEventListener('submit', e => {
         e.preventDefault();
         db.collection('feedback').add({
@@ -1490,8 +1507,8 @@ $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
             user_id: user_id,
             feedback: e.target.getElementsByTagName('textarea')[0].value
         })
-        $('closable_interface').style.visibility = "hidden";
-        $('closable_interface').previousElementSibling.style.visibility = "hidden";
+        $('closable_interface').style.display = "none";
+        $('closable_interface').previousElementSibling.style.display = "none";
     })
 })
 
@@ -1619,12 +1636,14 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     if (done) {
         popup.getElementsByTagName('div')[0].innerHTML = $('status').innerHTML;
         popup.getElementsByTagName('div')[1].innerHTML = "<button>Rematch</button>"
-        popup.style.visibility = "visible";
-        popup.previousElementSibling.style.visibility = "visible";
+        popup.style.display = "inline";
+        popup.previousElementSibling.style.display = "inline";
+        popup.previousElementSibling.style.right = popup.getBoundingClientRect().left + "px";
+        popup.previousElementSibling.style.top = popup.getBoundingClientRect().top + "px";
     }
     else {
-        popup.style.visibility = "hidden";
-        popup.previousElementSibling.style.visibility = "hidden";
+        popup.style.display = "none";
+        popup.previousElementSibling.style.display = "none"
     }
     enpassant = doc.data().enpassant;
     moves_back = 0;
@@ -1679,10 +1698,10 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         undo = [];
     }
 
-    if (mode.indexOf('Beirut') != -1) {
+    if (mode.indexOf('Beirut') != -1 && window[(blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece)]) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
-        if (!$('beirut_button')) {
+        if (!$('beirut_button') && window[beirut_piece]) {
             var choose_beirut = document.createElement("DIV");
             choose_beirut.setAttribute('id', 'beirut_button');
             var beirut_button = document.createElement("BUTTON");
@@ -1709,6 +1728,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         beirut_options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + 2 * $('options').getBoundingClientRect().height + "px";
         beirut_options.style.left = '0px';
         var beirut_listener = (e) => {
+            console.log('beirut_options');
             var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
             var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
             var clicked_piece_white = findArr(square, white_arr);
@@ -1739,6 +1759,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                     })}
                 }
             }
+            canvas.removeEventListener('click', beirut_listener)
         }
         beirut_options.addEventListener('click', e => {
             if (beirut_options.childNodes[0].innerHTML == "Choose Your Suicide Piece") {
@@ -1791,7 +1812,8 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                             }
                         }
                         }
-                    window[beirut_piece].update(window[beirut_piece].pos, false, null, true)
+                    window[beirut_piece].update(window[beirut_piece].pos, false, null, true);
+                    beirut_options.parentElement.removeChild(beirut_options);
             }
         }
     })

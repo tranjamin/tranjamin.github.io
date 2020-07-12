@@ -40,8 +40,8 @@
     <canvas id="canvas1" style="border: white 2pt solid">
     </canvas>
     <div id="chat_title">CHAT</div>
-    <icon id="close_cross">x</icon>
-    <div id="closable_interface">
+    <icon id="close_cross" style="display: none;">x</icon>
+    <div id="closable_interface" style="display: none;">
         <div>You Won</div>
         <div><button>Rematch</button></div>
     </div>
@@ -51,8 +51,17 @@
             <div id="opposite_time"></div>
             <div id="opposite_box"></div>
             <div id="status">Game in Progress...</div>
+            <table>
+                <tr><td>Moves</td><td>Game Info</td></tr>
+            </table>
             <div id="tracking">
                 <table></table>
+            </div>
+            <div id="info" style="display: none;">
+                Game Name: <br>
+                Mode: <br>
+                Rated: <br>
+                Time Format: <br>
             </div>
         </div>
         <div id="post_options">
