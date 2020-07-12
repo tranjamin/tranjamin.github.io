@@ -1571,6 +1571,13 @@ db.collection('chess').doc(game).get().then(doc => {
     else if (doc.data().black_user == username) {blackwhite = 0}
     else {blackwhite = 1; observer = true;}
 
+    $('info').innerHTML = `
+    Game Name: ${doc.data().name}<br>
+    Mode: ${doc.data().mode}<br>
+    Rated: ${doc.data().points}<br>
+    Time Format: ${doc.data().white_time}<br>
+    `;
+
     if (doc.data().white_time != null && doc.data().timer[1] != null) {
     var new_white_count = doc.data().white_count;
     var new_black_count = doc.data().black_count;
@@ -1698,7 +1705,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         undo = [];
     }
 
-    if (mode.indexOf('Beirut') != -1 && window[(blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece)]) {
+    if (mode.indexOf('Beirut') != -1 && (window[(blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece)] || (blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece == null))) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
         if (!$('beirut_button') && window[beirut_piece]) {
