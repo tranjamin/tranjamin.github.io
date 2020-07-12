@@ -1704,7 +1704,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     else {
         undo = [];
     }
-
+    console.log('sdfsd');
     if (mode.indexOf('Beirut') != -1) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
