@@ -53,11 +53,23 @@ var message_body = $("text");
 var popup = $('closable_interface');
 
 var cookies_allowed = true;
-if (getCookie('cookie_allowed')) {
+if (getCookie('cookie_allowed') || sessionStorage.getItem('cookie_allowed')) {
     cookies_allowed = true;
 }
 else {
     cookies_allowed = false;
+}
+if (!cookies_allowed) {
+    $('cookie_notice').style.display = "block";
+    $('cookie_notice').getElementsByTagName('button')[0].addEventListener('click', e => {
+        setCookie('cookie_allowed',true,365);
+        sessionStorage.setItem('cookie_allowed', true);
+        $('cookie_notice').style.display = "none";
+    })
+    $('cookie_notice').getElementsByTagName('button')[1].addEventListener('click', e => {
+        sessionStorage.setItem('cookie_allowed', true);
+        $('cookie_notice').style.display = "none";
+    })
 }
 
 if (getCookie('username') || sessionStorage.getItem('username')) {
