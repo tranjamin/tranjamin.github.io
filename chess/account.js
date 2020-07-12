@@ -485,6 +485,7 @@ function str_to_time(str) {
 
 /**
  * relevancy.js v0.2
+ * courtesy of James Padolsey
  **/
 relevant();
 function relevant() {
