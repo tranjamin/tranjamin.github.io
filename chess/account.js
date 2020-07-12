@@ -123,7 +123,7 @@ $('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
 
 
 function setCookie(cname, cvalue, exdays) {
-    if (cookie_allowed) {
+    if (cookies_allowed) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
