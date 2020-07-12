@@ -1704,11 +1704,11 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     else {
         undo = [];
     }
-    console.log('sdfsd');
-    if (mode.indexOf('Beirut') != -1) {
+
+    if (mode.indexOf('Beirut') != -1 && (window[(blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece)] || (blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece == null))) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
-        if (!$('beirut_button') && window[beirut_piece]) {
+        if (!$('beirut_button')) {
             var choose_beirut = document.createElement("DIV");
             choose_beirut.setAttribute('id', 'beirut_button');
             var beirut_button = document.createElement("BUTTON");
