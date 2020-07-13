@@ -1,19 +1,3 @@
-/*
-This Version Includes:
-Basic piece movement
-Basic chat
-En passant
-Castling
-Promotion
-
-This Version does not Include:
-Check / Checkmate
-Underpromotion
-Undo
-Flip Board
-
-*/
-
 function $(id) { return document.getElementById(id); }
 
 var username = "anon";
