@@ -162,6 +162,11 @@ $('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e => {
 	$('load_invite').style.display = "none";
 	$('info').style.display = "unset";
 	$('settings').style.display = "none";	
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
 })
 $('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e => {
 	$('load_past').style.display = "none";
@@ -169,6 +174,12 @@ $('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e => {
 	$('info').style.display = "none";
 	$('load_current').style.display = "unset";
 	$('settings').style.display = "none";	
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e => {
 	$('load_past').style.display = "none";
@@ -176,6 +187,12 @@ $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e => {
 	$('info').style.display = "none";
 	$('load_invite').style.display = "unset";
 	$('settings').style.display = "none";	
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
 	$('load_invite').style.display = "none";
@@ -183,6 +200,12 @@ $('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
 	$('info').style.display = "none";
 	$('load_past').style.display = "unset";
 	$('settings').style.display = "none";	
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 	$('load_invite').style.display = "none";
@@ -190,6 +213,12 @@ $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 	$('info').style.display = "none";
 	$('load_past').style.display = "none";
 	$('settings').style.display = "unset";	
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 	db.collection('account').doc(user_id).get().then(doc => {
 		email = doc.data().email
 		$('settings').getElementsByTagName('form')[1].innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`

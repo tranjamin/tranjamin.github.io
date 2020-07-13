@@ -143,17 +143,29 @@ $('load_observer').style.display = "none";
 $('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e=> {
     $('load_public').style.display = "unset";
     $('load_private').style.display = "none";
-    $('load_observer').style.display = "none";
+	$('load_observer').style.display = "none";
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e=> {
     $('load_public').style.display = "none";
     $('load_private').style.display = "unset";
-    $('load_observer').style.display = "none";
+	$('load_observer').style.display = "none";
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e=> {
     $('load_public').style.display = "none";
     $('load_private').style.display = "none";
-    $('load_observer').style.display = "unset";
+	$('load_observer').style.display = "unset";
+	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+	e.target.setAttribute('class', 'table_select');
 })
 
 $('search_public').addEventListener('keyup',e => {
