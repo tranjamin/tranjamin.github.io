@@ -37,8 +37,26 @@
             <li>Chess Variants</li>
             <li>Time Control</li>
         </ul>
-        <div class="rules" id="create_rules">How to Play</div>
+        <div class="rules" id="create_rules">
+            <h3 style="text-align: center; font-size: 150%;">Customising your Game</h3>
+            <h4>1. Name your chess server</h4>
+            <p>This is almost completely unrestricted</p>
+            <h4>2. Choose what colour to play with</h4>
+            <p>Randomly chosen games are labelled as such for different users</p>
+            <h4>3. Choose a game mode</h4>
+            <p>Explore the different chess variants in depth in the next tab</p>
+            <h4>4. Choose your visibility</h4>
+            <p>Public games are open to anyone, and are searchable. Private games require the exact name to find</p>
+            <h4>5. Invite a user</h4>
+            <p>You can enter the name of a user, who will get a notification to join your game. However, this does not automatically set the opponent as the user</p>
+            <h4>6. Mode</h4>
+            <p>Choose whether the game is casual or rated (affects your elo rating). Any rated game to which an anonymous user participates in is automatically changed to casual</p>
+            <h4>7. Choose your time control</h4>
+            <p>Time is automatically set as limited, but standardised options or a custom time control can be formed</p>
+
+        </div>
         <div class="rules" id="variant_rules">
+            <h3 style="text-align: center; font-size: 150%;">Chess Variants</h3>
             <h4>Classic</h4>
             <p>If classic chess was a spice, it would be flour</p>
             <h4>Chess960 (Fischer Random Chess)</h4>
@@ -173,7 +191,17 @@
             </ol>
             </p>
         </div>
-        <div class="rules" id="time_rules">How to format Time Control</div>
+        <div class="rules" id="time_rules">
+        <h3 style="text-align: center; font-size: 150%;">How to format Time Control</h3>
+            <h4>Interpreting time control</h4>
+            <p>Time control is split into phases (separated by spaces). In each phase, a number of turns (G for the rest of the game) is allocated a number of minutes in which it must be completed, with any time remaining from the previous phase carried over. An increment may also be added, a time in seconds which is added each turn.<br><br>For example, in the time control (40/90+30 + G/30+30), 90 minutes is first added to the clock, and after 40 turns another 30 minutes is added. For every move throughout the game, 30 seconds is added.</p>
+            <h4>Standardised time control formats</h4>
+            <p>FIDE International Time (40/90+30 G/30+30): 90m for the first 40 moves, followed by 30m for the rest of the game, with a 30s interval</p>
+            <p>FIDE Candidates Tournament / Tata Steel (40/100+30 20/50+30 G/15+30): 100m for the first 40 moves, followed by 50m for the next 20 and 15m for the rest of the game, with a 30s interval </p>
+            <p>Rapid Time (G/25): 25m for the entire game, with no interval</p>
+            <p>Blitz Time (G/5): 5m for the entire game, with no interval</p>
+            <p>Bullet Time (G/1): 1m for the entire game, with no interval</p>
+        </div>
     </div>
     <div id="cookie_notice" style="display: none;">
         <div>We use cookies</div>
