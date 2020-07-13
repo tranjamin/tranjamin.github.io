@@ -27,7 +27,7 @@ html {
 
 #overlay #game_creator > input[type=text] {
     font-size: 200%;
-    background-image: linear-gradient(to right, rgb(41,33,33),rgb(214, 82, 34) 50%,rgb(41,33,33));
+    background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(255, 136, 0) 50%,rgb(41,33,33));
     margin-bottom: 2%;
     text-decoration-line: underline;
     color: white;
@@ -238,10 +238,10 @@ html {
     background-color: none;
     font-size: 150%;
     text-align: center;
-    /* background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(32, 204, 55) 50%,rgb(41,33,33)); */
+    background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(255, 136, 0) 50%,rgb(41,33,33));
     background-color: rgba(236, 102, 12, 0.938);
     text-decoration-line: none;
-    color: rgba(53, 52, 52, 0.2935);
+    color: rgba(255, 255, 255, 0.692);
     border-left: none;
     border-right: none;
     margin-left: 5%;
@@ -256,15 +256,14 @@ html {
     color: rgba(53, 52, 52, 0.2935);
     border: none;
     text-decoration: none;
-    /* background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(32, 204, 55) 50%,rgb(41,33,33)); */
   }
 
   .select-items :nth-child(1), .select-items :nth-child(3),  .select-items :nth-child(5),  .select-items :nth-child(7),.select-items :nth-child(9),  .select-items :nth-child(11),  .select-items :nth-child(13) {
     text-align: center;
-    color: rgba(53, 52, 52, 0.2935);
+    color: rgba(255, 255, 255, 0.699);
     border: none;
     text-decoration: none;
-    /* background-image:linear-gradient(to right, rgb(41,33,33) 5%,rgb(35, 206, 20) 50%,rgb(41,33,33) 95%); */
+    background-image:linear-gradient(to right, rgb(41,33,33) ,rgb(73, 68, 68) 50%,rgb(41,33,33));
     background-color: grey;
   }
   
