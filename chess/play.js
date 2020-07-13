@@ -2318,17 +2318,6 @@ formatPos = (pos) => {
     return letter + pos[1];
 }
 
-/*stringify = (stringed_arr) => {
-    var x = "";
-    for (var y in stringed_arr) {
-        if (y == stringed_arr.length - 1) {
-            x += "[" + String(stringed_arr[y]) + "]";
-        }
-        else {
-            x += "[" + String(stringed_arr[y]) + "],";
-        }}
-    return x;
-}*/
 stringify = (stringed_arr) => {
     var x = "";
     for (var y in stringed_arr) {
@@ -2564,6 +2553,7 @@ formatRedo = (redo_arr) => {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     show_pieces();
 }
+
 function setCookie(cname, cvalue, exdays) {
     if (cookies_allowed) {
     var d = new Date();
@@ -2572,7 +2562,6 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 }
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -2588,7 +2577,6 @@ function getCookie(cname) {
     }
     return "";
 }
-
 function deleteAllCookies() {
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
 }
