@@ -33,6 +33,7 @@ html {
     color: white;
     border: none;
     text-align: center;
+
 }
 #overlay input[type=submit] {
     background-color: rgb(255, 115, 0);
@@ -112,6 +113,9 @@ html {
     background-color: #ccc;
   }
 
+  #custom_time {
+    overflow-y: scroll;
+  }
 
 .container .checkmark:after {
     top: 9px;

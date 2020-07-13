@@ -559,6 +559,13 @@ $('game_creator').addEventListener('submit', e=> {
 
     var exists = false;
     var user_exists = false;
+    if (play_name.indexOf(' - Rematch') != -1) {
+        $('error').innerHTML = "' - Rematch' is the default name for rematches. Please avoid using it."
+    }
+    else if (points == "Rated" && username == "anon") {
+        $('error').innerHTML = "You must sign in to play rated games"
+    }
+    else {
     db.collection('account').where('username', '==', other_user).get().then(snapshot => {
         if (other_user != null) {
             snapshot.docs.forEach(doc => {
@@ -645,6 +652,7 @@ $('game_creator').addEventListener('submit', e=> {
     $('error').innerHTML = "Could not connect to server. Please try again later";
 })
 })
+}
 })
 
 
