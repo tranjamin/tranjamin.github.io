@@ -1519,6 +1519,7 @@ function generate_position(mode) {
         }
     }
 }
+
 function rematch() {
     db.collection('chess').doc(game).get().then(doc => {
         var new_name = (doc.data().name.indexOf(' - Rematch') == -1) ? doc.data().name + " - Rematch" : (isNaN(parseInt(doc.data().name[name.length - 1])) ? doc.data().name + " 2" : (doc.data().name.pop() + (parseInt(doc.data().name[name.length - 1]) + 1)));
@@ -1584,6 +1585,7 @@ function rematch() {
 })
 })
 }
+
 
 var white_list = [];
 var black_list = [];
