@@ -148,6 +148,8 @@ function update_graphics() {
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
     options.style.left = '0px';
+    var post_options = $('post_options');
+    post_options.style.bottom = window.innerHeight - $('options').getBoundingClientRect().top + "px";
 
     //nav
     var nav = $('nav');
@@ -165,6 +167,8 @@ function update_graphics() {
 
     $('tracking').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
     $('info').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
+
+
 }
 
 popup.previousElementSibling.addEventListener('click', e => {
@@ -1429,6 +1433,158 @@ function draw(message) {
 })}
 }
 
+var rematchwhite_arr = [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]];
+var rematchblack_arr = [[1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7], [8, 7]];
+
+var rematchw_rooka = new piece(1, "R", [1, 1], "w_rooka");
+var rematchw_knightb = new piece(1, "N", [2, 1], "w_knightb");
+var rematchw_bishopc = new piece(1, "B", [3, 1], "w_bishopc");
+var rematchw_queen = new piece(1, "Q", [4, 1], "w_queen");
+var rematchw_king = new piece(1, "K", [5, 1], "w_king");
+var rematchw_bishopf = new piece(1, "B", [6, 1], "w_bishopf");
+var rematchw_knightg = new piece(1, "N", [7, 1], "w_knightg");
+var rematchw_rookh = new piece(1, "R", [8, 1], "w_rookh");
+
+var rematchw_a = new piece(1, "P", [1, 2], "w_a");
+var rematchw_b = new piece(1, "P", [2, 2], "w_b");
+var rematchw_c = new piece(1, "P", [3, 2], "w_c");
+var rematchw_d = new piece(1, "P", [4, 2], "w_d");
+var rematchw_e = new piece(1, "P", [5, 2], "w_e");
+var rematchw_f = new piece(1, "P", [6, 2], "w_f");
+var rematchw_g = new piece(1, "P", [7, 2], "w_g");
+var rematchw_h = new piece(1, "P", [8, 2], "w_h");
+
+var rematchb_rooka = new piece(0, "R", [1, 8], "b_rooka");
+var rematchb_knightb = new piece(0, "N", [2, 8], "b_knightb");
+var rematchb_bishopc = new piece(0, "B", [3, 8], "b_bishopc");
+var rematchb_queen = new piece(0, "Q", [4, 8], "b_queen");
+var rematchb_king = new piece(0, "K", [5, 8], "b_king");
+var rematchb_bishopf = new piece(0, "B", [6, 8], "b_bishopf");
+var rematchb_knightg = new piece(0, "N", [7, 8], "b_knightg");
+var rematchb_rookh = new piece(0, "R", [8, 8], "b_rookh");
+
+var rematchb_a = new piece(0, "P", [1, 7], "b_a");
+var rematchb_b = new piece(0, "P", [2, 7], "b_b");
+var rematchb_c = new piece(0, "P", [3, 7], "b_c");
+var rematchb_d = new piece(0, "P", [4, 7], "b_d");
+var rematchb_e = new piece(0, "P", [5, 7], "b_e");
+var rematchb_f = new piece(0, "P", [6, 7], "b_f");
+var rematchb_g = new piece(0, "P", [7, 7], "b_g");
+var rematchb_h = new piece(0, "P", [8, 7], "b_h");
+
+var rematchwhite_list = [rematchw_rooka, rematchw_knightb, rematchw_bishopc, rematchw_queen, rematchw_king, rematchw_bishopf, rematchw_knightg, rematchw_rookh, rematchw_a, rematchw_b, rematchw_c, rematchw_d, rematchw_e, rematchw_f, rematchw_g, rematchw_h];
+var rematchblack_list = [rematchb_rooka, rematchb_knightb, rematchb_bishopc, rematchb_queen, rematchb_king, rematchb_bishopf, rematchb_knightg, rematchb_rookh, rematchb_a, rematchb_b, rematchb_c, rematchb_d, rematchb_e, rematchb_f, rematchb_g, rematchb_h];
+
+
+function generate_position(mode) {
+    if (mode.indexOf('Chess960') != -1) {
+        var original = [1,2,3,4,5,6,7,8];
+        rematchw_bishopc.pos = [Math.ceil(Math.random() * 4) * 2, 1];
+        rematchw_bishopf.pos = [Math.ceil(Math.random() * 4) * 2 - 1, 1];
+        original.splice(original.indexOf(rematchw_bishopc.pos[0]),1);
+        original.splice(original.indexOf(rematchw_bishopf.pos[0]),1);
+        rematchw_queen.pos = [original[Math.floor(Math.random() * 6)], 1];
+        original.splice(original.indexOf(rematchw_queen.pos[0]),1);
+        rematchw_knightb.pos = [original[Math.floor(Math.random() * 5)], 1];
+        original.splice(original.indexOf(rematchw_knightb.pos[0]),1);
+        rematchw_knightg.pos = [original[Math.floor(Math.random() * 4)], 1];
+        original.splice(original.indexOf(rematchw_knightg.pos[0]),1);
+        rematchw_rooka.pos = [original[0], 1];
+        rematchw_king.pos = [original[1], 1];
+        rematchw_rookh.pos = [original[2], 1];
+        rematchb_rooka.pos = [rematchw_rooka.pos[0], 8]
+        rematchb_rookh.pos = [rematchw_rookh.pos[0], 8]
+        rematchb_bishopc.pos = [rematchw_bishopc.pos[0], 8]
+        rematchb_bishopf.pos = [rematchw_bishopf.pos[0], 8]
+        rematchb_knightb.pos = [rematchw_knightb.pos[0], 8]
+        rematchb_knightg.pos = [rematchw_knightg.pos[0], 8]
+        rematchb_queen.pos = [rematchw_queen.pos[0], 8]
+        rematchb_king.pos = [rematchw_king.pos[0], 8]
+    }
+    else if (mode.indexOf('Really') != -1) {
+        for (var ele of randomwhite_list.concat(randomblack_list)) {
+            if (ele.type != "K") {
+                ele.type = (['P','R','Q','B','N'])[Math.floor(Math.random() * 5)]
+            }
+        }
+    }
+    else if (mode.indexOf('Dusanny') != -1) {
+        randomwhite_list = [];
+        randomwhite_arr = [];
+        for (var i = 1; i <= 8; i++) {
+            for (var j = 1; j <= 4; j++) {
+                randomwhite_list.push(new piece(1, "P", [i,j], ('w_pawn' + i) + j));
+                randomwhite_arr.push([i,j]);
+            }
+        }
+    }
+}
+function rematch() {
+    db.collection('chess').doc(game).get().then(doc => {
+        var new_name = (doc.data().name.indexOf(' - Rematch') == -1) ? doc.data().name + " - Rematch" : (isNaN(parseInt(doc.data().name[name.length - 1])) ? doc.data().name + " 2" : (doc.data().name.pop() + (parseInt(doc.data().name[name.length - 1]) + 1)));
+        var rematch_exists = null;
+        db.collection('chess').where('name', '==', new_name).get().then(snapshot => {snapshot.docs.forEach(doc => {
+            rematch_exists = doc.id;
+        })}).then(docRef => {
+            if (rematch_exists) {
+                console.log('rematch exists', rematch_exists)
+                setCookie('game_id', rematch_exists, 2);
+                sessionStorage.setItem('game_id', rematch_exists);
+                location.reload();
+            }
+            else {
+        var tempb = [];
+        var tempw = [];
+        generate_position(mode);
+        rematchwhite_list.forEach(obj => {
+            tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+        })
+        rematchblack_list.forEach(obj => {
+            tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+        })
+        db.collection('chess').add({
+            name: new_name,
+            black_user: doc.data().white_user,
+            white_user: doc.data().black_user,
+            white_arr: stringify(rematchwhite_arr),
+            black_arr: stringify(rematchblack_arr),
+            white_list: tempw,
+            black_list: tempb,
+            points: doc.data().points,
+            mode: doc.data().mode,
+            visibility: doc.data().visibility,
+            invited_user: null,
+            white_time: doc.data().white_time,
+            black_time: doc.data().black_time,
+            randomised: doc.data().randomised,
+            admin: username,
+            messages: "",
+            white_bank: "",
+            black_bank: "",
+            draw_query: false,
+            result: null,
+            turn: (doc.data().mode.indexOf('Dusanny') == -1 ? 1 : 0),
+            white_count: doc.data().white_time ? doc.data().white_time[0][1] : null,
+            black_count: doc.data().black_time ? doc.data().black_time[0][1] : null,
+            timer: [(doc.data().mode.indexOf('Dusanny') == -1 ? 1 : 0),null],
+            white_checks: 0,
+            black_checks: 0,
+            moves: 0,
+            fifty_moves: 0,
+            white_beirut_piece: null,
+            black_beirut_piece: null,
+            undo: null
+        }).then(docRef => {
+            setCookie('game_id', docRef.id, 2);
+            sessionStorage.setItem('game_id', docRef.id);
+            location.reload();
+        })
+    }
+                    
+})
+})
+}
+
 var white_list = [];
 var black_list = [];
 $('options').getElementsByTagName('button')[0].addEventListener('click', e => {
@@ -1651,6 +1807,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     done = doc.data().result ? true : false;
     if (done) {
         $('status').innerHTML = `You ${doc.data().result == "draw" ? "Drew" : ((doc.data().result == 'white' ? 1 : 0) == blackwhite ? 'Won' : 'Lost')} by ${doc.data().result_method}`; 
+        $('post_options').style.display = "unset";
     }
     if (done) {
         popup.getElementsByTagName('div')[0].innerHTML = $('status').innerHTML;
@@ -2234,7 +2391,12 @@ var intermediary = (e) => {
 document.addEventListener('click', intermediary);    
 }
 })
-
+$('post_options').getElementsByTagName('button')[0].addEventListener('click', e => {
+    rematch();
+})
+$('closable_interface').getElementsByTagName('div')[1].getElementsByTagName('button')[0].addEventListener('click', e => {
+    rematch();
+})
 var msg_ready = true;
 $("message_form").addEventListener('submit', e => {
     e.preventDefault();

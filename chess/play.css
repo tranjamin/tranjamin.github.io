@@ -323,3 +323,20 @@ right: 15%;
     right: 25%;
     
 }
+
+#post_options button {
+    font-size: 75%;
+    display: inline-block;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    width: 98%;
+    position: relative;
+    left: 1%;
+    border: none;
+    background-color: white;
+}
+#post_options {
+    position: absolute;
+    display: none;
+}
