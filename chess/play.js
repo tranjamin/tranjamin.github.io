@@ -399,7 +399,6 @@ class piece {
         var opposite = this.colour ? black_arr : white_arr;
         var original_test_arr = copy_arr(test_arr);
         var original_opposite = copy_arr(opposite);
-        console.log(test_arr, this.pos, new_pos);
         test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
         this.pos = new_pos;
         var capture_arr = this.colour ? black_list : white_list;
@@ -507,6 +506,7 @@ class piece {
                     }
                 }
             }
+            
         enpassant = null;
         if (this.type == "K" && this.colour == blackwhite) {
             // console.log("not doublemove");
@@ -516,18 +516,18 @@ class piece {
                 // console.log(this.colour)
                 if (this.colour) {
                     if (new_pos[0] == 3) {
-                        w_rooka.update([4, 1], true, null, inter);
+                        w_rooka.update([4, 1], true, null, false);
                     }
                     else {
-                        w_rookh.update([6, 1], true, null, inter);
+                        w_rookh.update([6, 1], true, null, false);
                     }
                 }
                 else {
                     if (new_pos[0] == 3) {
-                        b_rooka.update([4, 8], true, null, inter);
+                        b_rooka.update([4, 8], true, null, false);
                     }
                     else {
-                        b_rookh.update([6, 8], true, null, inter);
+                        b_rookh.update([6, 8], true, null, false);
                     }
                 }
             }
@@ -548,7 +548,6 @@ class piece {
         if (this.type == "P" && Math.abs(this.pos[1] - original_pos[1]) == 2) {
             enpassant = this.pos;
         }
-
 
         if (check(this.colour)[0]) {
             console.log('in check')
@@ -644,7 +643,6 @@ class piece {
                 }
                 }
                 convert_to_bank(original_capture_arr[capture].type);
-                console.log('inner', $('self_box').innerHTML);
                 if (mode.indexOf('Atomic') != -1) {
                     var explosion = [
                         [this.pos[0] + 1,this.pos[1] + 1],
@@ -661,23 +659,23 @@ class piece {
                             explosion.splice(findArr(frag, explosion), 1);
                         }
                     }
-                    console.log(explosion);
+                    // console.log(explosion);
                     for (var frag of explosion) {
                         if (findArr(frag, white_arr.concat(black_arr)) != -1) {
-                            console.log('frag', frag)
+                            // console.log('frag', frag)
                             for (var casualty of white_list.concat(black_list)) {
                                 if (casualty.type != "P" && arrEqual(casualty.pos,frag)) {
                                     if (casualty.colour) {
-                                        console.log('casualty', casualty, white_list.length)
+                                        // console.log('casualty', casualty, white_list.length)
                                         white_list.splice(white_list.indexOf(casualty), 1);
                                         white_arr.splice(findArr(casualty.pos, white_arr), 1);
-                                        console.log('casualty', white_list.length);
+                                        // console.log('casualty', white_list.length);
                                     }
                                     else {
-                                        console.log('casualty', casualty, black_list.length)
+                                        // console.log('casualty', casualty, black_list.length)
                                         black_list.splice(black_list.indexOf(casualty), 1);
                                         black_arr.splice(findArr(casualty.pos, black_arr), 1);
-                                        console.log('casualty', black_list.length);
+                                        // console.log('casualty', black_list.length);
                                     }
                                     if (casualty.type == "K") {win('Exploding the King')}
                                 }
@@ -800,6 +798,7 @@ class piece {
                 tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
             })
 
+            console.log('length', test_arr.length)
             var time_left = 0;
             var original_moves;
             var original_white_checks;
@@ -893,6 +892,8 @@ class piece {
                 }
         })
     }
+    
+    console.log('length', test_arr.length)
         if (inter != null) {canvas.removeEventListener('click', inter)};
     }
 
@@ -977,7 +978,7 @@ class piece {
                     if (ret4 == "block") {break; }
                     else if (ret4 == "repeat") {break; }
                 }
-                if (!checktest) {console.log(options)}
+                //if (!checktest) {console.log(options)}
                 onboard = onboard.concat(options);
                 if (this.type == "R") {break;}
             case 'B':
