@@ -399,6 +399,7 @@ class piece {
         var opposite = this.colour ? black_arr : white_arr;
         var original_test_arr = copy_arr(test_arr);
         var original_opposite = copy_arr(opposite);
+        console.log(test_arr, this.pos, new_pos);
         test_arr.splice(findArr(this.pos, test_arr), 1, new_pos);
         this.pos = new_pos;
         var capture_arr = this.colour ? black_list : white_list;
@@ -1137,7 +1138,7 @@ class piece {
 
             for (let shade of onboard) {
                 var checkless_mock;
-                console.log(shade);
+                //console.log(shade);
                 if (mode.indexOf('Checkless') != -1) {checkless_mock = this.mock_update(shade);}
                 if ((!this.mock_update(shade)[0] && 
                     ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) || 

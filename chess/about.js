@@ -128,14 +128,26 @@ $('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e=> {
     $('create_rules').style.display = "unset";
     $('variant_rules').style.display = "none";
     $('time_rules').style.display = "none";
+    e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+    e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+    e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+    e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e=> {
     $('create_rules').style.display = "none";
     $('variant_rules').style.display = "unset";
     $('time_rules').style.display = "none";
+    e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+    e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+    e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+    e.target.setAttribute('class', 'table_select');
 })
 $('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e=> {
     $('create_rules').style.display = "none";
     $('variant_rules').style.display = "none";
     $('time_rules').style.display = "unset";
+    e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+    e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+    e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+    e.target.setAttribute('class', 'table_select');
 })
