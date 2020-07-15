@@ -274,7 +274,7 @@ function sendEmail (email_address, subject, body) {
     Email.send({
         Host: "smtp.gmail.com",
         Username: "tranjaminchess.noreply@gmail.com",
-        Password: 'Tranjaminchess',
+        Password: 'findArr(w_rooka.pos, white_arr)',
         To: email_address,
         From: "tranjaminchess.noreply@gmail.com",
         Subject: subject,
