@@ -20,6 +20,7 @@ var done = false;
 var pre_selection = false;
 var beirut_piece = null;
 var moves_back = 0;
+var pre_move = null
 
 if (getCookie('game_id'))
  {
@@ -51,6 +52,7 @@ var msg_submit = $('submit_message');
 var msg_title = $('chat_title');
 var message_body = $("text");
 var popup = $('closable_interface');
+var first_load = true;
 
 var cookies_allowed = true;
 if (getCookie('cookie_allowed') || sessionStorage.getItem('cookie_allowed')) {
@@ -323,7 +325,6 @@ class piece {
             })
             this.pos = original_pos;
             if (capture != -1) {cap_piece.delete = false;}
-            //console.log('retuuuuuuuuurn', [ret[0],ret[1],ret2, checkmate])
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             show_pieces();
             return [ret[0],ret[1],ret2, checkmate]
@@ -336,7 +337,6 @@ class piece {
     update(new_pos, doublemove = false, inter=null, selfkill=false) {
         if (this.type == "P" && new_pos[1] == (this.colour ? 8 : 1)) {
             ctx.fillStyle = "rgb(255,255,255)";
-            console.log(new_pos[0]) 
             var promote_div = document.createElement('DIV');
             promote_div.setAttribute('id', 'promote')
             document.getElementsByClassName('bottom')[0].insertBefore(promote_div, document.getElementsByClassName('bottom')[0].childNodes[0])      
@@ -384,20 +384,69 @@ class piece {
                         new_type = "R";
                         break;
                 }
-                this.update2(new_pos, doublemove, new_type, inter, selfkill)
-
+                if (turn == blackwhite) {
+                this.update2(new_pos, doublemove, new_type, inter, selfkill)}
+                else {
+                pre_move = [this.name, new_pos, new_type];
+                db.collection('chess').doc(game).update({
+                    pre_move: stringify(pre_move)
+                })
+                if (!doublemove) {
+                    if (undo.length != 0) {
+                        if (undo[undo.length - 1][3] == "castle") {
+                            undo[undo.length - 1][3] = [this.name, this.pos, new_pos, "", undefined, 0, null, null, null];
+                        }
+                        else {
+                                undo.push([this.name, this.pos, new_pos, "", undefined, 0, null, null, null]);
+                        }
+                    }
+                    else {
+                            undo.push([this.name, this.pos, new_pos, "", undefined, 0, null, null, null]);
+                    }
+                }
+                else {
+                    undo.push([this.name, this.pos, new_pos, 'castle', undefined, 0, null, null, null]);
+                }
+                show_pieces();
+                undo.pop();
+            }
             })
         
 
     }
     else {
-        this.update2(new_pos, doublemove, null, inter, selfkill)
+        if (turn == blackwhite) {
+        this.update2(new_pos, doublemove, null, inter, selfkill)}
+        else {
+        pre_move = [this.name, new_pos, null];
+        db.collection('chess').doc(game).update({
+            pre_move: stringify(pre_move)
+        })
+        if (!doublemove) {
+            if (undo.length != 0) {
+                if (undo[undo.length - 1][3] == "castle") {
+                    undo[undo.length - 1][3] = [this.name, this.pos, new_pos, "", undefined, 0, null, null, null];
+                }
+                else {
+                        undo.push([this.name, this.pos, new_pos, "", undefined, 0, null, null, null]);
+                }
+            }
+            else {
+                    undo.push([this.name, this.pos, new_pos, "", undefined, 0, null, null, null]);
+            }
+        }
+        else {
+            undo.push([this.name, this.pos, new_pos, 'castle', undefined, 0, null, null, null]);
+        }
+        show_pieces();
+        undo.pop();
+        }
     }
 }
     update2(new_pos, doublemove = false, pawn_type=null, inter, selfkill) {
+        console.log('update2')
         clearInterval(clock);
         var elapsed_time = new Date();
-        console.log('update');
         var original_pos = copy_arr(this.pos);
         var test_arr = this.colour ? white_arr : black_arr;
         var opposite = this.colour ? black_arr : white_arr;
@@ -513,11 +562,9 @@ class piece {
             
         enpassant = null;
         if (this.type == "K" && this.colour == blackwhite) {
-            // console.log("not doublemove");
             castle_rooka = false;
             castle_rookh = false;
             if (Math.abs(new_pos[0] - original_pos[0]) == 2) {
-                // console.log(this.colour)
                 if (this.colour) {
                     if (new_pos[0] == 3) {
                         w_rooka.update([4, 1], true, null, false);
@@ -663,23 +710,17 @@ class piece {
                             explosion.splice(findArr(frag, explosion), 1);
                         }
                     }
-                    // console.log(explosion);
                     for (var frag of explosion) {
                         if (findArr(frag, white_arr.concat(black_arr)) != -1) {
-                            // console.log('frag', frag)
                             for (var casualty of white_list.concat(black_list)) {
                                 if (casualty.type != "P" && arrEqual(casualty.pos,frag)) {
                                     if (casualty.colour) {
-                                        // console.log('casualty', casualty, white_list.length)
                                         white_list.splice(white_list.indexOf(casualty), 1);
                                         white_arr.splice(findArr(casualty.pos, white_arr), 1);
-                                        // console.log('casualty', white_list.length);
                                     }
                                     else {
-                                        // console.log('casualty', casualty, black_list.length)
                                         black_list.splice(black_list.indexOf(casualty), 1);
                                         black_arr.splice(findArr(casualty.pos, black_arr), 1);
-                                        // console.log('casualty', black_list.length);
                                     }
                                     if (casualty.type == "K") {win('Exploding the King')}
                                 }
@@ -802,7 +843,6 @@ class piece {
                 tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
             })
 
-            console.log('length', test_arr.length)
             var time_left = 0;
             var original_moves;
             var original_white_checks;
@@ -853,7 +893,6 @@ class piece {
                     original_fifty = 0;
                 }
                 else {
-                    //console.log(original_fifty)
                     original_fifty ++;
                 }
                 if (original_fifty == 50) {
@@ -866,7 +905,7 @@ class piece {
                 black_arr: stringify(black_arr),
                 white_list: tempw,
                 black_list: tempb,
-                turn: 0,
+                turn: turn,
                 white_bank: white_int,
                 black_bank: black_int,
                 white_count: str_to_time($('self_time').innerHTML),
@@ -883,7 +922,7 @@ class piece {
                 black_arr: stringify(black_arr),
                 white_list: tempw,
                 black_list: tempb,
-                turn: 1,
+                turn: turn,
                 white_bank: white_int,
                 black_bank: black_int,
                 black_count: str_to_time($('self_time').innerHTML),
@@ -894,10 +933,21 @@ class piece {
                 undo: stringify(undo)
             }).catch(error => {console.log(error.lineNumber)})
                 }
+        }).then(() => {
+            db.collection('chess').doc(game).get().then(doc => {
+                console.log(doc.data().pre_move)
+                if (doc.data().pre_move) {
+                    var other_pre = arrayify(doc.data().pre_move);
+                    db.collection('chess').doc(game).update({
+                        pre_move: null
+                    }).then(() => {
+                        window[other_pre[0]].update2(other_pre[1]);
+                    })
+                }
+            })
         })
     }
     
-    console.log('length', test_arr.length)
         if (inter != null) {canvas.removeEventListener('click', inter)};
     }
 
@@ -970,7 +1020,6 @@ class piece {
                     var ret2 = detectSingle([i, this.pos[1]], options, this.colour, white_arrt, black_arrt);
                     if (ret2 == "block") {break; }
                     else if (ret2 == "repeat") {break; }
-                    if (!checktest) {console.log([i, this.pos[1]], ret2)}
                 }
                 for (var i = this.pos[1] + 1; i < 9; i++) {
                     var ret3 = detectSingle([this.pos[0], i], options, this.colour, white_arrt, black_arrt);
@@ -982,7 +1031,6 @@ class piece {
                     if (ret4 == "block") {break; }
                     else if (ret4 == "repeat") {break; }
                 }
-                //if (!checktest) {console.log(options)}
                 onboard = onboard.concat(options);
                 if (this.type == "R") {break;}
             case 'B':
@@ -1008,7 +1056,7 @@ class piece {
                     else if (retb == "repeat") {break;}
                 }
 
-                // console.log(options);
+
                 onboard = onboard.concat(optionsq);
                 break;
             case 'K':
@@ -1078,7 +1126,6 @@ class piece {
                         }
                         rook_options.splice(findArr(blackwhite ? w_rookh.pos : b_rookh.pos, rook_options), 1)
                         for (var pos of king_options) {
-                            //console.log(findArr(pos, white_arr.concat(black_arr)));
                             if ((findArr(pos, white_arr.concat(black_arr)) != -1  && !arrEqual(pos, blackwhite ? w_rookh.pos : b_rookh.pos))|| this.mock_update(pos)[0]) {accepted = false;}
                         }
                         for(var pos of rook_options) {
@@ -1143,7 +1190,6 @@ class piece {
 
             for (let shade of onboard) {
                 var checkless_mock;
-                //console.log(shade);
                 if (mode.indexOf('Checkless') != -1) {checkless_mock = this.mock_update(shade);}
                 if ((!this.mock_update(shade)[0] && 
                     ((mode.indexOf('Checkless') == -1 && mode.indexOf('Atomic') == -1) || 
@@ -1168,11 +1214,11 @@ class piece {
             }
             onboard = int_onboard;
             var intermediary = (e) => {
-                console.log('inter clicker')
                 var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
                 var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
                 if (findArr(square, onboard) != -1) {
-                    this.update(square, false, intermediary)
+                    this.update(square, false, intermediary);
+
                 }
                 else {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1181,6 +1227,19 @@ class piece {
                     document.elementFromPoint(e.clientX, e.clientY).click();
                     try {document.getElementsByClassName('bottom')[0].removeChild($('promote'));}
                     catch (TypeError) {}
+                    if (!observer) {
+                        pre_move = null;
+                        if (blackwhite) {
+                            db.collection('chess').doc(game).update({
+                                white_pre_move: null
+                            })
+                        }
+                        else {
+                            db.collection('chess').doc(game).update({
+                                white_pre_move: null
+                            })
+                        }
+                    }
                 }
     
             }
@@ -1216,7 +1275,6 @@ class piece {
                     if (!this.mock_update(shade)[0]) {
                     int_onboard.push(shade) }}
             mode = "Checkless Chess";
-            //console.log('onboarrrrrd', int_onboard)
             var self_king = this.colour ? b_king : w_king;
             for (let check_piece of onboard) {
                 if (arrEqual(check_piece, self_king.pos)) { return [int_onboard, true]; }
@@ -1528,7 +1586,6 @@ function rematch() {
             rematch_exists = doc.id;
         })}).then(docRef => {
             if (rematch_exists) {
-                console.log('rematch exists', rematch_exists)
                 setCookie('game_id', rematch_exists, 2);
                 sessionStorage.setItem('game_id', rematch_exists);
                 location.reload();
@@ -1658,7 +1715,6 @@ $('options').getElementsByTagName('button')[7].addEventListener('click', e => {
 })
 
 $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
-    console.log('clicking');
     $('closable_interface').style.display = "inline";
     $('closable_interface').getElementsByTagName('div')[0].innerHTML = "Submit Feedback";
     $('closable_interface').getElementsByTagName('div')[1].innerHTML = `
@@ -1683,7 +1739,7 @@ $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
 })
 
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
-    if (!done) {
+    if (!done && !observer) {
     if (e.target.innerHTML == '⚑') {
         e.target.innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
@@ -1695,9 +1751,51 @@ $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     else if (e.target.innerHTML == '✘') {
         e.target.parentElement.innerHTML = '&#9873';
     }}
+    else if (observer) {
+        blackwhite = blackwhite ? 0 : 1;
+            var stored_name = $('self_name').innerHTML;
+            var stored_box = $('self_box').innerHTML;
+            var stored_time = $('self_time').innerHTML;
+            $('self_name').innerHTML = $('opposite_name').innerHTML;
+            $('self_box').innerHTML = $('opposite_box').innerHTML;
+            $('self_time').innerHTML = $('opposite_time').innerHTML;
+            $('opposite_name').innerHTML = stored_name;            
+            $('opposite_box').innerHTML = stored_box;
+            $('opposite_time').innerHTML = stored_time;         
+        
+            if (blackwhite) {
+                $('self_time').style['background-color'] = 'white';
+                $('self_name').style['background-color'] = 'white';
+                $('self_box').style['background-color'] = 'white';
+                $('opposite_name').style['background-color'] = 'black';
+                $('opposite_time').style['background-color'] = 'black';
+                $('opposite_box').style['background-color'] = 'black';
+                $('self_name').style.color = 'black';
+                $('self_time').style.color = 'black';
+                $('self_box').style.color = 'black';
+                $('opposite_name').style.color = 'white';
+                $('opposite_time').style.color = 'white';
+                $('opposite_box').style.color = 'white';
+            }
+            else {
+                $('self_name').style['background-color'] = 'black';
+                $('self_time').style['background-color'] = 'black';
+                $('self_box').style['background-color'] = 'black';
+                $('opposite_name').style['background-color'] = 'white';
+                $('opposite_time').style['background-color'] = 'white';
+                $('opposite_box').style['background-color'] = 'white';
+                $('self_time').style.color = 'white';
+                $('self_name').style.color = 'white';
+                $('self_box').style.color = 'white';
+                $('opposite_name').style.color = 'black';
+                $('opposite_time').style.color = 'black';
+                $('opposite_box').style.color = 'black';
+            }
+            show_pieces();
+    }
 })
 $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
-    if (!done) {
+    if (!done && !observer) {
     if (e.target.innerHTML == "🤝") {
         e.target.innerHTML = '✘';
         $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has offered a draw</i><br>`;
@@ -1748,7 +1846,7 @@ db.collection('chess').doc(game).get().then(doc => {
     Time Format: ${doc.data().white_time}<br>
     `;
 
-    if (doc.data().white_time != null && doc.data().timer[1] != null) {
+    if (doc.data().white_time != null && doc.data().timer[0] != null) {
     var new_white_count = doc.data().white_count;
     var new_black_count = doc.data().black_count;
     if (blackwhite) {
@@ -1792,26 +1890,33 @@ db.collection('chess').doc(game).get().then(doc => {
     }
     })
 }
+
+    //taken from onsnapshot
+    mode = doc.data().mode
+    if (observer) {
+        $('options').getElementsByTagName('button')[1].style.width = ($('options').getElementsByTagName('button')[2].getBoundingClientRect().right - $('options').getElementsByTagName('button')[1].getBoundingClientRect().left) + "px";
+        $('options').getElementsByTagName('button')[6].style.width = ($('options').getElementsByTagName('button')[6].getBoundingClientRect().right - $('options').getElementsByTagName('button')[5].getBoundingClientRect().left) + "px";
+        $('options').getElementsByTagName('button')[2].style.display = "none";
+        $('options').getElementsByTagName('button')[5].style.display = "none";
+        $('options').getElementsByTagName('button')[1].style.color = "black";
+        $('options').getElementsByTagName('button')[1].innerHTML = "&#10542";
+    }
 })
 
 db.collection('chess').doc(game).onSnapshot(doc => {    
+    console.log('snapshot');
     if (doc.data().white_user == username) {blackwhite = 1}
     else if (doc.data().black_user == username) {blackwhite = 0}
-    else {blackwhite = 1; observer = true;}
+    else {observer = true;}
     $('text').innerHTML = doc.data().messages;
     $('text').scrollTop = $('text').scrollHeight;
-    white_arr = arrayify(doc.data().white_arr, Number);
-    black_arr = arrayify(doc.data().black_arr, Number);
     turn = doc.data().turn;
-    mode = doc.data().mode;
-    white_list = [];
-    black_list = [];
+
+    //Done code
     done = doc.data().result ? true : false;
     if (done) {
         $('status').innerHTML = `You ${doc.data().result == "draw" ? "Drew" : ((doc.data().result == 'white' ? 1 : 0) == blackwhite ? 'Won' : 'Lost')} by ${doc.data().result_method}`; 
         $('post_options').style.display = "unset";
-    }
-    if (done) {
         popup.getElementsByTagName('div')[0].innerHTML = $('status').innerHTML;
         popup.getElementsByTagName('div')[1].innerHTML = "<button>Rematch</button>"
         popup.style.display = "inline";
@@ -1823,8 +1928,11 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         popup.style.display = "none";
         popup.previousElementSibling.style.display = "none"
     }
+
     enpassant = doc.data().enpassant;
     moves_back = 0;
+
+    if (doc.data().turn != doc.data().timer[1] || !doc.data().moves) {
     undo = arrayify(doc.data().undo);
     $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
     $('options').getElementsByTagName('button')[3].style.cursor = 'default'; 
@@ -1843,6 +1951,10 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('options').getElementsByTagName('button')[4].style.cursor = 'pointer';           
     }
 
+    white_list = [];
+    black_list = [];
+    white_arr = arrayify(doc.data().white_arr, Number);
+    black_arr = arrayify(doc.data().black_arr, Number);
     for (var i of doc.data().white_list) {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
         white_list.push(window[i.name])
@@ -1851,6 +1963,58 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         window[i.name] = new piece (i.colour, i.type, i.pos, i.name);
         black_list.push(window[i.name])
     }
+    var self_int = "";
+    var opp_int = "";
+    $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
+    $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
+    $('self_box').innerHTML = $('self_box').innerHTML.split("").forEach(ele => {
+        switch (ele) {
+            case "P":
+                self_int += "<icon>♟</icon>";
+                break;
+            case "Q":
+                self_int += "<icon>♛</icon>";
+                break;
+            case "K":
+                self_int += "<icon>♚</icon>";
+                break;
+            case "B":
+                self_int += "<icon>♝</icon>";
+                break;
+            case "N":
+                self_int += "<icon>♞</icon>";
+                break;
+            case "R":
+                self_int += "<icon>♜</icon>";
+                break;
+        }
+    })
+    $('self_box').innerHTML = self_int
+    $('opposite_box').innerHTML = $('opposite_box').innerHTML.split("").forEach(ele => {
+        switch (ele) {
+            case "P":
+                opp_int += "<icon>♟</icon>";
+                break;
+            case "Q":
+                opp_int += "<icon>♛</icon>";
+                break;
+            case "K":
+                opp_int += "<icon>♚</icon>";
+                break;
+            case "B":
+                opp_int += "<icon>♝</icon>";
+                break;
+            case "N":
+                opp_int += "<icon>♞</icon>";
+                break;
+            case "R":
+                opp_int += "<icon>♜</icon>";
+                break;
+        }
+    })
+    $('opposite_box').innerHTML = opp_int
+}
+
     if (doc.data().undo) {
     for (var prev_turn of undo) {
         if (prev_turn[0] == (blackwhite ? 'w_king' : 'b_king')) {
@@ -1906,7 +2070,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         beirut_options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + 2 * $('options').getBoundingClientRect().height + "px";
         beirut_options.style.left = '0px';
         var beirut_listener = (e) => {
-            console.log('beirut_options');
             var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
             var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
             var clicked_piece_white = findArr(square, white_arr);
@@ -1926,7 +2089,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                     }
                 }
                 if (clicked.colour == blackwhite && clicked.type != "K") {
-                    console.log(clicked);
                     if (blackwhite) {
                         db.collection('chess').doc(game).update({
                             white_beirut_piece: clicked.name
@@ -1956,7 +2118,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
             }
             else {
                 if (blackwhite == turn && beirut_piece && (Math.abs(window[beirut_piece].pos[0] - (blackwhite ? w_king.pos[0] : b_king.pos[0])) > 1 || Math.abs(window[beirut_piece].pos[1] - (blackwhite ? w_king.pos[1] : b_king.pos[1])) > 1)) {
-                console.log('explosion');
                     var explosion = [
                         [window[beirut_piece].pos[0] + 1,window[beirut_piece].pos[1] + 1],
                         [window[beirut_piece].pos[0] - 1,window[beirut_piece].pos[1] + 1],
@@ -1974,7 +2135,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                     }
                     for (var frag of explosion) {
                         if (findArr(frag, white_arr.concat(black_arr)) != -1) {
-                            console.log('frag', frag)
                             for (var casualty of white_list.concat(black_list)) {
                                 if (arrEqual(casualty.pos,frag)) {
                                     if (casualty.colour) {
@@ -2005,8 +2165,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('self_time').innerHTML = time_to_str($('self_time').innerHTML);
     $('opposite_time').innerHTML = time_to_str($('opposite_time').innerHTML);
 
-    $('self_box').innerHTML = blackwhite ? doc.data().white_bank : doc.data().black_bank;
-    $('opposite_box').innerHTML = blackwhite ? doc.data().black_bank : doc.data().white_bank;
 
     var white_elo;
     var black_elo;
@@ -2016,7 +2174,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         db.collection('account').where('username', '==', doc.data().black_user).get().then(snapshot => {
             snapshot.forEach(doc => {
                 black_elo = doc.data().ranking})
-            console.log(black_elo);
         }).then(() => {
     if (blackwhite) {
         $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + " (" + white_elo + ")";
@@ -2027,54 +2184,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + " (" + white_elo + ")"));
     }
     })})
-    var self_int = "";
-    var opp_int = "";
-    $('self_box').innerHTML = $('self_box').innerHTML.split("").forEach(ele => {
-        switch (ele) {
-            case "P":
-                self_int += "<icon>♟</icon>";
-                break;
-            case "Q":
-                self_int += "<icon>♛</icon>";
-                break;
-            case "K":
-                self_int += "<icon>♚</icon>";
-                break;
-            case "B":
-                self_int += "<icon>♝</icon>";
-                break;
-            case "N":
-                self_int += "<icon>♞</icon>";
-                break;
-            case "R":
-                self_int += "<icon>♜</icon>";
-                break;
-        }
-    })
-    $('self_box').innerHTML = self_int
-    $('opposite_box').innerHTML = $('opposite_box').innerHTML.split("").forEach(ele => {
-        switch (ele) {
-            case "P":
-                opp_int += "<icon>♟</icon>";
-                break;
-            case "Q":
-                opp_int += "<icon>♛</icon>";
-                break;
-            case "K":
-                opp_int += "<icon>♚</icon>";
-                break;
-            case "B":
-                opp_int += "<icon>♝</icon>";
-                break;
-            case "N":
-                opp_int += "<icon>♞</icon>";
-                break;
-            case "R":
-                opp_int += "<icon>♜</icon>";
-                break;
-        }
-    })
-    $('opposite_box').innerHTML = opp_int
+
 
 
     if (blackwhite) {
@@ -2139,15 +2249,16 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         }
 
     }
-
+    if (doc.data().turn != doc.data().timer[0] || doc.data().moves || first_load) {
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     show_pieces();
+}
+    first_load = false;
 })
 
 interval3 = () => {
     clock = setInterval(() => {
-        console.log('int3')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
         if ($('self_time').innerHTML == "0:00.00") {
             clearInterval(clock);
@@ -2157,7 +2268,6 @@ interval3 = () => {
 }
 interval2 = () => {
     clock = setInterval(() => {
-        console.log('int2')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 0.01);
         if ($('self_time').innerHTML.split)
         if ($('self_time').innerHTML == "0:10.00") {
@@ -2168,7 +2278,6 @@ interval2 = () => {
 }
 interval1 = () => {
     clock = setInterval(() => {
-        console.log('int1')
         $('self_time').innerHTML = time_to_str(str_to_time($('self_time').innerHTML) - 1);
             if ($('self_time').innerHTML == "1:00") {
                 clearInterval(clock);
@@ -2272,7 +2381,7 @@ document.addEventListener('click', e => {
                 if (arrEqual(check.pos, square)) { clicked = check; break; }
             }
         }
-        if (clicked.colour == turn && clicked.colour == blackwhite && !observer) {
+        if (clicked.colour == blackwhite && !observer) {
             clicked.highlight();
         }
     }
@@ -2360,7 +2469,6 @@ $('self_box').addEventListener('click', e => {
 var intermediary = (e) => {
     event_for_crazyhouse ++;
     if (event_for_crazyhouse > 2) {
-    console.log('listening to int')
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
     if (findArr(square, noncheck_spaces) != -1) {
@@ -2370,7 +2478,6 @@ var intermediary = (e) => {
                 if (typeof(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]) == 'undefined') {recent_addition = true;}
                 else {addition_number++;}
             }
-        console.log('addition #', square)
         window[(blackwhite ? "w" : "b") + '_crazy' + addition_number] = new piece (blackwhite, crazy_type, square, (blackwhite ? "w" : "b") + '_crazy' + addition_number);
         (blackwhite ? white_list : black_list).push(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]);
         (blackwhite ? white_arr : black_arr).push(square);
@@ -2423,14 +2530,12 @@ $("message_form").addEventListener('submit', e => {
 })
 
 function socket_data(socket) {
-    //console.log(socket);
     socket.on('chat', data => {
         $('text').innerHTML += "<strong>" + data.handle + ":</strong> " + data.message + "<br>";
         $('text').innerHTML = $('text').innerHTML.replace("<em><strong>" + data.handle + ":</strong> ... </em><br>", "");
     })
 
     $("message_form").addEventListener('keyup', () => {
-        //console.log($('message_form').childNodes[1].value.length)
         if ($('message_form').childNodes[1].value.length > 0) {
             socket.emit('typing', handle_colour);
         }
