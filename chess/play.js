@@ -1958,7 +1958,9 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('options').getElementsByTagName('button')[0].style['opacity'] = 1;
         $('options').getElementsByTagName('button')[0].style.cursor = 'pointer'; 
         $('options').getElementsByTagName('button')[4].style['opacity'] = 1;
-        $('options').getElementsByTagName('button')[4].style.cursor = 'pointer';           
+        $('options').getElementsByTagName('button')[4].style.cursor = 'pointer';         
+        $('options').getElementsByTagName('button')[5].style['opacity'] = 1;
+        $('options').getElementsByTagName('button')[5].style.cursor = 'pointer';     
     }
 
     white_list = [];
@@ -2875,14 +2877,22 @@ Undo = () => {
             black_check = true;
         }
     }
+    var tempb = [];
+    var tempw = [];
+    white_list.forEach(obj => {
+        tempw.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+    })
+    black_list.forEach(obj => {
+        tempb.push({colour: obj.colour, type: obj.type, pos: obj.pos, name: obj.name})
+    })
     undo.pop();
     db.collection('chess').doc(game).get().then(doc => {
         db.collection('chess').doc(game).update({
             turn: doc.data().turn ? 0 : 1,
             white_arr: stringify(white_arr),
             black_arr: stringify(black_arr),
-            white_list: stringify(white_list),
-            black_list: stringify(black_list),
+            white_list: tempw,
+            black_list: tempb,
             moves: doc.data().moves - 1,
             white_checks: white_check ? doc.data().white_checks - 1 : doc.data().white_checks,
             black_checks: black_check ? doc.data().black_checks - 1 : doc.data().black_checks, 
