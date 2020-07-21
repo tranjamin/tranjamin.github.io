@@ -91,10 +91,10 @@ function update_graphics() {
 	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
         if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#128100";
         }
         else {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#11144";
         }
         $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
@@ -129,6 +129,14 @@ function update_graphics() {
         $('overlay2').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
         $('overlay').style.height = window.innerHeight * 0.95 + "px";
         $('overlay2').style.height = window.innerHeight * 0.95 + "px";
+        while ($('nav').childNodes[1].childNodes[3].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[3].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
+            $('nav').childNodes[1].getElementsByTagName('li')[0].childNodes[0].childNodes[0].style['font-size'],
+            $('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0].style['font-size'],
+            $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'],
+            $('nav').childNodes[1].getElementsByTagName('li')[3].childNodes[0].childNodes[0].style['font-size'],
+            $('nav').childNodes[1].getElementsByTagName('li')[4].childNodes[0].childNodes[0].style['font-size'],  
+            $('nav').childNodes[1].getElementsByTagName('li')[5].childNodes[0].childNodes[0].style['font-size'] = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";      
+        }
 }
 }
 update_graphics();
