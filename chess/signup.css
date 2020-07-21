@@ -61,6 +61,8 @@ body form input:first-of-type{
     text-align: center;
     font-weight: bold;
     font-family: 'Philosopher';
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #overlay h2, #overlay2 h2 {

@@ -6,13 +6,6 @@ body form input:first-of-type{
     background-color: rgb(209, 253, 228);
     border: none;
 }
-#text {
-    position: absolute;
-    z-index: 3;
-}
-#text:hover {
-    overflow: scroll;
-}
 
 #overlay {
     background-color: rgb(41, 33, 33);
@@ -21,6 +14,8 @@ body form input:first-of-type{
     z-index: 10;
     font-weight: bold;
     font-family: 'Philosopher';
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #overlay h2 {

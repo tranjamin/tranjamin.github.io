@@ -191,17 +191,16 @@ function update_graphics() {
         $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
         $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
         username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-        }
+    }
 
     if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
-        if (getCookie('username') || sessionStorage.getItem('username')) {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
-        }
-        else {
+        if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
         }
-        $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+        else {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+        }
         $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
         $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
@@ -225,6 +224,17 @@ function update_graphics() {
             Powered by Github and Google Firebase
         </div>`;
     }
+    if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+        console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
+        $('overlay').style.right = '2%';
+        $('overlay2').style.right = '2%';
+        $('overlay').style.left = 'unset';
+        $('overlay2').style.left = 'unset';
+        $('overlay').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
+        $('overlay2').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
+        $('overlay').style.height = $('overlay').style.width;
+        $('overlay2').style.height = $('overlay2').style.width;
+}
 
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
@@ -253,7 +263,7 @@ popup.previousElementSibling.addEventListener('click', e => {
 })
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
+    if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id')

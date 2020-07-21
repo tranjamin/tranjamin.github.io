@@ -48,6 +48,56 @@ function update_graphics() {
     nav.style.top = 0;
     nav.style.left = 0;
 
+	$('nav').getElementsByTagName('button')[0].innerHTML = "Login/Signup";
+    if (getCookie('username') || sessionStorage.getItem('username')) {
+            $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
+        $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+    }
+	
+	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+        $('nav').style.width = window.innerHeight * 0.1 + "px";
+        if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
+        }
+        else {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+        }
+        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
+        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
+        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
+        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "&#128366";
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "&#128737";
+    }
+    else {
+        if (getCookie('username') || sessionStorage.getItem('username')) {
+            $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
+        $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        }
+        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "My Games";
+        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "Create Game";
+        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "Join Game";
+        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "How to Play";
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = `Privacy Policy<br>
+        <div id="copyright">
+            &copy Benjamin Tran 2020<br>
+            Powered by Github and Google Firebase
+        </div>`;
+    }
+    if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+        console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
+        $('overlay').style.right = '2%';
+        $('overlay2').style.right = '2%';
+        $('overlay').style.left = 'unset';
+        $('overlay2').style.left = 'unset';
+        $('overlay').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
+        $('overlay2').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
+        $('overlay').style.height = $('overlay').style.width;
+        $('overlay2').style.height = $('overlay2').style.width;
+}
     var rules = $('rules_nav');
     rules.style.width = overlay.getBoundingClientRect().width;
     document.getElementsByClassName('rules')[0].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
