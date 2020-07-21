@@ -248,10 +248,38 @@ function update_graphics() {
         $('interface').style.top = $('chat_title').getBoundingClientRect().top + "px";
         $('interface').style.width = canvas.width / 2 + "px";
         $('interface').style.left = canvas.getBoundingClientRect().right - $('interface').getBoundingClientRect().width + "px";
+
+        $('opposite_name').style['font-size'] = "100%";
+    $('self_name').style['font-size'] = "100%";
+    while (getComputedStyle($('opposite_name'))['height'].slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name'))['height'].slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
+        $('opposite_name').style['font-size'] = (getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) - 1) + "px";
+        $('self_name').style['font-size'] = (getComputedStyle($('self_name'))['font-size'].slice(0,-2) - 1) + "px";
+        $('opposite_time').style['font-size'] = $('opposite_name').style['font-size'];
+        $('self_time').style['font-size'] = $('self_name').style['font-size'];
     }
-    else {
-        
+
+    $('opposite_box').style['font-size'] = "100%";
+    $('self_box').style['font-size'] = "100%";
+    while (getComputedStyle($('opposite_box'))['height'].slice(0,-2) / getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_box'))['height'].slice(0,-2) / getComputedStyle($('self_box'))['font-size'].slice(0,-2) > 2) {
+        $('opposite_box').style['font-size'] = (getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) - 1) + "px";
+        $('self_box').style['font-size'] = (getComputedStyle($('self_box'))['font-size'].slice(0,-2) - 1) + "px";
     }
+
+    $('status').style['font-size'] = '100%';
+    $('status').nextElementSibling.firstElementChild.style['font-size'] = '100%';
+    while (getComputedStyle($('status'))['height'].slice(0,-2) / getComputedStyle($('status'))['font-size'].slice(0,-2) > 2) {
+        $('status').style['font-size'] = (getComputedStyle($('status'))['font-size'].slice(0,-2) - 1) + "px";
+        $('status').nextElementSibling.firstElementChild.style['font-size'] = $('status').style['font-size']
+        $('tracking').style['font-size'] = $('status').style['font-size']
+        $('info').style['font-size'] = $('status').style['font-size']
+    }
+    
+    $('options').style['font-size'] = '100%';
+    while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
+        $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
+    }        
+    }
+
 
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
