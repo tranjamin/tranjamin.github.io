@@ -224,17 +224,14 @@ function update_graphics() {
             Powered by Github and Google Firebase
         </div>`;
     }
-    if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+    /*
+    if ($('canvas').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
-        $('overlay').style.right = '2%';
-        $('overlay2').style.right = '2%';
+        $('canvas').style.right = '2%';
         $('overlay').style.left = 'unset';
-        $('overlay2').style.left = 'unset';
         $('overlay').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
-        $('overlay2').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
         $('overlay').style.height = $('overlay').style.width;
-        $('overlay2').style.height = $('overlay2').style.width;
-}
+}*/
 
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
