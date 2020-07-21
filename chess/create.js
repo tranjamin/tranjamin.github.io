@@ -169,7 +169,7 @@ function update_graphics() {
     nav.style.top = 0;
     nav.style.left = 0;
 
-	$('nav').getElementsByTagName('button')[0].innerHTML = "Login/Signup";
+	$('nav').getElementsByTagName('button')[0].innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>Login/Signup</a>";
     if (getCookie('username') || sessionStorage.getItem('username')) {
             $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
         $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
@@ -179,7 +179,7 @@ function update_graphics() {
 	
 	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
-        if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {
+        if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
         }
         else {
@@ -211,13 +211,9 @@ function update_graphics() {
     if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
         $('overlay').style.right = '2%';
-        $('overlay2').style.right = '2%';
         $('overlay').style.left = 'unset';
-        $('overlay2').style.left = 'unset';
         $('overlay').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
-        $('overlay2').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
-        $('overlay').style.height = $('overlay').style.width;
-        $('overlay2').style.height = $('overlay2').style.width;
+        $('overlay').style.height = window.innerHeight * 0.95 + "px";
 }
 
     var left_column = $('left_column')
@@ -236,7 +232,7 @@ function update_graphics() {
 
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {window.location.assign('signup.html')}
+    if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id')
@@ -247,7 +243,7 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
-    location.assign('signup.html');
+    location.assign('account.html');
 });
 $('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
 location.assign('create.html');
@@ -333,18 +329,7 @@ db.collection('chess').add({
     $('error').innerHTML = "Could not connect to server. Please try again later";
 });
 }
-/*
-stringify = (stringed_arr) => {
-    var x = "";
-    for (var y in stringed_arr) {
-        if (y == stringed_arr.length - 1) {
-            x += "[" + String(stringed_arr[y]) + "]";
-        }
-        else {
-            x += "[" + String(stringed_arr[y]) + "],";
-        }}
-    return x;
-}*/
+
 stringify = (stringed_arr) => {
     var x = "";
     for (var y in stringed_arr) {

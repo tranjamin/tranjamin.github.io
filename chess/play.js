@@ -185,7 +185,7 @@ function update_graphics() {
         nav.style.top = 0;
         nav.style.left = 0;
 
-    $('nav').getElementsByTagName('button')[0].innerHTML = "Login/Signup";
+    $('nav').getElementsByTagName('button')[0].innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>Login/Signup</a>";
     if (getCookie('username') || sessionStorage.getItem('username')) {
             $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
         $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
@@ -195,7 +195,7 @@ function update_graphics() {
 
     if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
-        if ($('nav').getElementsByTagName('button')[0].innerHTML == "Login/Signup") {
+        if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
         }
         else {
@@ -274,7 +274,7 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
-    location.assign('signup.html');
+    location.assign('account.html');
 });
 $('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
 location.assign('create.html');
