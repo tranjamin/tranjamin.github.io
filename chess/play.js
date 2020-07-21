@@ -224,6 +224,11 @@ function update_graphics() {
             Powered by Github and Google Firebase
         </div>`;
     }
+    if (canvas.getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+        canvas.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.94;
+        canvas.height = canvas.width;
+        canvas.style.left = $('nav').getBoundingClientRect().right + canvas.width * 0.01 + "px";
+    }
     if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('submit_message').style.position = "relative";
         $('message').style.top = parseFloat($('message').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
