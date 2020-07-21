@@ -196,7 +196,7 @@ function update_graphics() {
     if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
         if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>&#128100</a>";
         }
         else {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
@@ -250,7 +250,9 @@ function update_graphics() {
         $('interface').style.left = canvas.getBoundingClientRect().right - $('interface').getBoundingClientRect().width + "px";
 
         $('opposite_name').style['font-size'] = "100%";
-    $('self_name').style['font-size'] = "100%";
+        $('self_name').style['font-size'] = "100%";
+        $('opposite_time').style['font-size'] = "100%";
+        $('self_time').style['font-size'] = "100%";
     while (getComputedStyle($('opposite_name'))['height'].slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name'))['height'].slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
         $('opposite_name').style['font-size'] = (getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) - 1) + "px";
         $('self_name').style['font-size'] = (getComputedStyle($('self_name'))['font-size'].slice(0,-2) - 1) + "px";
@@ -277,7 +279,22 @@ function update_graphics() {
     $('options').style['font-size'] = '100%';
     while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
-    }        
+    }   
+    while (getComputedStyle($('nav').getElementsByTagName('button')[0])['height'].slice(0,-2) / (getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2) * 1.5) > 3) {
+        $('nav').getElementsByTagName('a')[0].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2)) + 1 + "px";
+        $('nav').getElementsByTagName('a')[1].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[1])['font-size'].slice(0,-2)) + 1 + "px";
+        $('nav').getElementsByTagName('a')[2].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[2])['font-size'].slice(0,-2)) + 1 + "px";
+        $('nav').getElementsByTagName('a')[3].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[3])['font-size'].slice(0,-2)) + 1 + "px";
+        $('nav').getElementsByTagName('a')[4].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[4])['font-size'].slice(0,-2)) + 1 + "px";
+
+    }     
+    }
+    else {
+        $('nav').getElementsByTagName('a')[0].style['font-size'] = '100%';
+        $('nav').getElementsByTagName('a')[1].style['font-size'] = '100%';
+        $('nav').getElementsByTagName('a')[2].style['font-size'] = '100%';
+        $('nav').getElementsByTagName('a')[3].style['font-size'] = '100%';
+        $('nav').getElementsByTagName('a')[4].style['font-size'] = '100%';
     }
 
 
