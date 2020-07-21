@@ -117,7 +117,7 @@ function draw_board() {
 }
 
 function update_graphics() {
-    canvas.height = window.innerHeight * 0.95;
+    canvas.height = (window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth) * 0.95;
     canvas.width = canvas.height;
     canvas.style.left = (window.innerWidth - canvas.width) / 2 + "px";
     canvas.style.top = window.innerHeight * 0.02 + "px";
@@ -148,18 +148,83 @@ function update_graphics() {
     interface.style.width = (window.innerWidth - canvas.getBoundingClientRect().right) * 0.95 + "px";
     interface.style.left = canvas.getBoundingClientRect().right * 1.01 + "px";
 
+    $('opposite_name').style['font-size'] = "100%";
+    $('self_name').style['font-size'] = "100%";
+    while (getComputedStyle($('opposite_name'))['height'].slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name'))['height'].slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
+        $('opposite_name').style['font-size'] = (getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) - 1) + "px";
+        $('self_name').style['font-size'] = (getComputedStyle($('self_name'))['font-size'].slice(0,-2) - 1) + "px";
+        $('opposite_time').style['font-size'] = $('opposite_name').style['font-size'];
+        $('self_time').style['font-size'] = $('self_name').style['font-size'];
+    }
+
+    $('opposite_box').style['font-size'] = "100%";
+    $('self_box').style['font-size'] = "100%";
+    while (getComputedStyle($('opposite_box'))['height'].slice(0,-2) / getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_box'))['height'].slice(0,-2) / getComputedStyle($('self_box'))['font-size'].slice(0,-2) > 2) {
+        $('opposite_box').style['font-size'] = (getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) - 1) + "px";
+        $('self_box').style['font-size'] = (getComputedStyle($('self_box'))['font-size'].slice(0,-2) - 1) + "px";
+    }
+
+    $('status').style['font-size'] = '100%';
+    $('status').nextElementSibling.firstElementChild.style['font-size'] = '100%';
+    while (getComputedStyle($('status'))['height'].slice(0,-2) / getComputedStyle($('status'))['font-size'].slice(0,-2) > 2) {
+        $('status').style['font-size'] = (getComputedStyle($('status'))['font-size'].slice(0,-2) - 1) + "px";
+        $('status').nextElementSibling.firstElementChild.style['font-size'] = $('status').style['font-size']
+        $('tracking').style['font-size'] = $('status').style['font-size']
+        $('info').style['font-size'] = $('status').style['font-size']
+    }
+    
+    $('options').style['font-size'] = '100%';
+    while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
+        $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
+    }
+
+        //nav
+        var nav = $('nav');
+        nav.style.height = window.innerHeight + "px";
+        nav.style.width = screen.width * 0.125 + "px";
+        nav.style.top = 0;
+        nav.style.left = 0;
+
+    if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+        $('nav').style.width = window.innerHeight * 0.1 + "px";
+        if (getCookie('username') || sessionStorage.getItem('username')) {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+        }
+        else {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
+        }
+        $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
+        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
+        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
+        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "&#128366";
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "&#128737";
+    }
+    else {
+        if (getCookie('username') || sessionStorage.getItem('username')) {
+            $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
+        $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        }
+        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "My Games";
+        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "Create Game";
+        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "Join Game";
+        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "How to Play";
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = `Privacy Policy<br>
+        <div id="copyright">
+            &copy Benjamin Tran 2020<br>
+            Powered by Github and Google Firebase
+        </div>`;
+    }
+
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
     options.style.left = '0px';
     var post_options = $('post_options');
     post_options.style.bottom = window.innerHeight - $('options').getBoundingClientRect().top + "px";
 
-    //nav
-    var nav = $('nav');
-    nav.style.height = window.innerHeight + "px";
-    nav.style.width = screen.width * 0.125 + "px";
-    nav.style.top = 0;
-    nav.style.left = 0;
+
     
     popup.style.height = canvas.height * 0.4 + "px";
     popup.style.width = canvas.width * 0.6 + "px";
@@ -180,7 +245,7 @@ popup.previousElementSibling.addEventListener('click', e => {
 })
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
+    if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id')
@@ -1217,8 +1282,6 @@ class piece {
 
                 }
                 else {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    show_pieces();
                     canvas.removeEventListener('click', intermediary);
                     document.elementFromPoint(e.clientX, e.clientY).click();
                     current_highlight = false;
@@ -1226,6 +1289,8 @@ class piece {
                     catch (TypeError) {}
                     if (!observer) {
                         pre_move = null;
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        show_pieces();
                         if (blackwhite) {
                             db.collection('chess').doc(game).update({
                                 white_pre_move: null
@@ -1236,6 +1301,10 @@ class piece {
                                 white_pre_move: null
                             })
                         }
+                    }
+                    else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        show_pieces();
                     }
                 }
             }
@@ -1830,7 +1899,7 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
     }}
 })
 $('options').getElementsByTagName('button')[5].addEventListener('click', e => {
-    if (!undo.length) {
+    if (undo.length) {
     if (blackwhite == turn) {
         Undo();
         Undo();
@@ -2262,11 +2331,13 @@ db.collection('chess').doc(game).onSnapshot(doc => {
 
     }
 
+    update_graphics();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    show_pieces();
     if ((blackwhite ? doc.data().white_notification : doc.data().black_notification) || !doc.data().moves || first_load) {
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     show_pieces();
-    console.log(1);
 }
     first_load = false;
     if (blackwhite) {
@@ -2418,7 +2489,7 @@ document.addEventListener('click', e => {
         }
         if (clicked && clicked.colour == blackwhite && !observer && !current_highlight) {
             current_highlight = true;
-            console.log('time to highlight');
+            console.log('time to highlight', clicked);
             clicked.highlight(false, white_arr, black_arr, white_list, black_list, true);
         }
     }
@@ -2691,7 +2762,7 @@ arrayify = (arr2,type=String) => {
         }
         }
         else if (!inner) {
-            if (type == Number) {
+            if (type == Number || !isNaN(original_arr[index])) {
             ret_arr.push(parseInt(original_arr[index]));}
             else {
                 ret_arr.push((original_arr[index]));
@@ -2783,10 +2854,10 @@ formatUndo = (undo_arr) => {
     else {
         window[undo_arr[0]].pos = undo_arr[1];
         if (window[undo_arr[0]].colour) {
-            white_arr.splice(undo_arr[2], 1, undo_arr[1])
+            white_arr.splice(findArr(undo_arr[2], white_arr), 1, undo_arr[1])
         }
         else {
-            black_arr.splice(undo_arr[2], 1, undo_arr[1])
+            black_arr.splice(findArr(undo_arr[2], black_arr), 1, undo_arr[1])
         }
         if (undo_arr[4] && undo_arr[4] != "undefined") {
                 window[undo_arr[4][3]] = new piece(undo_arr[4][0], undo_arr[4][1], undo_arr[4][2], undo_arr[4][3]);

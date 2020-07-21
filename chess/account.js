@@ -501,7 +501,7 @@ db.collection('account').doc(user_id).onSnapshot(doc => {
 	$('wins').innerHTML = doc.data().wins;
 	$('losses').innerHTML = doc.data().losses;
 	$('draws').innerHTML = doc.data().draws;
-	$('percents').innerHTML = !isNaN(doc.data().wins / (doc.data().losses)) ? (doc.data().wins / (doc.data().losses) * 100).toFixed(2) + "%" : "-";
+	$('percents').innerHTML = !isNaN(doc.data().wins / (doc.data().losses)) ? (doc.data().wins / (doc.data().losses + doc.data().wins) * 100).toFixed(2) + "%" : "-";
 	$('rankings').innerHTML = doc.data().ranking;
 })
 

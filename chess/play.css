@@ -136,7 +136,6 @@ right: 15%;
 #nav {
     background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
     position: fixed;
-    z-index: 100;
     color: white;
 
 }
