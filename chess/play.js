@@ -185,6 +185,14 @@ function update_graphics() {
         nav.style.top = 0;
         nav.style.left = 0;
 
+    $('nav').getElementsByTagName('button')[0].innerHTML = "Login/Signup";
+    if (getCookie('username') || sessionStorage.getItem('username')) {
+            $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
+        $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        }
+
     if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
         if (getCookie('username') || sessionStorage.getItem('username')) {
