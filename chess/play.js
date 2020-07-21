@@ -224,14 +224,29 @@ function update_graphics() {
             Powered by Github and Google Firebase
         </div>`;
     }
-    /*
-    if ($('canvas').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
-        console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
-        $('canvas').style.right = '2%';
-        $('overlay').style.left = 'unset';
-        $('overlay').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
-        $('overlay').style.height = $('overlay').style.width;
-}*/
+    if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+        $('submit_message').style.position = "relative";
+        $('message').style.top = parseFloat($('message').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
+        $('chat_title').style.top = parseFloat($('chat_title').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
+        $('text').style.top = parseFloat($('text').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
+        $('submit_message').style.top = $('text').getBoundingClientRect().bottom - $('submit_message').getBoundingClientRect().top - $('submit_message').getElementsByTagName('input')[0].getBoundingClientRect().height + "px";
+        $('message').style.left = (parseFloat($('message').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('message').getBoundingClientRect().left) + "px";
+        $('chat_title').style.left = (parseFloat($('chat_title').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('chat_title').getBoundingClientRect().left) + "px";
+        $('text').style.left = (parseFloat($('text').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('text').getBoundingClientRect().left) + "px";
+        $('submit_message').style.left = (parseFloat($('submit_message').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('submit_message').getBoundingClientRect().left) + "px";
+        $('message').style.width = canvas.width / 2 + "px";
+        $('chat_title').style.width = canvas.width / 2 + "px";
+        $('text').style.width = canvas.width / 2 + "px";
+        $('submit_message').style.width = canvas.width / 2 + "px";
+        $('message_form').getElementsByTagName('input')[0].style.width = $('text').getBoundingClientRect().width + "px";
+
+        $('interface').style.top = $('chat_title').getBoundingClientRect().top + "px";
+        $('interface').style.width = canvas.width / 2 + "px";
+        $('interface').style.left = canvas.getBoundingClientRect().right - $('interface').getBoundingClientRect().width + "px";
+    }
+    else {
+        
+    }
 
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
