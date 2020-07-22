@@ -40,6 +40,7 @@ color: white;
 #submit_message {
 position: fixed;
 z-index: 4;
+overflow: hidden;
 }
 body form input:first-of-type{
     background-color: rgb(184, 135, 45);

@@ -122,6 +122,13 @@ function update_graphics() {
     canvas.style.left = (window.innerWidth - canvas.width) / 2 + "px";
     canvas.style.top = window.innerHeight * 0.02 + "px";
 
+    //nav
+    var nav = $('nav');
+    nav.style.height = window.innerHeight + "px";
+    nav.style.width = screen.width * 0.125 + "px";
+    nav.style.top = 0;
+    nav.style.left = 0;
+
     msg.style.height = canvas.getBoundingClientRect().height + "px";
     msg.style.width = (window.innerWidth - canvas.width) / 2 * 0.5 + 'px';
     msg.style.top = window.innerHeight * 0.02 + "px";
@@ -178,12 +185,6 @@ function update_graphics() {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
     }
 
-        //nav
-        var nav = $('nav');
-        nav.style.height = window.innerHeight + "px";
-        nav.style.width = screen.width * 0.125 + "px";
-        nav.style.top = 0;
-        nav.style.left = 0;
 
     $('nav').getElementsByTagName('button')[0].innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>Login/Signup</a>";
     if (getCookie('username') || sessionStorage.getItem('username')) {
@@ -229,7 +230,7 @@ function update_graphics() {
         canvas.height = canvas.width;
         canvas.style.left = $('nav').getBoundingClientRect().right + canvas.width * 0.01 + "px";
     }
-    if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+    if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right || window.innerWidth / canvas.width < 2) {
         $('submit_message').style.position = "relative";
         $('message').style.top = parseFloat($('message').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
         $('chat_title').style.top = parseFloat($('chat_title').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
@@ -295,7 +296,17 @@ function update_graphics() {
         $('nav').getElementsByTagName('a')[2].style['font-size'] = '100%';
         $('nav').getElementsByTagName('a')[3].style['font-size'] = '100%';
         $('nav').getElementsByTagName('a')[4].style['font-size'] = '100%';
+        $('text').style.width = (canvas.getBoundingClientRect().left - nav.getBoundingClientRect().right) * 0.96 + "px";
+        $('text').style.left = nav.getBoundingClientRect().right + $('text').style.width.slice(0,-2) * 0.02 + "px";
+        msg_title.style.width = $('text').style.width;
+        msg_title.style.left = $('text').style.left;
+        msg.style.width = $('text').style.width;
+        msg.style.left = $('text').style.left;
+        $('submit_message').style.width = $('text').style.width;
+        $('submit_message').getElementsByTagName('input')[0].style.width = '100%';
+        $('submit_message').style.left = $('text').style.left;
     }
+    
 
 
     var options = $('options');
