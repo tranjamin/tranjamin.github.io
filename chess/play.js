@@ -835,18 +835,14 @@ class piece {
                     }
                     for (var frag of explosion) {
                         if (findArr(frag, white_arr.concat(black_arr)) != -1) {
-                            for (var casualty of white_list.concat(black_list)) {
-                                if (casualty.type != "P" && arrEqual(casualty.pos,frag)) {
-                                    if (casualty.colour) {
-                                        white_list.splice(white_list.indexOf(casualty), 1);
-                                        white_arr.splice(findArr(casualty.pos, white_arr), 1);
-                                    }
-                                    else {
-                                        black_list.splice(black_list.indexOf(casualty), 1);
-                                        black_arr.splice(findArr(casualty.pos, black_arr), 1);
-                                    }
-                                    if (casualty.type == "K") {
-                                        if (this.colour == blackwhite) {
+                        for (var casualty of white_list.concat(black_list)) {
+                        if (casualty.type != "P" && arrEqual(casualty.pos,frag)) {
+                        if (casualty.colour) {white_list.splice(white_list.indexOf(casualty), 1);
+                        white_arr.splice(findArr(casualty.pos, white_arr), 1);}
+                        else {black_list.splice(black_list.indexOf(casualty), 1);
+                        black_arr.splice(findArr(casualty.pos, black_arr), 1);}
+                        if (casualty.type == "K") {
+                        if (this.colour == blackwhite) {
                                             win('Exploding the King')
                                         }
                                         else {
