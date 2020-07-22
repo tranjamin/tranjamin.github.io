@@ -129,15 +129,26 @@ function update_graphics() {
         $('overlay2').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
         $('overlay').style.height = window.innerHeight * 0.95 + "px";
         $('overlay2').style.height = window.innerHeight * 0.95 + "px";
-        while ($('nav').childNodes[1].childNodes[3].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[3].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
-            $('nav').childNodes[1].getElementsByTagName('li')[0].childNodes[0].childNodes[0].style['font-size'],
-            $('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0].style['font-size'],
-            $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'],
-            $('nav').childNodes[1].getElementsByTagName('li')[3].childNodes[0].childNodes[0].style['font-size'],
-            $('nav').childNodes[1].getElementsByTagName('li')[4].childNodes[0].childNodes[0].style['font-size'],  
-            $('nav').childNodes[1].getElementsByTagName('li')[5].childNodes[0].childNodes[0].style['font-size'] = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";      
-        }
 }
+/*
+$('nav').childNodes[1].getElementsByTagName('li')[0].childNodes[0].style['font-size'] = '0px';
+$('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0].style['font-size'] = '0px';
+$('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = '0px';
+$('nav').childNodes[1].getElementsByTagName('li')[3].childNodes[0].childNodes[0].style['font-size'] = '0px';
+$('nav').childNodes[1].getElementsByTagName('li')[4].childNodes[0].childNodes[0].style['font-size'] = '0px';
+$('nav').childNodes[1].getElementsByTagName('li')[5].childNodes[0].childNodes[0].style['font-size'] = '0px';
+var new_size;
+while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 2.5) {
+    var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";         
+    $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
+
+}
+$('nav').childNodes[1].getElementsByTagName('li')[0].childNodes[0].style['font-size'] = new_size;
+$('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0].style['font-size'] = new_size;
+$('nav').childNodes[1].getElementsByTagName('li')[3].childNodes[0].childNodes[0].style['font-size'] = new_size;
+$('nav').childNodes[1].getElementsByTagName('li')[4].childNodes[0].childNodes[0].style['font-size'] = new_size;
+$('nav').childNodes[1].getElementsByTagName('li')[5].childNodes[0].childNodes[0].style['font-size'] = new_size;
+*/
 }
 update_graphics();
 
