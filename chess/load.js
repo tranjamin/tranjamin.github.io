@@ -37,7 +37,7 @@ function find_overlap(element, x_or_y, single_line=true) {
 			if (element.clientHeight != element.scrollHeight) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth && element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight) {overflow_bool = true}
 			break;
 }
 	element.style['overflow'] = original_overflowX;
@@ -51,6 +51,7 @@ function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
 	}
 	return getComputedStyle(element)['font-size'];
 }
+
 
 var username = "anon";
 var user_id = "";
@@ -124,7 +125,9 @@ function update_graphics() {
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
         $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
         $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "&#128366";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "&#128737";
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = `&#128737        <div id="copyright" style='font-size: 40%;'>
+		&copy 2020
+	</div>`;
     }
     else {
         if (getCookie('username') || sessionStorage.getItem('username')) {
@@ -161,15 +164,25 @@ function update_graphics() {
     document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom + "px";
 	document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom + "px";
 
-	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
+	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
 
 	var new_size;
-	while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
-    var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";         
-    $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
-
+	while (
+		$('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
+		find_overlap($('nav').getElementsByTagName('a')[0],'x',false) ||
+		find_overlap($('nav').getElementsByTagName('a')[1],'x',false) ||
+		find_overlap($('nav').getElementsByTagName('a')[2],'x',false) ||
+		find_overlap($('nav').getElementsByTagName('a')[3],'x',false) ||
+		find_overlap($('nav').getElementsByTagName('a')[4],'x',false) ||
+		find_overlap($('nav').getElementsByTagName('a')[5],'x',false)	
+		) {
+    var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
+	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
 }
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
+	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
+	$('copyright').style.top = 'unset';
+	$('copyright').style.bottom = 0;
+
 
 }
 

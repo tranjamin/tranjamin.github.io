@@ -135,12 +135,15 @@ body form input:first-of-type{
 
 }
 #nav li {
-    height: 16%;
+    height: 16.66666666666666666%;
     width: 100%;
     background-color: rgba(58, 54, 54, 0.158);
     border-bottom: white 2px solid;
     position: relative;
     padding: 0;
+}
+#nav li:last-of-type {
+    border-bottom: none;
 }
 #nav ul {
     list-style: none;
@@ -149,7 +152,8 @@ body form input:first-of-type{
     width: 100%;
     position: absolute;
     left: 0%;
-    padding: 0;
+    padding: 0 0;
+    margin: 0 0;
 }
 #nav li button {
     height: 100%;
