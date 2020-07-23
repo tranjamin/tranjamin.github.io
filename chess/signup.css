@@ -166,6 +166,11 @@ body form input:first-of-type{
     overflow: hidden;
     cursor: pointer;
 }
+#nav li button a {
+    display: block;
+    position: absolute;
+    left: 0;
+}
 
 #copyright {
     font-size: 50%;

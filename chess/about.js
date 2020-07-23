@@ -22,7 +22,7 @@ function find_overlap(element, x_or_y, single_line=true) {
 			if (element.clientHeight != element.scrollHeight) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth && element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight) {overflow_bool = true}
 			break;
 }
 	element.style['overflow'] = original_overflowX;
@@ -30,7 +30,6 @@ function find_overlap(element, x_or_y, single_line=true) {
 	element.style['overflow-y'] = original_overflow;
 	return overflow_bool;
 }
-
 function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
 	while (find_overlap(element, x_or_y, single_line)) {
 		element.style['font-size'] = (parseFloat(getComputedStyle(element)['font-size'].slice(0,-2)) - interval) + "px";

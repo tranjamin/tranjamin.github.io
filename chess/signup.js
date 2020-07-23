@@ -41,7 +41,7 @@ function find_overlap(element, x_or_y, single_line=true) {
 			if (element.clientHeight != element.scrollHeight) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth && element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight) {overflow_bool = true}
 			break;
 }
 	element.style['overflow'] = original_overflowX;
