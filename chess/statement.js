@@ -122,7 +122,7 @@ function update_graphics() {
 	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
         if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>&#128100</a>";
         }
         else {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
