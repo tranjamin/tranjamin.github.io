@@ -1,19 +1,3 @@
-/*
-This Version Includes:
-Basic piece movement
-Basic chat
-En passant
-Castling
-Promotion
-
-This Version does not Include:
-Check / Checkmate
-Underpromotion
-Undo
-Flip Board
-
-*/
-
 var white_arr = [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]];
 var black_arr = [[1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7], [8, 7]];
 
@@ -131,10 +115,10 @@ function find_overlap(element, x_or_y, single_line=true) {
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
 			break;
 		case 'y': 
-			if (element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight) {overflow_bool = true}
 			break;
 }
 	element.style['overflow'] = original_overflowX;
@@ -178,12 +162,6 @@ if (!cookies_allowed) {
     })
 }
 
-if (getCookie('username') || sessionStorage.getItem('username')) {
-    $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
-$('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-$('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
-username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-}
 if (sessionStorage.getItem('user_id')) {user_id = sessionStorage.getItem('user_id')}
 else if (getCookie('user_id')) {user_id = getCookie('user_id')}
 
@@ -206,21 +184,21 @@ function update_graphics() {
     nav.style.top = 0;
     nav.style.left = 0;
 
-	$('nav').getElementsByTagName('button')[0].innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>Login/Signup</a>";
+	$('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Login/Signup";
     if (getCookie('username') || sessionStorage.getItem('username')) {
-            $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
-        $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-        $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
+            $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Welcome, ";
+        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += "<br>Logout";
         username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
     }
 	
 	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
         if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "<a href='signup.html' style='text-decoration: none; color: white;'>&#128100</a>";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#128100";
         }
         else {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#11144";
         }
         $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
@@ -231,12 +209,6 @@ function update_graphics() {
 	</div>`;
     }
     else {
-        if (getCookie('username') || sessionStorage.getItem('username')) {
-            $('nav').getElementsByTagName('button')[0].innerHTML = "Welcome, ";
-        $('nav').getElementsByTagName('button')[0].innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-        $('nav').getElementsByTagName('button')[0].innerHTML += "<br>Logout";
-        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-        }
         $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "My Games";
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "Create Game";
         $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "Join Game";
@@ -269,21 +241,40 @@ function update_graphics() {
       ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
 
       var new_size;
-      while (
-          $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-          find_overlap($('nav').getElementsByTagName('a')[0],'x',false) ||
-          find_overlap($('nav').getElementsByTagName('a')[1],'x',false) ||
-          find_overlap($('nav').getElementsByTagName('a')[2],'x',false) ||
-          find_overlap($('nav').getElementsByTagName('a')[3],'x',false) ||
-          find_overlap($('nav').getElementsByTagName('a')[4],'x',false) ||
-          find_overlap($('nav').getElementsByTagName('a')[5],'x',false)	
-          ) {
-      var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
-      ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
-  }
-      ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
-      $('copyright').style.top = 'unset';
-      $('copyright').style.bottom = 0;
+      if (user_id) {
+        while (
+            $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
+            find_overlap($('nav').getElementsByTagName('a')[0],'x',false) ||
+            find_overlap($('nav').getElementsByTagName('a')[1],'x',false) ||
+            find_overlap($('nav').getElementsByTagName('a')[2],'x',false) ||
+            find_overlap($('nav').getElementsByTagName('a')[3],'x',false) ||
+            find_overlap($('nav').getElementsByTagName('a')[4],'x',false) ||
+            find_overlap($('nav').getElementsByTagName('a')[5],'x',false)	
+            ) {
+        new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
+        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
+    }
+        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
+        $('copyright').style.top = 'unset';
+        $('copyright').style.bottom = 0;}
+        else {
+            while (
+                $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
+                find_overlap($('nav').getElementsByTagName('a')[1],'x',false) ||
+                find_overlap($('nav').getElementsByTagName('a')[2],'x',false) ||
+                find_overlap($('nav').getElementsByTagName('a')[3],'x',false) ||
+                find_overlap($('nav').getElementsByTagName('a')[4],'x',false) ||
+                find_overlap($('nav').getElementsByTagName('a')[5],'x',false)	
+                ) {
+            new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
+            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
+        }
+            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
+            $('nav').getElementsByTagName('a')[0].style['font-size'] = '50px';
+            reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
+            $('copyright').style.top = 'unset';
+            $('copyright').style.bottom = 0;
+        }
 
 }
 
