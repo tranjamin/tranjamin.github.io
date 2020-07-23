@@ -19,6 +19,42 @@ Flip Board
 
 function $(id) { return document.getElementById(id); }
 
+function find_overlap(element, x_or_y, single_line=true) {
+	var overflow_bool = false;
+	var original_overflowY = element.style['overflow-y']
+	var original_overflowX = element.style['overflow-x']
+	var original_overflow = element.style['overflow']
+
+	if (single_line) {
+		if ((getComputedStyle(element)['height'].slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+			return true;
+		}
+	}
+	element.style['overflow'] = 'scroll';
+	element.style['overflow-x'] = 'scroll';
+	element.style['overflow-y'] = 'scroll';
+	switch (x_or_y) {
+		case 'x': 
+			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
+			break;
+		case 'y': 
+			if (element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			break;
+		default: 
+			if (element.clientWidth != element.scrollWidth && element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			break;
+}
+	element.style['overflow'] = original_overflowX;
+	element.style['overflow-x'] = original_overflowY;
+	element.style['overflow-y'] = original_overflow;
+	return overflow_bool;
+}
+function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
+	while (find_overlap(element, x_or_y, single_line)) {
+		element.style['font-size'] = (parseFloat(getComputedStyle(element)['font-size'].slice(0,-2)) - interval) + "px";
+	}
+	return getComputedStyle(element)['font-size'];
+}
 
 // sockets
   
@@ -130,25 +166,15 @@ function update_graphics() {
         $('overlay').style.height = window.innerHeight * 0.95 + "px";
         $('overlay2').style.height = window.innerHeight * 0.95 + "px";
 }
-/*
-$('nav').childNodes[1].getElementsByTagName('li')[0].childNodes[0].style['font-size'] = '0px';
-$('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0].style['font-size'] = '0px';
-$('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = '0px';
-$('nav').childNodes[1].getElementsByTagName('li')[3].childNodes[0].childNodes[0].style['font-size'] = '0px';
-$('nav').childNodes[1].getElementsByTagName('li')[4].childNodes[0].childNodes[0].style['font-size'] = '0px';
-$('nav').childNodes[1].getElementsByTagName('li')[5].childNodes[0].childNodes[0].style['font-size'] = '0px';
+([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
+
 var new_size;
-while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 2.5) {
-    var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";         
-    $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
+while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
+var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";         
+$('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
 
 }
-$('nav').childNodes[1].getElementsByTagName('li')[0].childNodes[0].style['font-size'] = new_size;
-$('nav').childNodes[1].getElementsByTagName('li')[1].childNodes[0].childNodes[0].style['font-size'] = new_size;
-$('nav').childNodes[1].getElementsByTagName('li')[3].childNodes[0].childNodes[0].style['font-size'] = new_size;
-$('nav').childNodes[1].getElementsByTagName('li')[4].childNodes[0].childNodes[0].style['font-size'] = new_size;
-$('nav').childNodes[1].getElementsByTagName('li')[5].childNodes[0].childNodes[0].style['font-size'] = new_size;
-*/
+([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
 }
 update_graphics();
 

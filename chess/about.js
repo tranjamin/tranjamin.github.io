@@ -1,5 +1,43 @@
 function $(id) { return document.getElementById(id); }
 
+function find_overlap(element, x_or_y, single_line=true) {
+	var overflow_bool = false;
+	var original_overflowY = element.style['overflow-y']
+	var original_overflowX = element.style['overflow-x']
+	var original_overflow = element.style['overflow']
+
+	if (single_line) {
+		if ((getComputedStyle(element)['height'].slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+			return true;
+		}
+	}
+	element.style['overflow'] = 'scroll';
+	element.style['overflow-x'] = 'scroll';
+	element.style['overflow-y'] = 'scroll';
+	switch (x_or_y) {
+		case 'x': 
+			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
+			break;
+		case 'y': 
+			if (element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			break;
+		default: 
+			if (element.clientWidth != element.scrollWidth && element.clientHeight != element.scrollHeight) {overflow_bool = true}
+			break;
+}
+	element.style['overflow'] = original_overflowX;
+	element.style['overflow-x'] = original_overflowY;
+	element.style['overflow-y'] = original_overflow;
+	return overflow_bool;
+}
+
+function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
+	while (find_overlap(element, x_or_y, single_line)) {
+		element.style['font-size'] = (parseFloat(getComputedStyle(element)['font-size'].slice(0,-2)) - interval) + "px";
+	}
+	return getComputedStyle(element)['font-size'];
+}
+
 var username = "anon";
 var user_id = "";
 
@@ -104,7 +142,15 @@ function update_graphics() {
     document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom + "px";
     document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom + "px";
 
-
+    var smallest_size = Infinity;
+    ([]).forEach.call($('overlay').getElementsByTagName('ul')[0].getElementsByTagName('li'), ele => {
+        ele.style['font-size'] = '100%';
+        reduce_size(ele, 'xy', true, 0.1);
+        if (parseFloat(getComputedStyle(ele)['font-size'].slice(0,-2)) > parseFloat(smallest_size)) {
+            smallest_size = getComputedStyle(ele)['font-size'].slice(0,-2)
+        }
+        ele.style['font-size'] = smallest_size + "px";
+    })
 
 
 }
