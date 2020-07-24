@@ -1,22 +1,3 @@
-/*
-This Version Includes:
-Basic piece movement
-Basic chat
-En passant
-Castling
-Promotion
-
-This Version does not Include:
-Check / Checkmate
-Underpromotion
-Undo
-Flip Board
-
-*/
-
-// socket
-
-
 function $(id) { return document.getElementById(id); }
 
 function find_overlap(element, x_or_y, single_line=true) {
@@ -32,16 +13,18 @@ function find_overlap(element, x_or_y, single_line=true) {
 	}
 	element.style['overflow'] = 'scroll';
 	element.style['overflow-x'] = 'scroll';
-	element.style['overflow-y'] = 'scroll';
+    element.style['overflow-y'] = 'scroll';
+    console.log(parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
 	switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
 			break;
-		case 'y': 
-			if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight) {overflow_bool = true}
+        case 'y': 
+            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+            ) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))) {overflow_bool = true}
 			break;
 }
 	element.style['overflow'] = original_overflowX;
@@ -90,6 +73,10 @@ if (!cookies_allowed) {
     })
 }
 
+if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
+    user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
+    username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+	}
 
 function update_graphics() {
     var overlay = $('overlay');
@@ -120,7 +107,7 @@ function update_graphics() {
 	
 	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
-        if ($('nav').getElementsByTagName('button')[0].getElementsByTagName('a').length) {
+        if ($('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML == 'Login/Signup') {
             $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#128100";
         }
         else {
@@ -130,20 +117,14 @@ function update_graphics() {
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
         $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
         $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "&#128366";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = `&#128737        <div id="copyright" style='font-size: 40%;'>
-		&copy 2020
-	</div>`;
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "&#128737";
     }
     else {
         $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "My Games";
         $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "Create Game";
         $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "Join Game";
         $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "How to Play";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = `Privacy Policy<br>
-        <div id="copyright">
-            &copy Benjamin Tran 2020<br>
-            Powered by Github and Google Firebase
-        </div>`;
+        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "Privacy Policy";
     }
     if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
@@ -164,42 +145,38 @@ var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByT
 $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
 
 }
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
+([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
 
     var new_size;
-    if (user_id) {
+    if (!user_id) {
 	while (
         $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-        find_overlap($('nav').getElementsByTagName('a')[0],'x',false) ||
-		find_overlap($('nav').getElementsByTagName('a')[1],'x',false) ||
-		find_overlap($('nav').getElementsByTagName('a')[2],'x',false) ||
-		find_overlap($('nav').getElementsByTagName('a')[3],'x',false) ||
-		find_overlap($('nav').getElementsByTagName('a')[4],'x',false) ||
-		find_overlap($('nav').getElementsByTagName('a')[5],'x',false)	
+        find_overlap($('nav').getElementsByTagName('a')[0],'xy',true) ||
+		find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
+		find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
+		find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
+		find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
+		find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
 		) {
     new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
 	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
 }
 	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
-	$('copyright').style.top = 'unset';
-    $('copyright').style.bottom = 0;}
+}
     else {
         while (
             $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-            find_overlap($('nav').getElementsByTagName('a')[1],'x',false) ||
-            find_overlap($('nav').getElementsByTagName('a')[2],'x',false) ||
-            find_overlap($('nav').getElementsByTagName('a')[3],'x',false) ||
-            find_overlap($('nav').getElementsByTagName('a')[4],'x',false) ||
-            find_overlap($('nav').getElementsByTagName('a')[5],'x',false)	
+            find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
             ) {
         new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
         ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
     }
         ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
-        $('nav').getElementsByTagName('a')[0].style['font-size'] = '50px';
         reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
-        $('copyright').style.top = 'unset';
-        $('copyright').style.bottom = 0;
     }
 }
 update_graphics();
