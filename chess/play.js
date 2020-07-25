@@ -41,30 +41,30 @@ function find_overlap(element, x_or_y, single_line=true) {
 	var overflow_bool = false;
 	var original_overflowY = element.style['overflow-y']
 	var original_overflowX = element.style['overflow-x']
-	var original_overflow = element.style['overflow']
+	var original_overflow = element.style.overflow
 
 	if (single_line) {
-		if ((getComputedStyle(element)['height'].slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+		if ((getComputedStyle(element).height.slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
 			return true;
 		}
 	}
-	element.style['overflow'] = 'scroll';
+	element.style.overflow = 'scroll';
 	element.style['overflow-x'] = 'scroll';
     element.style['overflow-y'] = 'scroll';
-    console.log(parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+    console.log(parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
 	switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
 			break;
         case 'y': 
-            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
             ) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))) {overflow_bool = true}
 			break;
 }
-	element.style['overflow'] = original_overflowX;
+	element.style.overflow = original_overflowX;
 	element.style['overflow-x'] = original_overflowY;
 	element.style['overflow-y'] = original_overflow;
 	return overflow_bool;
@@ -198,7 +198,7 @@ function update_graphics() {
 
     $('opposite_name').style['font-size'] = "100%";
     $('self_name').style['font-size'] = "100%";
-    while (getComputedStyle($('opposite_name'))['height'].slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name'))['height'].slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
+    while (getComputedStyle($('opposite_name')).height.slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name')).height.slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
         $('opposite_name').style['font-size'] = (getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) - 1) + "px";
         $('self_name').style['font-size'] = (getComputedStyle($('self_name'))['font-size'].slice(0,-2) - 1) + "px";
         $('opposite_time').style['font-size'] = $('opposite_name').style['font-size'];
@@ -207,14 +207,14 @@ function update_graphics() {
 
     $('opposite_box').style['font-size'] = "100%";
     $('self_box').style['font-size'] = "100%";
-    while (getComputedStyle($('opposite_box'))['height'].slice(0,-2) / getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_box'))['height'].slice(0,-2) / getComputedStyle($('self_box'))['font-size'].slice(0,-2) > 2) {
+    while (getComputedStyle($('opposite_box')).height.slice(0,-2) / getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_box')).height.slice(0,-2) / getComputedStyle($('self_box'))['font-size'].slice(0,-2) > 2) {
         $('opposite_box').style['font-size'] = (getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) - 1) + "px";
         $('self_box').style['font-size'] = (getComputedStyle($('self_box'))['font-size'].slice(0,-2) - 1) + "px";
     }
 
     $('status').style['font-size'] = '100%';
     $('status').nextElementSibling.firstElementChild.style['font-size'] = '100%';
-    while (getComputedStyle($('status'))['height'].slice(0,-2) / getComputedStyle($('status'))['font-size'].slice(0,-2) > 2) {
+    while (getComputedStyle($('status')).height.slice(0,-2) / getComputedStyle($('status'))['font-size'].slice(0,-2) > 2) {
         $('status').style['font-size'] = (getComputedStyle($('status'))['font-size'].slice(0,-2) - 1) + "px";
         $('status').nextElementSibling.firstElementChild.style['font-size'] = $('status').style['font-size']
         $('tracking').style['font-size'] = $('status').style['font-size']
@@ -222,10 +222,16 @@ function update_graphics() {
     }
     
     $('options').style['font-size'] = '100%';
+    if (user_id) {
     while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
     }
-
+    }
+    else {
+        while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[2].getBoundingClientRect().top) {
+            $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
+        }   
+    }
 
 	$('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Login/Signup";
     if (getCookie('username') || sessionStorage.getItem('username')) {
@@ -285,7 +291,7 @@ function update_graphics() {
         $('self_name').style['font-size'] = "100%";
         $('opposite_time').style['font-size'] = "100%";
         $('self_time').style['font-size'] = "100%";
-    while (getComputedStyle($('opposite_name'))['height'].slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name'))['height'].slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
+    while (getComputedStyle($('opposite_name')).height.slice(0,-2) / getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_name')).height.slice(0,-2) / getComputedStyle($('self_name'))['font-size'].slice(0,-2) > 2) {
         $('opposite_name').style['font-size'] = (getComputedStyle($('opposite_name'))['font-size'].slice(0,-2) - 1) + "px";
         $('self_name').style['font-size'] = (getComputedStyle($('self_name'))['font-size'].slice(0,-2) - 1) + "px";
         $('opposite_time').style['font-size'] = $('opposite_name').style['font-size'];
@@ -294,14 +300,14 @@ function update_graphics() {
 
     $('opposite_box').style['font-size'] = "100%";
     $('self_box').style['font-size'] = "100%";
-    while (getComputedStyle($('opposite_box'))['height'].slice(0,-2) / getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_box'))['height'].slice(0,-2) / getComputedStyle($('self_box'))['font-size'].slice(0,-2) > 2) {
+    while (getComputedStyle($('opposite_box')).height.slice(0,-2) / getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) > 2 || getComputedStyle($('self_box')).height.slice(0,-2) / getComputedStyle($('self_box'))['font-size'].slice(0,-2) > 2) {
         $('opposite_box').style['font-size'] = (getComputedStyle($('opposite_box'))['font-size'].slice(0,-2) - 1) + "px";
         $('self_box').style['font-size'] = (getComputedStyle($('self_box'))['font-size'].slice(0,-2) - 1) + "px";
     }
 
     $('status').style['font-size'] = '100%';
     $('status').nextElementSibling.firstElementChild.style['font-size'] = '100%';
-    while (getComputedStyle($('status'))['height'].slice(0,-2) / getComputedStyle($('status'))['font-size'].slice(0,-2) > 2) {
+    while (getComputedStyle($('status')).height.slice(0,-2) / getComputedStyle($('status'))['font-size'].slice(0,-2) > 2) {
         $('status').style['font-size'] = (getComputedStyle($('status'))['font-size'].slice(0,-2) - 1) + "px";
         $('status').nextElementSibling.firstElementChild.style['font-size'] = $('status').style['font-size']
         $('tracking').style['font-size'] = $('status').style['font-size']
@@ -312,7 +318,7 @@ function update_graphics() {
     while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
     }   
-    while (getComputedStyle($('nav').getElementsByTagName('button')[0])['height'].slice(0,-2) / (getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2) * 1.5) > 3) {
+    while (getComputedStyle($('nav').getElementsByTagName('button')[0]).height.slice(0,-2) / (getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2) * 1.5) > 3) {
         $('nav').getElementsByTagName('a')[0].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2)) + 1 + "px";
         $('nav').getElementsByTagName('a')[1].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[1])['font-size'].slice(0,-2)) + 1 + "px";
         $('nav').getElementsByTagName('a')[2].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[2])['font-size'].slice(0,-2)) + 1 + "px";
@@ -358,7 +364,7 @@ function update_graphics() {
     $('tracking').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
     $('info').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
 
-    ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
+    ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style.width = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
 
 	var new_size;
 	while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
@@ -366,7 +372,7 @@ function update_graphics() {
     $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
 
 }
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
+([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style.width = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
 
 	var new_size;
     if (!user_id) {
@@ -382,7 +388,6 @@ function update_graphics() {
         new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
         ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
     }
-        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
 }
         else {
             while (
@@ -396,7 +401,6 @@ function update_graphics() {
             new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
             ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
         }
-            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
             reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
         }
 
@@ -408,15 +412,17 @@ popup.previousElementSibling.addEventListener('click', e => {
 })
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
+    if ($('nav').getElementsByTagName('a')[0].innerHTML == "Login/Signup" || $('nav').getElementsByTagName('a')[0].innerHTML == "👤") {
+        window.location.assign('signup.html')
+    }
     else {
         sessionStorage.removeItem('username');
-        sessionStorage.removeItem('user_id')
-        deleteAllCookies();
+        sessionStorage.removeItem('user_id');
         setCookie('user_id', "", 0);
         setCookie('username', "", 0);
         
-        location.reload();}
+        location.reload();
+    }
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
     location.assign('account.html');
@@ -1083,6 +1089,7 @@ class piece {
                 })
             }
                 original_moves = doc.data().moves + 1;
+                if (pre_move == "second") {original_moves++;}
 
 
                 if (this.colour) {
@@ -1106,11 +1113,13 @@ class piece {
                 }
                 else {
                     original_fifty ++;
+                    if (pre_move == "second") {original_fifty ++;}
                 }
                 if (original_fifty == 50) {
                     draw('Fifty Moves');
                 }
             }).then(() => {
+                if (!pre_move) {
                 if (this.colour) {
             db.collection('chess').doc(game).update({
                 white_arr: stringify(white_arr),
@@ -1148,13 +1157,53 @@ class piece {
                 black_notification: false,
                 white_notification: true
             }).catch(error => {console.log(error.lineNumber)})
-                }
-        }).then(() => {
+                }}
+                else if (pre_move == "second") {
+                    pre_move = null;
+                    if (this.colour) {
+                        db.collection('chess').doc(game).update({
+                            white_arr: stringify(white_arr),
+                            black_arr: stringify(black_arr),
+                            white_list: tempw,
+                            black_list: tempb,
+                            turn: turn,
+                            white_bank: white_int,
+                            black_bank: black_int,
+                            white_count: str_to_time($('self_time').innerHTML),
+                            white_checks: original_white_checks,
+                            moves: original_moves,
+                            fifty_moves: original_fifty,
+                            enpassant: enpassant,
+                            undo: stringify(undo),
+                            black_notification: true,
+                            white_notification: false
+                        }).catch(error => {console.log(error.lineNumber)})
+                    }
+                            else {
+                        db.collection('chess').doc(game).update({
+                            white_arr: stringify(white_arr),
+                            black_arr: stringify(black_arr),
+                            white_list: tempw,
+                            black_list: tempb,
+                            turn: turn,
+                            white_bank: white_int,
+                            black_bank: black_int,
+                            black_count: str_to_time($('self_time').innerHTML),
+                            black_checks: original_black_checks,
+                            moves: original_moves,
+                            fifty_moves: original_fifty,
+                            enpassant: enpassant,
+                            undo: stringify(undo),
+                            black_notification: false,
+                            white_notification: true
+                        }).catch(error => {console.log(error.lineNumber)})
+                            
+                }}
             ctx.clearRect(0,0,canvas.width,canvas.height);
             show_pieces();
             if (pre_move) {
                 var copy_pre_move = copy_arr(pre_move);
-                pre_move = null;
+                pre_move = 'second';
                 console.log(copy_pre_move);
                 window[copy_pre_move[0]].update2(copy_pre_move[1])
                 db.collection('chess').doc(game).update({
@@ -1442,7 +1491,7 @@ class piece {
                 }
                 else {
                     canvas.removeEventListener('click', intermediary);
-                    document.elementFromPoint(e.clientX, e.clientY).click();
+                    //document.elementFromPoint(e.clientX, e.clientY).click();
                     current_highlight = false;
                     try {document.getElementsByClassName('bottom')[0].removeChild($('promote'));}
                     catch (TypeError) {}
@@ -1937,7 +1986,6 @@ $('options').getElementsByTagName('button')[7].addEventListener('click', e => {
 
     
 })
-
 $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
     $('closable_interface').style.display = "inline";
     $('closable_interface').getElementsByTagName('div')[0].innerHTML = "Submit Feedback";
@@ -1961,7 +2009,6 @@ $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
         $('closable_interface').previousElementSibling.style.display = "none";
     })
 })
-
 $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     if (!done && !observer) {
     if (e.target.innerHTML == '⚑') {
@@ -2068,67 +2115,45 @@ $('options').getElementsByTagName('button')[5].addEventListener('click', e => {
     }
     }
 })
+db.collection('chess').doc(game).onSnapshot(doc => {    
+    console.log('snapshot');
+    if (first_load) {
+        if (doc.data().white_user == username) {blackwhite = 1}
+        else if (doc.data().black_user == username) {blackwhite = 0}
+        else {observer = true;}
 
-db.collection('chess').doc(game).get().then(doc => {
-    if (doc.data().white_user == username) {blackwhite = 1}
-    else if (doc.data().black_user == username) {blackwhite = 0}
-    else {blackwhite = 1; observer = true;}
-
-    $('info').innerHTML = `
-    Game Name: ${doc.data().name}<br>
-    Mode: ${doc.data().mode}<br>
-    Rated: ${doc.data().points}<br>
-    Time Format: ${doc.data().white_time}<br>
-    `;
-
-    if (doc.data().white_time != null && doc.data().timer[0] != null) {
-    var new_white_count = doc.data().white_count;
-    var new_black_count = doc.data().black_count;
-    if (blackwhite) {
-        new_white_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
-        $('self_time').innerHTML = time_to_str(new_white_count);
-        if (new_white_count <= 0) {
-            new_white_count = 0;
-            lose('Time');
-        }
-    }
-    else {
-        new_black_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
-        $('self_time').innerHTML = time_to_str(new_black_count);
-        if (new_black_count <= 0) {
-            new_black_count = 0;
-            lose('Time');
-        }
-    }
-
-    db.collection('chess').doc(game).update({
-        white_count: new_white_count,
-        black_count: new_black_count,
-        timer: [blackwhite, new Date()]
-    }).then(docRef => {
-        if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
-        clearInterval(clock)
-        if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
-
-        }
-        else if (parseInt($('self_time').innerHTML.split(':')[0])) {
-            interval1();
+        if (blackwhite) {
+            $('self_time').style['background-color'] = 'white';
+            $('self_name').style['background-color'] = 'white';
+            $('self_box').style['background-color'] = 'white';
+            $('opposite_name').style['background-color'] = 'black';
+            $('opposite_time').style['background-color'] = 'black';
+            $('opposite_box').style['background-color'] = 'black';
+            $('self_name').style.color = 'black';
+            $('self_time').style.color = 'black';
+            $('self_box').style.color = 'black';
+            $('opposite_name').style.color = 'white';
+            $('opposite_time').style.color = 'white';
+            $('opposite_box').style.color = 'white';
         }
         else {
-            if (parseFloat($('self_time').innerHTML.split(":")[1])) {
-                interval3();
-            }
-            else {
-                interval2();
-            }
+            $('self_name').style['background-color'] = 'black';
+            $('self_time').style['background-color'] = 'black';
+            $('self_box').style['background-color'] = 'black';
+            $('opposite_name').style['background-color'] = 'white';
+            $('opposite_time').style['background-color'] = 'white';
+            $('opposite_box').style['background-color'] = 'white';
+            $('self_time').style.color = 'white';
+            $('self_name').style.color = 'white';
+            $('self_box').style.color = 'white';
+            $('opposite_name').style.color = 'black';
+            $('opposite_time').style.color = 'black';
+            $('opposite_box').style.color = 'black';
         }
-    }
-    })
-}
 
-    //taken from onsnapshot
-    mode = doc.data().mode
-    if (observer) {
+            //startup data
+        mode = doc.data().mode
+        if (observer) {
         $('options').getElementsByTagName('button')[1].style.width = ($('options').getElementsByTagName('button')[2].getBoundingClientRect().right - $('options').getElementsByTagName('button')[1].getBoundingClientRect().left) + "px";
         $('options').getElementsByTagName('button')[6].style.width = ($('options').getElementsByTagName('button')[6].getBoundingClientRect().right - $('options').getElementsByTagName('button')[5].getBoundingClientRect().left) + "px";
         $('options').getElementsByTagName('button')[2].style.display = "none";
@@ -2136,19 +2161,65 @@ db.collection('chess').doc(game).get().then(doc => {
         $('options').getElementsByTagName('button')[1].style.color = "black";
         $('options').getElementsByTagName('button')[1].innerHTML = "&#10542";
     }
-})
+        $('info').innerHTML = `
+        Game Name: ${doc.data().name}<br>
+        Mode: ${doc.data().mode}<br>
+        Rated: ${doc.data().points}<br>
+        Time Format: ${doc.data().white_time}<br>
+        `;
 
-db.collection('chess').doc(game).onSnapshot(doc => {    
-    console.log('snapshot');
-    if (doc.data().white_user == username) {blackwhite = 1}
-    else if (doc.data().black_user == username) {blackwhite = 0}
-    else {observer = true;}
+        if (doc.data().white_time != null && doc.data().timer[0] != null) {
+            var new_white_count = doc.data().white_count;
+            var new_black_count = doc.data().black_count;
+            if (blackwhite) {
+                new_white_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
+                $('self_time').innerHTML = time_to_str(new_white_count);
+                if (new_white_count <= 0) {
+                    new_white_count = 0;
+                    lose('Time');
+                }
+            }
+            else {
+                new_black_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
+                $('self_time').innerHTML = time_to_str(new_black_count);
+                if (new_black_count <= 0) {
+                    new_black_count = 0;
+                    lose('Time');
+                }
+            }
+        
+            db.collection('chess').doc(game).update({
+                white_count: new_white_count,
+                black_count: new_black_count,
+                timer: [blackwhite, new Date()]
+            }).then(docRef => {
+                if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
+                clearInterval(clock)
+                if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
+        
+                }
+                else if (parseInt($('self_time').innerHTML.split(':')[0])) {
+                    interval1();
+                }
+                else {
+                    if (parseFloat($('self_time').innerHTML.split(":")[1])) {
+                        interval3();
+                    }
+                    else {
+                        interval2();
+                    }
+                }
+            }
+            })
+        }
+    }
+
     $('text').innerHTML = doc.data().messages;
     $('text').scrollTop = $('text').scrollHeight;
     turn = doc.data().turn;
     pre_move = doc.data().pre_move ? arrayify(doc.data().pre_move) : null;
 
-    //Done code
+    //done code
     done = doc.data().result ? true : false;
     if (done) {
         $('status').innerHTML = `You ${doc.data().result == "draw" ? "Drew" : ((doc.data().result == 'white' ? 1 : 0) == blackwhite ? 'Won' : 'Lost')} by ${doc.data().result_method}`; 
@@ -2168,6 +2239,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     enpassant = doc.data().enpassant;
     moves_back = 0;
 
+    //undo and controls
     if (doc.data().turn != doc.data().timer[1] || !doc.data().moves) {
     undo = arrayify(doc.data().undo);
     $('options').getElementsByTagName('button')[3].style['opacity'] = 0.6;
@@ -2254,7 +2326,6 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     })
     $('opposite_box').innerHTML = opp_int
 }
-
     if (doc.data().undo) {
     for (var prev_turn of undo) {
         if (prev_turn[0] == (blackwhite ? 'w_king' : 'b_king')) {
@@ -2280,6 +2351,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         undo = [];
     }
 
+    //beirut code
     if (mode.indexOf('Beirut') != -1) {
         pre_selection = ((blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece) == null) ? false : true;
         beirut_piece = blackwhite ? doc.data().white_beirut_piece : doc.data().black_beirut_piece;
@@ -2400,12 +2472,11 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         pre_selection = true;
     }
 
-    $('self_time').innerHTML = blackwhite ? doc.data().white_count : doc.data().black_count;
-    $('opposite_time').innerHTML = blackwhite ? doc.data().black_count : doc.data().white_count;
-    $('self_time').innerHTML = time_to_str($('self_time').innerHTML);
-    $('opposite_time').innerHTML = time_to_str($('opposite_time').innerHTML);
+    //update time
+    $('self_time').innerHTML = time_to_str(blackwhite ? doc.data().white_count : doc.data().black_count);
+    $('opposite_time').innerHTML = time_to_str(blackwhite ? doc.data().black_count : doc.data().white_count);
 
-
+    //get user name and rating
     var white_elo;
     var black_elo;
     db.collection('account').where('username', '==', doc.data().white_user).get().then(snapshot => {
@@ -2425,8 +2496,8 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     }
     })})
 
-
-
+    //swap observer ui
+    if (observer) {
     if (blackwhite) {
         $('self_time').style['background-color'] = 'white';
         $('self_name').style['background-color'] = 'white';
@@ -2455,7 +2526,9 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('opposite_time').style.color = 'black';
         $('opposite_box').style.color = 'black';
     }
+    }
 
+    //draw query
     if (doc.data()['draw_query']) {
         if (doc.data()['draw_query'] != (blackwhite ? 'white' : 'black')) {
         $('options').getElementsByTagName('button')[2].innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";}
@@ -2466,6 +2539,8 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     else {
         $('options').getElementsByTagName('button')[2].innerHTML = "🤝";
     }
+
+    //update timer
     if (doc.data()['white_time'] != null && doc.data().timer[0] != blackwhite && doc.data().turn == blackwhite) {
         var new_date = new Date()
         db.collection('chess').doc(game).update({
@@ -2490,6 +2565,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
 
     }
 
+    //update graphics and notifications
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     show_pieces();

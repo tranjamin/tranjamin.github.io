@@ -4,30 +4,30 @@ function find_overlap(element, x_or_y, single_line=true) {
 	var overflow_bool = false;
 	var original_overflowY = element.style['overflow-y']
 	var original_overflowX = element.style['overflow-x']
-	var original_overflow = element.style['overflow']
+	var original_overflow = element.style.overflow
 
 	if (single_line) {
-		if ((getComputedStyle(element)['height'].slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+		if ((getComputedStyle(element).height.slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
 			return true;
 		}
 	}
-	element.style['overflow'] = 'scroll';
+	element.style.overflow = 'scroll';
 	element.style['overflow-x'] = 'scroll';
     element.style['overflow-y'] = 'scroll';
-    console.log(parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+    console.log(parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
 	switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
 			break;
         case 'y': 
-            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
             ) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))) {overflow_bool = true}
 			break;
 }
-	element.style['overflow'] = original_overflowX;
+	element.style.overflow = original_overflowX;
 	element.style['overflow-x'] = original_overflowY;
 	element.style['overflow-y'] = original_overflow;
 	return overflow_bool;
@@ -146,7 +146,7 @@ function update_graphics() {
 	document.getElementsByClassName('rules')[3].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom + "px";
 	document.getElementsByClassName('rules')[4].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[4].getBoundingClientRect().bottom + "px";
 
-	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
+	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style.width = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
 
 	var new_size;
     if (!user_id || $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML == "⮈") {
@@ -162,7 +162,6 @@ function update_graphics() {
 		new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
 		([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
 	}
-		([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
 }
 		else {
 			while (
@@ -176,7 +175,6 @@ function update_graphics() {
 			new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
 			([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
 		}
-			([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
 			reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
 		}
 
@@ -319,7 +317,7 @@ $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 $('settings').getElementsByTagName('form')[0].addEventListener('submit', e => {
 	e.preventDefault();
 	db.collection('account').doc(user_id).get().then(doc => {
-		if (doc.data().password == $('settings').getElementsByTagName('form')[0]['confirm'].value) {
+		if (doc.data().password == $('settings').getElementsByTagName('form')[0].confirm.value) {
 			e.target.style.display = "none";		
 			e.target.nextElementSibling.style.display = "none";	
 			$('settings').getElementsByTagName('form')[1].style.visibility = "visible";		
@@ -339,7 +337,7 @@ $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
 	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
-	username = e.target['username'].value;
+	username = e.target.username.value;
 	var username_exists = false;
 	db.collection('account').get().then(snapshot => {
 		snapshot.docs.forEach(doc => {
@@ -349,7 +347,7 @@ $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
 		})
 	}).then(docRef => {
 		if (username_exists) {
-		username = e.target['username'].value = "";
+		username = e.target.username.value = "";
 		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Username already exists";
 		}
 		else {
@@ -375,7 +373,7 @@ $('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
 	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
-	email = e.target['email'].value;
+	email = e.target.email.value;
 	var email_exists = false;
 	db.collection('account').get().then(snapshot => {
 		snapshot.docs.forEach(doc => {
@@ -385,7 +383,7 @@ $('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
 		})
 	}).then(docRef => {
 		if (email_exists) {
-			e.target['email'].value = "";
+			e.target.email.value = "";
 			e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Email already exists";
 		}
 		else {
@@ -410,14 +408,14 @@ $('settings').getElementsByTagName('form')[5].addEventListener('submit', e => {
 	e.target.nextElementSibling.style.display = "unset";
 }
 	else {
-	if (e.target['password'].value == e.target['confirm'].value) {
+	if (e.target.password.value == e.target.confirm.value) {
 		e.target.nextElementSibling.style.display = "none";
 		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
-		db.collection('account').doc(user_id).update({password: e.target['password'].value});
+		db.collection('account').doc(user_id).update({password: e.target.password.value});
 		e.target.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
 	}
 	else  {
-		e.target['confirm'].value = "";
+		e.target.confirm.value = "";
 		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Passwords do not match";
 	}
 	}
@@ -429,48 +427,48 @@ $('settings').getElementsByTagName('form')[6].addEventListener('submit', e => {
 })
 
 $('search_current').addEventListener('keyup', e => {
-	if ($('search_current')['increment'].value != "0") {
-		sortData('current', 'load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
+	if ($('search_current').increment.value != "0") {
+		sortData('current', 'load_current', $('search_current').search.value, $('search_current').increment.value);
 	}
 	else {
-		sortData('current', 'load_current', $('search_current')['search'].value);
+		sortData('current', 'load_current', $('search_current').search.value);
 	}
 });
 $('search_invite').addEventListener('keyup', e => {
-	if ($('search_invite')['increment'].value != "0") {
-		sortData('invites', 'load_invite', $('search_invite')['search'].value, $('search_invite')['increment'].value);
+	if ($('search_invite').increment.value != "0") {
+		sortData('invites', 'load_invite', $('search_invite').search.value, $('search_invite').increment.value);
 	}
 	else {
-		sortData('invites', 'load_invite', $('search_invite')['search'].value);
+		sortData('invites', 'load_invite', $('search_invite').search.value);
 	}
 });
 $('search_past').addEventListener('keyup', e => {
-	if ($('search_past')['increment'].value != "0") {
-		sortData('completed', 'load_past', $('search_past')['search'].value, $('search_past')['increment'].value);
+	if ($('search_past').increment.value != "0") {
+		sortData('completed', 'load_past', $('search_past').search.value, $('search_past').increment.value);
 	}
 	else {
-		sortData('completed', 'load_past', $('search_past')['search'].value);
+		sortData('completed', 'load_past', $('search_past').search.value);
 	}
 });
 
 db.collection('chess').onSnapshot(ref => {
-	if ($('search_current')['increment'].value != "0") {
-		sortData('current', 'load_current', $('search_current')['search'].value, $('search_current')['increment'].value);
+	if ($('search_current').increment.value != "0") {
+		sortData('current', 'load_current', $('search_current').search.value, $('search_current').increment.value);
 	}
 	else {
-		sortData('current', 'load_current', $('search_current')['search'].value);
+		sortData('current', 'load_current', $('search_current').search.value);
 	}
-	if ($('search_invite')['increment'].value != "0") {
-		sortData('invites', 'load_invite', $('search_invite')['search'].value, $('search_invite')['increment'].value);
-	}
-	else {
-		sortData('invites', 'load_invite', $('search_invite')['search'].value);
-	}
-	if ($('search_past')['increment'].value != "0") {
-		sortData('completed', 'load_past', $('search_past')['search'].value, $('search_past')['increment'].value);
+	if ($('search_invite').increment.value != "0") {
+		sortData('invites', 'load_invite', $('search_invite').search.value, $('search_invite').increment.value);
 	}
 	else {
-		sortData('completed', 'load_past', $('search_past')['search'].value);
+		sortData('invites', 'load_invite', $('search_invite').search.value);
+	}
+	if ($('search_past').increment.value != "0") {
+		sortData('completed', 'load_past', $('search_past').search.value, $('search_past').increment.value);
+	}
+	else {
+		sortData('completed', 'load_past', $('search_past').search.value);
 	}
 })
 
@@ -480,8 +478,7 @@ function sortData(conditional, id, input = "", precision = 0.3) {
 	db.collection('chess').get().then(snapshot => {
 		snapshot.forEach(doc => {
 			if (
-				(relevancy.weight(doc.data().name, input) >= precision || input == "")
-				&& ((conditional == "invites" && doc.data().invited_user == username && (doc.data().white_user == null || doc.data().black_user == null)) ||
+				(relevancy.weight(doc.data().name, input) >= precision || input == "") && ((conditional == "invites" && doc.data().invited_user == username && (doc.data().white_user == null || doc.data().black_user == null)) ||
 					(conditional == "current" && !doc.data().result && (doc.data().white_user == username || doc.data().black_user == username)) ||
 					(conditional == "completed" && doc.data().result && (doc.data().white_user == username || doc.data().black_user == username))
 				)) {

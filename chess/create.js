@@ -100,30 +100,30 @@ function find_overlap(element, x_or_y, single_line=true) {
 	var overflow_bool = false;
 	var original_overflowY = element.style['overflow-y']
 	var original_overflowX = element.style['overflow-x']
-	var original_overflow = element.style['overflow']
+	var original_overflow = element.style.overflow
 
 	if (single_line) {
-		if ((getComputedStyle(element)['height'].slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+		if ((getComputedStyle(element).height.slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
 			return true;
 		}
 	}
-	element.style['overflow'] = 'scroll';
+	element.style.overflow = 'scroll';
 	element.style['overflow-x'] = 'scroll';
     element.style['overflow-y'] = 'scroll';
-    console.log(parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+    console.log(parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
 	switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
 			break;
         case 'y': 
-            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
             ) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))) {overflow_bool = true}
 			break;
 }
-	element.style['overflow'] = original_overflowX;
+	element.style.overflow = original_overflowX;
 	element.style['overflow-x'] = original_overflowY;
 	element.style['overflow-y'] = original_overflow;
 	return overflow_bool;
@@ -236,7 +236,7 @@ function update_graphics() {
 
       }
 
-      ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
+      ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style.width = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
 
       var new_size;
       if (!user_id) {
@@ -252,7 +252,6 @@ function update_graphics() {
         new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
         ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
     }
-        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
 }
         else {
             while (
@@ -266,7 +265,6 @@ function update_graphics() {
             new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
             ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
         }
-            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
             reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
         }
 
@@ -610,8 +608,8 @@ $('game_creator').addEventListener('submit', e=> {
     e.preventDefault();
     $('error').innerHTML = "";
     var is_random = false;
-    var play_name = $('game_creator')['create_name'].value;
-    var play_colour = $('game_creator')['create_play'].value;
+    var play_name = $('game_creator').create_name.value;
+    var play_colour = $('game_creator').create_play.value;
     if (play_colour == "Random") {
         is_random = true;
         play_colour = Math.round(Math.random());
@@ -622,9 +620,9 @@ $('game_creator').addEventListener('submit', e=> {
     else {
         play_colour = 0;
     }
-    var variation = $('game_creator')['create_type'].value;
-    var visibility = $('game_creator')['create_public'].value;
-    var other_user = $('game_creator')['create_invite'].value;
+    var variation = $('game_creator').create_type.value;
+    var visibility = $('game_creator').create_public.value;
+    var other_user = $('game_creator').create_invite.value;
     if (other_user == "Custom") {
         other_user = document.getElementById('custom_player').value;
     }
@@ -633,8 +631,8 @@ $('game_creator').addEventListener('submit', e=> {
     }
 
 
-    var points = $('game_creator')['create_points'].value;
-    var time_control = $('game_creator')['create_time'].value;
+    var points = $('game_creator').create_points.value;
+    var time_control = $('game_creator').create_time.value;
 
     var exists = false;
     var user_exists = false;
@@ -660,7 +658,7 @@ $('game_creator').addEventListener('submit', e=> {
         snapshot.docs.forEach(doc => {if (doc.data().name == play_name) {exists = true;}})}).then(() => {
     if (exists) {
         console.warn('name already exists');
-        $('game_creator')['create_name'].value = "";
+        $('game_creator').create_name.value = "";
         $('error').innerHTML = "Name already exists";
     }
     else {
@@ -671,13 +669,13 @@ $('game_creator').addEventListener('submit', e=> {
     var valid_time = true;
     ([]).forEach.call(document.getElementsByClassName('custom_time'),(time,index) => {
         var time_input = time.getElementsByTagName('input');
-        if (!(new RegExp("(\\d+|[gG])")).test(time_input['moves'].value)) {
+        if (!(new RegExp("(\\d+|[gG])")).test(time_input.moves.value)) {
             valid_numbers = false;
         }
-        if (((new RegExp("[gG]")).test(time_input['moves'].value) && index != arr_length - 1) || (!(new RegExp('[gG]')).test(time_input['moves'].value) && index == arr_length - 1)) {
+        if (((new RegExp("[gG]")).test(time_input.moves.value) && index != arr_length - 1) || (!(new RegExp('[gG]')).test(time_input.moves.value) && index == arr_length - 1)) {
             g_at_end = false;
         }
-        if (!time_input['minutes'].value == !time_input['seconds'].value) {
+        if (!time_input.minutes.value == !time_input.seconds.value) {
             valid_time = false;
         }
     })
@@ -706,7 +704,7 @@ $('game_creator').addEventListener('submit', e=> {
         time_control = [];
         ([]).forEach.call(document.getElementsByClassName('custom_time'),time => {
             var time2 = time.getElementsByTagName('input');
-            time_control.push(time2['moves'].value + "/" + (60 * (isNaN(parseInt(time2['minutes'].value)) ? 0 : parseInt(time2['minutes'].value)) + (isNaN(parseInt(time2['seconds'].value)) ? 0 : parseInt(time2['seconds'].value))) + "+" + time2['increment'].value)
+            time_control.push(time2.moves.value + "/" + (60 * (isNaN(parseInt(time2.minutes.value)) ? 0 : parseInt(time2.minutes.value)) + (isNaN(parseInt(time2.seconds.value)) ? 0 : parseInt(time2.seconds.value))) + "+" + time2.increment.value)
           })
           
         time_control = convert_time_to_arr(time_control);

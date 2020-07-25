@@ -181,20 +181,22 @@ html {
   margin: 0 0;
 }
 #nav li button {
-    height: 100%;
-    width: 100%;
-    background-color: unset;
-    border: none;
-    color: white;
-    font-family: 'Raleway';
-    font-size: 1.5em;
-    overflow: hidden;
-    cursor: pointer;
+  height: 100%;
+  width: 100%;
+  background-color: unset;
+  border: none;
+  color: white;
+  font-family: 'Raleway';
+  font-size: 1.5em;
+  overflow: hidden;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
 }
 #nav li button a {
   display: block;
   position: absolute;
-  left: 0;
+  padding: 0 5%;
 }
 
 #copyright {

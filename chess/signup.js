@@ -4,30 +4,30 @@ function find_overlap(element, x_or_y, single_line=true) {
 	var overflow_bool = false;
 	var original_overflowY = element.style['overflow-y']
 	var original_overflowX = element.style['overflow-x']
-	var original_overflow = element.style['overflow']
+	var original_overflow = element.style.overflow
 
 	if (single_line) {
-		if ((getComputedStyle(element)['height'].slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+		if ((getComputedStyle(element).height.slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
 			return true;
 		}
 	}
-	element.style['overflow'] = 'scroll';
+	element.style.overflow = 'scroll';
 	element.style['overflow-x'] = 'scroll';
     element.style['overflow-y'] = 'scroll';
-    console.log(parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+    console.log(parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
 	switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
 			break;
         case 'y': 
-            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))
+            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
             ) {overflow_bool = true}
 			break;
 		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element)['height'].slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement)['height'].slice(0,-2)))) {overflow_bool = true}
+			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))) {overflow_bool = true}
 			break;
 }
-	element.style['overflow'] = original_overflowX;
+	element.style.overflow = original_overflowX;
 	element.style['overflow-x'] = original_overflowY;
 	element.style['overflow-y'] = original_overflow;
 	return overflow_bool;
@@ -137,7 +137,7 @@ function update_graphics() {
         $('overlay').style.height = window.innerHeight * 0.95 + "px";
         $('overlay2').style.height = window.innerHeight * 0.95 + "px";
 }
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style['width'] = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
+([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style.width = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
 
 var new_size;
 while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
@@ -145,7 +145,7 @@ var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByT
 $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
 
 }
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style['width'] = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
+([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style.width = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
 
     var new_size;
     if (!user_id) {
@@ -160,9 +160,7 @@ $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0]
 		) {
     new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
 	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
-}
-	([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
-}
+}}
     else {
         while (
             $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
@@ -175,7 +173,6 @@ $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0]
         new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
         ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
     }
-        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style.top = (getComputedStyle(ele.parentElement)['height'].slice(0,-2) - getComputedStyle(ele)['height'].slice(0,-2)) / 2 + "px"})
         reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
     }
 }
@@ -189,7 +186,7 @@ $('login').addEventListener('submit', e=> {
     db.collection('account').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
             console.log(doc.data());
-            if ((login_name == (e.target['username_or_email'].value == 'Username' ? doc.data().username : doc.data().email)) && doc.data().password == login_pass) {login_successful = true; 
+            if ((login_name == (e.target.username_or_email.value == 'Username' ? doc.data().username : doc.data().email)) && doc.data().password == login_pass) {login_successful = true; 
                 username = doc.data().username; 
                 user_id = doc.id;
                 setCookie('username',username,5);
@@ -281,8 +278,8 @@ $('reset').addEventListener('submit', e => {
         random_str += char_str[Math.floor(Math.random() * 62)];
     }
     var address;
-    if (e.target['reset_config'].value == "Email") {
-        db.collection('account').where('email', '==', e.target['reset_address'].value).get().then(snapshot => {
+    if (e.target.reset_config.value == "Email") {
+        db.collection('account').where('email', '==', e.target.reset_address.value).get().then(snapshot => {
             snapshot.docs.forEach(doc => {
                 address = doc.data().email;
             })
@@ -293,13 +290,13 @@ $('reset').addEventListener('submit', e => {
                 console.log('sending');
             }    
             else {
-                e.target['reset_address'].value = "";
+                e.target.reset_address.value = "";
                 e.target.nextElementSibling.innerHTML = "Username/Email not found"
             }            
         })
     }
     else {
-        db.collection('account').where('username', '==', e.target['reset_address'].value).get().then(snapshot => {
+        db.collection('account').where('username', '==', e.target.reset_address.value).get().then(snapshot => {
             snapshot.docs.forEach(doc => {
                 address = doc.data().email;
             })
@@ -310,7 +307,7 @@ $('reset').addEventListener('submit', e => {
                 console.log('sending');
             }
             else {
-                e.target['reset_address'].value = "";
+                e.target.reset_address.value = "";
                 e.target.nextElementSibling.innerHTML = "Username/Email not found"
             }            
         })     
@@ -318,7 +315,7 @@ $('reset').addEventListener('submit', e => {
 })
 $('reset_code').addEventListener('submit', e => {
     e.preventDefault();
-    if (e.target['reset_code'].value == random_str) {
+    if (e.target.reset_code.value == random_str) {
         $('change_password').style.visibility = "visible";
         $('reset_error').innerHTML = "";
     }
@@ -328,10 +325,10 @@ $('reset_code').addEventListener('submit', e => {
 })
 $('new_password').addEventListener('submit', e => {
     e.preventDefault();
-    if (e.target['create_newpassword'].value == e.target['confirm_newpassword']) {
+    if (e.target.create_newpassword.value == e.target.confirm_newpassword) {
         $('newpassword_error').innerHTML = ""
         db.collection('account').doc(user_id).update({
-            password: e.target['create_newpassword']
+            password: e.target.create_newpassword
         }).then(docRef => {
             location.assign('account.html');
         })
