@@ -72,7 +72,11 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
 
 var options = $('options');
 
+update_graphics();
 window.addEventListener('resize', e => {
+    update_graphics();
+})
+window.addEventListener('load', e => {
     update_graphics();
 })
 

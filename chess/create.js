@@ -171,7 +171,10 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
 
 update_graphics();
 window.addEventListener('resize', e => {
-    update_graphics()
+    update_graphics();
+})
+window.addEventListener('load', e => {
+    update_graphics();
 })
 
 function update_graphics() {

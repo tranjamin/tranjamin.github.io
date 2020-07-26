@@ -72,13 +72,12 @@ sortData('current', 'load_current');
 sortData('invites', 'load_invite');
 sortData('completed', 'load_past');
 
-/*db.collection('account').doc(user_id).get().then(doc => {
-	$('username').innerHTML = doc.username;
-})*/
-
 update_graphics();
 window.addEventListener('resize', e => {
-	update_graphics()
+	update_graphics();
+})
+window.addEventListener('load', e => {
+    update_graphics();
 })
 
 function update_graphics() {

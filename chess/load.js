@@ -71,8 +71,11 @@ sortData('public', 'load_public');
 sortData('observer', 'load_observer');
 update_graphics();
 window.addEventListener('resize', e => {
-	console.log(e);
+	// console.log(e);
     update_graphics()
+})
+window.addEventListener('load', e => {
+    update_graphics();
 })
 
 function update_graphics() {

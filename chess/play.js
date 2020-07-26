@@ -124,7 +124,9 @@ if (getCookie('username') || sessionStorage.getItem('username')) {
 
 if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
 	user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
-	}
+    }
+
+update_graphics();
 window.addEventListener('load', e => {
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -2666,7 +2668,7 @@ function show_pieces(for_or_back=1) {
             }        
             }        
     }
-    if (pre_move && window[pre_move[0]].colour == blackwhite) {
+    if (pre_move && pre_move != "second" && window[pre_move[0]].colour == blackwhite) {
         if (blackwhite) {
             ctx.fillStyle = "rgba(0,255,0,0.6)";
             ctx.fillRect((pre_move[1][0] - 1) * canvas.width / 8, (8 - pre_move[1][1]) * canvas.width / 8,canvas.width / 8, canvas.height / 8);

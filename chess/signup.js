@@ -49,7 +49,11 @@ var successful_email;
 
 var options = $('options');
 
+update_graphics();
 window.addEventListener('resize', e => {
+    update_graphics();
+})
+window.addEventListener('load', e => {
     update_graphics();
 })
 
