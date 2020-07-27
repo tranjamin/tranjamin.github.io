@@ -541,7 +541,8 @@ function sortData(conditional, id, input = "", precision = 0.3) {
 
 $('load_current').getElementsByTagName('table')[0].addEventListener('click', e => {
 	if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
-		var load_name = e.target.parentElement.cells[0].innerHTML;
+		var load_name = e.target.parentElement.cells[0].innerHTML.split('>');
+		load_name = load_name[load_name.length - 1]
 		var load_id;
 		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 			snapshot.forEach(doc => {
@@ -557,7 +558,8 @@ $('load_current').getElementsByTagName('table')[0].addEventListener('click', e =
 
 $('load_invite').getElementsByTagName('table')[0].addEventListener('click', e => {
 	if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
-		var load_name = e.target.parentElement.cells[0].innerHTML;
+		var load_name = e.target.parentElement.cells[0].innerHTML.split('>');
+		load_name = load_name[load_name.length - 1]
 		var load_id;
 		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 			snapshot.forEach(doc => {
@@ -578,10 +580,33 @@ $('load_invite').getElementsByTagName('table')[0].addEventListener('click', e =>
 							sessionStorage.setItem('game_id', load_id);
 							window.location.assign('play.html');})
 					}
+					else {
+						setCookie('game_id', load_id, 2);
+						sessionStorage.setItem('game_id', load_id);
+						window.location.assign('play.html');
+					}
 			})
 		})
 	}
 	})
+
+$('load_past').getElementsByTagName('table')[0].addEventListener('click', e => {
+	if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
+		var load_name = e.target.parentElement.cells[0].innerHTML.split('>');
+		load_name = load_name[load_name.length - 1]
+		var load_id;
+		db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
+			snapshot.forEach(doc => {
+					load_id = doc.id;
+					setCookie('game_id', load_id, 2);
+					sessionStorage.setItem('game_id', load_id);
+					window.location.assign('play.html');
+			
+			})
+		})
+	}
+})
+	
 
 db.collection('account').doc(user_id).onSnapshot(doc => {
 	$('wins').innerHTML = doc.data().wins;

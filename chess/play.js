@@ -22,6 +22,7 @@ var beirut_piece = null;
 var moves_back = 0;
 var pre_move = null;
 var current_highlight = false;
+var event_for_crazyhouse = 0;
 
 if (getCookie('game_id'))
  {
@@ -224,15 +225,8 @@ function update_graphics() {
     }
     
     $('options').style['font-size'] = '100%';
-    if (user_id) {
     while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
-    }
-    }
-    else {
-        while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[2].getBoundingClientRect().top) {
-            $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
-        }   
     }
 
 	$('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Login/Signup";
@@ -852,7 +846,7 @@ class piece {
             }
             if (same_type.length > 1) {
                 same_type.forEach(test_square => {
-                    if (new_pos, findArr(test_square.highlight)) {
+                    if (findArr(new_pos, test_square.highlight())) {
                         same_pos.push(test_square.pos)
                     }
                 })
@@ -1178,7 +1172,8 @@ class piece {
                             enpassant: enpassant,
                             undo: stringify(undo),
                             black_notification: true,
-                            white_notification: false
+                            white_notification: false,
+                            pre_move: null
                         }).catch(error => {console.log(error.lineNumber)})
                     }
                             else {
@@ -1197,20 +1192,20 @@ class piece {
                             enpassant: enpassant,
                             undo: stringify(undo),
                             black_notification: false,
-                            white_notification: true
+                            white_notification: true,
+                            pre_move: null
                         }).catch(error => {console.log(error.lineNumber)})
                             
                 }}
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            show_pieces();
             if (pre_move) {
                 var copy_pre_move = copy_arr(pre_move);
                 pre_move = 'second';
-                console.log(copy_pre_move);
+                console.log('pre_move updating', window[copy_pre_move[0]], 'to', copy_pre_move[1])
                 window[copy_pre_move[0]].update2(copy_pre_move[1])
-                db.collection('chess').doc(game).update({
-                    pre_move: null
-                })
+            }
+            else {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                show_pieces();
             }
         })
     }
@@ -2732,11 +2727,12 @@ document.addEventListener('click', e => {
     }
     }
 });
+
 $('self_box').addEventListener('click', e => {
-    var event_for_crazyhouse = 0;
+    event_for_crazyhouse = 0;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     show_pieces();
-    if (mode.indexOf("Crazyhouse") != -1 && turn == blackwhite && !done && !moves_back) {
+    if (mode.indexOf("Crazyhouse") != -1 && !done && !moves_back) {
     var target = e.target;
     e.target.parentElement.childNodes.forEach(child => {child.style.color = "inherit";})
     e.target.style.color = 'red';
@@ -2813,10 +2809,13 @@ $('self_box').addEventListener('click', e => {
 }
 var intermediary = (e) => {
     event_for_crazyhouse ++;
-    if (event_for_crazyhouse > 2) {
+    console.log('place', event_for_crazyhouse)
+    if (event_for_crazyhouse >= 2) {
+    console.log('place clear')
     var baseline = [canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().left];
     var square = blackwhite ? [Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), 9 - Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))] : [9 - Math.ceil((e.clientX - baseline[1]) / (canvas.width / 8)), Math.ceil((e.clientY - baseline[0]) / (canvas.height / 8))];
     if (findArr(square, noncheck_spaces) != -1) {
+        console.log('place success')
         var recent_addition = false;
         var addition_number = 1;
             while (!recent_addition) {
@@ -2826,18 +2825,17 @@ var intermediary = (e) => {
         window[(blackwhite ? "w" : "b") + '_crazy' + addition_number] = new piece (blackwhite, crazy_type, square, (blackwhite ? "w" : "b") + '_crazy' + addition_number);
         (blackwhite ? white_list : black_list).push(window[(blackwhite ? "w" : "b") + '_crazy' + addition_number]);
         (blackwhite ? white_arr : black_arr).push(square);
-        target.parentElement.removeChild(target);
-        window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square, false, intermediary);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
-        target.style.color = 'inherit';
+        target.parentElement.removeChild(target);
+        document.removeEventListener('click', intermediary);
+        window[(blackwhite ? "w" : "b") + '_crazy' + addition_number].update(square, false, intermediary);
     }
     else {
         event_for_crazyhouse = 0;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show_pieces();
         document.removeEventListener('click', intermediary);
-        document.elementFromPoint(e.clientX, e.clientY).click();
         target.style.color = 'inherit';
     }
     }
