@@ -381,7 +381,6 @@ if (document.title == "Benjamin Tran | Search") {
 }
 
 function ajaxSearch(url, search, i, link_arr) {
-    //console.log("i is: " + i);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", url, true);
     xhttp.responseType = 'document';
@@ -390,11 +389,7 @@ function ajaxSearch(url, search, i, link_arr) {
 
     xhttp.onreadystatechange = (i) => {
         if (xhttp.readyState == 4) {
-            //console.log("i2e is: " + i);
             console.log("link secured!");
-
-            //console.log(xhttp);
-            //console.log(xhttp.status);
 
             var InnerHTML = xhttp.responseXML.getElementsByTagName('main')[0].innerHTML.toLowerCase();
             if (InnerHTML.includes(search)) {
@@ -417,7 +412,6 @@ function ajaxSearch(url, search, i, link_arr) {
                             break;
                         }
                         else if (InnerHTML[index + i] == "<" && (/[a-zA-Z]/.test(InnerHTML[index + i + 1]) || (InnerHTML[index + i + 1] == "/"))) {
-                            //console.log(InnerHTML[index+i] + InnerHTML[index+i+1]);
                             if (InnerHTML.substring(index + i, index + i + 9) == "</script>") {
                                 includes_tag = true;
                                 break;
@@ -434,9 +428,6 @@ function ajaxSearch(url, search, i, link_arr) {
 
 
                     if (!includes_tag) {
-                        //setCookie("search",true,2);
-                        //console.log('success at ' + url + " (" + num_includes + ")");
-                        //window.location = "search.html";
                         console.log('at the moment, ' + total_counts);
                         if (total_counts > 15) {
                             var newElement = document.createElement("ARTICLE");

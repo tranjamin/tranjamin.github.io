@@ -183,41 +183,66 @@ $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0]
 update_graphics();
 
 $('login').addEventListener('submit', e=> {
+    $('login_error').innerHTML = "";
+    $('signup_error').innerHTML = "";
     e.preventDefault();
     var login_name = $('login').getElementsByTagName('input')[0].value;
     var login_pass = $('login').getElementsByTagName('input')[1].value;
     var login_successful = false;
-    db.collection('account').get().then(snapshot => {
-        snapshot.docs.forEach(doc => {
-            console.log(doc.data());
-            if ((login_name == (e.target.username_or_email.value == 'Username' ? doc.data().username : doc.data().email)) && doc.data().password == login_pass) {login_successful = true; 
-                username = doc.data().username; 
-                user_id = doc.id;
+    if (e.target.username_or_email.value == "Email") {
+        auth.signInWithEmailAndPassword(login_name,login_pass).then(docRef => {
+            console.log(auth.currentUser.uid);
+            db.collection('account').where('auth_id', '==', auth.currentUser.uid).get().then(snapshot => {snapshot.docs.forEach(doc => {
+                console.log('auth 0')
+                username = doc.data().username;
                 setCookie('username',username,5);
-                setCookie('user_id',user_id,5);
+                setCookie('user_id',doc.id,5);
                 sessionStorage.setItem('username',username);
-                sessionStorage.setItem('user_id',user_id);
-                window.location.assign('account.html');
-
-            
-            }
-        })}).then(docRef => {
-            if (login_successful) {
-                $("login_error").innerHTML = "";
-                $('signup_error').innerHTML = "";
-            }
-            else {
-                $('login_error').innerHTML = "Username or Password is Incorrect";
-                $('signup_error').innerHTML = "";
-        }
+                sessionStorage.setItem('user_id',doc.id);
+                window.location.assign('account.html')
+            })}).catch(error => {
+                console.log('catch 1');
+                $('login_error').innerHTML = error.message;
+            })
+        }).catch(error => {
+                console.log('catch 2');
+                $('login_error').innerHTML = error.message;
+        })
+    }
+    else {
+        var username_exists = false;
+        db.collection('account').where('username','==',login_name).get().then(snapshot => {snapshot.docs.forEach(doc => {
+            console.log('yee')
+            if (doc.data().email) {
+            username_exists = true;
+            auth.signInWithEmailAndPassword(doc.data().email, login_pass).then(docRef => {
+                console.log('yaa')
+                username = doc.data().username;
+                setCookie('username',username,5);
+                setCookie('user_id',doc.id,5);
+                sessionStorage.setItem('username',username);
+                sessionStorage.setItem('user_id',doc.id);
+                window.location.assign('account.html')
+            }).catch(error => {
+                console.log(error);
+                $('login_error').innerHTML = error.message;
+            })
+        }})
         }).catch(error => {
             console.log(error);
-            $('login_error').innerHTML = "Server Inaccessible. Please try again.";
-            $('signup_error').innerHTML = "";
+            $('login_error').innerHTML = error.message;
+        }).then(() => {
+            if (!username_exists) {
+                $('login_error').innerHTML = "Username or password is incorrect";
+            }
         })
-}) 
+    }
+})
+
 $('signup').addEventListener('submit', e=> {
     e.preventDefault();
+    $('signup_error').innerHTML = "";
+    $('login_error').innerHTML = "";
     var signup_arr = $('signup').getElementsByTagName('input');
     var signup_username = signup_arr[0].value;
     var signup_email = signup_arr[1].value;
@@ -229,20 +254,23 @@ $('signup').addEventListener('submit', e=> {
     db.collection('account').get().then(snapshot => {
         snapshot.docs.forEach(doc => {
             if (doc.data().username == signup_username) {signup_decline = 'Username'}
-            if (signup_email && doc.data().email == signup_email && !signup_decline) {signup_decline = 'Email'}
         })
     }).then(() => {   
         if (!signup_decline) {
             console.log('success');
-            db.collection('account').add({
+            auth.createUserWithEmailAndPassword(signup_email ? signup_email : signup_username + "@tranchess.com", signup_password).then(ref1 => {
+                db.collection('non-existingCollection').get().then(() => {
+                console.log('auth1')
+                db.collection('account').add({
+                auth_id: ref1.user.uid,
                 username: signup_username,
                 email: signup_email,
-                password: signup_password,
                 wins: 0,
                 losses: 0,
                 draws: 0,   
                 ranking: 0     
             }).then(docRef => {
+                console.log('auth2')
                 username = signup_username; 
                 user_id = docRef.id;
                 setCookie('username',username,5);
@@ -250,23 +278,29 @@ $('signup').addEventListener('submit', e=> {
                 sessionStorage.setItem('username',username);
                 sessionStorage.setItem('user_id',user_id);
                 window.location.assign('account.html');
+            }).catch(error => {
+                console.log('auth 3');
+                console.log('error', error)
+                $('signup_error').innerHTML = error.message;
+                $('login_error').innerHTML = "";
             })
-
+        }).catch(error => {
+            console.log('auth 4')
+            $('signup_error').innerHTML = error.message;
+        })
+    })
         }
         else {
             $('signup_error').innerHTML = signup_decline + " already exists";
-            $('login_error').innerHTML = "";
         }
     })
 }
     else {
         $('signup_error').innerHTML = "'anon' cannot be used since it is the placeholder name";
-        $('login_error').innerHTML = "";
     }
     }
     else {
         $('signup_error').innerHTML = "Passwords do not Match";
-        $('login_error').innerHTML = "";
     }
 })
 
