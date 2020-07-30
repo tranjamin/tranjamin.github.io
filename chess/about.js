@@ -65,8 +65,22 @@ if (!cookies_allowed) {
 if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
     user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
     username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-	}
-
+    }
+    else {
+        auth.signOut();
+    }
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+        } else {
+            username = "anon";
+            user_id = "";
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('username');
+            setCookie('user_id', '',0);
+            setCookie('username', '', 0);
+            update_graphics();
+        }
+    });
 
 update_graphics();
 window.addEventListener('resize', e => {

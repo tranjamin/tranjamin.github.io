@@ -80,7 +80,23 @@ if (!cookies_allowed) {
 if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
     user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
     username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-	}
+    }
+    else {
+        auth.signOut();
+    }
+
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+    } else {
+        username = "anon";
+        user_id = "";
+        sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('username');
+        setCookie('user_id', '',0);
+        setCookie('username', '', 0);
+        update_graphics();
+    }
+});
 
 function update_graphics() {
     var overlay = $('overlay');
@@ -381,8 +397,7 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
-        sessionStorage.removeItem('user_id')
-        deleteAllCookies();
+        sessionStorage.removeItem('user_id');
         setCookie('user_id', "", 0);
         setCookie('username', "", 0);
         

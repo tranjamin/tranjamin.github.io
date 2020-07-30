@@ -66,6 +66,21 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
     user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
     username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
 	}
+else {
+	auth.signOut();
+}
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+    } else {
+        username = "anon";
+        user_id = "";
+        sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('username');
+        setCookie('user_id', '',0);
+        setCookie('username', '', 0);
+        update_graphics();
+    }
+});
 
 sortData('public', 'load_public');
 sortData('observer', 'load_observer');
@@ -301,7 +316,6 @@ function sortData(mode, id, input="", precision=0.3) {
 	var doc_name = [];
     db.collection('chess').where('visibility', '==', 'Public').get().then(snapshot => {
         snapshot.forEach(doc => {
-			//console.log(doc.data().name, relevancy.weight(doc.data().name,input));
 			if ((mode == "observer" && doc.data().white_user != null && doc.data().black_user != null) || 
 				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))
 			) {
