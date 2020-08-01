@@ -103,10 +103,12 @@ html {
 }
 
 #copyright {
-    font-size: 50%;
+    position: absolute;
+    bottom: 1%;
+    left: 5%;
+    font-size: 67%;
     font-family: 'Times New Roman';
     text-align: left;
-    padding-left: 5%;
 }
 
 table {

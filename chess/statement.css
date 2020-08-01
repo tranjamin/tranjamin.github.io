@@ -80,7 +80,10 @@ body form input:first-of-type{
 }
 
 #copyright {
-    font-size: 50%;
+    position: absolute;
+    bottom: 1%;
+    left: 5%;
+    font-size: 67%;
     font-family: 'Times New Roman';
     text-align: left;
 }
