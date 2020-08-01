@@ -433,7 +433,7 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         sessionStorage.removeItem('user_id');
         setCookie('user_id', "", 0);
         setCookie('username', "", 0);
-        
+        auth.signOut();
         location.reload();
     }
 });

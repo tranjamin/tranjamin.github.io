@@ -300,7 +300,7 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         deleteAllCookies();
         setCookie('user_id', "", 0);
         setCookie('username', "", 0);
-        
+        auth.signOut();
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
