@@ -52,7 +52,6 @@ function find_overlap(element, x_or_y, single_line=true) {
 	element.style.overflow = 'scroll';
 	element.style['overflow-x'] = 'scroll';
     element.style['overflow-y'] = 'scroll';
-    console.log(parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
 	switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
@@ -638,7 +637,7 @@ class piece {
                 pre_move = [this.name, new_pos, new_type];
                 db.collection('chess').doc(game).update({
                     pre_move: stringify(pre_move)
-                })
+                }).catch(error => console.log(error))
                 show_pieces();
             }
             })
@@ -652,7 +651,7 @@ class piece {
         pre_move = [this.name, new_pos, null];
         db.collection('chess').doc(game).update({
             pre_move: stringify(pre_move)
-        })
+        }).catch(error => console.log(error))
         show_pieces();
         }
     }
@@ -1224,7 +1223,7 @@ class piece {
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 show_pieces();
             }
-        })
+        }).catch(error => console.log(error))
     }
     
         if (inter != null) {canvas.removeEventListener('click', inter)}
@@ -1516,12 +1515,12 @@ class piece {
                         if (blackwhite) {
                             db.collection('chess').doc(game).update({
                                 white_pre_move: null
-                            })
+                            }).catch(error => console.log(error))
                         }
                         else {
                             db.collection('chess').doc(game).update({
                                 white_pre_move: null
-                            })
+                            }).catch(error => console.log(error))
                         }
                     }
                     else {
@@ -1633,7 +1632,7 @@ function win(message) {
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'white' : 'black',
         result_method: message
-    })
+    }).catch(error => console.log(error))
     db.collection('account').doc(user_id).get().then(doc => {
         original_wins = doc.data().wins;
         elo = doc.data().ranking
@@ -1665,9 +1664,9 @@ function win(message) {
             db.collection('account').doc(user_id).update({
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
             })
-        })
+        }).catch(error => console.log(error))
     })
-})
+}).catch(error => console.log(error))
 }
 function lose(message) {
     $("status").innerHTML = `You Lost by ${message}`;
@@ -1681,7 +1680,7 @@ function lose(message) {
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'black' : 'white',
         result_method: message
-    })
+    }).catch(error => console.log(error))
     db.collection('account').doc(user_id).get().then(doc => {
         original_losses = doc.data().losses;
         elo = doc.data().ranking
@@ -1713,9 +1712,9 @@ function lose(message) {
             db.collection('account').doc(user_id).update({
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
             })
-        })
-    })
-})
+        }).catch(error => console.log(error))
+    }).catch(error => console.log(error))
+}).catch(error => console.log(error))
 }
 function draw(message) {
     if (mode.indexOf('Armageddon') != -1) {
@@ -1735,7 +1734,7 @@ function draw(message) {
     db.collection('chess').doc(game).update({
         result: 'draw',
         result_method: message
-    })
+    }).catch(error => console.log(error))
     db.collection('account').doc(user_id).get().then(doc => {
         original_draws = doc.data().draws;
         elo = doc.data().ranking;
@@ -1769,13 +1768,14 @@ function draw(message) {
             db.collection('account').doc(other_id).update({
                 draws: other_draws + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
-            })
+            }).catch(error => console.log(error))
             db.collection('account').doc(user_id).update({
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
-            })
-        })
-    })
-})}
+            }).catch(error => console.log(error))
+        }).catch(error => console.log(error))
+    }).catch(error => console.log(error))
+}).catch(error => console.log(error))
+}
 }
 
 var rematchwhite_arr = [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]];
@@ -1923,11 +1923,11 @@ function rematch() {
             setCookie('game_id', docRef.id, 2);
             sessionStorage.setItem('game_id', docRef.id);
             location.reload();
-        })
+        }).catch(error => console.log(error))
     }
                     
-})
-})
+}).catch(error => console.log(error))
+}).catch(error => console.log(error))
 }
 
 
@@ -2018,7 +2018,7 @@ $('options').getElementsByTagName('button')[6].addEventListener('click', e => {
             username: username,
             user_id: user_id,
             feedback: e.target.getElementsByTagName('textarea')[0].value
-        })
+        }).catch(error => console.log(error))
         $('closable_interface').style.display = "none";
         $('closable_interface').previousElementSibling.style.display = "none";
     })
@@ -2087,7 +2087,7 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
         db.collection('chess').doc(game).update({
             draw_query: (blackwhite ? "white" : "black"),
             messages: $('text').innerHTML
-        })
+        }).catch(error => console.log(error))
     }
     else if (e.target.innerHTML == '✘') {
         if (e.target.parentElement.childElementCount == 2) {
@@ -2114,7 +2114,7 @@ $('options').getElementsByTagName('button')[2].addEventListener('click', e => {
         db.collection('chess').doc(game).update({
             draw_query: false,
             messages: $('text').innerHTML
-        })
+        }).catch(error => console.log(error))
         draw('Agreement');
     }}
 })
@@ -2130,7 +2130,7 @@ $('options').getElementsByTagName('button')[5].addEventListener('click', e => {
     }
 })
 db.collection('chess').doc(game).onSnapshot(doc => {    
-    console.log('snapshot');
+    //console.log('snapshot');
     if (first_load) {
         if (doc.data().white_user == username) {blackwhite = 1}
         else if (doc.data().black_user == username) {blackwhite = 0}
@@ -2192,6 +2192,28 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                     new_white_count = 0;
                     lose('Time');
                 }
+                db.collection('chess').doc(game).update({
+                    white_count: new_white_count,
+                    timer: [blackwhite, new Date()]
+                }).then(docRef => {
+                    if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
+                    clearInterval(clock)
+                    if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
+            
+                    }
+                    else if (parseInt($('self_time').innerHTML.split(':')[0])) {
+                        interval1();
+                    }
+                    else {
+                        if (parseFloat($('self_time').innerHTML.split(":")[1])) {
+                            interval3();
+                        }
+                        else {
+                            interval2();
+                        }
+                    }
+                }
+                })
             }
             else {
                 new_black_count -= ((new Date()) - doc.data().timer[1].toDate())/1000
@@ -2200,31 +2222,30 @@ db.collection('chess').doc(game).onSnapshot(doc => {
                     new_black_count = 0;
                     lose('Time');
                 }
-            }
-        
-            db.collection('chess').doc(game).update({
-                white_count: new_white_count,
-                black_count: new_black_count,
-                timer: [blackwhite, new Date()]
-            }).then(docRef => {
-                if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
-                clearInterval(clock)
-                if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
-        
-                }
-                else if (parseInt($('self_time').innerHTML.split(':')[0])) {
-                    interval1();
-                }
-                else {
-                    if (parseFloat($('self_time').innerHTML.split(":")[1])) {
-                        interval3();
+                db.collection('chess').doc(game).update({
+                    black_count: new_black_count,
+                    timer: [blackwhite, new Date()]
+                }).then(docRef => {
+                    if (doc.data().turn == blackwhite && doc.data().timer[0] == blackwhite) {
+                    clearInterval(clock)
+                    if (!parseInt($('self_time').innerHTML.split(':')[0]) && !parseInt($('self_time').innerHTML.split(':')[1])) {
+            
+                    }
+                    else if (parseInt($('self_time').innerHTML.split(':')[0])) {
+                        interval1();
                     }
                     else {
-                        interval2();
+                        if (parseFloat($('self_time').innerHTML.split(":")[1])) {
+                            interval3();
+                        }
+                        else {
+                            interval2();
+                        }
                     }
                 }
+                })
             }
-            })
+
         }
     }
 
@@ -2589,12 +2610,13 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     show_pieces();
 }
     first_load = false;
+    /*
     if (blackwhite) {
-        db.collection('chess').doc(game).update({white_notification: false})
+        db.collection('chess').doc(game).update({white_notification: false}).catch(error => {console.log(error)})
     }
     else {
-        db.collection('chess').doc(game).update({black_notification: false})
-    }
+        db.collection('chess').doc(game).update({black_notification: false}).catch(error => {console.log(error)})
+    }*/
 })
 
 interval3 = () => {
@@ -2884,9 +2906,10 @@ $("message_form").addEventListener('submit', e => {
     }).then(docRef => {
         $('message_form').childNodes[1].value = "";
         msg_ready = true;
-    })
+    }).catch(error => console.log(error))
     
-    })}
+    }).catch(error => console.log(error))
+}
 })
 
 function socket_data(socket) {
@@ -3221,8 +3244,8 @@ Undo = () => {
             black_checks: black_check ? doc.data().black_checks - 1 : doc.data().black_checks, 
             pre_move: null,
             undo: stringify(undo)
-        })
-    })
+        }).catch(error => console.log(error))
+    }).catch(error => console.log(error))
 }
 
 function setCookie(cname, cvalue, exdays) {
