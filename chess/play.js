@@ -1519,7 +1519,7 @@ class piece {
                         }
                         else {
                             db.collection('chess').doc(game).update({
-                                white_pre_move: null
+                                black_pre_move: null
                             }).catch(error => console.log(error))
                         }
                     }
