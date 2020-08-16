@@ -2,74 +2,6 @@ html {
     background-color: black
 }
 
-.piece {
-    position: relative;
-    z-index: 10;
-}
-
-#canvas1 {
-    position: absolute;
-    background-image: url("board.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    margin: none;
-    padding: none;
-}
-
-#message {
-background-color: lightgreen;
-display: block;
-position: absolute;
-}
-
-#chat_title {
-background-color: green;
-text-align: center;
-font-size: 1.7em;
-padding: 1% 0;
-position: absolute;
-display: block;
-z-index: 2;
-font-weight: bold;
-font-family: 'Arial';
-color: white;
-}
-#submit_message {
-position: fixed;
-z-index: 4;
-}
-body form input:first-of-type{
-    background-color: rgb(209, 253, 228);
-    border: none;
-}
-#text {
-    position: absolute;
-    z-index: 3;
-}
-#text:hover {
-    overflow: scroll;
-}
-
-#options {
-    background-color: grey;
-    position: absolute;
-}
-
-#options button{
-    display: block;
-    width: 80%;
-    position: relative;
-    right: -10%;
-    border: none;
-    height: 20%;
-    margin-bottom: 2.5%;
-    font-family: Helvetica;
-    font-weight: bold;
-    font-size: 200%;
-}
 
 #overlay {
     background-color: red;
@@ -84,57 +16,6 @@ body form input:first-of-type{
 #overlay h4 {
     text-align: center;
     font-family: 'Raleway';
-}
-
-#game_creator {
-    text-decoration-line: underline;
-    text-align: center;
-}
-#game_loader {    
-    text-decoration-line: underline;
-    text-align: center;
-}
-
-#overlay input[type=text] {
-    font-size: 200%;
-    text-align: center;
-    background-color: red;
-    margin-bottom: 2%;
-    text-decoration-line: underline;
-    color: rgba(53, 52, 52, 0.527)
-}
-#overlay input[type=submit] {
-    background-color: rgb(255, 115, 0);
-    margin-bottom: 20%;
-    text-align: right;
-    font-family: 'Raleway';
-    border: none;
-    font-size: 100%;
-}
-
-#login {
-position: absolute;
-bottom: 5%;
-left: 15%;
-display: inline-block;
-}
-
-#signup {
-position: absolute;
-bottom: 0%;
-right: 15%;
-}
-
-#logout {
-    position: fixed;
-    bottom: 2%;
-    right : 0.5%;
-    background-color: red;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-
 }
 #nav {
     background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
