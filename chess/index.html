@@ -27,64 +27,11 @@
             Powered by Github and Google Firebase
         </div>
     </div>
-
-    <div id="chat_title">CHAT</div>
-
-    <div id="message"></div>
-    <p id="text"></p>
-    <div id="submit_message">
-        <form id="message_form">
-            <input type="text" placeholder="Write a message">
-            <input type="submit" value="Submit" style="visibility: hidden;">
-        </form>
-    </div>
-    <canvas id="canvas1" style="border: white 2pt solid">
-    </canvas>
-    </div>
     <div id="overlay">
         <h2>Welcome to Ben's Chess Website</h2>
         <h4>Set up your own chess game or visit an existing one</h4>
-        <form id="game_creator" action="chess.php" method="POST">
-            <input type='text' placeholder='Name your chess server' id='create_name' name="create_name"><br>
-            <div style="text-decoration: unset;"></div>
-            <input type='submit' value='Create your board' name="create_submit">
-        </form>
-        <form id="game_loader" action="chess.php" method="GET">
-            <input type='text' placeholder='Server Name' id='load_name' name="load_name"><br>
-            <div style='text-decoration: none;'></div>
-            <input type='submit' value='Join Game' name="load_submit">
-        </form>
     </div>
-    <div id="options">
-        <button>Start New Game</button><br>
-        <button>Load</button><br>
-        <button>Resign</button><br>
-        <button>Login / Signup</button>
-        <form id="login" style="display: none;">
-            <input name="username" type="text" placeholder="username"><br>
-            <input name="password" type="password" placeholder="password"><br>
-            <input name="login" type="submit" value="Login">
-        </form>
-        <form id="signup" style="display: none;">
-            <input name="new_username" placeholder="create username"><br>
-            <input name="email" placeholder="enter email"><br>
-            <input name="new_password" placeholder="create password"><br>
-            <input name="confirm_password" placeholder="confirm password"><br>
-            <input name="signup" type="submit" value="Sign Up">
-        </form>
-    </div>
-    <image src="white_rookv2.jpg" class="piece" id="wR" style="display: none;"></image>
-    <image src="white_knightv2.jpg" class="piece" id="wN" style="display: none;"></image>
-    <image src="white_bishopv2.jpg" class="piece" id="wB" style="display: none;"></image>
-    <image src="white_queenv2.jpg" class="piece" id="wQ" style="display: none;"></image>
-    <image src="white_kingv2.jpg" class="piece" id="wK" style="display: none;"></image>
-    <image src="white_pawnv2.jpg" class="piece" id="wP" style="display: none;"></image>
-    <image src="black_rookv2.jpg" class="piece" id="bR" style="display: none;"></image>
-    <image src="black_knightv2.jpg" class="piece" id="bN" style="display: none;"></image>
-    <image src="black_bishopv2.jpg" class="piece" id="bB" style="display: none;"></image>
-    <image src="black_queenv2.jpg" class="piece" id="bQ" style="display: none;"></image>
-    <image src="black_kingv2.jpg" class="piece" id="bK" style="display: none;"></image>
-    <image src="black_pawnv2.jpg" class="piece" id="bP" style="display: none;"></image>
+        
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 
