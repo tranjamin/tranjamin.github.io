@@ -1,22 +1,4 @@
 
-
-
-
-var game = "";
-var undo = [];
-
-
-
-
-// socket
-
-var socket;
-var loaded;
-var ready;
-
-
-loaded = false;
-ready = false;
 window.addEventListener('load', e => {
     show_pieces();
 })
