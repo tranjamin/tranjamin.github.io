@@ -4,18 +4,54 @@ html {
 
 
 #overlay {
-    background-color: red;
+    background-color: rgb(19, 17, 17);
     position: absolute;
     z-index: 10;
+    color: white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
 }
 
 #overlay h2 {
     text-align: center;
     font-family: 'Philosopher';
+    background: linear-gradient(white 0.5%, orangered);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 #overlay h4 {
     text-align: center;
     font-family: 'Raleway';
+    background: linear-gradient(white 0.5%, orangered);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#overlay h1:first-of-type {
+    text-align: center;
+    font-family: 'Raleway';
+    font-size: 3.3em;
+    padding: 0;
+    margin: 0;
+    display: inline;
+    text-align: left;
+    position: relative;
+    left: 18%;
+    top: 8%;
+    background-color: rgba(19, 17, 17, 1);
+    color: orangered;
+}
+#overlay h1:nth-of-type(2) {
+    width: 100%;
+    text-align: center;
+    font-family: 'Raleway';
+    background: linear-gradient(to right, orangered ,rgba(0,0,0,0) 90%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 10em;
+    padding: 0;
+    margin: 0;
+    line-height: 80%;
 }
 #nav {
     background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
@@ -25,12 +61,15 @@ html {
 
 }
 #nav li {
-    height: 16%;
+    height: 16.66666666666666666%;
     width: 100%;
     background-color: rgba(58, 54, 54, 0.158);
     border-bottom: white 2px solid;
     position: relative;
     padding: 0;
+}
+#nav li:last-of-type {
+    border-bottom: none;
 }
 #nav ul {
     list-style: none;
@@ -39,7 +78,8 @@ html {
     width: 100%;
     position: absolute;
     left: 0%;
-    padding: 0;
+    padding: 0 0;
+    margin: 0 0;
 }
 #nav li button {
     height: 100%;
@@ -51,10 +91,133 @@ html {
     font-size: 1.5em;
     overflow: hidden;
     cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+#nav li button a {
+    display: block;
+    position: absolute;
+    padding: 0 5%;
 }
 
 #copyright {
     position: absolute;
-    bottom: 5px;
-    left: 5px;
+    bottom: 1%;
+    left: 5%;
+    font-size: 67%;
+    font-family: 'Times New Roman';
+    text-align: left;
+}
+
+#cookie_notice {
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    z-index: 100;
+    color: black;
+    font-family: 'Philosopher';
+    font-size: 200%;
+    border-radius: 1%;
+    text-align: center;
+    background-color: rgba(172, 167, 167, 0.98);
+    width: 40%;
+    height: 60%;
+}
+#cookie_notice button {
+    background-color: rgb(255, 94, 0);
+    border: none;
+    font-size: 100%;
+    font-family: 'Philosopher';
+    font-weight: bold;
+    position: absolute;
+    bottom: 1%;
+    right: 1%;
+    
+}
+#cookie_notice button:first-of-type {
+    background-color: rgb(255, 94, 0);
+    border: none;
+    font-size: 100%;
+    font-family: 'Philosopher';
+    font-weight: bold;
+    position: absolute;
+    right: 25%;
+    
+}
+#welcome {
+    padding: 5% 5%;
+}
+#welcome button {
+    width: 100%;
+    background-color: rgb(255, 94, 0);
+    border: none;
+    font-size: 100%;
+    font-family: 'Philosopher';
+    font-weight: bold;
+    display: block;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin: 0% 2%;
+    width: 96%;
+    cursor: pointer;
+}
+#title_scroll {
+    width: 86%;
+    margin: 0 7%;
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 47%;
+}
+.suggested_game {
+    width: 47%;
+    border: 2pt solid white;
+}
+#cookie_notice {
+    position: absolute;
+    left: 30%;
+    top: 20%;
+    z-index: 100;
+    color: black;
+    font-family: 'Philosopher';
+    font-size: 200%;
+    border-radius: 1%;
+    text-align: center;
+    background-color: rgba(172, 167, 167, 0.98);
+    width: 40%;
+    height: 60%;
+}
+#cookie_notice button {
+    background-color: rgb(255, 94, 0);
+    border: none;
+    font-size: 100%;
+    font-family: 'Philosopher';
+    font-weight: bold;
+    position: absolute;
+    bottom: 1%;
+    right: 1%;
+    
+}
+#cookie_notice button:first-of-type {
+    background-color: rgb(255, 94, 0);
+    border: none;
+    font-size: 100%;
+    font-family: 'Philosopher';
+    font-weight: bold;
+    position: absolute;
+    right: 25%;
+    
+}
+.suggested_label:nth-of-type(1) {
+    width: 41.25%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    left: 7%;
+}
+.suggested_label:nth-of-type(2) {
+    width: 41.25%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    left: 10%;
 }

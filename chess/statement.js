@@ -1,22 +1,3 @@
-/*
-This Version Includes:
-Basic piece movement
-Basic chat
-En passant
-Castling
-Promotion
-
-This Version does not Include:
-Check / Checkmate
-Underpromotion
-Undo
-Flip Board
-
-*/
-
-// socket
-
-
 function $(id) { return document.getElementById(id); }
 
 function find_overlap(element, x_or_y, single_line=true) {

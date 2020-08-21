@@ -8,19 +8,22 @@
     <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="favicon4.png" type='image/x-icon'/>
     <meta charset="utf8">
 </head>
 
 <body>
     <div id="nav">
         <ul>
+            <li><button><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a><button></li>
+            <li><button><a href="account.html" style="text-decoration: none; color: white;">My Games</a></button></li>
+            <li><button><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a></button>
+            </li>
+            <li><button><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></button></li>
+            <li><button><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></button></li>
+            <li><button><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br>
 
-<li><button>Login/Signup<button></li>
-<li><button>My Games</button></li>
-<li><button><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a></button></li>
-<li><button><a href="join.html" style="text-decoration: none; color: white;">Join Game</a></button></li>
-<li><button><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></button></li>
-
+            </a></button></li>
         </ul>
         <div id="copyright">
             &copy Benjamin Tran 2020<br>
@@ -28,36 +31,64 @@
         </div>
     </div>
     <div id="overlay">
-        <h2>Welcome to Ben's Chess Website</h2>
-        <h4>Set up your own chess game or visit an existing one</h4>
+        <h1>Tran</h1>
+        <h1><img src="favicon_edit.png" height="100px"/>Chess</h1>
+        <div id="welcome">
+        Welcome to the buggiest online chess server in  the world!
+        This version includes:
+        <ul>
+            <li>Realtime chat services</li>
+            <li>Numerous different modes</li>
+            <li>Fully functioning (maybe) chess clocks</li>
+            <li>And so much more!</li>
+        </ul>
+        <button>See changelog</button>
+        </div>
+        <label for="quick_join" class="suggested_label">Quick Join</label>
+        <label for="quick_observe" class="suggested_label">Quick Observe</label>
+        <div id="title_scroll">
+        <canvas class="suggested_game" name="quick_join">
+            
+        </canvas>
+        <canvas class="suggested_game">
+            
+        </canvas>
+        </div>
+    </div>
+    <div id="cookie_notice" style="display: none;">
+        <div>We use cookies</div>
+        <h6>We use non-tracking cookies to enhance your experience. By accepting, you agree to our use of cookies and our <a href="statement.html">terms and conditions</a>.</h6>
+        <button>Accept</button>
+        <button>Decline</button>
     </div>
         
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+ https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
 
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
-            authDomain: "chess-10cd9.firebaseapp.com",
-            databaseURL: "https://chess-10cd9.firebaseio.com",
-            projectId: "chess-10cd9",
-            storageBucket: "chess-10cd9.appspot.com",
-            messagingSenderId: "897666750783",
-            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
-            measurementId: "G-H57J99DFNG"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        firebase.analytics();
-
-    </script>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+        authDomain: "chess-10cd9.firebaseapp.com",
+        databaseURL: "https://chess-10cd9.firebaseio.com",
+        projectId: "chess-10cd9",
+        storageBucket: "chess-10cd9.appspot.com",
+        messagingSenderId: "897666750783",
+        appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+        measurementId: "G-H57J99DFNG"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    firebase.analytics();
+</script>
 
     <script src='chess.js'></script>
 </body>
