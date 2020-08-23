@@ -60,6 +60,7 @@ firebase.auth().onAuthStateChanged(user => {
         user_id = "";
         sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('username');
+        setCookie('game_id','',0);
         setCookie('user_id', '',0);
         setCookie('username', '', 0);
         update_graphics();
@@ -188,12 +189,14 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if (!user_id) {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
-        sessionStorage.removeItem('user_id')
-        deleteAllCookies();
+        sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('game_id');
         setCookie('user_id', "", 0);
-        setCookie('username', "", 0);
-        auth.signOut();
-        location.reload();}
+		setCookie('username', "", 0);
+		setCookie('game_id', 0)
+		auth.signOut();
+        location.reload();
+    }
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
         location.assign('account.html');

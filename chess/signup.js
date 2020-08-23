@@ -46,6 +46,7 @@ var username = "anon";
 var user_id = "";
 var successful_email;
 
+var clickable = true;
 
 var options = $('options');
 
@@ -92,6 +93,7 @@ firebase.auth().onAuthStateChanged(user => {
         user_id = "";
         sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('username');
+        setCookie('game_id','',0);
         setCookie('user_id', '',0);
         setCookie('username', '', 0);
         update_graphics();
@@ -201,9 +203,11 @@ $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0]
 update_graphics();
 
 $('login').addEventListener('submit', e=> {
+    e.preventDefault();
+    if (clickable) {
     $('login_error').innerHTML = "";
     $('signup_error').innerHTML = "";
-    e.preventDefault();
+    clickable = false;
     var login_name = $('login').getElementsByTagName('input')[0].value;
     var login_pass = $('login').getElementsByTagName('input')[1].value;
     var login_successful = false;
@@ -221,18 +225,20 @@ $('login').addEventListener('submit', e=> {
             })}).catch(error => {
                 console.log('catch 1');
                 $('login_error').innerHTML = error.message;
+                clickable = true;
             })
         }).catch(error => {
                 console.log('catch 2');
                 $('login_error').innerHTML = error.message;
+                clickable = true;
         })
     }
     else {
         var username_exists = false;
         db.collection('account').where('username','==',login_name).get().then(snapshot => {snapshot.docs.forEach(doc => {
             console.log('yee')
-            if (doc.data().email) {
             username_exists = true;
+            if (doc.data().email) {
             auth.signInWithEmailAndPassword(doc.data().email, login_pass).then(docRef => {
                 console.log('yaa')
                 username = doc.data().username;
@@ -244,21 +250,42 @@ $('login').addEventListener('submit', e=> {
             }).catch(error => {
                 console.log(error);
                 $('login_error').innerHTML = error.message;
+                clickable = true;
             })
-        }})
+        }
+        else {
+            auth.signInWithEmailAndPassword(login_name + "@tranchess.com", login_pass).then(docRef => {
+                console.log('yaa')
+                username = doc.data().username;
+                setCookie('username',username,5);
+                setCookie('user_id',doc.id,5);
+                sessionStorage.setItem('username',username);
+                sessionStorage.setItem('user_id',doc.id);
+                window.location.assign('account.html')
+            }).catch(error => {
+                console.log(error);
+                $('login_error').innerHTML = error.message;
+                clickable = true;
+            })
+        }
+    })
         }).catch(error => {
             console.log(error);
             $('login_error').innerHTML = error.message;
+            clickable = true;
         }).then(() => {
             if (!username_exists) {
                 $('login_error').innerHTML = "Username or password is incorrect";
+                clickable = true;
             }
         })
-    }
+    }}
 })
 
 $('signup').addEventListener('submit', e=> {
     e.preventDefault();
+    if (clickable) {
+    clickable = false;
     $('signup_error').innerHTML = "";
     $('login_error').innerHTML = "";
     var signup_arr = $('signup').getElementsByTagName('input');
@@ -277,7 +304,7 @@ $('signup').addEventListener('submit', e=> {
         if (!signup_decline) {
             console.log('success');
             auth.createUserWithEmailAndPassword(signup_email ? signup_email : signup_username + "@tranchess.com", signup_password).then(ref1 => {
-                db.collection('non-existingCollection').get().then(() => {
+                db.collection('chess').get().then(() => {
                 console.log('auth1')
                 db.collection('account').add({
                 auth_id: ref1.user.uid,
@@ -305,21 +332,25 @@ $('signup').addEventListener('submit', e=> {
         }).catch(error => {
             console.log('auth 4')
             $('signup_error').innerHTML = error.message;
+            clickable = true;
         })
     })
         }
         else {
             $('signup_error').innerHTML = signup_decline + " already exists";
+            clickable = true;
         }
     })
 }
     else {
         $('signup_error').innerHTML = "'anon' cannot be used since it is the placeholder name";
+        clickable = true;
     }
     }
     else {
         $('signup_error').innerHTML = "Passwords do not Match";
-    }
+        clickable = true;
+    }}
 })
 
 $('forgot_password').addEventListener('click', e => {
@@ -400,9 +431,11 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('game_id');
         setCookie('user_id', "", 0);
-        setCookie('username', "", 0);
-        auth.signOut();
+		setCookie('username', "", 0);
+		setCookie('game_id', 0)
+		auth.signOut();
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {

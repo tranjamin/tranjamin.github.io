@@ -76,6 +76,7 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
             user_id = "";
             sessionStorage.removeItem('user_id');
             sessionStorage.removeItem('username');
+            setCookie('game_id','',0);
             setCookie('user_id', '',0);
             setCookie('username', '', 0);
             update_graphics();
@@ -193,11 +194,12 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
-        sessionStorage.removeItem('user_id')
-        deleteAllCookies();
+        sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('game_id');
         setCookie('user_id', "", 0);
-        setCookie('username', "", 0);
-        auth.signOut();
+		setCookie('username', "", 0);
+		setCookie('game_id', 0)
+		auth.signOut();
         location.reload();}
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {

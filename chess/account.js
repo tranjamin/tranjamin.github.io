@@ -77,6 +77,7 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
 			user_id = "";
 			sessionStorage.removeItem('user_id');
 			sessionStorage.removeItem('username');
+			setCookie('game_id','',0);
 			setCookie('user_id', '',0);
 			setCookie('username', '', 0);
 			update_graphics();
@@ -202,10 +203,11 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
-        sessionStorage.removeItem('user_id')
-        deleteAllCookies();
+		sessionStorage.removeItem('user_id');
+		sessionStorage.removeItem('game_id');
         setCookie('user_id', "", 0);
-        setCookie('username', "", 0);
+		setCookie('username', "", 0);
+		setCookie('game_id', 0)
 		auth.signOut();
         location.reload();}
 });
@@ -332,18 +334,15 @@ $('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
 
 $('settings').getElementsByTagName('form')[0].addEventListener('submit', e => {
 	e.preventDefault();
-	db.collection('account').doc(user_id).get().then(doc => {
-		if (doc.data().password == $('settings').getElementsByTagName('form')[0].confirm.value) {
-			e.target.style.display = "none";		
-			e.target.nextElementSibling.style.display = "none";	
-			$('settings').getElementsByTagName('form')[1].style.visibility = "visible";		
-			$('settings').getElementsByTagName('form')[3].style.visibility = "visible";	
-			$('settings').getElementsByTagName('form')[5].style.visibility = "visible";	
-			e.target.nextElementSibling.innerHTML = "";	
-		}
-		else {
-			e.target.nextElementSibling.innerHTML = "Password is incorrect"
-		}
+	auth.signInWithEmailAndPassword(auth.currentUser.email, $('settings').getElementsByTagName('form')[0].confirm.value).then(() => {
+		e.target.style.display = "none";		
+		e.target.nextElementSibling.style.display = "none";	
+		$('settings').getElementsByTagName('form')[1].style.visibility = "visible";		
+		$('settings').getElementsByTagName('form')[3].style.visibility = "visible";	
+		$('settings').getElementsByTagName('form')[5].style.visibility = "visible";	
+		e.target.nextElementSibling.innerHTML = "";	
+	}).catch(() => {
+		e.target.nextElementSibling.innerHTML = "Password is incorrect"
 	})
 })
 $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
@@ -355,12 +354,10 @@ $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
 	else {
 	username = e.target.username.value;
 	var username_exists = false;
-	db.collection('account').get().then(snapshot => {
-		snapshot.docs.forEach(doc => {
-			if (username == doc.data().username) {
-				username_exists = true;
-			}
-		})
+	db.collection('account').where('username','==',username).get().then(snapshot => {
+		if (snapshot.docs.length) {
+			username_exists = true;
+		}
 	}).then(docRef => {
 		if (username_exists) {
 		username = e.target.username.value = "";
@@ -368,6 +365,9 @@ $('settings').getElementsByTagName('form')[1].addEventListener('submit', e => {
 		}
 		else {
 		db.collection('account').doc(user_id).update({username: username})
+		if ((/^.*@tranchess\.com$/).test(auth.currentUser.email)) {
+			auth.currentUser.updateEmail(username + "@tranchess.com")
+		}
 		e.target.innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
 		e.target.nextElementSibling.style.display = "none";
 		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
@@ -391,24 +391,16 @@ $('settings').getElementsByTagName('form')[3].addEventListener('submit', e => {
 	else {
 	email = e.target.email.value;
 	var email_exists = false;
-	db.collection('account').get().then(snapshot => {
-		snapshot.docs.forEach(doc => {
-			if (email == doc.data().email) {
-				email_exists = true;
-			}
-		})
-	}).then(docRef => {
-		if (email_exists) {
-			e.target.email.value = "";
-			e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Email already exists";
-		}
-		else {
-	db.collection('account').doc(user_id).update({email: email})
-	e.target.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`;
-	e.target.nextElementSibling.style.display = "none";
-	e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
-}
+	auth.currentUser.updateEmail(email).then(() => {
+		db.collection('account').doc(user_id).update({email: email})
+		e.target.innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`;
+		e.target.nextElementSibling.style.display = "none";
+		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
+	}).catch(error => {
+		e.target.email.value = "";
+		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Email already exists";
 	})
+	
 }
 })
 $('settings').getElementsByTagName('form')[4].addEventListener('submit', e => {
@@ -427,9 +419,12 @@ $('settings').getElementsByTagName('form')[5].addEventListener('submit', e => {
 	if (e.target.password.value == e.target.confirm.value) {
 		e.target.nextElementSibling.style.display = "none";
 		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "";
-		db.collection('account').doc(user_id).update({password: e.target.password.value});
-		e.target.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
-	}
+		auth.currentUser.updatePassword(e.target.password.value).then(() => {
+			e.target.innerHTML = `<label for="password">Password: ******</label><input type="submit" value="Change">`;
+		}).catch(error => {
+			e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = error
+		})
+			}
 	else  {
 		e.target.confirm.value = "";
 		e.target.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML = "Passwords do not match";
@@ -856,7 +851,7 @@ function relevant() {
 
 		var m, prev, index;
 
-		while (m = regex.exec(str)) {
+		while (m = regex.exec(str)) { 
 			if (!prev || m[0].length > prev.length) {
 				prev = m[0];
 				index = regex.lastIndex;
