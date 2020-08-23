@@ -211,10 +211,10 @@ update_graphics();
 highest_order_id = ["",0];
 var num_of_its;
 var it_num = 0;
-db.collection('chess').where('result', '==', null).where('invited_user', '==',null).get().then(snapshot => {
+db.collection('chess').where('result', '==', null).where('visibility','==','public').where('invited_user', '==',null).get().then(snapshot => {
     snapshot.docs.forEach(doc => {
         if ((doc.data().white_user == null || doc.data().black_user == null)) {
-
+            console.log(doc.data().white_user)
         }
     })
 })
