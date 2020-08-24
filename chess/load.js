@@ -191,8 +191,6 @@ function update_graphics() {
 
 }
 
-
-
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
     else {
@@ -220,7 +218,6 @@ location.assign('about.html');
 $('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
     location.assign('statement.html');
 });
-
 
 function setCookie(cname, cvalue, exdays) {
     if (cookies_allowed) {
@@ -376,7 +373,8 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 					load_id = doc.id;
 					if (doc.data().white_user == null) {
 						db.collection('chess').doc(load_id).update({
-							white_user: username
+							white_user: username,
+							white_user_id: user_id
 						}).then(docRef => {
 							console.log('t2')
 							setCookie('game_id',load_id,2);
@@ -386,7 +384,8 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 					}
 					else if (doc.data().black_user == null) {
 						db.collection('chess').doc(load_id).update({
-							black_user: username
+							black_user: username,
+							black_user_id: user_id
 						}).then(docRef => {
 							console.log('t2')
 							setCookie('game_id',load_id,2);
@@ -430,7 +429,8 @@ $('search_private').addEventListener('submit', e => {
 		sessionStorage.setItem('game_id',doc.id);
 		if (doc.data().white_user == null) {
 			db.collection('chess').doc(doc.id).update({
-				white_user: username
+				white_user: username,
+				white_user_id: user_id
 			}).then(() => {
 						if (!exists) {
 			$('private_error').innerHTML = "Game does not exist"; }
@@ -441,7 +441,8 @@ $('search_private').addEventListener('submit', e => {
 		}
 		else if (doc.data().black_user == null) {
 			db.collection('chess').doc(doc.id).update({
-				black_user: username
+				black_user: username,
+				black_user_id: user_id
 			}).then(() => {
 		if (!exists) {
 			$('private_error').innerHTML = "Game does not exist"; }

@@ -341,19 +341,24 @@ if (mode.indexOf('Armageddon') != -1) {
 }
 console.log(white_time);
 var rated = points == "Casual" ? false : true;
-var white_user;
-var black_user;
+var white_user = null;
+var black_user = null;
+var white_user_id = "";
+var black_user_id = "";
 if (play_colour) {
     white_user = user;
-    black_user = null; }
+    white_user_id = user_id;
+     }
 else {
-    white_user = null;
     black_user = user;
+    black_user_id = user_id;
 }
 db.collection('chess').add({
     name: newname,
     black_user: black_user,
     white_user: white_user,
+    black_id: black_user_id,
+    white_id: white_user_id,
     white_arr: stringify(white_arr),
     black_arr: stringify(black_arr),
     white_list: tempw,

@@ -11,6 +11,7 @@ Flip Board
 
 */
 
+//determine if rated or not
 
 var game = "";
 var undo = [];
@@ -86,6 +87,7 @@ castle_rookh = true;
 
 var username = "anon";
 var user_id = "";
+var other_user_id = "";
 
 var msg = $('message');
 var msg_submit = $('submit_message');
@@ -1642,12 +1644,8 @@ function win(message) {
             wins: original_wins + 1
         })
     }).then(docRef => {
-    db.collection('chess').doc(game).get().then(doc => {
-        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
-    }).then(docRef => {
-        db.collection('account').where('username','==',other_user).get().then(snapshots => {
+        db.collection('account').doc(other_user_id).get().then(snapshots => {
             snapshots.forEach(doc => {
-                other_id = doc.id;
                 other_losses = doc.data().losses;
                 other_elo = doc.data().ranking;
             })
@@ -1658,16 +1656,15 @@ function win(message) {
             var other_e = other_r / (r + other_r);
             var new_elo = elo + 32 * (1 - e);
             var new_other_elo = other_elo + 32 * (0 - other_e);
-            db.collection('account').doc(other_id).update({
+            db.collection('account').doc(other_user_id).update({
                 losses: other_losses + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             })
-            db.collection('account').doc(user_id).update({
+            db.collection('account').doc(other_euser_id).update({
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
             })
         }).catch(error => console.log(error))
     })
-}).catch(error => console.log(error))
 }
 function lose(message) {
     $("status").innerHTML = `You Lost by ${message}`;
@@ -1690,12 +1687,8 @@ function lose(message) {
             losses: original_losses + 1
         })
     }).then(docRef => {
-    db.collection('chess').doc(game).get().then(doc => {
-        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
-    }).then(docRef => {
-        db.collection('account').where('username','==',other_user).get().then(snapshots => {
+        db.collection('account').doc(other_user_id).get().then(snapshots => {
             snapshots.forEach(doc => {
-                other_id = doc.id;
                 other_wins = doc.data().wins;
                 other_elo = doc.data().ranking;
             })
@@ -1706,7 +1699,7 @@ function lose(message) {
             var other_e = other_r / (r + other_r);
             var new_elo = elo + 32 * (0 - e);
             var new_other_elo = other_elo + 32 * (1 - other_e);
-            db.collection('account').doc(other_id).update({
+            db.collection('account').doc(other_user_id).update({
                 wins: other_wins + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             })
@@ -1715,7 +1708,6 @@ function lose(message) {
             })
         }).catch(error => console.log(error))
     }).catch(error => console.log(error))
-}).catch(error => console.log(error))
 }
 function draw(message) {
     if (mode.indexOf('Armageddon') != -1) {
@@ -1745,10 +1737,7 @@ function draw(message) {
         })
     }).then(docRef => {
     db.collection('chess').doc(game).get().then(doc => {
-        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
-        is_it_rated = doc.data().points
-    }).then(docRef => {
-        db.collection('account').where('username','==',other_user).get().then(snapshots => {
+        db.collection('account').doc(other_user_id).get().then(snapshots => {
             snapshots.forEach(doc => {
                 other_id = doc.id;
                 other_draws = doc.data().draws;
@@ -2136,6 +2125,7 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         if (doc.data().white_user == username) {blackwhite = 1}
         else if (doc.data().black_user == username) {blackwhite = 0}
         else {observer = true;}
+        other_user_id = blackwhite ? doc.data().black_user_id : doc.data().white_user_id;
 
         if (blackwhite) {
             $('self_time').style['background-color'] = 'white';
