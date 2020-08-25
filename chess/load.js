@@ -53,6 +53,8 @@ var selected_opponent_ranking = "All";
 var selected_game_mode = "All";
 var selected_play_as = "Any";
 
+var opponent_ranking_range = ["",""];
+
 function formatFilter(e, array) {
 	if (e.target.getAttribute('name') == 'back') {
 		var filter = e.target.parentElement.getElementsByTagName('span')[1];
@@ -87,6 +89,10 @@ $('search_public').getElementsByTagName('button')[0].addEventListener('click', e
 	selected_opponent_ranking = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].innerHTML;
 	selected_game_mode = e.target.parentElement.getElementsByTagName('div')[3].getElementsByTagName('span')[1].innerHTML;
 	selected_play_as = e.target.parentElement.getElementsByTagName('div')[4].getElementsByTagName('span')[1].innerHTML;
+	if (selected_opponent_ranking != "All") {
+	opponent_ranking_range[0] = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].getElementsByTagName('input')[0].value;
+	opponent_ranking_range[1] = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].getElementsByTagName('input')[1].value;
+}
 	if ($('search_public').increment.value != "0") {
 		sortData('public', 'load_public', $('search_public').search.value, $('search_public').increment.value);
 		}
@@ -129,7 +135,6 @@ firebase.auth().onAuthStateChanged(user => {
         user_id = "";
         sessionStorage.removeItem('user_id');
 		sessionStorage.removeItem('username');
-		setCookie('game_id','',0);
         setCookie('user_id', '',0);
         setCookie('username', '', 0);
         update_graphics();
@@ -375,9 +380,9 @@ function sortData(mode, id, input="", precision=0.3) {
 				((selected_play_as == "Any") || (selected_play_as == "Random" && doc.data().randomised) || (selected_play_as == "White" && doc.data().white_user == null) || (selected_play_as == "Black" && doc.data().black_user == null)) &&
 				((selected_game_mode == "All") || (doc.data().mode.indexOf(selected_game_mode) != -1)) &&
 				((selected_mode == "All") || (selected_mode == "Casual" && !doc.data().points) || (selected_mode == "Ranked" && doc.data().points)) &&
-				((selected_time_control == "All") || (selected_time_control == "None" && doc.data().white_time == null))
+				((selected_time_control == "All") || (selected_time_control == "None" && doc.data().white_time == null)) &&
+				((selected_opponent_ranking == "All") || (opponent_ranking_range[0] == "" && opponent_ranking_range[1] == "") || (((doc.data().white_user == null ? doc.data().black_ranking : doc.data().white_ranking) >= parseFloat(opponent_ranking_range[0] == "" ? '0': opponent_ranking_range[0])) && ((doc.data().white_user == null ? doc.data().black_ranking : doc.data().white_ranking) <= parseFloat(opponent_ranking_range[1] == "" ? '3000': opponent_ranking_range[1])))) 
 			) {
-				console.log(1);
             if (
                 (relevancy.weight(doc.data().name,input) >= precision || input == ""))
             {data_arr[doc.data().name] = doc.data();            

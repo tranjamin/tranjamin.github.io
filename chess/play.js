@@ -106,6 +106,7 @@ else {
 if (!cookies_allowed) {
     $('cookie_notice').style.display = "block";
     $('cookie_notice').getElementsByTagName('button')[0].addEventListener('click', e => {
+        cookies_allowed = true;
         setCookie('cookie_allowed',true,365);
         sessionStorage.setItem('cookie_allowed', true);
         $('cookie_notice').style.display = "none";
@@ -137,7 +138,6 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
         user_id = "";
         sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('username');
-        setCookie('game_id','',0);
         setCookie('user_id', '',0);
         setCookie('username', '', 0);
         update_graphics();
@@ -2122,8 +2122,8 @@ $('options').getElementsByTagName('button')[5].addEventListener('click', e => {
 db.collection('chess').doc(game).onSnapshot(doc => {    
     //console.log('snapshot');
     if (first_load) {
-        if (doc.data().white_user == username) {blackwhite = 1}
-        else if (doc.data().black_user == username) {blackwhite = 0}
+        if (doc.data().white_user == username || (username == "anon" && getCookie(game + "_info") == "white")) {blackwhite = 1}
+        else if (doc.data().black_user == username || (username == "anon" && getCookie(game + "_info") == "black")) {blackwhite = 0}
         else {observer = true;}
         other_user_id = blackwhite ? doc.data().black_user_id : doc.data().white_user_id;
 
@@ -2505,22 +2505,24 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     //get user name and rating
     var white_elo;
     var black_elo;
-    db.collection('account').where('username', '==', doc.data().white_user).get().then(snapshot => {
-        snapshot.forEach(doc => {white_elo = doc.data().ranking})
+    db.collection('account').where('username', 'in', [doc.data().white_user == null ? "" : doc.data().white_user, doc.data().black_user == null ? "" : doc.data().black_user]).get().then(snapshot => {
+        snapshot.forEach(doc => {
+            if (doc.data().username == doc.data().white_user) {
+            white_elo = doc.data().ranking}
+            if (doc.data().username == doc.data().black_user) {
+            black_elo = doc.data().ranking
+            }
+        })
     }).then(() => {
-        db.collection('account').where('username', '==', doc.data().black_user).get().then(snapshot => {
-            snapshot.forEach(doc => {
-                black_elo = doc.data().ranking})
-        }).then(() => {
     if (blackwhite) {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + " (" + white_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + " (" + black_elo + ")"));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + (white_elo == undefined ? "" : " (" + white_elo + ")");
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + (black_elo == undefined ? "" : " (" + black_elo + ")")));
     }
     else {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + " (" + black_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + " (" + white_elo + ")"));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + (black_elo == undefined ? "" : " (" + black_elo + ")");
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + (white_elo == undefined ? "" : " (" + white_elo + ")")));
     }
-    })})
+    })
 
     //swap observer ui
     if (observer) {

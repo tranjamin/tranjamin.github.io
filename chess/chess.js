@@ -79,7 +79,6 @@ firebase.auth().onAuthStateChanged(user => {
         user_id = "";
         sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('username');
-        setCookie('game_id','',0);
         setCookie('user_id', '',0);
         setCookie('username', '', 0);
         update_graphics();

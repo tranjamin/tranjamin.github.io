@@ -77,7 +77,6 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
 			user_id = "";
 			sessionStorage.removeItem('user_id');
 			sessionStorage.removeItem('username');
-			setCookie('game_id','',0);
 			setCookie('user_id', '',0);
 			setCookie('username', '', 0);
 			update_graphics();

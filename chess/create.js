@@ -178,7 +178,6 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
             user_id = "";
             sessionStorage.removeItem('user_id');
             sessionStorage.removeItem('username');
-            setCookie('game_id','',0);
             setCookie('user_id', '',0);
             setCookie('username', '', 0);
             update_graphics();
@@ -394,6 +393,10 @@ db.collection('chess').add({
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
     sessionStorage.setItem('game_id',docRef.id);
+    if (username == "anon") {
+        setCookie(docRef.id + "_info", black_user == null ? 'white' : 'black', 9999);
+        sessionStorage.setItem(docRef.id + "_info", black_user == null ? 'white' : 'black', 9999);
+    }
     window.location.assign('play.html');
 
 }).catch(function(error) {
