@@ -386,7 +386,11 @@ db.collection('chess').add({
     fifty_moves: 0,
     white_beirut_piece: null,
     black_beirut_piece: null,
-    undo: null
+    undo: null,
+    white_notification: false,
+    black_notification: false,
+    creation_date: new Date(),
+    result_date: null
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
     sessionStorage.setItem('game_id',docRef.id);

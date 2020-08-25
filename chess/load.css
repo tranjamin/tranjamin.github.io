@@ -148,6 +148,94 @@ table td {
     margin: none;
 }
 
+#search_public {
+    height: 300%;
+    display: grid;
+    grid-template-columns: 19% 19% 19% 19% 19%;
+    grid-template-rows: auto;
+    grid-template-areas: "input1 input2 input3 input4 input5" 
+                         "search search search search reload";
+    padding-top: 1%;
+    justify-content: space-between;
+}
+#search_public div {
+    /*border-left: 1.5pt solid black;*/
+    /*border-right: 1.5pt solid black;*/
+    text-align: center;
+
+}
+#search_public div:nth-of-type(1) {grid-area: 'input1';}
+#search_public div:nth-of-type(2) {grid-area: 'input2';}
+#search_public div:nth-of-type(3) {grid-area: 'input3';}
+#search_public div:nth-of-type(4) {grid-area: 'input4';}
+#search_public div:nth-of-type(5) {grid-area: 'input5';}
+#search_public div:last-of-type {
+    grid-area: 'search'; 
+    width: 526%;
+    padding: 10% 0;
+    border: none;
+    display: inline-block;
+}
+#search_public div:nth-of-type(3) input {
+    width: 37%;
+    border: none;
+    background-color: rgb(20, 18, 22);
+    color: white;
+    text-align: right;
+    font-family: 'Raleway';
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    padding: none;
+    margin: none;
+}
+#search_public button:first-of-type {
+    background-color: rgba(0,0,0,0);
+    grid-area: 'reload';
+    color: white;
+    width: 40%;
+    border: none;
+    font-size: 200%;
+    cursor: pointer;
+    position: relative;
+    left: 300%;
+}
+
+#search_public div label {
+    display: block;
+    width: 100%;
+    padding: 2% 0;
+    margin: 0;
+    background-color: rgba(70, 44, 27, 0.644);
+}
+#search_public div:last-of-type label {
+    background-color: rgba(0,0,0,0);
+    padding: 0;
+    display: inline;
+    
+}
+#search_public div span {
+    display: inline-block;
+    width: 20%;
+    background-color: rgba(87, 53, 31, 0.644);
+    padding: 2% 0;
+    margin: none;
+    cursor: pointer;
+    border: none;
+    line-height: 100%;
+}
+#search_public div span:nth-of-type(2) {
+    background-color: rgba(87, 53, 31, 0.644);
+    display: inline-block;
+    width: 60%;
+    padding: 2% 0;
+    margin: none;
+}
+
+#search_public input:nth-of-type(2) {
+    width: 50px;
+}
+
 #search_private {
     padding: 10%;
     width: 80%;

@@ -42,6 +42,59 @@ function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
 var username = "anon";
 var user_id = "";
 
+var time_control_array = ['All','None','Classic'];
+var mode_array = ['All', 'Ranked', 'Casual'];
+var opponent_ranking = ['All', "<input type='number' min='0' max='3000'>to<input type='number' min='0' max='3000'>"];
+var game_mode = ['All','Classic','Chess960','Antichess','Armageddon','Atomic','Beirut','Crazyhouse','3 Check','Checkless','Circe','Dusanny\'s','KOTH','Really Bad','Schrodinger'];
+var play_as = ['Any', 'White', 'Black', 'Random'];
+var selected_time_control = "All";
+var selected_mode = "All";
+var selected_opponent_ranking = "All";
+var selected_game_mode = "All";
+var selected_play_as = "Any";
+
+function formatFilter(e, array) {
+	if (e.target.getAttribute('name') == 'back') {
+		var filter = e.target.parentElement.getElementsByTagName('span')[1];
+		filter.innerHTML = array[array.indexOf(filter.innerHTML) ? (array.indexOf(filter.innerHTML) - 1) : (array.length - 1)];
+
+	}
+	else if (e.target.getAttribute('name') == 'forward' || e.target.getAttribute('name') == 'current') {
+		var filter = e.target.parentElement.getElementsByTagName('span')[1];
+		filter.innerHTML = array[array.indexOf(filter.innerHTML) == array.length - 1 ? 0 : (array.indexOf(filter.innerHTML) + 1)];
+	}
+}
+
+$('search_public').getElementsByTagName('div')[0].addEventListener('click', e => {
+	formatFilter(e, time_control_array);
+})
+$('search_public').getElementsByTagName('div')[1].addEventListener('click', e => {
+	formatFilter(e, mode_array);
+})
+$('search_public').getElementsByTagName('div')[2].addEventListener('click', e => {
+	formatFilter(e, opponent_ranking);
+})
+$('search_public').getElementsByTagName('div')[3].addEventListener('click', e => {
+	formatFilter(e, game_mode);
+})
+$('search_public').getElementsByTagName('div')[4].addEventListener('click', e => {
+	formatFilter(e, play_as);
+})
+$('search_public').getElementsByTagName('button')[0].addEventListener('click', e => {
+	e.preventDefault();
+	selected_time_control = e.target.parentElement.getElementsByTagName('div')[0].getElementsByTagName('span')[1].innerHTML;
+	selected_mode = e.target.parentElement.getElementsByTagName('div')[1].getElementsByTagName('span')[1].innerHTML;
+	selected_opponent_ranking = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].innerHTML;
+	selected_game_mode = e.target.parentElement.getElementsByTagName('div')[3].getElementsByTagName('span')[1].innerHTML;
+	selected_play_as = e.target.parentElement.getElementsByTagName('div')[4].getElementsByTagName('span')[1].innerHTML;
+	if ($('search_public').increment.value != "0") {
+		sortData('public', 'load_public', $('search_public').search.value, $('search_public').increment.value);
+		}
+		else {
+		sortData('public', 'load_public', $('search_public').search.value);
+		}
+})
+
 var cookies_allowed = true;
 if (getCookie('cookie_allowed') || sessionStorage.getItem('cookie_allowed')) {
     cookies_allowed = true;
@@ -317,9 +370,14 @@ function sortData(mode, id, input="", precision=0.3) {
 	var doc_name = [];
     db.collection('chess').where('visibility', '==', 'Public').get().then(snapshot => {
         snapshot.forEach(doc => {
-			if ((mode == "observer" && doc.data().white_user != null && doc.data().black_user != null) || 
-				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))
+			if (((mode == "observer" && doc.data().white_user != null && doc.data().black_user != null) || 
+				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))) &&
+				((selected_play_as == "Any") || (selected_play_as == "Random" && doc.data().randomised) || (selected_play_as == "White" && doc.data().white_user == null) || (selected_play_as == "Black" && doc.data().black_user == null)) &&
+				((selected_game_mode == "All") || (doc.data().mode.indexOf(selected_game_mode) != -1)) &&
+				((selected_mode == "All") || (selected_mode == "Casual" && !doc.data().points) || (selected_mode == "Ranked" && doc.data().points)) &&
+				((selected_time_control == "All") || (selected_time_control == "None" && doc.data().white_time == null))
 			) {
+				console.log(1);
             if (
                 (relevancy.weight(doc.data().name,input) >= precision || input == ""))
             {data_arr[doc.data().name] = doc.data();            
