@@ -1515,16 +1515,10 @@ class piece {
                         pre_move = null;
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         show_pieces();
-                        if (blackwhite) {
                             db.collection('chess').doc(game).update({
-                                white_pre_move: null
+                                pre_move: null
                             }).catch(error => console.log(error))
-                        }
-                        else {
-                            db.collection('chess').doc(game).update({
-                                white_pre_move: null
-                            }).catch(error => console.log(error))
-                        }
+                        
                     }
                     else {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
