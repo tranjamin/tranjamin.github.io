@@ -1152,7 +1152,7 @@ class piece {
                 undo: stringify(undo),
                 black_notification: true,
                 white_notification: false
-            }).catch(error => {console.log(error.lineNumber)})
+            }).then(() => {}).catch(error => {console.log(error.lineNumber)})
         }
                 else {
             db.collection('chess').doc(game).update({
