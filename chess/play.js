@@ -1639,7 +1639,7 @@ function win(message) {
         })
     }).then(docRef => {
         db.collection('account').doc(other_user_id).get().then(snapshots => {
-            snapshots.forEach(doc => {
+            snapshots.docs.forEach(doc => {
                 other_losses = doc.data().losses;
                 other_elo = doc.data().ranking;
             })
@@ -1682,7 +1682,7 @@ function lose(message) {
         })
     }).then(docRef => {
         db.collection('account').doc(other_user_id).get().then(snapshots => {
-            snapshots.forEach(doc => {
+            snapshots.docs.forEach(doc => {
                 other_wins = doc.data().wins;
                 other_elo = doc.data().ranking;
             })
@@ -1732,7 +1732,7 @@ function draw(message) {
     }).then(docRef => {
     db.collection('chess').doc(game).get().then(doc => {
         db.collection('account').doc(other_user_id).get().then(snapshots => {
-            snapshots.forEach(doc => {
+            snapshots.docs.forEach(doc => {
                 other_id = doc.id;
                 other_draws = doc.data().draws;
                 other_elo = doc.data().ranking
