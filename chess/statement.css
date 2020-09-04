@@ -1,7 +1,3 @@
-html {
-    background-color: black
-}
-
 body form input:first-of-type{
     background-color: rgb(209, 253, 228);
     border: none;
@@ -32,62 +28,6 @@ body form input:first-of-type{
     padding-left: 5%;
 }
 
-#nav {
-    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
-    position: fixed;
-    z-index: 100;
-    color: white;
-
-}
-#nav li {
-    height: 16.66666666666666666%;
-    width: 100%;
-    background-color: rgba(58, 54, 54, 0.158);
-    border-bottom: white 2px solid;
-    position: relative;
-    padding: 0;
-}
-#nav li:last-of-type {
-    border-bottom: none;
-}
-#nav ul {
-    list-style: none;
-    list-style-position: unset;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0%;
-    padding: 0 0;
-    margin: 0 0;
-}
-#nav li button {
-    height: 100%;
-    width: 100%;
-    background-color: unset;
-    border: none;
-    color: white;
-    font-family: 'Raleway';
-    font-size: 1.5em;
-    overflow: hidden;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-}
-#nav li button a {
-    display: block;
-    position: absolute;
-    padding: 0 5%;
-}
-
-#copyright {
-    position: absolute;
-    bottom: 1%;
-    left: 5%;
-    font-size: 67%;
-    font-family: 'Times New Roman';
-    text-align: left;
-}
-
 #overlay button {
     background-color: rgb(46, 41, 41);
     color: rgb(255, 115, 0);
@@ -98,39 +38,4 @@ body form input:first-of-type{
     cursor: pointer;
     width: 20%;
     margin-left: 40%;
-}
-#cookie_notice {
-    position: absolute;
-    left: 30%;
-    top: 20%;
-    z-index: 100;
-    color: black;
-    font-family: 'Philosopher';
-    font-size: 200%;
-    border-radius: 1%;
-    text-align: center;
-    background-color: rgba(172, 167, 167, 0.98);
-    width: 40%;
-    height: 60%;
-}
-#cookie_notice button {
-    background-color: rgb(255, 94, 0);
-    border: none;
-    font-size: 100%;
-    font-family: 'Philosopher';
-    font-weight: bold;
-    position: absolute;
-    bottom: 1%;
-    right: 1%;
-    
-}
-#cookie_notice button:first-of-type {
-    background-color: rgb(255, 94, 0);
-    border: none;
-    font-size: 100%;
-    font-family: 'Philosopher';
-    font-weight: bold;
-    position: absolute;
-    right: 25%;
-    
 }
