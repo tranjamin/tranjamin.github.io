@@ -32,18 +32,13 @@ function deleteAllCookies() {
 
 function find_overlap(element, x_or_y, single_line=true) {
 	var overflow_bool = false;
-	var original_overflowY = element.style['overflow-y']
-	var original_overflowX = element.style['overflow-x']
-	var original_overflow = element.style.overflow
 
 	if (single_line) {
-		if ((getComputedStyle(element).height.slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
+		if ((getComputedStyle(element).height.slice(0,-2)) / (isNaN(parseFloat(getComputedStyle(element).lineHeight)) ? getComputedStyle(element)['font-size'] * 1.5 : getComputedStyle(element).lineHeight) > 1.2) {
 			return true;
 		}
 	}
-	element.style.overflow = 'scroll';
-	element.style['overflow-x'] = 'scroll';
-    element.style['overflow-y'] = 'scroll';
+
     switch (x_or_y) {
 		case 'x': 
 			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
@@ -56,9 +51,6 @@ function find_overlap(element, x_or_y, single_line=true) {
 			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))) {overflow_bool = true}
 			break;
 }
-	element.style.overflow = original_overflowX;
-	element.style['overflow-x'] = original_overflowY;
-	element.style['overflow-y'] = original_overflow;
 	return overflow_bool;
 }
 function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
@@ -67,6 +59,7 @@ function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
 	}
 	return getComputedStyle(element)['font-size'];
 }
+
 
 var cookies_allowed = true;
 if (getCookie('cookie_allowed') || sessionStorage.getItem('cookie_allowed')) {
@@ -143,3 +136,41 @@ location.assign('about.html');
 $('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
     location.assign('statement.html');
 });
+
+function update_nav_graphics () {
+    ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {
+        ele.style.lineHeight = getComputedStyle(ele).height;
+        ele.style['font-size'] = '2em';   
+    })
+
+    var new_size;
+    
+    if (!user_id) {
+        while (
+            find_overlap($('nav').getElementsByTagName('a')[0],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
+            find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
+            ) {
+        new_size = parseFloat(getComputedStyle($('nav').getElementsByTagName('li')[2].childNodes[0])['font-size']) - 0.5 + "px";         
+        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
+    }
+}
+        else {
+            while (
+                $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
+                find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
+                find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
+                find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
+                find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
+                find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
+                ) {
+            new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
+            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
+        }
+            reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
+        }
+
+}
