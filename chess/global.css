@@ -1,5 +1,7 @@
 html {
     background-color: black;
+    
+    scrollbar-width: thinner;
 }
 
 #nav {

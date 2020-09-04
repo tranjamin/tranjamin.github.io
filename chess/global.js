@@ -138,6 +138,7 @@ $('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
 });
 
 function update_nav_graphics () {
+    console.log('updating nav graphics')
     var overlay = $('overlay');
     var nav = $('nav');
     nav.style.height = window.innerHeight + "px";
@@ -179,8 +180,7 @@ function update_nav_graphics () {
         if (!window.location.pathname.includes('play')) {
         $('copyright').innerHTML = "&copy Benjamin Tran 2020<br>Powered by Github and Google Firebase";
         $('copyright').style.right = '0.625%';
-        $('copyright').style.left = 'unset';
-    }
+        $('copyright').style.left = 'unset';}
     }
     if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);

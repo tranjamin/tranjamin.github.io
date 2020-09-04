@@ -7,6 +7,7 @@ window.addEventListener('resize', e => {
     update_nav_graphics();
 })
 window.addEventListener('load', e => {
+    console.log('has loaded')
     update_graphics();
     update_nav_graphics();
 })

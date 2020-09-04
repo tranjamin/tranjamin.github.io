@@ -42,8 +42,6 @@ ctx = canvas.getContext("2d");
 castle_rooka = true;
 castle_rookh = true;
 
-// sockets
-
 var username = "anon";
 var user_id = "";
 var other_user_id = "";
