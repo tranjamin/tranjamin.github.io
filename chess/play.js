@@ -55,6 +55,10 @@ var message_body = $("text");
 var popup = $('closable_interface');
 var first_load = true;
 
+$('copyright').innerHTML = "&copy 2020";
+$('copyright').style.left = '0.625%';
+$('copyright').style.right = 'unset';
+
 update_graphics();
 window.addEventListener('load', e => {
     update_graphics();

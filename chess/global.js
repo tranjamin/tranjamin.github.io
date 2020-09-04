@@ -167,6 +167,8 @@ function update_nav_graphics () {
         $('nav').getElementsByTagName('li')[4].firstElementChild.innerHTML = "&#128366";
         $('nav').getElementsByTagName('li')[5].firstElementChild.innerHTML = "&#128737";
         $('copyright').innerHTML = "&copy 2020";
+        $('copyright').style.left = '0.625%';
+        $('copyright').style.right = 'unset';
     }
     else {
         $('nav').getElementsByTagName('li')[1].firstElementChild.innerHTML = "My Games";
@@ -174,7 +176,11 @@ function update_nav_graphics () {
         $('nav').getElementsByTagName('li')[3].firstElementChild.innerHTML = "Join Game";
         $('nav').getElementsByTagName('li')[4].firstElementChild.innerHTML = "How to Play";
         $('nav').getElementsByTagName('li')[5].firstElementChild.innerHTML = "Privacy Policy";
+        if (!window.location.pathname.includes('play')) {
         $('copyright').innerHTML = "&copy Benjamin Tran 2020<br>Powered by Github and Google Firebase";
+        $('copyright').style.right = '0.625%';
+        $('copyright').style.left = 'unset';
+    }
     }
     if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);

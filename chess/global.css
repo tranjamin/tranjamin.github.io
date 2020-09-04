@@ -53,10 +53,12 @@ html {
 #copyright {
     position: absolute;
     bottom: 1%;
-    left: 5%;
+    right: 0.625%;
+    color: white;
     font-size: 67%;
     font-family: 'Times New Roman';
     text-align: left;
+    z-index: 5555555555555555555555555;
 }
 
 #cookie_notice {
