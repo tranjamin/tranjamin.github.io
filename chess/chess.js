@@ -7,12 +7,33 @@ var successful_email;
 var options = $('options');
 
 update_graphics();
+update_nav_graphics();
 window.addEventListener('resize', e => {
     update_graphics();
+    update_nav_graphics();
 })
 window.addEventListener('load', e => {
     update_graphics();
+    update_nav_graphics();
 })
+
+function draw_board(canvas) {
+    var ctx = canvas.getContext('2d')
+    ctx.fillStyle = 'rgba(33,33,33,1)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+            if (((i % 2) && (j % 2)) || (!(i % 2) && !(j % 2))) {
+            ctx.fillStyle = 'rgba(255,105,0,1)';
+            ctx.fillRect(i * canvas.width / 8, j * canvas.height / 8, canvas.width / 8, canvas.height / 8);
+            ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            ctx.fillRect(i * canvas.width / 8, j * canvas.height / 8, canvas.width / 8, canvas.height / 8);
+        }
+        }
+    }
+}
 
 function update_graphics() {
     var overlay = $('overlay');
@@ -25,84 +46,6 @@ function update_graphics() {
         classElement.style.height = getComputedStyle(classElement)['width'];
         draw_board(classElement);
     })
-
-    //nav
-    var nav = $('nav');
-    nav.style.height = window.innerHeight + "px";
-    nav.style.width = screen.width * 0.125 + "px";
-    nav.style.top = 0;
-    nav.style.left = 0;
-
-	$('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Login/Signup";
-    if (user_id) {
-            $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Welcome, ";
-        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += username;
-        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += "<br>Logout";
-        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-    }
-	
-	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
-        $('nav').style.width = window.innerHeight * 0.1 + "px";
-        if ($('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML == 'Login/Signup') {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#128100";
-        }
-        else {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#11144";
-        }
-        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
-        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
-        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
-        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "&#128366";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "&#128737";
-        $('copyright').innerHTML = "&copy 2020";
-    }
-    else {
-        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "My Games";
-        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "Create Game";
-        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "Join Game";
-        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "How to Play";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "Privacy Policy";
-        $('copyright').innerHTML = "&copy Benjamin Tran 2020<br>Powered by Github and Google Firebase";
-    }
-        if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
-        console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
-        $('overlay').style.right = '2%';
-        $('overlay').style.left = 'unset';
-        $('overlay').style.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.95 + "px";
-        $('overlay').style.height = window.innerHeight * 0.95 + "px";
-}
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style.width = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
-
-	var new_size;
-    if (!user_id) {
-        while (
-            $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-            find_overlap($('nav').getElementsByTagName('a')[0],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
-            ) {
-        new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
-        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
-    }
-}
-        else {
-            while (
-                $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-                find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
-                ) {
-            new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
-            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
-        }
-            reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false);
-
-        }
 }
 
 update_graphics();

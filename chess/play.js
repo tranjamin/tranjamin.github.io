@@ -96,10 +96,6 @@ function update_graphics() {
 
     //nav
     var nav = $('nav');
-    nav.style.height = window.innerHeight + "px";
-    nav.style.width = screen.width * 0.125 + "px";
-    nav.style.top = 0;
-    nav.style.left = 0;
 
     msg.style.height = canvas.getBoundingClientRect().height + "px";
     msg.style.width = (window.innerWidth - canvas.width) / 2 * 0.5 + 'px';
