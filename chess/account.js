@@ -1,5 +1,5 @@
-var username = "anon";
-var user_id = "";
+// var username = "anon";
+// var user_id = "";
 var email;
 
 update_graphics();

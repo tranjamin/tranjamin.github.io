@@ -110,7 +110,8 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
 
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if (($('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0] && $('nav').getElementsByTagName('button')[0].getElementsByTagName('a')[0].innerHTML == "Login/Signup") || $('nav').getElementsByTagName('button')[0].innerHTML == "👤") {window.location.assign('signup.html')}
+    e.preventDefault();
+    if (e.target.innerHTML == "Login/Signup" || e.target.innerHTML == "👤") {window.location.assign('signup.html')}
     else {
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('user_id');
@@ -118,8 +119,10 @@ $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
         setCookie('user_id', "", 0);
 		setCookie('username', "", 0);
 		setCookie('game_id', 0)
-		auth.signOut();
-        location.reload();}
+		auth.signOut().then(() => {
+            location.reload();
+        });
+        }
 });
 $('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
     location.assign('account.html');
@@ -147,11 +150,8 @@ function update_nav_graphics () {
     nav.style.left = 0;
 
 	$('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "Login/Signup";
-    if (getCookie('username') || sessionStorage.getItem('username')) {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "Welcome, ";
-        $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-        $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML += "<br>Logout";
-        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
+    if (user_id) {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = `Welcome, ${username} <br> Logout`;
     }
 	
 	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
@@ -193,6 +193,9 @@ function update_nav_graphics () {
     ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {
         ele.style.lineHeight = getComputedStyle(ele).height;
         ele.style['font-size'] = '2em';   
+        if (ele.innerHTML == `Welcome, ${username} <br> Logout`) {
+            ele.style.lineHeight = parseFloat(ele.style.lineHeight)/2 + "px";
+        }
     })
 
     var new_size;
@@ -212,14 +215,13 @@ function update_nav_graphics () {
 }
         else {
             while (
-                $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-                find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
+               find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
                 find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
                 find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
                 find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
                 find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
                 ) {
-            new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
+            new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0])['font-size']) - 0.5 + "px";         
             ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
         }
             reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)

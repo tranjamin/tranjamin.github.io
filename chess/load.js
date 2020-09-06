@@ -1,6 +1,6 @@
 
-var username = "anon";
-var user_id = "";
+// var username = "anon";
+// var user_id = "";
 
 var time_control_array = ['All','None','Classic'];
 var mode_array = ['All', 'Ranked', 'Casual'];
@@ -210,9 +210,14 @@ function sortData(mode, id, input="", precision=0.3) {
             }}
             if (!data.randomised) {
             if (data.black_user == null) {play_as = "Black"}
-            if (data.white_user == null) {play_as = "White"}}
-            new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
-        }
+			if (data.white_user == null) {play_as = "White"}}
+			if (mode == "public") {
+				new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
+			}
+			else {
+				new_table.innerHTML = `<td>${data.name}</td><td>${data.white_user}</td><td>${data.black_user}</td><td>${variation}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;	
+			}
+            }
 
     })
 }

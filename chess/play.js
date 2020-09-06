@@ -42,8 +42,8 @@ ctx = canvas.getContext("2d");
 castle_rooka = true;
 castle_rookh = true;
 
-var username = "anon";
-var user_id = "";
+// var username = "anon";
+// var user_id = "";
 var other_user_id = "";
 
 var msg = $('message');

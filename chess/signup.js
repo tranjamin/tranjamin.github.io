@@ -1,8 +1,8 @@
 
   
 
-var username = "anon";
-var user_id = "";
+// var username = "anon";
+// var user_id = "";
 var successful_email;
 
 var clickable = true;

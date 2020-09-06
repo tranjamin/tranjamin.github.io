@@ -12,6 +12,8 @@ body form input:first-of-type{
     font-family: 'Philosopher';
     overflow-y: scroll;
     overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 68, 0, 0.562) rgba(75, 68, 68, 0.05);
 }
 
 #overlay h2 {

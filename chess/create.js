@@ -94,8 +94,8 @@ function generate_position(mode) {
     }
 }
 
-var username = "anon";
-var user_id = "";
+// var username = "anon";
+// var user_id = "";
 
 var msg = $('message');
 var msg_submit = $('submit_message');

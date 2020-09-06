@@ -4,6 +4,11 @@ html {
     scrollbar-width: thinner;
 }
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 68, 0, 0.562) rgba(75, 68, 68, 0.05);
+}
+
 #nav {
     background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
     position: fixed;
