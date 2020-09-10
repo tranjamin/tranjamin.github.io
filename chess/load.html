@@ -5,6 +5,7 @@
     <title>Join Game</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
     <link type="text/css" href="load.css" rel="stylesheet">
+    <link type="text/css" href="global.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
         rel="stylesheet">
@@ -15,21 +16,19 @@
 <body>
     <div id="nav">
         <ul>
-            <li><button><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a><button></li>
-            <li><button><a href="account.html" style="text-decoration: none; color: white;">My Games</a></button></li>
-            <li><button><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a></button>
+    
+            <li><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a></li>
+            <li><a href="account.html" style="text-decoration: none; color: white;">My Games</a></li>
+            <li><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a>
             </li>
-            <li><button><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></button></li>
-            <li><button><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></button></li>
-            <li><button><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br>
-
-            </a></button></li>
+            <li><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></li>
+            <li><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></li>
+            <li><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br></a></li>
         </ul>
-        <div id="copyright">
-            &copy Benjamin Tran 2020<br>
-            Powered by Github and Google Firebase
-        </div>
     </div>
+    <div id="copyright">
+        &copy Benjamin Tran 2020<br>
+        Powered by Github and Google Firebase
     </div>
     <div id="overlay">
         <h2>Join Game</h2>
@@ -40,8 +39,28 @@
         </ul>
         <div class="rules" id="load_public">
             <form id='search_public'>
+                <div>
+                    <label>Time control: </label>
+                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
+                </div><div>
+                    <label>Mode: </label>
+                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
+                </div><div>
+                    <label>Opponent Ranking: </label>
+                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
+                </div><div>
+                    <label>Game Mode: </label>
+                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
+                </div><div>
+                    <label>Play As: </label>
+                    <span name="back">&#9664</span><span name="current">Any</span><span name="forward">&#9654</span>
+                </div>
+                <div>
+                <label for="search">Enter Keywords and Adjust Precision</label><br>
                 <input type="text" placeholder="Search..." name="search">
                 <input type="number" min=0 max=1 step=0.005 name="increment">
+                </div>
+                <button>&#8635</button>
             </form>
             <table>
                 <tr>
@@ -57,7 +76,7 @@
         <div class="rules" id="load_private">
             <form id='search_private'>
                 <input type="text" placeholder="Enter the name of a private game" name="search">
-                <input type="submit" value="Search">
+                <input type="submit" value="Join">
             </form>
             <div id="private_error"></div>
         </div>
@@ -69,10 +88,10 @@
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Admin</th>
+                    <th>White User</th>
+                    <th>Black User</th>
+                    <th>Variation</th>
                     <th>Mode</th>
-                    <th>Play as</th>
-                    <th>Ranked</th>
                     <th>Time</th>
                 </tr>
             </table>
@@ -114,6 +133,7 @@
 
     </script>
 
+<script src='global.js'></script>
     <script src='load.js'></script>
 </body>
 

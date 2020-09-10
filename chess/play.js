@@ -11,6 +11,7 @@ Flip Board
 
 */
 
+//determine if rated or not
 
 var game = "";
 var undo = [];
@@ -35,57 +36,15 @@ else {
     console.error('Error getting game id');
 }
 
-
-function $(id) { return document.getElementById(id); }
-
-function find_overlap(element, x_or_y, single_line=true) {
-	var overflow_bool = false;
-	var original_overflowY = element.style['overflow-y']
-	var original_overflowX = element.style['overflow-x']
-	var original_overflow = element.style.overflow
-
-	if (single_line) {
-		if ((getComputedStyle(element).height.slice(0,-2)) / (getComputedStyle(element)['font-size'].slice(0,-2) * 1.5) > 1.2) {
-			return true;
-		}
-	}
-	element.style.overflow = 'scroll';
-	element.style['overflow-x'] = 'scroll';
-    element.style['overflow-y'] = 'scroll';
-	switch (x_or_y) {
-		case 'x': 
-			if (element.clientWidth != element.scrollWidth) {overflow_bool = true}
-			break;
-        case 'y': 
-            if (element.clientHeight != element.scrollHeight || element.clientHeight > element.parentElement.clientHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))
-            ) {overflow_bool = true}
-			break;
-		default: 
-			if (element.clientWidth != element.scrollWidth || element.clientHeight != element.scrollHeight || (parseFloat(getComputedStyle(element).height.slice(0,-2)) > parseFloat(getComputedStyle(element.parentElement).height.slice(0,-2)))) {overflow_bool = true}
-			break;
-}
-	element.style.overflow = original_overflowX;
-	element.style['overflow-x'] = original_overflowY;
-	element.style['overflow-y'] = original_overflow;
-	return overflow_bool;
-}
-function reduce_size(element, x_or_y, single_line=true, interval=0.5) {
-	while (find_overlap(element, x_or_y, single_line)) {
-		element.style['font-size'] = (parseFloat(getComputedStyle(element)['font-size'].slice(0,-2)) - interval) + "px";
-	}
-	return getComputedStyle(element)['font-size'];
-}
-
 canvas = $("canvas1");
 ctx = canvas.getContext("2d");
 
 castle_rooka = true;
 castle_rookh = true;
 
-// sockets
-
-var username = "anon";
-var user_id = "";
+// var username = "anon";
+// var user_id = "";
+var other_user_id = "";
 
 var msg = $('message');
 var msg_submit = $('submit_message');
@@ -94,52 +53,9 @@ var message_body = $("text");
 var popup = $('closable_interface');
 var first_load = true;
 
-var cookies_allowed = true;
-if (getCookie('cookie_allowed') || sessionStorage.getItem('cookie_allowed')) {
-    cookies_allowed = true;
-}
-else {
-    cookies_allowed = false;
-}
-if (!cookies_allowed) {
-    $('cookie_notice').style.display = "block";
-    $('cookie_notice').getElementsByTagName('button')[0].addEventListener('click', e => {
-        setCookie('cookie_allowed',true,365);
-        sessionStorage.setItem('cookie_allowed', true);
-        $('cookie_notice').style.display = "none";
-    })
-    $('cookie_notice').getElementsByTagName('button')[1].addEventListener('click', e => {
-        sessionStorage.setItem('cookie_allowed', true);
-        $('cookie_notice').style.display = "none";
-    })
-}
-
-$('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Login/Signup";
-if (getCookie('username') || sessionStorage.getItem('username')) {
-        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Welcome, ";
-    $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-    $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += "<br>Logout";
-    username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-}
-
-if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
-	user_id = sessionStorage.getItem('user_id') ? sessionStorage.getItem('user_id') : getCookie('user_id');
-    }
-    else {
-        auth.signOut();
-    }
-    firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-    } else {
-        username = "anon";
-        user_id = "";
-        sessionStorage.removeItem('user_id');
-        sessionStorage.removeItem('username');
-        setCookie('user_id', '',0);
-        setCookie('username', '', 0);
-        update_graphics();
-    }
-});
+$('copyright').innerHTML = "&copy 2020";
+$('copyright').style.left = '0.625%';
+$('copyright').style.right = 'unset';
 
 update_graphics();
 window.addEventListener('load', e => {
@@ -182,10 +98,6 @@ function update_graphics() {
 
     //nav
     var nav = $('nav');
-    nav.style.height = window.innerHeight + "px";
-    nav.style.width = screen.width * 0.125 + "px";
-    nav.style.top = 0;
-    nav.style.left = 0;
 
     msg.style.height = canvas.getBoundingClientRect().height + "px";
     msg.style.width = (window.innerWidth - canvas.width) / 2 * 0.5 + 'px';
@@ -422,35 +334,6 @@ popup.previousElementSibling.addEventListener('click', e => {
     e.target.nextElementSibling.style.display = "none";
     e.target.style.display = "none";
 })
-
-$('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-    if ($('nav').getElementsByTagName('a')[0].innerHTML == "Login/Signup" || $('nav').getElementsByTagName('a')[0].innerHTML == "👤") {
-        window.location.assign('signup.html')
-    }
-    else {
-        sessionStorage.removeItem('username');
-        sessionStorage.removeItem('user_id');
-        setCookie('user_id', "", 0);
-        setCookie('username', "", 0);
-        auth.signOut();
-        location.reload();
-    }
-});
-$('nav').getElementsByTagName('li')[1].addEventListener('click', e => {
-    location.assign('account.html');
-});
-$('nav').getElementsByTagName('li')[2].addEventListener('click', e => {
-location.assign('create.html');
-});
-$('nav').getElementsByTagName('li')[3].addEventListener('click', e => {
-location.assign('load.html');
-});
-$('nav').getElementsByTagName('li')[4].addEventListener('click', e => {
-location.assign('about.html');
-});
-$('nav').getElementsByTagName('li')[5].addEventListener('click', e => {
-    location.assign('statement.html');
-});
 
 $('tracking').previousElementSibling.addEventListener('click', e => {
     if (e.target.innerHTML == "Moves") {
@@ -1149,7 +1032,7 @@ class piece {
                 undo: stringify(undo),
                 black_notification: true,
                 white_notification: false
-            }).catch(error => {console.log(error.lineNumber)})
+            }).then(() => {}).catch(error => {console.log(error.lineNumber)})
         }
                 else {
             db.collection('chess').doc(game).update({
@@ -1512,16 +1395,14 @@ class piece {
                         pre_move = null;
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         show_pieces();
-                        if (blackwhite) {
                             db.collection('chess').doc(game).update({
-                                white_pre_move: null
-                            }).catch(error => console.log(error))
-                        }
-                        else {
-                            db.collection('chess').doc(game).update({
+<<<<<<< HEAD
                                 black_pre_move: null
+=======
+                                pre_move: null
+>>>>>>> c753900a1a75bf644e51a79055d170bb0ff0558e
                             }).catch(error => console.log(error))
-                        }
+                        
                     }
                     else {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1641,12 +1522,8 @@ function win(message) {
             wins: original_wins + 1
         })
     }).then(docRef => {
-    db.collection('chess').doc(game).get().then(doc => {
-        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
-    }).then(docRef => {
-        db.collection('account').where('username','==',other_user).get().then(snapshots => {
-            snapshots.forEach(doc => {
-                other_id = doc.id;
+        db.collection('account').doc(other_user_id).get().then(snapshots => {
+            snapshots.docs.forEach(doc => {
                 other_losses = doc.data().losses;
                 other_elo = doc.data().ranking;
             })
@@ -1657,16 +1534,15 @@ function win(message) {
             var other_e = other_r / (r + other_r);
             var new_elo = elo + 32 * (1 - e);
             var new_other_elo = other_elo + 32 * (0 - other_e);
-            db.collection('account').doc(other_id).update({
+            db.collection('account').doc(other_user_id).update({
                 losses: other_losses + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             })
-            db.collection('account').doc(user_id).update({
+            db.collection('account').doc(other_euser_id).update({
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
             })
         }).catch(error => console.log(error))
     })
-}).catch(error => console.log(error))
 }
 function lose(message) {
     $("status").innerHTML = `You Lost by ${message}`;
@@ -1689,12 +1565,8 @@ function lose(message) {
             losses: original_losses + 1
         })
     }).then(docRef => {
-    db.collection('chess').doc(game).get().then(doc => {
-        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
-    }).then(docRef => {
-        db.collection('account').where('username','==',other_user).get().then(snapshots => {
-            snapshots.forEach(doc => {
-                other_id = doc.id;
+        db.collection('account').doc(other_user_id).get().then(snapshots => {
+            snapshots.docs.forEach(doc => {
                 other_wins = doc.data().wins;
                 other_elo = doc.data().ranking;
             })
@@ -1705,7 +1577,7 @@ function lose(message) {
             var other_e = other_r / (r + other_r);
             var new_elo = elo + 32 * (0 - e);
             var new_other_elo = other_elo + 32 * (1 - other_e);
-            db.collection('account').doc(other_id).update({
+            db.collection('account').doc(other_user_id).update({
                 wins: other_wins + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             })
@@ -1714,7 +1586,6 @@ function lose(message) {
             })
         }).catch(error => console.log(error))
     }).catch(error => console.log(error))
-}).catch(error => console.log(error))
 }
 function draw(message) {
     if (mode.indexOf('Armageddon') != -1) {
@@ -1744,11 +1615,8 @@ function draw(message) {
         })
     }).then(docRef => {
     db.collection('chess').doc(game).get().then(doc => {
-        other_user = blackwhite ? doc.data().black_user : doc.data().white_user;
-        is_it_rated = doc.data().points
-    }).then(docRef => {
-        db.collection('account').where('username','==',other_user).get().then(snapshots => {
-            snapshots.forEach(doc => {
+        db.collection('account').doc(other_user_id).get().then(snapshots => {
+            snapshots.docs.forEach(doc => {
                 other_id = doc.id;
                 other_draws = doc.data().draws;
                 other_elo = doc.data().ranking
@@ -2132,9 +2000,10 @@ $('options').getElementsByTagName('button')[5].addEventListener('click', e => {
 db.collection('chess').doc(game).onSnapshot(doc => {    
     //console.log('snapshot');
     if (first_load) {
-        if (doc.data().white_user == username) {blackwhite = 1}
-        else if (doc.data().black_user == username) {blackwhite = 0}
+        if (doc.data().white_user == username || (username == "anon" && getCookie(game + "_info") == "white")) {blackwhite = 1}
+        else if (doc.data().black_user == username || (username == "anon" && getCookie(game + "_info") == "black")) {blackwhite = 0}
         else {observer = true;}
+        other_user_id = blackwhite ? doc.data().black_user_id : doc.data().white_user_id;
 
         if (blackwhite) {
             $('self_time').style['background-color'] = 'white';
@@ -2514,22 +2383,24 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     //get user name and rating
     var white_elo;
     var black_elo;
-    db.collection('account').where('username', '==', doc.data().white_user).get().then(snapshot => {
-        snapshot.forEach(doc => {white_elo = doc.data().ranking})
+    db.collection('account').where('username', 'in', [doc.data().white_user == null ? "" : doc.data().white_user, doc.data().black_user == null ? "" : doc.data().black_user]).get().then(snapshot => {
+        snapshot.forEach(doc => {
+            if (doc.data().username == doc.data().white_user) {
+            white_elo = doc.data().ranking}
+            if (doc.data().username == doc.data().black_user) {
+            black_elo = doc.data().ranking
+            }
+        })
     }).then(() => {
-        db.collection('account').where('username', '==', doc.data().black_user).get().then(snapshot => {
-            snapshot.forEach(doc => {
-                black_elo = doc.data().ranking})
-        }).then(() => {
     if (blackwhite) {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + " (" + white_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + " (" + black_elo + ")"));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + (white_elo == undefined ? "" : " (" + white_elo + ")");
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + (black_elo == undefined ? "" : " (" + black_elo + ")")));
     }
     else {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + " (" + black_elo + ")";
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + " (" + white_elo + ")"));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + (black_elo == undefined ? "" : " (" + black_elo + ")");
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + (white_elo == undefined ? "" : " (" + white_elo + ")")));
     }
-    })})
+    })
 
     //swap observer ui
     if (observer) {
@@ -3246,31 +3117,4 @@ Undo = () => {
             undo: stringify(undo)
         }).catch(error => console.log(error))
     }).catch(error => console.log(error))
-}
-
-function setCookie(cname, cvalue, exdays) {
-    if (cookies_allowed) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-}
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-function deleteAllCookies() {
-    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
 }

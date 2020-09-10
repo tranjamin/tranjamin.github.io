@@ -1,179 +1,92 @@
-html {
-    background-color: black
-}
-
-.piece {
-    position: relative;
-    z-index: 10;
-}
-
-#canvas1 {
-    position: absolute;
-    background-image: url("board.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    margin: none;
-    padding: none;
-}
-
-#message {
-background-color: lightgreen;
-display: block;
-position: absolute;
-}
-
-#chat_title {
-background-color: green;
-text-align: center;
-font-size: 1.7em;
-padding: 1% 0;
-position: absolute;
-display: block;
-z-index: 2;
-font-weight: bold;
-font-family: 'Arial';
-color: white;
-}
-#submit_message {
-position: fixed;
-z-index: 4;
-}
-body form input:first-of-type{
-    background-color: rgb(209, 253, 228);
-    border: none;
-}
-#text {
-    position: absolute;
-    z-index: 3;
-}
-#text:hover {
-    overflow: scroll;
-}
-
-#options {
-    background-color: grey;
-    position: absolute;
-}
-
-#options button{
-    display: block;
-    width: 80%;
-    position: relative;
-    right: -10%;
-    border: none;
-    height: 20%;
-    margin-bottom: 2.5%;
-    font-family: Helvetica;
-    font-weight: bold;
-    font-size: 200%;
-}
-
 #overlay {
-    background-color: red;
+    background-color: rgb(19, 17, 17);
     position: absolute;
     z-index: 10;
+    color: white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
 }
 
 #overlay h2 {
     text-align: center;
     font-family: 'Philosopher';
+    background: linear-gradient(white 0.5%, orangered);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 #overlay h4 {
     text-align: center;
     font-family: 'Raleway';
+    background: linear-gradient(white 0.5%, orangered);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
-
-#game_creator {
-    text-decoration-line: underline;
+#overlay h1:first-of-type {
     text-align: center;
-}
-#game_loader {    
-    text-decoration-line: underline;
-    text-align: center;
-}
-
-#overlay input[type=text] {
-    font-size: 200%;
-    text-align: center;
-    background-color: red;
-    margin-bottom: 2%;
-    text-decoration-line: underline;
-    color: rgba(53, 52, 52, 0.527)
-}
-#overlay input[type=submit] {
-    background-color: rgb(255, 115, 0);
-    margin-bottom: 20%;
-    text-align: right;
     font-family: 'Raleway';
+    font-size: 3.3em;
+    padding: 0;
+    margin: 0;
+    display: inline;
+    text-align: left;
+    position: relative;
+    left: 18%;
+    top: 8%;
+    background-color: rgba(19, 17, 17, 1);
+    color: orangered;
+}
+#overlay h1:nth-of-type(2) {
+    width: 100%;
+    text-align: center;
+    font-family: 'Raleway';
+    background: linear-gradient(to right, orangered ,rgba(0,0,0,0) 90%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 10em;
+    padding: 0;
+    margin: 0;
+    line-height: 80%;
+}
+#welcome {
+    padding: 5% 5%;
+}
+#welcome button {
+    width: 100%;
+    background-color: rgb(255, 94, 0);
     border: none;
     font-size: 100%;
-}
-
-#login {
-position: absolute;
-bottom: 5%;
-left: 15%;
-display: inline-block;
-}
-
-#signup {
-position: absolute;
-bottom: 0%;
-right: 15%;
-}
-
-#logout {
-    position: fixed;
-    bottom: 2%;
-    right : 0.5%;
-    background-color: red;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-
-}
-#nav {
-    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
-    position: fixed;
-    z-index: 100;
-    color: white;
-
-}
-#nav li {
-    height: 16%;
-    width: 100%;
-    background-color: rgba(58, 54, 54, 0.158);
-    border-bottom: white 2px solid;
-    position: relative;
-    padding: 0;
-}
-#nav ul {
-    list-style: none;
-    list-style-position: unset;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0%;
-    padding: 0;
-}
-#nav li button {
-    height: 100%;
-    width: 100%;
-    background-color: unset;
-    border: none;
-    color: white;
-    font-family: 'Raleway';
-    font-size: 1.5em;
-    overflow: hidden;
+    font-family: 'Philosopher';
+    font-weight: bold;
+    display: block;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin: 0% 2%;
+    width: 96%;
     cursor: pointer;
 }
-
-#copyright {
-    position: absolute;
-    bottom: 5px;
-    left: 5px;
+#title_scroll {
+    width: 86%;
+    margin: 0 7%;
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 47%;
+}
+.suggested_game {
+    width: 47%;
+    border: 2pt solid white;
+}
+.suggested_label:nth-of-type(1) {
+    width: 41.25%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    left: 7%;
+}
+.suggested_label:nth-of-type(2) {
+    width: 41.25%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    left: 10%;
 }

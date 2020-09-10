@@ -1,8 +1,3 @@
-html {
-    background-color: black;
-}
-
-
 #overlay {
     background-color: rgb(41, 33, 33);
     position: absolute;
@@ -55,62 +50,6 @@ html {
     left: 2.5%;
 }
 
-#nav {
-    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
-    position: fixed;
-    z-index: 100;
-    color: white;
-
-}
-#nav li {
-    height: 16.66666666666666666%;
-    width: 100%;
-    background-color: rgba(58, 54, 54, 0.158);
-    border-bottom: white 2px solid;
-    position: relative;
-    padding: 0;
-}
-#nav li:last-of-type {
-    border-bottom: none;
-}
-#nav ul {
-    list-style: none;
-    list-style-position: unset;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0%;
-    padding: 0 0;
-    margin: 0 0;
-}
-#nav li button {
-    height: 100%;
-    width: 100%;
-    background-color: unset;
-    border: none;
-    color: white;
-    font-family: 'Raleway';
-    font-size: 1.5em;
-    overflow: hidden;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-}
-#nav li button a {
-    display: block;
-    position: absolute;
-    padding: 0 5%;
-}
-
-#copyright {
-    position: absolute;
-    bottom: 1%;
-    left: 5%;
-    font-size: 67%;
-    font-family: 'Times New Roman';
-    text-align: left;
-}
-
 table {
     width: 100%;
 }
@@ -148,6 +87,94 @@ table td {
     margin: none;
 }
 
+#search_public {
+    height: 300%;
+    display: grid;
+    grid-template-columns: 19% 19% 19% 19% 19%;
+    grid-template-rows: auto;
+    grid-template-areas: "input1 input2 input3 input4 input5" 
+                         "search search search search reload";
+    padding-top: 1%;
+    justify-content: space-between;
+}
+#search_public div {
+    /*border-left: 1.5pt solid black;*/
+    /*border-right: 1.5pt solid black;*/
+    text-align: center;
+
+}
+#search_public div:nth-of-type(1) {grid-area: 'input1';}
+#search_public div:nth-of-type(2) {grid-area: 'input2';}
+#search_public div:nth-of-type(3) {grid-area: 'input3';}
+#search_public div:nth-of-type(4) {grid-area: 'input4';}
+#search_public div:nth-of-type(5) {grid-area: 'input5';}
+#search_public div:last-of-type {
+    grid-area: 'search'; 
+    width: 526%;
+    padding: 10% 0;
+    border: none;
+    display: inline-block;
+}
+#search_public div:nth-of-type(3) input {
+    width: 37%;
+    border: none;
+    background-color: rgb(20, 18, 22);
+    color: white;
+    text-align: right;
+    font-family: 'Raleway';
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    padding: none;
+    margin: none;
+}
+#search_public button:first-of-type {
+    background-color: rgba(0,0,0,0);
+    grid-area: 'reload';
+    color: white;
+    width: 40%;
+    border: none;
+    font-size: 200%;
+    cursor: pointer;
+    position: relative;
+    left: 300%;
+}
+
+#search_public div label {
+    display: block;
+    width: 100%;
+    padding: 2% 0;
+    margin: 0;
+    background-color: rgba(70, 44, 27, 0.644);
+}
+#search_public div:last-of-type label {
+    background-color: rgba(0,0,0,0);
+    padding: 0;
+    display: inline;
+    
+}
+#search_public div span {
+    display: inline-block;
+    width: 20%;
+    background-color: rgba(87, 53, 31, 0.644);
+    padding: 2% 0;
+    margin: none;
+    cursor: pointer;
+    border: none;
+    line-height: 100%;
+}
+#search_public div span:nth-of-type(2) {
+    background-color: rgba(87, 53, 31, 0.644);
+    display: inline-block;
+    width: 60%;
+    padding: 2% 0;
+    margin: none;
+}
+
+#search_public input:nth-of-type(2) {
+    width: 50px;
+}
+
 #search_private {
     padding: 10%;
     width: 80%;
@@ -174,39 +201,4 @@ table td {
     font-weight: bold;
     text-align: center;
     font-size: 120%;
-}
-#cookie_notice {
-    position: absolute;
-    left: 30%;
-    top: 20%;
-    z-index: 100;
-    color: black;
-    font-family: 'Philosopher';
-    font-size: 200%;
-    border-radius: 1%;
-    text-align: center;
-    background-color: rgba(172, 167, 167, 0.98);
-    width: 40%;
-    height: 60%;
-}
-#cookie_notice button {
-    background-color: rgb(255, 94, 0);
-    border: none;
-    font-size: 100%;
-    font-family: 'Philosopher';
-    font-weight: bold;
-    position: absolute;
-    bottom: 1%;
-    right: 1%;
-    
-}
-#cookie_notice button:first-of-type {
-    background-color: rgb(255, 94, 0);
-    border: none;
-    font-size: 100%;
-    font-family: 'Philosopher';
-    font-weight: bold;
-    position: absolute;
-    right: 25%;
-    
 }
