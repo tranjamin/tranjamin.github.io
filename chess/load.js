@@ -225,38 +225,52 @@ function sortData(mode, id, input="", precision=0.3) {
 $('load_public').getElementsByTagName('table')[0].addEventListener('click', e => {
     if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
         var load_name = e.target.parentElement.cells[0].innerHTML;
-        var load_id;
-        db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
-            snapshot.forEach(doc => {
-                if (doc.data().name == load_name) {
-					load_id = doc.id;
-					if (doc.data().white_user == null) {
-						db.collection('chess').doc(load_id).update({
-							white_user: username,
-							white_user_id: user_id,
-							white_user_email: (auth.currentUser == null ? "" : auth.currentUser.email)
-						}).then(docRef => {
-							console.log('t2')
+		var load_id;
+		var user_elo = null;
+		db.collection('account').doc(user_id ? user_id : " ").get().then(doc => {
+			user_elo = doc.data().ranking;
+		}).then(() => {
+			db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
+				snapshot.forEach(doc => {
+					if (doc.data().name == load_name) {
+						load_id = doc.id;
+						if (doc.data().white_user == null) {
+							db.collection('chess').doc(load_id).update({
+								white_user: username,
+								white_user_id: user_id,
+								white_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
+								white_user_ranking: user_elo
+							}).then(docRef => {
+								console.log('t2')
+								setCookie('game_id',load_id,2);
+								sessionStorage.setItem('game_id',load_id);
+								window.location.assign('play.html');
+							})
+						}
+						else if (doc.data().black_user == null) {
+							db.collection('chess').doc(load_id).update({
+								black_user: username,
+								black_user_id: user_id,
+								black_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
+								black_user_ranking: user_elo
+							}).then(docRef => {
+								console.log('t2')
+								setCookie('game_id',load_id,2);
+								sessionStorage.setItem('game_id',load_id);
+								window.location.assign('play.html');
+							})
+						}
+						else {
 							setCookie('game_id',load_id,2);
 							sessionStorage.setItem('game_id',load_id);
 							window.location.assign('play.html');
-						})
+							
+						}
 					}
-					else if (doc.data().black_user == null) {
-						db.collection('chess').doc(load_id).update({
-							black_user: username,
-							black_user_id: user_id,
-							black_user_email: (auth.currentUser == null ? "" : auth.currentUser.email)
-						}).then(docRef => {
-							console.log('t2')
-							setCookie('game_id',load_id,2);
-							sessionStorage.setItem('game_id',load_id);
-							window.location.assign('play.html');
-						})
-					}
-                }
-            })
-        })
+				})
+			})
+		})
+
     }
 })
 

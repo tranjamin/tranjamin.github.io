@@ -171,6 +171,10 @@ else {
     black_user = user;
     black_user_id = user_id;
 }
+var user_elo = null;
+db.collection('account').doc(user_id ? user_id : " ").get().then(doc => {
+    user_elo = doc.data().ranking;
+}).then(() => {
 db.collection('chess').add({
     name: newname,
     black_user: black_user,
@@ -224,6 +228,8 @@ db.collection('chess').add({
     console.error("Error adding document: ", error);
     $('error').innerHTML = "Could not connect to server. Please try again later";
 });
+})
+
 }
 
 stringify = (stringed_arr) => {
