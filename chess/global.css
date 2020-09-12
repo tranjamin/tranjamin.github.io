@@ -1,7 +1,5 @@
 html {
     background-color: black;
-    
-    scrollbar-width: thinner;
 }
 
 * {
@@ -58,7 +56,7 @@ html {
 }
 
 #copyright {
-    position: absolute;
+    position: fixed;
     bottom: 1%;
     right: 0.625%;
     color: white;

@@ -34,15 +34,14 @@
 }
 #overlay input[type=submit] {
     background-color: rgb(255, 115, 0);
-    margin-bottom: 20%;
     text-align: center;
     font-family: 'Raleway';
     border: none;
-    font-size: 100%;
+    font-size: 70%;
     position: absolute;
-    left: 35%;
-    bottom: -15%;
-    width: 30%;
+    left: -112.76%;
+    width: 105%;
+    margin: 5% 56%;
     cursor: pointer;
 }
 
@@ -63,13 +62,22 @@
 #right_column {
     position: absolute;
     left: 53%;
-    height: 50%;
     font-size: 150%;
     width: 47%;
+    overflow: hidden;
+}
+#left_column {
+  overflow: hidden;
+  width: 47%;
+}
+
+#left_column .select-selected {
+  width: 100%;
+  margin: 0 0 0 5%;
 }
 
 
-.container {
+#right_column .container {
   display: block;
   cursor: pointer;
   -webkit-user-select: none;
@@ -77,10 +85,11 @@
   -ms-user-select: none;
   user-select: none;
   text-indent: 0;
-  text-align: left;
+  text-align: center;
   margin: 0;
   position: relative;
-  width: 100%;
+  width: 90%;
+  margin-left: 10%;
   background-image: linear-gradient(to right,rgba(163, 146, 146, 0.301),rgb(41,33,33));
   padding: 2.5% 0;
 }

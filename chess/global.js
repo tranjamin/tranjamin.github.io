@@ -107,7 +107,7 @@ if (getCookie('user_id') || sessionStorage.getItem('user_id')) {
     });
 
     
-
+var overlay_or_canvas = $('overlay') ? $('overlay') : $('canvas1')
 
 $('nav').getElementsByTagName('li')[0].addEventListener('click', e => {
     e.preventDefault();
@@ -154,7 +154,7 @@ function update_nav_graphics () {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = `Welcome, ${username} <br> Logout`;
     }
 	
-	if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+	if (overlay_or_canvas.getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         $('nav').style.width = window.innerHeight * 0.1 + "px";
         if ($('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML == 'Login/Signup') {
             $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
@@ -182,7 +182,7 @@ function update_nav_graphics () {
         $('copyright').style.right = '0.625%';
         $('copyright').style.left = 'unset';}
     }
-    if ($('overlay').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+    if (overlay_or_canvas.getBoundingClientRect().left < $('nav').getBoundingClientRect().right && !window.location.pathname.includes('play')) {
         console.log('yes', window.innerWidth - $('nav').getBoundingClientRect().right);
         $('overlay').style.right = '2%';
         $('overlay').style.left = 'unset';

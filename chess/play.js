@@ -50,6 +50,8 @@ var msg = $('message');
 var msg_submit = $('submit_message');
 var msg_title = $('chat_title');
 var message_body = $("text");
+var msg_container = $('message_container');
+
 var popup = $('closable_interface');
 var first_load = true;
 
@@ -57,8 +59,10 @@ $('copyright').innerHTML = "&copy 2020";
 $('copyright').style.left = '0.625%';
 $('copyright').style.right = 'unset';
 
+update_nav_graphics();
 update_graphics();
 window.addEventListener('load', e => {
+    update_nav_graphics();
     update_graphics();
     ctx.clearRect(0,0,canvas.width,canvas.height)
     draw_board();
@@ -66,6 +70,7 @@ window.addEventListener('load', e => {
 })
 
 window.addEventListener('resize', e => {
+    update_nav_graphics();
     update_graphics();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     draw_board();
@@ -95,35 +100,21 @@ function update_graphics() {
     canvas.width = canvas.height;
     canvas.style.left = (window.innerWidth - canvas.width) / 2 + "px";
     canvas.style.top = window.innerHeight * 0.02 + "px";
-
     //nav
     var nav = $('nav');
 
-    msg.style.height = canvas.getBoundingClientRect().height + "px";
-    msg.style.width = (window.innerWidth - canvas.width) / 2 * 0.5 + 'px';
-    msg.style.top = window.innerHeight * 0.02 + "px";
-    msg.style.left = (canvas.getBoundingClientRect().left - msg.style.width.slice(0,-2)) * 0.98 + "px";
-
-    msg_title.style.width = msg.style.width;
-    msg_title.style.top = msg.style.top;
-    msg_title.style.left = msg.style.left;
-    msg_submit.style.bottom = window.innerHeight - msg.getBoundingClientRect().bottom + "px";
-    $('message_form').childNodes[1].style.width = msg.style.width.slice(0,-2) * 0.99 + "px";
-    msg_submit.style.left = msg.style.left;
-    msg_submit.style.width = msg.style.width;
-    $("message_form").childNodes[1].style.display = "absolute";
-    $("message_form").childNodes[1].style.bottom = 0;
-
-    message_body.style.height = $("message_form").childNodes[1].getBoundingClientRect().top - msg_title.getBoundingClientRect().bottom + "px";
-    message_body.style.width = msg.style.width;
-    message_body.style.top = msg_title.getBoundingClientRect().bottom + "px";
-    message_body.style.left = msg.style.left;
+    msg_container.style.height = canvas.getBoundingClientRect().height + "px";
+    msg_container.style.width = (canvas.getBoundingClientRect().left - $('nav').getBoundingClientRect().right) * 0.95 + 'px';
+    msg_container.style.top = window.innerHeight * 0.02 + "px";
+    msg_container.style.left = $('nav').getBoundingClientRect().right + parseFloat(msg_container.style.width) * 0.025 + "px";
+    msg_container.style['margin-bottom'] = window.innerHeight * 0.02 + "px";
 
 	var interface = $('interface');
-    interface.style.height = msg.style.height;
-    interface.style.top = msg.style.top;
+    interface.style.height = msg_container.style.height;
+    interface.style.top = msg_container.style.top;
     interface.style.width = (window.innerWidth - canvas.getBoundingClientRect().right) * 0.95 + "px";
-    interface.style.left = canvas.getBoundingClientRect().right * 1.01 + "px";
+    interface.style.left = canvas.getBoundingClientRect().right + parseFloat(interface.style.width) * 0.025 + "px";
+    interface.style['margin-bottom'] = window.innerHeight * 0.02 + "px";
 
     $('opposite_name').style['font-size'] = "100%";
     $('self_name').style['font-size'] = "100%";
@@ -155,59 +146,52 @@ function update_graphics() {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
     }
 
-	$('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Login/Signup";
-    if (getCookie('username') || sessionStorage.getItem('username')) {
-            $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML = "Welcome, ";
-        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-        $('nav').getElementsByTagName('button')[0].firstElementChild.innerHTML += "<br>Logout";
-        username = sessionStorage.getItem('username') ? sessionStorage.getItem('username') : getCookie('username');
-    }
-
-    if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
+    if (msg_container.getBoundingClientRect().width / canvas.width < 0.3) {
+        console.log('compressing');
         $('nav').style.width = window.innerHeight * 0.1 + "px";
-        if ($('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML == 'Login/Signup') {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#128100";
+        if ($('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML == 'Login/Signup') {
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#128100";
         }
         else {
-            $('nav').getElementsByTagName('li')[0].firstElementChild.firstElementChild.innerHTML = "&#11144";
+            $('nav').getElementsByTagName('li')[0].firstElementChild.innerHTML = "&#11144";
         }
-        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "&#9881";
-        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "&#9998";
-        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "&#9876";
-        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "&#128366";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "&#128737";
+        $('nav').getElementsByTagName('li')[1].firstElementChild.innerHTML = "&#9881";
+        $('nav').getElementsByTagName('li')[2].firstElementChild.innerHTML = "&#9998";
+        $('nav').getElementsByTagName('li')[3].firstElementChild.innerHTML = "&#9876";
+        $('nav').getElementsByTagName('li')[4].firstElementChild.innerHTML = "&#128366";
+        $('nav').getElementsByTagName('li')[5].firstElementChild.innerHTML = "&#128737";
         $('copyright').innerHTML = "&copy 2020";
+
+        msg_container.style.height = canvas.getBoundingClientRect().height + "px";
+        msg_container.style.width = (canvas.getBoundingClientRect().left - $('nav').getBoundingClientRect().right) * 0.95 + 'px';
+        msg_container.style.top = window.innerHeight * 0.02 + "px";
+        msg_container.style.left = $('nav').getBoundingClientRect().right + parseFloat(msg_container.style.width) * 0.025 + "px";
+    
+        interface.style.height = msg_container.style.height;
+        interface.style.top = msg_container.style.top;
+        interface.style.width = (window.innerWidth - canvas.getBoundingClientRect().right) * 0.95 + "px";
+        interface.style.left = canvas.getBoundingClientRect().right + parseFloat(interface.style.width) * 0.025 + "px";
     }
-    else {
-        $('nav').getElementsByTagName('li')[1].firstElementChild.firstElementChild.innerHTML = "My Games";
-        $('nav').getElementsByTagName('li')[2].firstElementChild.firstElementChild.innerHTML = "Create Game";
-        $('nav').getElementsByTagName('li')[3].firstElementChild.firstElementChild.innerHTML = "Join Game";
-        $('nav').getElementsByTagName('li')[4].firstElementChild.firstElementChild.innerHTML = "How to Play";
-        $('nav').getElementsByTagName('li')[5].firstElementChild.firstElementChild.innerHTML = "Privacy Policy";
-        $('copyright').innerHTML = "&copy Benjamin Tran 2020<br>Powered by Github and Google Firebase";
-    }
+    // else {
+    //     $('nav').getElementsByTagName('li')[1].firstElementChild.innerHTML = "My Games";
+    //     $('nav').getElementsByTagName('li')[2].firstElementChild.innerHTML = "Create Game";
+    //     $('nav').getElementsByTagName('li')[3].firstElementChild.innerHTML = "Join Game";
+    //     $('nav').getElementsByTagName('li')[4].firstElementChild.innerHTML = "How to Play";
+    //     $('nav').getElementsByTagName('li')[5].firstElementChild.innerHTML = "Privacy Policy";
+    //     $('copyright').innerHTML = "&copy Benjamin Tran 2020<br>Powered by Github and Google Firebase";
+    // }
+
     if (canvas.getBoundingClientRect().left < $('nav').getBoundingClientRect().right) {
         canvas.width = (window.innerWidth - $('nav').getBoundingClientRect().right) * 0.94;
         canvas.height = canvas.width;
         canvas.style.left = $('nav').getBoundingClientRect().right + canvas.width * 0.01 + "px";
     }
-    if ($('text').getBoundingClientRect().left < $('nav').getBoundingClientRect().right || window.innerWidth / canvas.width < 2) {
-        $('submit_message').style.position = "relative";
-        $('message').style.top = parseFloat($('message').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
-        $('chat_title').style.top = parseFloat($('chat_title').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
-        $('text').style.top = parseFloat($('text').style.top.slice(0,-2)) + canvas.getBoundingClientRect().bottom + "px";
-        $('submit_message').style.top = $('text').getBoundingClientRect().bottom - $('submit_message').getBoundingClientRect().top - $('submit_message').getElementsByTagName('input')[0].getBoundingClientRect().height + "px";
-        $('message').style.left = (parseFloat($('message').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('message').getBoundingClientRect().left) + "px";
-        $('chat_title').style.left = (parseFloat($('chat_title').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('chat_title').getBoundingClientRect().left) + "px";
-        $('text').style.left = (parseFloat($('text').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('text').getBoundingClientRect().left) + "px";
-        $('submit_message').style.left = (parseFloat($('submit_message').style.left.slice(0,-2)) + canvas.getBoundingClientRect().left - $('submit_message').getBoundingClientRect().left) + "px";
-        $('message').style.width = canvas.width / 2 + "px";
-        $('chat_title').style.width = canvas.width / 2 + "px";
-        $('text').style.width = canvas.width / 2 + "px";
-        $('submit_message').style.width = canvas.width / 2 + "px";
-        $('message_form').getElementsByTagName('input')[0].style.width = $('text').getBoundingClientRect().width + "px";
+    if (msg_container.getBoundingClientRect().width / canvas.width < 0.3 || window.innerWidth / canvas.width < 2) {
+        msg_container.style.top = parseFloat(getComputedStyle(msg_container).top) + canvas.getBoundingClientRect().bottom + "px";
+        msg_container.style.left = canvas.getBoundingClientRect().left + "px";
+        msg_container.style.width = canvas.width / 2 + "px";
 
-        $('interface').style.top = $('chat_title').getBoundingClientRect().top + "px";
+        $('interface').style.top = msg_container.getBoundingClientRect().top + "px";
         $('interface').style.width = canvas.width / 2 + "px";
         $('interface').style.left = canvas.getBoundingClientRect().right - $('interface').getBoundingClientRect().width + "px";
 
@@ -242,30 +226,18 @@ function update_graphics() {
     while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
         $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
     }   
-    while (getComputedStyle($('nav').getElementsByTagName('button')[0]).height.slice(0,-2) / (getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2) * 1.5) > 3) {
-        $('nav').getElementsByTagName('a')[0].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[0])['font-size'].slice(0,-2)) + 1 + "px";
-        $('nav').getElementsByTagName('a')[1].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[1])['font-size'].slice(0,-2)) + 1 + "px";
-        $('nav').getElementsByTagName('a')[2].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[2])['font-size'].slice(0,-2)) + 1 + "px";
-        $('nav').getElementsByTagName('a')[3].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[3])['font-size'].slice(0,-2)) + 1 + "px";
-        $('nav').getElementsByTagName('a')[4].style['font-size'] = parseFloat(getComputedStyle($('nav').getElementsByTagName('a')[4])['font-size'].slice(0,-2)) + 1 + "px";
-
-    }     
+   
     }
     else {
-        $('nav').getElementsByTagName('a')[0].style['font-size'] = '100%';
-        $('nav').getElementsByTagName('a')[1].style['font-size'] = '100%';
-        $('nav').getElementsByTagName('a')[2].style['font-size'] = '100%';
-        $('nav').getElementsByTagName('a')[3].style['font-size'] = '100%';
-        $('nav').getElementsByTagName('a')[4].style['font-size'] = '100%';
-        $('text').style.width = (canvas.getBoundingClientRect().left - nav.getBoundingClientRect().right) * 0.96 + "px";
-        $('text').style.left = nav.getBoundingClientRect().right + $('text').style.width.slice(0,-2) * 0.02 + "px";
-        msg_title.style.width = $('text').style.width;
-        msg_title.style.left = $('text').style.left;
-        msg.style.width = $('text').style.width;
-        msg.style.left = $('text').style.left;
-        $('submit_message').style.width = $('text').style.width;
-        $('submit_message').getElementsByTagName('input')[0].style.width = '100%';
-        $('submit_message').style.left = $('text').style.left;
+        msg_container.style.height = canvas.getBoundingClientRect().height + "px";
+        msg_container.style.width = (canvas.getBoundingClientRect().left - $('nav').getBoundingClientRect().right) * 0.95 + 'px';
+        msg_container.style.top = window.innerHeight * 0.02 + "px";
+        msg_container.style.left = $('nav').getBoundingClientRect().right + parseFloat(msg_container.style.width) * 0.025 + "px";
+    
+        interface.style.height = msg_container.style.height;
+        interface.style.top = msg_container.style.top;
+        interface.style.width = (window.innerWidth - canvas.getBoundingClientRect().right) * 0.95 + "px";
+        interface.style.left = canvas.getBoundingClientRect().right + parseFloat(interface.style.width) * 0.025 + "px";
     }
     
 
@@ -288,45 +260,6 @@ function update_graphics() {
     $('tracking').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
     $('info').style.height = document.getElementsByClassName('bottom')[0].firstElementChild.getBoundingClientRect().top - document.getElementsByClassName('top')[0].getElementsByTagName('table')[0].getBoundingClientRect().bottom + "px";
 
-    ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '0px'; ele.style.width = $('nav').getBoundingClientRect().width + 'px'; ele.style['text-align'] = 'center';})
-
-	var new_size;
-	while ($('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height > 3.1) {
-    var new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) + 0.5 + "px";         
-    $('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0].style['font-size'] = new_size;
-
-}
-([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = '50px'; ele.style.width = $('nav').getBoundingClientRect().width * 0.9 + 'px'; ele.style['text-align'] = 'center';})
-
-	var new_size;
-    if (!user_id) {
-        while (
-            $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-            find_overlap($('nav').getElementsByTagName('a')[0],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
-            find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
-            ) {
-        new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
-        ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
-    }
-}
-        else {
-            while (
-                $('nav').childNodes[1].childNodes[5].childNodes[0].getBoundingClientRect().height * 0.96 / $('nav').childNodes[1].childNodes[5].childNodes[0].childNodes[0].getBoundingClientRect().height < 2.5 ||	
-                find_overlap($('nav').getElementsByTagName('a')[1],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[2],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[3],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[4],'xy',true) ||
-                find_overlap($('nav').getElementsByTagName('a')[5],'xy',true)	
-                ) {
-            new_size = parseFloat(getComputedStyle($('nav').childNodes[1].getElementsByTagName('li')[2].childNodes[0].childNodes[0])['font-size']) - 0.5 + "px";         
-            ([]).forEach.call(document.querySelectorAll('#nav a'), ele => {ele.style['font-size'] = new_size})
-        }
-            reduce_size($('nav').getElementsByTagName('a')[0], 'xy', false)
-        }
 
 }
 
@@ -1396,11 +1329,8 @@ class piece {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         show_pieces();
                             db.collection('chess').doc(game).update({
-<<<<<<< HEAD
-                                black_pre_move: null
-=======
+                                black_pre_move: null,
                                 pre_move: null
->>>>>>> c753900a1a75bf644e51a79055d170bb0ff0558e
                             }).catch(error => console.log(error))
                         
                     }
@@ -2760,9 +2690,9 @@ $('closable_interface').getElementsByTagName('div')[1].getElementsByTagName('but
     rematch();
 })
 var msg_ready = true;
-$("message_form").addEventListener('submit', e => {
+msg_submit.addEventListener('submit', e => {
     e.preventDefault();
-    if ($('message_form').childNodes[1].value && msg_ready) {
+    if (e.target.childNodes[1].value && msg_ready) {
     msg_ready = false;
     var handle;
     if (observer) {handle = username}
@@ -2773,9 +2703,9 @@ $("message_form").addEventListener('submit', e => {
         prev_html = doc.data().messages;
     }).then(docRef => {
     db.collection('chess').doc(game).update({
-        messages: prev_html + "<strong>" + handle + ":</strong> " + $('message_form').childNodes[1].value + "<br>"
+        messages: prev_html + "<strong>" + handle + ":</strong> " + e.target.childNodes[1].value + "<br>"
     }).then(docRef => {
-        $('message_form').childNodes[1].value = "";
+        e.target.childNodes[1].value = "";
         msg_ready = true;
     }).catch(error => console.log(error))
     

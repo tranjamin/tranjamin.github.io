@@ -239,7 +239,7 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 								white_user: username,
 								white_user_id: user_id,
 								white_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
-								white_user_ranking: user_elo
+								white_user_elo: user_elo
 							}).then(docRef => {
 								console.log('t2')
 								setCookie('game_id',load_id,2);
@@ -252,7 +252,7 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 								black_user: username,
 								black_user_id: user_id,
 								black_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
-								black_user_ranking: user_elo
+								black_user_elo: user_elo
 							}).then(docRef => {
 								console.log('t2')
 								setCookie('game_id',load_id,2);

@@ -173,7 +173,7 @@ else {
 }
 var user_elo = null;
 db.collection('account').doc(user_id ? user_id : " ").get().then(doc => {
-    user_elo = doc.data().ranking;
+    user_elo = doc.data() ? doc.data().ranking : null;
 }).then(() => {
 db.collection('chess').add({
     name: newname,
@@ -183,6 +183,8 @@ db.collection('chess').add({
     white_user_id: white_user_id,
     black_user_email: ((black_user == null) ? null : (auth.currentUser == null ? "" : auth.currentUser.email)),
     white_user_email: ((white_user == null) ? null : (auth.currentUser == null ? "" : auth.currentUser.email)),
+    black_user_elo: (black_user == null) ? null : user_elo,
+    white_user_elo: (black_user == null) ? null : user_elo,
     white_arr: stringify(white_arr),
     black_arr: stringify(black_arr),
     white_list: tempw,
