@@ -1,3 +1,15 @@
+html input {
+    filter: none;
+}
+html input:-webkit-autofill,
+html input:-webkit-autofill:hover,
+html input:-webkit-autofill:focus,
+html input:-webkit-autofill:active
+ {
+    box-shadow: 0 0 0 30px white inset !important;
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
 .piece {
     position: relative;
     z-index: 10;

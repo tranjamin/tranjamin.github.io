@@ -40,22 +40,6 @@
         <div class="rules" id="load_public">
             <form id='search_public'>
                 <div>
-                    <label>Time control: </label>
-                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
-                </div><div>
-                    <label>Mode: </label>
-                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
-                </div><div>
-                    <label>Opponent Ranking: </label>
-                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
-                </div><div>
-                    <label>Game Mode: </label>
-                    <span name="back">&#9664</span><span name="current">All</span><span name="forward">&#9654</span>
-                </div><div>
-                    <label>Play As: </label>
-                    <span name="back">&#9664</span><span name="current">Any</span><span name="forward">&#9654</span>
-                </div>
-                <div>
                 <label for="search">Enter Keywords and Adjust Precision</label><br>
                 <input type="text" placeholder="Search..." name="search">
                 <input type="number" min=0 max=1 step=0.005 name="increment">
@@ -65,11 +49,12 @@
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Admin</th>
-                    <th>Mode</th>
-                    <th>Play as</th>
-                    <th>Ranked</th>
-                    <th>Time</th>
+                    <th>Opponent</th>
+                    <th>Ranking</th>
+                    <th><span name="back">&#9664 </span><span name="current">Variation</span><span name="forward"> &#9654</span></th>
+                    <th><span name="back">&#9664 </span><span name="current">Play As</span><span name="forward"> &#9654</span></th>
+                    <th><span name="back">&#9664 </span><span name="current">Mode</span><span name="forward"> &#9654</span></th>
+                    <th><span name="back">&#9664 </span><span name="current">Time Control</span><span name="forward"> &#9654</span></th>
                 </tr>
             </table>
         </div>

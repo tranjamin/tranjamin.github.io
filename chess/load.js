@@ -2,11 +2,11 @@
 // var username = "anon";
 // var user_id = "";
 
-var time_control_array = ['All','None','Classic'];
-var mode_array = ['All', 'Ranked', 'Casual'];
+var time_control_array = ['Time Control','None','Timed','Classic', 'Rapid', 'Blitz'];
+var mode_array = ['Mode', 'Ranked', 'Casual'];
 var opponent_ranking = ['All', "<input type='number' min='0' max='3000'>to<input type='number' min='0' max='3000'>"];
-var game_mode = ['All','Classic','Chess960','Antichess','Armageddon','Atomic','Beirut','Crazyhouse','3 Check','Checkless','Circe','Dusanny\'s','KOTH','Really Bad','Schrodinger'];
-var play_as = ['Any', 'White', 'Black', 'Random'];
+var game_mode = ['Variation','Classic','Chess960','Antichess','Armageddon','Atomic','Beirut','Crazyhouse','3 Check','Checkless','Circe','Dusanny\'s','KOTH','Really Bad','Schrodinger'];
+var play_as = ['Play As', 'White', 'Black', 'Random'];
 var selected_time_control = "All";
 var selected_mode = "All";
 var selected_opponent_ranking = "All";
@@ -27,21 +27,24 @@ function formatFilter(e, array) {
 	}
 }
 
-$('search_public').getElementsByTagName('div')[0].addEventListener('click', e => {
-	formatFilter(e, time_control_array);
-})
-$('search_public').getElementsByTagName('div')[1].addEventListener('click', e => {
-	formatFilter(e, mode_array);
-})
-$('search_public').getElementsByTagName('div')[2].addEventListener('click', e => {
-	formatFilter(e, opponent_ranking);
-})
-$('search_public').getElementsByTagName('div')[3].addEventListener('click', e => {
+$('search_public').nextElementSibling.getElementsByTagName('th')[3].addEventListener('click', e => {
+	console.log(e.target.parentElement);
 	formatFilter(e, game_mode);
 })
-$('search_public').getElementsByTagName('div')[4].addEventListener('click', e => {
+$('search_public').nextElementSibling.getElementsByTagName('th')[4].addEventListener('click', e => {
+	console.log(e.target.parentElement);
 	formatFilter(e, play_as);
 })
+$('search_public').nextElementSibling.getElementsByTagName('th')[5].addEventListener('click', e => {
+	console.log(e.target.parentElement);
+	formatFilter(e, mode_array);
+})
+$('search_public').nextElementSibling.getElementsByTagName('th')[6].addEventListener('click', e => {
+	console.log(e.target.parentElement);
+	formatFilter(e, time_control_array);
+})
+
+
 $('search_public').getElementsByTagName('button')[0].addEventListener('click', e => {
 	e.preventDefault();
 	selected_time_control = e.target.parentElement.getElementsByTagName('div')[0].getElementsByTagName('span')[1].innerHTML;
@@ -76,6 +79,7 @@ window.addEventListener('load', e => {
 })
 
 function update_graphics() {
+
     var overlay = $('overlay');
     overlay.style.height = window.innerHeight * 0.95 + "px";
     overlay.style.width = overlay.style.height.slice(0,-2) * 1.2 + "px";
@@ -209,10 +213,10 @@ function sortData(mode, id, input="", precision=0.3) {
                 catch (error) {}
             }}
             if (!data.randomised) {
-            if (data.black_user == null) {play_as = "Black"}
+            if (data.black_user == null) {play_as = "Black"} 
 			if (data.white_user == null) {play_as = "White"}}
 			if (mode == "public") {
-				new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
+				new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${data.white_user ? data.white_user_elo : data.black_user_elo}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
 			}
 			else {
 				new_table.innerHTML = `<td>${data.name}</td><td>${data.white_user}</td><td>${data.black_user}</td><td>${variation}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;	

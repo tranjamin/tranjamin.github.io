@@ -184,7 +184,7 @@ db.collection('chess').add({
     black_user_email: ((black_user == null) ? null : (auth.currentUser == null ? "" : auth.currentUser.email)),
     white_user_email: ((white_user == null) ? null : (auth.currentUser == null ? "" : auth.currentUser.email)),
     black_user_elo: (black_user == null) ? null : user_elo,
-    white_user_elo: (black_user == null) ? null : user_elo,
+    white_user_elo: (white_user == null) ? null : user_elo,
     white_arr: stringify(white_arr),
     black_arr: stringify(black_arr),
     white_list: tempw,
