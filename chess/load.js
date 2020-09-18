@@ -4,14 +4,12 @@
 
 var time_control_array = ['Time Control','None','Timed','Classic', 'Rapid', 'Blitz'];
 var mode_array = ['Mode', 'Ranked', 'Casual'];
-var opponent_ranking = ['All', "<input type='number' min='0' max='3000'>to<input type='number' min='0' max='3000'>"];
 var game_mode = ['Variation','Classic','Chess960','Antichess','Armageddon','Atomic','Beirut','Crazyhouse','3 Check','Checkless','Circe','Dusanny\'s','KOTH','Really Bad','Schrodinger'];
 var play_as = ['Play As', 'White', 'Black', 'Random'];
-var selected_time_control = "All";
-var selected_mode = "All";
-var selected_opponent_ranking = "All";
-var selected_game_mode = "All";
-var selected_play_as = "Any";
+var selected_time_control = "Time Control";
+var selected_mode = "Mode";
+var selected_game_mode = "Variation";
+var selected_play_as = "Play As";
 
 var opponent_ranking_range = ["",""];
 
@@ -47,15 +45,10 @@ $('search_public').nextElementSibling.getElementsByTagName('th')[6].addEventList
 
 $('search_public').getElementsByTagName('button')[0].addEventListener('click', e => {
 	e.preventDefault();
-	selected_time_control = e.target.parentElement.getElementsByTagName('div')[0].getElementsByTagName('span')[1].innerHTML;
-	selected_mode = e.target.parentElement.getElementsByTagName('div')[1].getElementsByTagName('span')[1].innerHTML;
-	selected_opponent_ranking = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].innerHTML;
-	selected_game_mode = e.target.parentElement.getElementsByTagName('div')[3].getElementsByTagName('span')[1].innerHTML;
-	selected_play_as = e.target.parentElement.getElementsByTagName('div')[4].getElementsByTagName('span')[1].innerHTML;
-	if (selected_opponent_ranking != "All") {
-	opponent_ranking_range[0] = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].getElementsByTagName('input')[0].value;
-	opponent_ranking_range[1] = e.target.parentElement.getElementsByTagName('div')[2].getElementsByTagName('span')[1].getElementsByTagName('input')[1].value;
-}
+	selected_time_control = $('search_public').nextElementSibling.getElementsByTagName('th')[6].getElementsByTagName('span')[1].innerHTML;
+	selected_play_as = $('search_public').nextElementSibling.getElementsByTagName('th')[5].getElementsByTagName('span')[1].innerHTML;
+	selected_game_mode = $('search_public').nextElementSibling.getElementsByTagName('th')[3].getElementsByTagName('span')[1].innerHTML;
+	selected_play_as = $('search_public').nextElementSibling.getElementsByTagName('th')[4].getElementsByTagName('span')[1].innerHTML;
 	if ($('search_public').increment.value != "0") {
 		sortData('public', 'load_public', $('search_public').search.value, $('search_public').increment.value);
 		}
@@ -91,10 +84,6 @@ function update_graphics() {
     document.getElementsByClassName('rules')[0].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
     document.getElementsByClassName('rules')[1].style.top = $('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
     document.getElementsByClassName('rules')[2].style.top = $('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
-
-    document.getElementsByClassName('rules')[0].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
-    document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom + "px";
-	document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0,-2)-$('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom + "px";
 
 
 }
@@ -168,15 +157,16 @@ function sortData(mode, id, input="", precision=0.3) {
     console.clear();
     var data_arr = {};
 	var doc_name = [];
-    db.collection('chess').where('visibility', '==', 'Public').get().then(snapshot => {
+    db.collection('chess').where('visibility', '==', 'Public').where('creation_date','>',new Date(new Date() - 30*24*3600*1000)).orderBy('creation_date','desc').get().then(snapshot => {
         snapshot.forEach(doc => {
 			if (((mode == "observer" && doc.data().white_user != null && doc.data().black_user != null) || 
 				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))) &&
-				((selected_play_as == "Any") || (selected_play_as == "Random" && doc.data().randomised) || (selected_play_as == "White" && doc.data().white_user == null) || (selected_play_as == "Black" && doc.data().black_user == null)) &&
-				((selected_game_mode == "All") || (doc.data().mode.indexOf(selected_game_mode) != -1)) &&
-				((selected_mode == "All") || (selected_mode == "Casual" && !doc.data().points) || (selected_mode == "Ranked" && doc.data().points)) &&
-				((selected_time_control == "All") || (selected_time_control == "None" && doc.data().white_time == null)) &&
-				((selected_opponent_ranking == "All") || (opponent_ranking_range[0] == "" && opponent_ranking_range[1] == "") || (((doc.data().white_user == null ? doc.data().black_ranking : doc.data().white_ranking) >= parseFloat(opponent_ranking_range[0] == "" ? '0': opponent_ranking_range[0])) && ((doc.data().white_user == null ? doc.data().black_ranking : doc.data().white_ranking) <= parseFloat(opponent_ranking_range[1] == "" ? '3000': opponent_ranking_range[1])))) 
+				((selected_play_as == "Play As") || (selected_play_as == "Random" && doc.data().randomised) || (selected_play_as == "White" && doc.data().white_user == null) || (selected_play_as == "Black" && doc.data().black_user == null)) &&
+				((selected_game_mode == "Variation") || (doc.data().mode.indexOf(selected_game_mode) != -1)) &&
+				((selected_mode == "Mode") || (selected_mode == "Casual" && !doc.data().points) || (selected_mode == "Ranked" && doc.data().points)) &&
+				((selected_time_control == "Time Control") || (selected_time_control == "None" && doc.data().white_time == null)) &&
+				(($('search_public').lbound.value == "" && $('search_public').ubound.value == "") || (doc.data().white_user != null ? (parseFloat(doc.data().white_user_elo) <= parseInt($('search_public').ubound.value != "" ? $('search_public').ubound.value : 10000) && parseFloat(doc.data().white_user_elo) >= parseInt($('search_public').lbound.value ? $('search_public').lbound.value : 0)) : (parseFloat(doc.data().black_user_elo) <= parseInt($('search_public').ubound.value != "" ? $('search_public').ubound.value : 10000) && parseFloat(doc.data().black_user_elo) >= parseInt($('search_public').lbound.value ? $('search_public').lbound.value : 0)))) &&
+				($('search_public').opponent_search.value == "" || $('search_public').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user))
 			) {
             if (
                 (relevancy.weight(doc.data().name,input) >= precision || input == ""))
@@ -232,13 +222,14 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 		var load_id;
 		var user_elo = null;
 		db.collection('account').doc(user_id ? user_id : " ").get().then(doc => {
-			user_elo = doc.data().ranking;
+			user_elo = doc.data() ? doc.data().ranking : null;
 		}).then(() => {
 			db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
 				snapshot.forEach(doc => {
 					if (doc.data().name == load_name) {
 						load_id = doc.id;
-						if (doc.data().white_user == null) {
+						console.log(doc.data().black_user, doc.data().white_user, username);
+						if (doc.data().white_user == null && doc.data().black_user != username) {
 							db.collection('chess').doc(load_id).update({
 								white_user: username,
 								white_user_id: user_id,
@@ -248,10 +239,14 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 								console.log('t2')
 								setCookie('game_id',load_id,2);
 								sessionStorage.setItem('game_id',load_id);
+								if (username == "anon") {
+									setCookie(load_id + "_info", 'white', 9999);
+									sessionStorage.setItem(load_id + "_info", 'white', 9999);
+								}
 								window.location.assign('play.html');
 							})
 						}
-						else if (doc.data().black_user == null) {
+						else if (doc.data().black_user == null && doc.data().white_user != username) {
 							db.collection('chess').doc(load_id).update({
 								black_user: username,
 								black_user_id: user_id,
@@ -261,6 +256,10 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 								console.log('t2')
 								setCookie('game_id',load_id,2);
 								sessionStorage.setItem('game_id',load_id);
+								if (username == "anon") {
+									setCookie(load_id + "_info", 'black', 9999);
+									sessionStorage.setItem(load_id + "_info", 'black', 9999);
+								}
 								window.location.assign('play.html');
 							})
 						}

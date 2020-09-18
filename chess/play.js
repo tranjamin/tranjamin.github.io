@@ -25,6 +25,9 @@ var pre_move = null;
 var current_highlight = false;
 var event_for_crazyhouse = 0;
 
+var type_possibilities = [];
+var type_record = "";
+
 if (getCookie('game_id'))
  {
      game = getCookie('game_id')
@@ -140,11 +143,7 @@ function update_graphics() {
         $('tracking').style['font-size'] = $('status').style['font-size']
         $('info').style['font-size'] = $('status').style['font-size']
     }
-    
-    $('options').style['font-size'] = '100%';
-    while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
-        $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
-    }
+     
 
     if (msg_container.getBoundingClientRect().width / canvas.width < 0.3) {
         console.log('compressing');
@@ -221,11 +220,6 @@ function update_graphics() {
         $('tracking').style['font-size'] = $('status').style['font-size']
         $('info').style['font-size'] = $('status').style['font-size']
     }
-    
-    $('options').style['font-size'] = '100%';
-    while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
-        $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
-    }   
    
     }
     else {
@@ -242,13 +236,28 @@ function update_graphics() {
     
 
 
+    var total_options_width = $('options').getBoundingClientRect().width - ($('options').getElementsByTagName('button')[4].getBoundingClientRect().top - $('options').getElementsByTagName('button')[0].getBoundingClientRect().bottom) * 4;
+    console.log(total_options_width / 4);
+    ([]).forEach.call($('options').getElementsByTagName('button'), ele => {
+        ele.style['font-size'] = parseFloat(getComputedStyle($('self_name'))['font-size']) * 0.75 + "px";
+        ele.style.width = total_options_width / 4 + "px";
+    })
+    total_options_width = $('options').getBoundingClientRect().width - ($('options').getElementsByTagName('button')[4].getBoundingClientRect().top - $('options').getElementsByTagName('button')[0].getBoundingClientRect().bottom) * 4;
+    console.log(total_options_width / 4);
+    ([]).forEach.call($('options').getElementsByTagName('button'), ele => {
+        ele.style['font-size'] = parseFloat(getComputedStyle($('self_name'))['font-size']) * 0.75 + "px";
+        ele.style.width = total_options_width / 4 + "px";
+    })
+
+        while ($('options').getElementsByTagName('button')[0].getBoundingClientRect().top != $('options').getElementsByTagName('button')[3].getBoundingClientRect().top) {
+        $('options').style['font-size'] = (getComputedStyle($('options'))['font-size'].slice(0,-2) - 1) + "px";
+    }
+
     var options = $('options');
     options.style.bottom = $('self_name').getBoundingClientRect().height + $('self_box').getBoundingClientRect().height + $('self_time').getBoundingClientRect().height + "px";
     options.style.left = '0px';
     var post_options = $('post_options');
     post_options.style.bottom = window.innerHeight - $('options').getBoundingClientRect().top + "px";
-
-
     
     popup.style.height = canvas.height * 0.4 + "px";
     popup.style.width = canvas.width * 0.6 + "px";
@@ -1329,7 +1338,6 @@ class piece {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         show_pieces();
                             db.collection('chess').doc(game).update({
-                                black_pre_move: null,
                                 pre_move: null
                             }).catch(error => console.log(error))
                         
@@ -1434,11 +1442,7 @@ var b_h;
 function win(message) {
     $("status").innerHTML = `You Won by ${message}`;
     var original_wins;
-    var other_user;
-    var other_id;
     var other_losses;
-    var elo;
-    var other_elo;
     console.log('win');
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'white' : 'black',
@@ -1446,16 +1450,10 @@ function win(message) {
     }).catch(error => console.log(error))
     db.collection('account').doc(user_id).get().then(doc => {
         original_wins = doc.data().wins;
-        elo = doc.data().ranking
-    }).then(docRef => {
-        db.collection('account').doc(user_id).update({
-            wins: original_wins + 1
-        })
     }).then(docRef => {
         db.collection('account').doc(other_user_id).get().then(snapshots => {
             snapshots.docs.forEach(doc => {
                 other_losses = doc.data().losses;
-                other_elo = doc.data().ranking;
             })
         }).then(docRef => {
             var r = 10**(elo/400);
@@ -1468,7 +1466,8 @@ function win(message) {
                 losses: other_losses + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             })
-            db.collection('account').doc(other_euser_id).update({
+            db.collection('account').doc(other_user_id).update({
+                wins: original_wins + 1,
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
             })
         }).catch(error => console.log(error))
@@ -1477,11 +1476,7 @@ function win(message) {
 function lose(message) {
     $("status").innerHTML = `You Lost by ${message}`;
     var original_losses;
-    var other_user;
-    var other_id;
     var other_wins;
-    var elo;
-    var other_elo;
     console.log('lose');
     db.collection('chess').doc(game).update({
         result: blackwhite ? 'black' : 'white',
@@ -1489,16 +1484,10 @@ function lose(message) {
     }).catch(error => console.log(error))
     db.collection('account').doc(user_id).get().then(doc => {
         original_losses = doc.data().losses;
-        elo = doc.data().ranking
-    }).then(docRef => {
-        db.collection('account').doc(user_id).update({
-            losses: original_losses + 1
-        })
     }).then(docRef => {
         db.collection('account').doc(other_user_id).get().then(snapshots => {
             snapshots.docs.forEach(doc => {
                 other_wins = doc.data().wins;
-                other_elo = doc.data().ranking;
             })
         }).then(docRef => {
             var r = 10**(elo/400);
@@ -1512,6 +1501,7 @@ function lose(message) {
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             })
             db.collection('account').doc(user_id).update({
+                losses: original_losses + 1,
                 ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
             })
         }).catch(error => console.log(error))
@@ -1525,11 +1515,7 @@ function draw(message) {
     else {
     $("status").innerHTML = `You Drew by ${message}`;
     var original_draws;
-    var other_id;
-    var other_user;
     var other_draws;
-    var elo;
-    var other_elo;
     var is_it_rated;
     console.log('draw');
     db.collection('chess').doc(game).update({
@@ -1538,11 +1524,6 @@ function draw(message) {
     }).catch(error => console.log(error))
     db.collection('account').doc(user_id).get().then(doc => {
         original_draws = doc.data().draws;
-        elo = doc.data().ranking;
-    }).then(docRef => {
-        db.collection('account').doc(user_id).update({
-            draws: original_draws + 1
-        })
     }).then(docRef => {
     db.collection('chess').doc(game).get().then(doc => {
         db.collection('account').doc(other_user_id).get().then(snapshots => {
@@ -1563,12 +1544,13 @@ function draw(message) {
             var new_other_elo = other_elo;
             var new_elo = elo;
             }
-            db.collection('account').doc(other_id).update({
+            db.collection('account').doc(other_user_id).update({
                 draws: other_draws + 1,
                 ranking: (Math.round(new_other_elo) >= 0 ? Math.round(new_other_elo) : 0)
             }).catch(error => console.log(error))
             db.collection('account').doc(user_id).update({
-                ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0)
+                ranking: (Math.round(new_elo) >= 0 ? Math.round(new_elo) : 0),
+                draws: original_draws + 1
             }).catch(error => console.log(error))
         }).catch(error => console.log(error))
     }).catch(error => console.log(error))
@@ -1689,6 +1671,12 @@ function rematch() {
             name: new_name,
             black_user: doc.data().white_user,
             white_user: doc.data().black_user,
+            black_user_id: doc.data().black_user_id,
+            white_user_id: doc.data().white_user_id,
+            black_user_email: doc.data().black_user_email,
+            white_user_email: doc.data().white_user_email,
+            black_user_elo: doc.data().black_user_elo,
+            white_user_elo: doc.data().white_user_elo,
             white_arr: stringify(rematchwhite_arr),
             black_arr: stringify(rematchblack_arr),
             white_list: tempw,
@@ -1716,7 +1704,12 @@ function rematch() {
             fifty_moves: 0,
             white_beirut_piece: null,
             black_beirut_piece: null,
-            undo: null
+            undo: null,    
+            white_notification: false,
+            black_notification: false,
+            creation_date: new Date(),
+            most_recent_date: null,
+            rematch_query: false
         }).then(docRef => {
             setCookie('game_id', docRef.id, 2);
             sessionStorage.setItem('game_id', docRef.id);
@@ -1826,14 +1819,29 @@ $('options').getElementsByTagName('button')[1].addEventListener('click', e => {
     if (e.target.innerHTML == '⚑') {
         e.target.innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
     }
-    else if (e.target.innerHTML == '✔') {
+    else if (e.target.innerHTML == '✔' && $('options').getElementsByTagName('button')[2].style.display != "none") {
         e.target.parentElement.innerHTML = '&#9873';
         $('text').innerHTML += `<i>${blackwhite ? 'white' : 'black'} has resigned</i><br>`;
         lose('Resignation');
     }
+    else if (e.target.innerHTML == '✔' && $('options').getElementsByTagName('button')[2].style.display == "none") {
+        db.collection('chess').doc(game).delete().then(ref => {
+            setCookie('game_id', '', 0);
+            sessionStorage.removeItem('game_id');
+            setCookie('game_id','',0)
+            window.location.assign('./')
+        }
+            )
+    }
     else if (e.target.innerHTML == '✘') {
-        e.target.parentElement.innerHTML = '&#9873';
-    }}
+        e.target.parentElement.style.color = ($('options').getElementsByTagName('button')[2].style.display == "none") ? 'black' : 'red';
+        e.target.parentElement.innerHTML =  ($('options').getElementsByTagName('button')[2].style.display == "none") ? '⎋ Delete Game' : '&#9873';
+    }
+    else if (e.target.innerHTML == "⎋ Delete Game") {
+        e.target.style.color = "red";
+        e.target.innerHTML = "<div style='width: 49%;display: inline-block;'>&#10004</div><div style='width: 49%;display: inline-block;'>&#10008</div>";
+    }
+}
     else if (observer) {
         blackwhite = blackwhite ? 0 : 1;
             var stored_name = $('self_name').innerHTML;
@@ -1934,6 +1942,8 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         else if (doc.data().black_user == username || (username == "anon" && getCookie(game + "_info") == "black")) {blackwhite = 0}
         else {observer = true;}
         other_user_id = blackwhite ? doc.data().black_user_id : doc.data().white_user_id;
+        other_elo = blackwhite ? doc.data().black_user_elo : doc.data().white_user_elo;
+        elo = blackwhite ? doc.data().white_user_elo : doc.data().black_user_elo;
 
         if (blackwhite) {
             $('self_time').style['background-color'] = 'white';
@@ -1974,6 +1984,20 @@ db.collection('chess').doc(game).onSnapshot(doc => {
         $('options').getElementsByTagName('button')[1].style.color = "black";
         $('options').getElementsByTagName('button')[1].innerHTML = "&#10542";
     }
+        else if (doc.data().white_user == null || doc.data().black_user == null) {
+        $('options').getElementsByTagName('button')[1].style.width = ($('options').getElementsByTagName('button')[2].getBoundingClientRect().right - $('options').getElementsByTagName('button')[1].getBoundingClientRect().left) + "px";
+        $('options').getElementsByTagName('button')[2].style.display = "none";
+        $('options').getElementsByTagName('button')[1].style.color = "black";
+        $('options').getElementsByTagName('button')[1].innerHTML = "⎋ Delete Game";       
+        }
+        else {
+            $('options').getElementsByTagName('button')[1].style.width = $('options').getElementsByTagName('button')[0].getBoundingClientRect().width + "px";            
+            $('options').getElementsByTagName('button')[4].style.width = $('options').getElementsByTagName('button')[0].getBoundingClientRect().width + "px";
+            $('options').getElementsByTagName('button')[2].style.display = "initial";
+            $('options').getElementsByTagName('button')[5].style.display = "initial";
+            $('options').getElementsByTagName('button')[1].style.color = "red";
+            $('options').getElementsByTagName('button')[1].innerHTML = "⚑";    
+        }
         $('info').innerHTML = `
         Game Name: ${doc.data().name}<br>
         Mode: ${doc.data().mode}<br>
@@ -2310,27 +2334,15 @@ db.collection('chess').doc(game).onSnapshot(doc => {
     $('self_time').innerHTML = time_to_str(blackwhite ? doc.data().white_count : doc.data().black_count);
     $('opposite_time').innerHTML = time_to_str(blackwhite ? doc.data().black_count : doc.data().white_count);
 
-    //get user name and rating
-    var white_elo;
-    var black_elo;
-    db.collection('account').where('username', 'in', [doc.data().white_user == null ? "" : doc.data().white_user, doc.data().black_user == null ? "" : doc.data().black_user]).get().then(snapshot => {
-        snapshot.forEach(doc => {
-            if (doc.data().username == doc.data().white_user) {
-            white_elo = doc.data().ranking}
-            if (doc.data().username == doc.data().black_user) {
-            black_elo = doc.data().ranking
-            }
-        })
-    }).then(() => {
+
     if (blackwhite) {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + (white_elo == undefined ? "" : " (" + white_elo + ")");
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + (black_elo == undefined ? "" : " (" + black_elo + ")")));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().white_user + (elo == undefined ? "" : " (" + elo + ")");
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().black_user == null) ? "Waiting for opponent..." : (doc.data().black_user + (other_elo == undefined ? "" : " (" + other_elo + ")")));
     }
     else {
-        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + (black_elo == undefined ? "" : " (" + black_elo + ")");
-        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + (white_elo == undefined ? "" : " (" + white_elo + ")")));
+        $('self_name').innerHTML = ((turn == blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + doc.data().black_user + (elo == undefined ? "" : " (" + elo + ")");
+        $('opposite_name').innerHTML = ((turn != blackwhite) ? "<icon style='font-size: 75%'>&#9654</icon> " : "") + ((doc.data().white_user == null) ? "Waiting for opponent..." : (doc.data().white_user + (other_elo == undefined ? "" : " (" + other_elo + ")")));
     }
-    })
 
     //swap observer ui
     if (observer) {
@@ -2713,6 +2725,103 @@ msg_submit.addEventListener('submit', e => {
 }
 })
 
+var inner_event = e => {
+    if (e.target == document.body && document.activeElement == document.body) {
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+        show_pieces();
+        if (!['a','b','c','d','e','f','g','h','x','1','2','3','4','5','6','7','8','9','+','#'].includes(e.key)) {
+            type_possibilities = [];
+            type_record = [];
+        }
+        type_record += e.key;
+        if (type_record.length == 1) {
+            (blackwhite ? white_list : black_list).forEach(pce => {
+                if ((pce.type == "Q" && (e.key == "Q" || e.key == "q")) || 
+                (pce.type == "R" && (e.key == "r" || e.key == "R")) || 
+                (pce.type == "N" && (e.key == "n" || e.key == "N")) ||
+                (pce.type == "K" && (e.key == "k" || e.key == "K")) ||
+                (pce.type == "Q" && (e.key == "q" || e.key == "Q")) ||
+                (pce.type == "B" && (e.key == "B" || e.key == "b")) ||
+                (pce.type == "P" && (['a','b','c','d','e','f','g','h'].includes(e.key)) && (e.key.charCodeAt(0) - 96) == pce.pos[0])
+                ) {
+                    type_possibilities.push(pce);
+                }
+
+            }) 
+        console.log(type_possibilities);
+        if (type_possibilities.length == 1) {
+            type_possibilities[0].highlight(false, white_arr, black_arr, white_list, black_list, true);
+        }
+        else {
+            type_possibilities.forEach(pce => {
+                console.log(pce.pos);
+                ctx.fillStyle = 'rgba(250,250,250,0.5)';
+                if (blackwhite) {
+                    ctx.fillRect(canvas.width / 8 * (pce.pos[0] - 1), canvas.height - canvas.height / 8 * (pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                }
+                else {
+                    ctx.fillRect(canvas.width - (canvas.width / 8 * (pce.pos[0])), canvas.height - canvas.height / 8 * (9 - pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                }
+            })
+        }
+    }
+        else if (type_record.length == 2) {
+            if (['a','b','c','d','e','f','g','h'].includes(e.key)) {
+                type_possibilities.forEach(pce => {
+                    if (pce.pos[0] == (e.key.charCodeAt(0) - 96)) {
+                        if (blackwhite) {
+                            ctx.fillRect(canvas.width / 8 * (pce.pos[0] - 1), canvas.height - canvas.height / 8 * (pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                        }
+                        else {
+                            ctx.fillRect(canvas.width - (canvas.width / 8 * (pce.pos[0])), canvas.height - canvas.height / 8 * (9 - pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                        }
+                    }
+                })
+            }
+            else if (!isNaN(parseInt(e.key))) {
+                type_possibilities.forEach(pce => {
+                    if (pce.pos[1] == parseInt(e.key)) {
+                        ctx.fillStyle = 'rgba(250,250,250,0.5)';
+                        if (blackwhite) {
+                            ctx.fillRect(canvas.width / 8 * (pce.pos[0] - 1), canvas.height - canvas.height / 8 * (pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                        }
+                        else {
+                            ctx.fillRect(canvas.width - (canvas.width / 8 * (pce.pos[0])), canvas.height - canvas.height / 8 * (9 - pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                        }
+                    }
+                    if (['a','c','d','e','f','g','h'].includes(type_record[0]) && findArr([(e.key.charCodeAt(0) - 96), parseInt(e.key)], pce.highlight()) != -1) {
+                        ctx.fillStyle = 'rgba(250,250,250,0.5)';
+                        if (blackwhite) {
+                            ctx.fillRect(canvas.width / 8 * (pce.pos[0] - 1), canvas.height - canvas.height / 8 * (pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                            ctx.fillRect(canvas.width / 8 * ((e.key.charCodeAt(0) - 96) - 1), canvas.height - canvas.height / 8 * (parseInt(e.key)), canvas.width / 8, canvas.height / 8);
+                        }
+                        else {
+                            ctx.fillRect(canvas.width - (canvas.width / 8 * (pce.pos[0])), canvas.height - canvas.height / 8 * (9 - pce.pos[1]), canvas.width / 8, canvas.height / 8);
+                            ctx.fillRect(canvas.width / 8 * ((e.key.charCodeAt(0) - 96) - 1), canvas.height - canvas.height / 8 * (parseInt(e.key)), canvas.width / 8, canvas.height / 8);
+                        }
+                    }
+                })
+            }
+            else {
+
+            }
+        }
+
+
+}
+}
+document.addEventListener('mousemove', mouse => {
+if (!observer) {
+if (mouse.target == canvas) {
+document.addEventListener('keypress', inner_event)
+}
+else {
+document.removeEventListener('keypress', inner_event)
+type_possibilities = [];
+}
+}
+})
+
 function socket_data(socket) {
     socket.on('chat', data => {
         $('text').innerHTML += "<strong>" + data.handle + ":</strong> " + data.message + "<br>";
@@ -2838,7 +2947,7 @@ arrayify = (arr2,type=String) => {
         }
         }
         else if (!inner) {
-            if (type == Number || !isNaN(original_arr[index])) {
+            if (type == Number || !isNaN(parseInt(original_arr[index]))) {
             ret_arr.push(parseInt(original_arr[index]));}
             else {
                 ret_arr.push((original_arr[index]));

@@ -216,7 +216,8 @@ db.collection('chess').add({
     white_notification: false,
     black_notification: false,
     creation_date: new Date(),
-    result_date: null
+    most_recent_date: null,
+    rematch_query: false
 }).then(docRef => {
     setCookie('game_id',docRef.id,2);
     sessionStorage.setItem('game_id',docRef.id);
