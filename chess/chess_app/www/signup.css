@@ -1,0 +1,145 @@
+html input {
+    filter: none;
+}
+html input:-webkit-autofill,
+html input:-webkit-autofill:hover,
+html input:-webkit-autofill:focus,
+html input:-webkit-autofill:active
+ {
+    box-shadow: 0 0 0 30px white inset !important;
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+.piece {
+    position: relative;
+    z-index: 10;
+}
+
+#canvas1 {
+    position: absolute;
+    background-image: url("board.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    margin: none;
+    padding: none;
+}
+
+#message {
+background-color: lightgreen;
+display: block;
+position: absolute;
+}
+
+#chat_title {
+background-color: green;
+text-align: center;
+font-size: 1.7em;
+padding: 1% 0;
+position: absolute;
+display: block;
+z-index: 2;
+font-weight: bold;
+font-family: 'Arial';
+color: white;
+}
+#submit_message {
+position: fixed;
+z-index: 4;
+}
+body form input:first-of-type{
+    background-color: rgb(209, 253, 228);
+    border: none;
+}
+#text {
+    position: absolute;
+    z-index: 3;
+}
+#text:hover {
+    overflow: scroll;
+}
+
+#overlay, #overlay2 {
+    background-color: rgb(41, 33, 33);
+    color: white;
+    position: absolute;
+    z-index: 10;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Philosopher';
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#overlay h2, #overlay2 h2 {
+    text-align: center;
+    font-family: 'Philosopher';
+}
+#overlay h4, #overlay2 h4 {
+    text-align: center;
+    font-family: 'Raleway';
+}
+
+#game_creator {
+    text-decoration-line: underline;
+    text-align: center;
+}
+#game_loader {    
+    text-decoration-line: underline;
+    text-align: center;
+}
+
+
+#overlay input[type=submit], #overlay2 input[type=submit] {
+    background-color: rgb(46, 41, 41);
+    color: rgb(255, 115, 0);
+    text-align: right;
+    font-family: 'Raleway';
+    border: none;
+    font-size: 100%;
+    cursor: pointer;
+}
+
+#overlay form, #overlay2 form {
+    margin: 0;
+}
+
+#signup, #login, #overlay2 {
+    text-align: center;
+}
+#signup input, #login input, #overlay2 input {
+    margin-bottom: 2.4%;
+    font-size: 1.1em;
+    border-bottom: solid white 1.5pt;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: rgba(0,0,0,0);
+    text-align: center;
+    color: rgb(255, 215, 193);
+}
+#overlay2 input[type=text] {
+    width: 60%;
+}
+
+#logout {
+    position: fixed;
+    bottom: 2%;
+    right : 0.5%;
+    background-color: red;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+
+}
+
+.error {
+    color: red;
+}
+
+#forgot_password {
+    cursor: pointer;
+}

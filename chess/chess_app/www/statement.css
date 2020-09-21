@@ -1,0 +1,43 @@
+body form input:first-of-type{
+    background-color: rgb(209, 253, 228);
+    border: none;
+}
+
+#overlay {
+    background-color: rgb(41, 33, 33);
+    color: white;
+    position: absolute;
+    z-index: 10;
+    font-weight: bold;
+    font-family: 'Philosopher';
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 68, 0, 0.562) rgba(75, 68, 68, 0.05);
+}
+
+#overlay h2 {
+    font-family: 'Philosopher';
+    text-align: center;
+}
+#overlay h4 {
+    text-align: left;
+    font-family: 'Raleway';
+    text-indent: 10%;
+}
+#overlay h5 {
+    text-indent: 5%;
+    padding-left: 5%;
+}
+
+#overlay button {
+    background-color: rgb(46, 41, 41);
+    color: rgb(255, 115, 0);
+    text-align: center;
+    font-family: 'Raleway';
+    border: none;
+    font-size: 100%;
+    cursor: pointer;
+    width: 20%;
+    margin-left: 40%;
+}

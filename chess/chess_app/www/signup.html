@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link type="text/css" href="signup.css" rel="stylesheet">
+    <link type="text/css" href="global.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+        <link rel="icon" href="favicon4.png" type='image/x-icon'/>
+    <meta charset="utf8">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+    
+            <li><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a></li>
+            <li><a href="account.html" style="text-decoration: none; color: white;">My Games</a></li>
+            <li><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a>
+            </li>
+            <li><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></li>
+            <li><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></li>
+            <li><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br></a></li>
+        </ul>
+
+    </div>
+    <div id="copyright">
+        &copy Benjamin Tran 2020<br>
+        Powered by Github and Google Firebase
+    </div>
+    <div id="overlay">
+        <h2>Login or Sign Up</h2>
+        <h4>Set up your own chess game or visit an existing one</h4>
+
+
+        <form id="login">
+            <input name="username" type="text" placeholder="username or email" required><br>
+            <input name="password" type="password" placeholder="password" required><br>
+            <input name="username_or_email" type="radio" value="Username" checked="checked">
+            <label for="username_or_emails">Username</label>
+            <input name="username_or_email" type="radio" value="Email">
+            <label for="username_or_email">Email</label><br>
+            <input name="login" type="submit" value="Login">
+        </form>
+        <p id="login_error" class="error"></p>
+        or<br><br>
+        <form id="signup">
+            <input name="new_username" placeholder="create username" required><br>
+            <input name="email" placeholder="enter email (optional)" pattern="^.+@.+$"><br>
+            <input name="new_password" placeholder="create password" type='password' required><br>
+            <input name="confirm_password" placeholder="confirm password" type='password' required><br>
+            <input name="signup" type="submit" value="Sign Up">
+        </form>
+        <div id="signup_error" class="error"></div><br>
+    <p>
+        By signing up, you agree to our <a href="statement.html" style="color: white;">Terms and Conditions and Privacy Statement</a>
+        
+    </p>
+        <div id="forgot_password">
+            Forgot Your Password?
+        </div>
+    </div>
+    <div id="overlay2" style="visibility: hidden;">
+        <h2>Reset Your Password</h2>
+        <h4>You must have set your email to reset your password</h4>
+        <form id="reset">
+            <input name="reset_address" type="text" placeholder="enter your email or username" required><br>
+            <input name="reset_config" type="radio" value="Email" checked="checked">
+            <label for="reset_config">Email</label>
+            <input name="reset_config" type="radio" value="Username">
+            <label for="reset_config">Username</label><br>
+            <input type="submit" value="Send Email">
+        </form>
+        <p id="email_error" class="error"></p><br>
+        <form id="reset_code">
+            <input name="reset_code" type="text" placeholder="enter your code here" required><br>
+            <input type="submit" value="Reset Password">
+        </form>
+        <p id="reset_error" class="error"></p><br><br>
+        <div id="change_password" style="visibility: hidden;">
+            <form id="new_password">
+                <input name="create_newpassword" type="text" placeholder="create a new password" required><br>
+                <input name="confirm_newpassword" type="text" placeholder="confirm new password" required><br>
+                <input type="submit" value="Change Password">
+            </form>
+            <p id="newpassword_error" class="error"></p>
+        </div>
+        </div>
+        <div id="cookie_notice" style="display: none;">
+            <div>We use cookies</div>
+            <h6>We use non-tracking cookies to enhance your experience. By accepting, you agree to our use of cookies and our <a href="statement.html">terms and conditions</a>.</h6>
+            <button>Accept</button>
+            <button>Decline</button>
+        </div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+            authDomain: "chess-10cd9.firebaseapp.com",
+            databaseURL: "https://chess-10cd9.firebaseio.com",
+            projectId: "chess-10cd9",
+            storageBucket: "chess-10cd9.appspot.com",
+            messagingSenderId: "897666750783",
+            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+            measurementId: "G-H57J99DFNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        firebase.analytics();
+        
+
+    </script>
+
+<script src='global.js'></script>
+    <script src='signup.js'></script>
+</body>
+
+</html>

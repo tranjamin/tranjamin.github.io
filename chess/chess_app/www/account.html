@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Account</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link type="text/css" href="account.css" rel="stylesheet">
+    <link type="text/css" href="global.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+        <link rel="icon" href="favicon4.png" type='image/x-icon'/>
+    <meta charset="utf8">
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+    
+            <li><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a></li>
+            <li><a href="account.html" style="text-decoration: none; color: white;">My Games</a></li>
+            <li><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a>
+            </li>
+            <li><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></li>
+            <li><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></li>
+            <li><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br></a></li>
+        </ul>
+
+    </div>        
+    <div id="copyright">
+        &copy Benjamin Tran 2020<br>
+        Powered by Github and Google Firebase
+    </div>
+    <div id="overlay">
+        <h2>My Account</h2>
+        <ul id="rules_nav">
+            <li class="table_select">Information</li>
+            <li>Current Games</li>
+            <li>Invites</li>
+            <li>Completed Games</li>
+            <li>Settings</li>
+
+        </ul>
+        <div class="rules" id="info">
+            <p id="username"></p>
+            <p id="email"></p>
+            <div id="stats">
+                <div id="win">Won: <p id="wins"></p>
+                </div>
+                <div id="loss">Lost: <p id="losses"></p>
+                </div>
+                <div id="draw">Drew: <p id="draws"></p>
+                </div>
+            </div>
+            <div id="percent">Win/Loss Percentage: <p id="percents"></p>
+            </div>
+            <div id="ranking">Elo Ranking: <p id="rankings"></p>
+            </div>
+        </div>
+        <div class="rules" id="load_current">
+            <form id='search_current'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Mode</th>
+                    <th>Play as</th>
+                    <th>Ranked</th>
+                    <th>Time</th>
+                </tr>
+            </table>
+            <div id="private_error"></div>
+        </div>
+        <div class="rules" id="load_invite">
+            <form id='search_invite'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Mode</th>
+                    <th>Play as</th>
+                    <th>Ranked</th>
+                    <th>Time</th>
+                </tr>
+            </table>
+        </div>
+        <div class="rules" id="load_past">
+            <form id='search_past'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Mode</th>
+                    <th>Play as</th>
+                    <th>Ranked</th>
+                    <th>Time</th>
+                </tr>
+            </table>
+        </div>
+        <div class="rules" id="settings">
+            <br>
+                <form>
+                    <label for="confirm">Enter Your Password to Proceed</label><br>
+                    <input name="confirm" type='password' required><br>
+                    <input type="submit" value="Proceed">
+                </form>
+                <p style="width: 100%; text-align: center; color: red;"></p>
+            <br><br><br>
+            <form style="visibility: hidden;">
+                <label for="username">Username: </label>
+                <input name="username" type="text" value="">
+                <input type="submit" value="Change">
+            </form>
+            <form style="display: none;"><input type="submit" value="Cancel"></form><br>
+            <p style="width: 100%; text-align: center; color: red;"></p>
+            <br>
+            <form style="visibility: hidden;">
+                <label for="email">Email: </label>
+                <input name="email" type="text" value="">
+                <input type="submit" value="Change">
+            </form>
+            <form style="display: none;"><input type="submit" value="Cancel"></form><br>
+            <p style="width: 100%; text-align: center; color: red;"></p>
+            <br>
+            <form style="visibility: hidden;">
+                <label for="password">Password: ******</label>
+                <input type="submit" value="Change">
+            </form>
+            <form style="display: none;"><input type="submit" value="Cancel"></form><br>
+            <p style="width: 100%; text-align: center; color: red;"></p>
+    </div></div>
+    <div id="cookie_notice" style="display: none;">
+        <div>We use cookies</div>
+        <h6>We use non-tracking cookies to enhance your experience. By accepting, you agree to our use of cookies and our <a href="statement.html">terms and conditions</a>.</h6>
+        <button>Accept</button>
+        <button>Decline</button>
+    </div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+            authDomain: "chess-10cd9.firebaseapp.com",
+            databaseURL: "https://chess-10cd9.firebaseio.com",
+            projectId: "chess-10cd9",
+            storageBucket: "chess-10cd9.appspot.com",
+            messagingSenderId: "897666750783",
+            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+            measurementId: "G-H57J99DFNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        firebase.analytics();
+
+    </script>
+
+<script src='global.js'></script>
+    <script src='account.js'></script>
+</body>
+
+</html>

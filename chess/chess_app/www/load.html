@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Join Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link type="text/css" href="load.css" rel="stylesheet">
+    <link type="text/css" href="global.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="favicon4.png" type='image/x-icon'/>
+    <meta charset="utf8">
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+    
+            <li><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a></li>
+            <li><a href="account.html" style="text-decoration: none; color: white;">My Games</a></li>
+            <li><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a>
+            </li>
+            <li><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></li>
+            <li><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></li>
+            <li><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br></a></li>
+        </ul>
+    </div>
+    <div id="copyright">
+        &copy Benjamin Tran 2020<br>
+        Powered by Github and Google Firebase
+    </div>
+    <div id="overlay">
+        <h2>Join Game</h2>
+        <ul id="rules_nav">
+            <li class="table_select">Search for Game</li>
+            <li>Join a Private Game</li>
+            <li>Observe a Game</li>
+        </ul>
+        <div class="rules" id="load_public">
+            <form id='search_public'>
+                <div>
+                <label for="search">Enter Keywords and Adjust Precision</label><br>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment"><br><br>
+                <label for="search">Filter Opponents and Set Min and Max Ranking</label><br>
+                <input type="text" placeholder="Search for opponent..." name="opponent_search">
+                <input type="number" min=0 max=3900 step=1 name="lbound">
+                <input type="number" min=1 max=4000 step=1 name="ubound">
+                </div>
+                <button>&#8635</button>
+            </form>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Opponent</th>
+                    <th>Ranking</th>
+                    <th><span name="back">&#9664 </span><span name="current">Variation</span><span name="forward"> &#9654</span></th>
+                    <th><span name="back">&#9664 </span><span name="current">Play As</span><span name="forward"> &#9654</span></th>
+                    <th><span name="back">&#9664 </span><span name="current">Mode</span><span name="forward"> &#9654</span></th>
+                    <th><span name="back">&#9664 </span><span name="current">Time Control</span><span name="forward"> &#9654</span></th>
+                </tr>
+            </table>
+        </div>
+        <div class="rules" id="load_private">
+            <form id='search_private'>
+                <input type="text" placeholder="Enter the name of a private game" name="search">
+                <input type="submit" value="Join">
+            </form>
+            <div id="private_error"></div>
+        </div>
+        <div class="rules" id="load_observer">
+            <form id='search_observer'>
+                <input type="text" placeholder="Search..." name="search">
+                <input type="number" min=0 max=1 step=0.005 name="increment">
+            </form>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>White User</th>
+                    <th>Black User</th>
+                    <th>Variation</th>
+                    <th>Mode</th>
+                    <th>Time</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="cookie_notice" style="display: none;">
+        <div>We use cookies</div>
+        <h6>We use non-tracking cookies to enhance your experience. By accepting, you agree to our use of cookies and our <a href="statement.html">terms and conditions</a>.</h6>
+        <button>Accept</button>
+        <button>Decline</button>
+    </div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+            authDomain: "chess-10cd9.firebaseapp.com",
+            databaseURL: "https://chess-10cd9.firebaseio.com",
+            projectId: "chess-10cd9",
+            storageBucket: "chess-10cd9.appspot.com",
+            messagingSenderId: "897666750783",
+            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+            measurementId: "G-H57J99DFNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        firebase.analytics();
+
+    </script>
+
+<script src='global.js'></script>
+    <script src='load.js'></script>
+</body>
+
+</html>

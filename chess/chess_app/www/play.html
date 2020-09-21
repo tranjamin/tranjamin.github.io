@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chess</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link type="text/css" href="play.css" rel="stylesheet">
+    <link type="text/css" href="global.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+        <link rel="icon" href="favicon4.png" type='image/x-icon'/>
+    <meta charset="utf8">
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+    
+            <li><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a></li>
+            <li><a href="account.html" style="text-decoration: none; color: white;">My Games</a></li>
+            <li><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a>
+            </li>
+            <li><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></li>
+            <li><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></li>
+            <li><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br></a></li>
+        </ul>
+
+    </div>
+    <div id="copyright">
+        &copy Benjamin Tran 2020<br>
+        Powered by Github and Google Firebase
+    </div>
+    <div id="message_container">
+    <div id="chat_title">CHAT</div>
+    <div id="text"></div>
+        <form id="submit_message">
+            <input type="text" placeholder="Write a message">
+        </form>
+    </div>
+    <canvas id="canvas1" style="border: white 2pt solid">
+    </canvas>
+    <icon id="close_cross" style="display: none;">x</icon>
+    <div id="closable_interface" style="display: none;">
+        <div>You Won</div>
+        <div><button>Rematch</button></div>
+    </div>
+    <div id="interface">
+        <div class="top">
+            <div id="opposite_name">Anon</div>
+            <div id="opposite_time"></div>
+            <div id="opposite_box"></div>
+            <div id="status">Game in Progress...</div>
+            <table>
+                <tr><td>Moves</td><td>Game Info</td></tr>
+            </table>
+            <div id="tracking">
+                <table></table>
+            </div>
+            <div id="info" style="display: none;">
+                Game Name: <br>
+                Mode: <br>
+                Rated: <br>
+                Time Format: <br>
+            </div>
+        </div>
+        <div class="bottom">
+            <div id="post_options">
+                <button title="Rematch">Rematch</button>
+            </div>
+            <div id="options">
+                <button title="Previous Move">&#11164</button>
+                <button title="Resign" style="color: red;">&#9873</button>
+                <button title="Offer Draw" style="color: red;">&#129309</button>
+                <button title="Next Move">&#11166</button></br>
+                <button title="First Move" style="letter-spacing: -10px;">&#11164&#11164</button>
+                <button title="Request Undo">&#10226</button>
+                <button title="Submit Feedback">&#9997</button>
+                <button title="Last Move" style="letter-spacing: -10px;">&#11166&#11166</button>
+            </div>
+            <div id="self_box"></div>
+            <div id="self_time"></div>
+            <div id="self_name">Anon</div>
+        </div>
+    </div>
+    <div id="cookie_notice" style="display: none;">
+        <div>We use cookies</div>
+        <h6>We use non-tracking cookies to enhance your experience. By accepting, you agree to our use of cookies and our <a href="statement.html">terms and conditions</a>.</h6>
+        <button>Accept</button>
+        <button>Decline</button>
+    </div>
+    <image src="wrook.png" class="piece" id="wR" style="display: none;"></image>
+    <image src="wknight.png" class="piece" id="wN" style="display: none;"></image>
+    <image src="wbishop.png" class="piece" id="wB" style="display: none;"></image>
+    <image src="wqueen.png" class="piece" id="wQ" style="display: none;"></image>
+    <image src="wking.png" class="piece" id="wK" style="display: none;"></image>
+    <image src="wpawn.png" class="piece" id="wP" style="display: none;"></image>
+    <image src="brook.png" class="piece" id="bR" style="display: none;"></image>
+    <image src="bknight.png" class="piece" id="bN" style="display: none;"></image>
+    <image src="bbishop.png" class="piece" id="bB" style="display: none;"></image>
+    <image src="bqueen.png" class="piece" id="bQ" style="display: none;"></image>
+    <image src="bking.png" class="piece" id="bK" style="display: none;"></image>
+    <image src="bpawn.png" class="piece" id="bP" style="display: none;"></image>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBagseJgZVZD-1eehTc8oAAUMLaBw99Cms",
+            authDomain: "chess-10cd9.firebaseapp.com",
+            databaseURL: "https://chess-10cd9.firebaseio.com",
+            projectId: "chess-10cd9",
+            storageBucket: "chess-10cd9.appspot.com",
+            messagingSenderId: "897666750783",
+            appId: "1:897666750783:web:fbd04b08c7d87550289b8a",
+            measurementId: "G-H57J99DFNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        firebase.analytics();
+
+    </script>
+
+<script src='global.js'></script>
+    <script src='play.js'></script>
+</body>
+
+</html>

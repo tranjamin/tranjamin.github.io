@@ -1,0 +1,247 @@
+#overlay {
+    background-color: rgb(41, 33, 33);
+    position: absolute;
+    z-index: 10;
+    color: white;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#overlay h2 {
+    text-align: center;
+    font-family: 'Philosopher';
+}
+
+#rules_nav {
+    font-family: "Raleway";
+    text-decoration: none;
+    list-style: none;
+    padding: 0 0;
+    margin: 0 2.5%;
+    text-align: center;
+    text-indent: 0;
+    position: absolute;
+    left: 0;
+    width: 95%;
+    padding: 0;
+    display: grid;
+    grid-template-areas: 'li1 li2 li3';
+    background-color: rgba(255, 102, 0, 0.192);
+}
+
+.table_select {
+    background-color: rgba(0, 255, 0, 0.192)
+}
+
+#rules_nav li {
+    text-indent: 0;
+    padding: 2% 0;
+    cursor: pointer;
+}
+
+.rules {
+    display: block;
+    width: 95%;
+    background-color: rgba(75, 68, 68, 0.466);
+    position: absolute;
+    top: 13.5%;
+    left: 2.5%;
+    min-height: 80%;
+}
+
+table {
+    width: 100%;
+}
+
+table tr td:nth-of-type(1) {
+    width: 20%;
+}
+table tr td:nth-of-type(2) {
+    width: 10%;
+}
+table tr td:nth-of-type(3) {
+    width: 5%;
+}
+table tr td:nth-of-type(4) {
+    width: 15%;
+}
+table tr td:nth-of-type(5) {
+    width: 10%;
+}
+table tr td:nth-of-type(6) {
+    width: 10%;
+}
+table tr td:nth-of-type(7) {
+    width: 15%;
+}
+
+table tr {
+    height: 100%;
+    padding: 20% 0;
+    line-height: 200%;
+}
+table tr:first-of-type {
+    line-height: 100%;
+}
+
+table th {
+    background-color: rgba(255, 136, 0, 0.61);
+    cursor: pointer;
+}
+
+table th span:first-of-type {
+    display: inline-block;
+    width: 20%;
+
+}
+table th span:nth-of-type(2) {
+    display: inline-block;
+    width: 60%;
+    overflow: hidden;
+    word-wrap: none;
+}
+table th span:last-of-type {
+    display: inline-block;
+    width: 20%;
+}
+
+table th:nth-last-of-type(1),table th:nth-last-of-type(3),table th:nth-last-of-type(5),table th:nth-last-of-type(7) {
+    background-color: rgba(255, 136, 0, 0.452);
+}
+
+table td {
+    padding: none;
+    margin: none;
+}
+
+#search_public input[type="text"] {
+    line-height: 200%;
+    font-weight: 500;
+    font-family: 'Raleway';
+}
+#search_public input[type="number"] {
+    line-height: 200%;
+    font-weight: bolder;
+    font-family: 'Raleway';
+    width: 50px;
+}
+
+#search_public {
+    height: 300%;
+    display: grid;
+    grid-template-columns: 19% 19% 19% 19% 19%;
+    grid-template-rows: auto;
+    grid-template-areas: "input1 input2 input3 input4 input5" 
+                         "search search search search reload";
+    padding-top: 1%;
+    justify-content: space-between;
+}
+#search_public div {
+    /*border-left: 1.5pt solid black;*/
+    /*border-right: 1.5pt solid black;*/
+    text-align: center;
+
+}
+#search_public div:last-of-type {
+    grid-area: 'search'; 
+    width: 526%;
+    padding: 10% 0;
+    border: none;
+    display: inline-block;
+}
+#search_public div:nth-of-type(3) input {
+    width: 37%;
+    border: none;
+    background-color: rgb(20, 18, 22);
+    color: white;
+    text-align: right;
+    font-family: 'Raleway';
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    padding: none;
+    margin: none;
+}
+
+#search_public button:first-of-type {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    width: 40%;
+    border: none;
+    font-size: 200%;
+    cursor: pointer;
+    position: relative;
+    left: 300%;
+    animation: spin 0.5s linear;
+}
+
+
+#search_public button:first-of-type:hover {
+    animation-play-state: paused;
+}
+
+/* @keyframes spin { 100% {transform:rotate(360deg); } } */
+
+#search_public div label {
+    display: block;
+    width: 100%;
+    padding: 2% 0;
+    margin: 0;
+    background-color: rgba(70, 44, 27, 0.644);
+}
+#search_public div:last-of-type label {
+    background-color: rgba(0,0,0,0);
+    padding: 0;
+    display: inline;
+    
+}
+#search_public div span {
+    display: inline-block;
+    width: 20%;
+    background-color: rgba(87, 53, 31, 0.644);
+    padding: 2% 0;
+    margin: none;
+    cursor: pointer;
+    border: none;
+    line-height: 100%;
+}
+#search_public div span:nth-of-type(2) {
+    background-color: rgba(87, 53, 31, 0.644);
+    display: inline-block;
+    width: 60%;
+    padding: 2% 0;
+    margin: none;
+}
+
+#search_public input:nth-of-type(2) {
+    width: 50px;
+}
+
+#search_private {
+    padding: 10%;
+    width: 80%;
+    height: 20%;
+    overflow: unset;
+}
+#search_private input:first-of-type {
+    width: 100%;
+    line-height: 200%;
+    font-size: 120%;
+    font-family: "Raleway"
+}
+#search_private input:last-of-type {
+    width: 101%;
+    border: none;
+    text-align: center;
+    margin-top: 1.5%;
+    font-size: 120%;
+    font-family: "Raleway"
+}
+
+#private_error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    font-size: 120%;
+}

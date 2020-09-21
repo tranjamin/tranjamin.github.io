@@ -1,0 +1,268 @@
+.piece {
+  position: relative;
+  z-index: 10;
+}
+
+#canvas1 {
+  position: absolute;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin: none;
+  padding: none;
+}
+
+#message_container {
+  position: absolute;
+  display: block;
+}
+
+#chat_title {
+  background-color: rgba(51, 42, 42, 0.589);
+  text-align: center;
+  font-size: 1.7em;
+  width: 100%;
+  height: 10%;
+  line-height: 260%;
+  z-index: 2;
+  font-weight: bold;
+  font-family: "Arial";
+  color: white;
+}
+#submit_message {
+  position: absolute;
+  bottom: 0;
+  z-index: 4;
+  overflow: hidden;
+  width: 100%;
+}
+#submit_message input {
+  width: 100%;
+}
+body form input:first-of-type {
+  background-color: rgb(184, 135, 45);
+  border: none;
+}
+#text {
+    background-color: rgba(155, 149, 149, 0.514);
+    width: 100%;
+    height: 90%;
+    color: white;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+#text:hover {
+  overflow-y: scroll;
+}
+
+#options {
+  background-color: grey;
+  position: absolute;
+}
+
+#options button {
+  display: block;
+  width: 80%;
+  position: relative;
+  right: -10%;
+  border: none;
+  height: 20%;
+  margin-bottom: 2.5%;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 200%;
+}
+
+#overlay {
+  background-color: red;
+  position: absolute;
+  z-index: 10;
+}
+
+#overlay h2 {
+  text-align: center;
+  font-family: "Philosopher";
+}
+#overlay h4 {
+  text-align: center;
+  font-family: "Raleway";
+}
+
+#overlay input[type="text"] {
+  font-size: 200%;
+  text-align: center;
+  background-color: red;
+  margin-bottom: 2%;
+  text-decoration-line: underline;
+  color: rgba(53, 52, 52, 0.527);
+}
+#overlay input[type="submit"] {
+  background-color: rgb(255, 115, 0);
+  margin-bottom: 20%;
+  text-align: right;
+  font-family: "Raleway";
+  border: none;
+  font-size: 100%;
+}
+
+#login {
+  position: absolute;
+  bottom: 5%;
+  left: 15%;
+  display: inline-block;
+}
+
+#signup {
+  position: absolute;
+  bottom: 0%;
+  right: 15%;
+}
+
+#logout {
+  position: fixed;
+  bottom: 2%;
+  right: 0.5%;
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+#interface {
+  background-color: rgba(30, 30, 30, 1);
+  position: absolute;
+  color: rgb(255, 255, 255);
+  font-family: "Raleway";
+  font-size: 2em;
+}
+
+#interface div {
+  width: 100%;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+}
+.top {
+  position: absolute;
+  top: 0;
+}
+
+#options,
+#promote,
+#beirut_button {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  position: absolute;
+  padding: 0;
+  text-align: center;
+}
+
+#options button,
+#closable_interface button {
+  width: 23%;
+  font-size: 75%;
+  display: inline-block;
+  cursor: pointer;
+  margin: 1% 0;
+  padding: 0;
+  position: relative;
+  right: 0%;
+}
+#promote button {
+  width: 23%;
+  font-size: 75%;
+  display: inline-block;
+  cursor: pointer;
+  margin: 1% 0.75%;
+  padding: 0;
+  position: relative;
+  right: 0%;
+}
+#beirut_button button {
+  width: 97%;
+  font-size: 75%;
+  display: inline-block;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  color: black;
+  border: 0;
+  font-family: "Raleway";
+}
+
+#self_box icon,
+#opposite_box icon {
+  cursor: pointer;
+}
+
+#tracking,
+#info {
+  overflow: scroll;
+  font-family: "Times New Roman";
+  font-size: 75%;
+}
+.top > table {
+  background-color: rgb(68, 54, 54);
+  text-align: center;
+  width: 100%;
+  font-size: 70%;
+}
+.top > table tr td {
+  width: 50%;
+  cursor: pointer;
+}
+
+#status {
+  overflow: hidden;
+  text-align: center;
+}
+
+#closable_interface {
+  position: absolute;
+  z-index: 1;
+  color: white;
+  font-family: "Philosopher";
+  font-size: 200%;
+  border-radius: 1%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+#close_cross {
+  position: absolute;
+  z-index: 2;
+  font-family: "Philosopher";
+  color: white;
+  font-size: 150%;
+  cursor: pointer;
+}
+
+#closable_interface button {
+  background-color: white;
+  border: none;
+  width: 96%;
+  margin: 2%;
+  overflow: hidden;
+}
+
+#post_options button {
+  font-size: 75%;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  width: 98%;
+  position: relative;
+  left: 1%;
+  border: none;
+  background-color: white;
+}
+#post_options {
+  position: absolute;
+  display: none;
+}
