@@ -57,22 +57,39 @@ table {
 table tr td:nth-of-type(1) {
     width: 20%;
 }
-table tr td:nth-of-type(2) {
+#load_public table tr td:nth-of-type(2) {
     width: 10%;
+}
+#load_observer table tr td:nth-of-type(2) {
+    width: 12.5%;
 }
 table tr td:nth-of-type(3) {
     width: 5%;
 }
-table tr td:nth-of-type(4) {
+#load_observer table tr td:nth-last-of-type(4) {
+    width: 12.5%;
+}
+#load_observer table tr td:nth-of-type(5) {
+    width: 5%;
+}
+
+#load_public table tr td:nth-of-type(4) {
     width: 15%;
 }
-table tr td:nth-of-type(5) {
+
+#load_public table tr td:nth-last-of-type(3) {
     width: 10%;
 }
-table tr td:nth-of-type(6) {
+
+#load_observer table tr td:nth-last-of-type(3) {
+    width: 15%;
+}
+
+table tr td:nth-last-of-type(2) {
     width: 10%;
 }
-table tr td:nth-of-type(7) {
+
+table tr td:nth-last-of-type(1) {
     width: 15%;
 }
 
@@ -115,19 +132,19 @@ table td {
     margin: none;
 }
 
-#search_public input[type="text"] {
+#search_public input[type="text"], #search_observer input[type="text"]{
     line-height: 200%;
     font-weight: 500;
     font-family: 'Raleway';
 }
-#search_public input[type="number"] {
+#search_public input[type="number"], #search_observer input[type="number"] {
     line-height: 200%;
     font-weight: bolder;
     font-family: 'Raleway';
     width: 50px;
 }
 
-#search_public {
+#search_public, #search_observer {
     height: 300%;
     display: grid;
     grid-template-columns: 19% 19% 19% 19% 19%;
@@ -137,20 +154,20 @@ table td {
     padding-top: 1%;
     justify-content: space-between;
 }
-#search_public div {
+#search_public div, #search_observer div {
     /*border-left: 1.5pt solid black;*/
     /*border-right: 1.5pt solid black;*/
     text-align: center;
 
 }
-#search_public div:last-of-type {
+#search_public div:last-of-type, #search_observer div:last-of-type {
     grid-area: 'search'; 
     width: 526%;
     padding: 10% 0;
     border: none;
     display: inline-block;
 }
-#search_public div:nth-of-type(3) input {
+#search_public div:nth-of-type(3) input, #search_observer div:nth-of-type(3) input {
     width: 37%;
     border: none;
     background-color: rgb(20, 18, 22);
@@ -164,7 +181,7 @@ table td {
     margin: none;
 }
 
-#search_public button:first-of-type {
+#search_public button:first-of-type, #search_observer button:first-of-type {
     background-color: rgba(0,0,0,0);
     color: white;
     width: 40%;
@@ -173,30 +190,26 @@ table td {
     cursor: pointer;
     position: relative;
     left: 300%;
-    animation: spin 0.5s linear;
-}
-
-
-#search_public button:first-of-type:hover {
+    animation: spin 0.8s linear infinite;
     animation-play-state: paused;
 }
 
-/* @keyframes spin { 100% {transform:rotate(360deg); } } */
+@keyframes spin { 100% {transform:rotate(360deg); } }
 
-#search_public div label {
+#search_public div label, #search_observer div label {
     display: block;
     width: 100%;
     padding: 2% 0;
     margin: 0;
     background-color: rgba(70, 44, 27, 0.644);
 }
-#search_public div:last-of-type label {
+#search_public div:last-of-type label, #search_observer div:last-of-type label  {
     background-color: rgba(0,0,0,0);
     padding: 0;
     display: inline;
     
 }
-#search_public div span {
+#search_public div span, #search_observer div span {
     display: inline-block;
     width: 20%;
     background-color: rgba(87, 53, 31, 0.644);
@@ -206,7 +219,7 @@ table td {
     border: none;
     line-height: 100%;
 }
-#search_public div span:nth-of-type(2) {
+#search_public div span:nth-of-type(2), #search_observer div span:nth-of-type(2) {
     background-color: rgba(87, 53, 31, 0.644);
     display: inline-block;
     width: 60%;
@@ -214,7 +227,7 @@ table td {
     margin: none;
 }
 
-#search_public input:nth-of-type(2) {
+#search_public input:nth-of-type(2), #search_observer input:nth-of-type(2) {
     width: 50px;
 }
 

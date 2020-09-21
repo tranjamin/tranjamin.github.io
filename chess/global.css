@@ -5,6 +5,15 @@ html {
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 68, 0, 0.562) rgba(75, 68, 68, 0.05);
+    
+}
+* ::-webkit-scrollbar {
+    width: 6px;
+    background-color: rgba(75, 68, 68, 0.05);
+}
+
+* ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 68, 0, 0.562);
 }
 
 #nav {

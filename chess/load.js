@@ -6,12 +6,15 @@ var time_control_array = ['Time Control','None','Timed','Classic', 'Rapid', 'Bli
 var mode_array = ['Mode', 'Ranked', 'Casual'];
 var game_mode = ['Variation','Classic','Chess960','Antichess','Armageddon','Atomic','Beirut','Crazyhouse','3 Check','Checkless','Circe','Dusanny\'s','KOTH','Really Bad','Schrodinger'];
 var play_as = ['Play As', 'White', 'Black', 'Random'];
+
 var selected_time_control = "Time Control";
 var selected_mode = "Mode";
 var selected_game_mode = "Variation";
 var selected_play_as = "Play As";
 
-var opponent_ranking_range = ["",""];
+var selected_time_control_array_observer = 'Time Control';
+var selected_mode_array_observer = 'Mode';
+var selected_game_mode_observer = 'Variation';
 
 function formatFilter(e, array) {
 	if (e.target.getAttribute('name') == 'back') {
@@ -43,10 +46,26 @@ $('search_public').nextElementSibling.getElementsByTagName('th')[6].addEventList
 })
 
 
+$('search_observer').nextElementSibling.getElementsByTagName('th')[5].addEventListener('click', e => {
+	console.log(e.target.parentElement);
+	formatFilter(e, game_mode_observer);
+})
+$('search_observer').nextElementSibling.getElementsByTagName('th')[6].addEventListener('click', e => {
+	console.log(e.target.parentElement);
+	formatFilter(e, mode_array_observer);
+})
+$('search_observer').nextElementSibling.getElementsByTagName('th')[7].addEventListener('click', e => {
+	console.log(e.target.parentElement);
+	formatFilter(e, time_control_array_observer);
+})
+
+
 $('search_public').getElementsByTagName('button')[0].addEventListener('click', e => {
 	e.preventDefault();
+	if (document.getElementById('search_public').getElementsByTagName('button')[0].style['animation-play-state'] != 'running') {
+	document.getElementById('search_public').getElementsByTagName('button')[0].style['animation-play-state'] = 'running';
 	selected_time_control = $('search_public').nextElementSibling.getElementsByTagName('th')[6].getElementsByTagName('span')[1].innerHTML;
-	selected_play_as = $('search_public').nextElementSibling.getElementsByTagName('th')[5].getElementsByTagName('span')[1].innerHTML;
+	selected_mode = $('search_public').nextElementSibling.getElementsByTagName('th')[5].getElementsByTagName('span')[1].innerHTML;
 	selected_game_mode = $('search_public').nextElementSibling.getElementsByTagName('th')[3].getElementsByTagName('span')[1].innerHTML;
 	selected_play_as = $('search_public').nextElementSibling.getElementsByTagName('th')[4].getElementsByTagName('span')[1].innerHTML;
 	if ($('search_public').increment.value != "0") {
@@ -55,6 +74,23 @@ $('search_public').getElementsByTagName('button')[0].addEventListener('click', e
 		else {
 		sortData('public', 'load_public', $('search_public').search.value);
 		}
+	}
+})
+
+$('search_observer').getElementsByTagName('button')[0].addEventListener('click', e => {
+	e.preventDefault();
+	if (document.getElementById('search_observer').getElementsByTagName('button')[0].style['animation-play-state'] != 'running') {
+	document.getElementById('search_observer').getElementsByTagName('button')[0].style['animation-play-state'] = 'running';
+	selected_time_control_observer = $('search_observer').nextElementSibling.getElementsByTagName('th')[7].getElementsByTagName('span')[1].innerHTML;
+	selected_game_mode_observer = $('search_observer').nextElementSibling.getElementsByTagName('th')[5].getElementsByTagName('span')[1].innerHTML;
+	selected_mode_observer = $('search_observer').nextElementSibling.getElementsByTagName('th')[6].getElementsByTagName('span')[1].innerHTML;
+	if ($('search_observer').increment.value != "0") {
+		sortData('observer', 'load_observer', $('search_observer').search.value, $('search_observer').increment.value);
+		}
+		else {
+		sortData('observer', 'load_observer', $('search_observer').search.value);
+		}
+	}
 })
 
 
@@ -160,13 +196,20 @@ function sortData(mode, id, input="", precision=0.3) {
     db.collection('chess').where('visibility', '==', 'Public').where('creation_date','>',new Date(new Date() - 30*24*3600*1000)).orderBy('creation_date','desc').get().then(snapshot => {
         snapshot.forEach(doc => {
 			if (((mode == "observer" && doc.data().white_user != null && doc.data().black_user != null) || 
-				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))) &&
+				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))) && ((mode == "public" &&
 				((selected_play_as == "Play As") || (selected_play_as == "Random" && doc.data().randomised) || (selected_play_as == "White" && doc.data().white_user == null) || (selected_play_as == "Black" && doc.data().black_user == null)) &&
 				((selected_game_mode == "Variation") || (doc.data().mode.indexOf(selected_game_mode) != -1)) &&
 				((selected_mode == "Mode") || (selected_mode == "Casual" && !doc.data().points) || (selected_mode == "Ranked" && doc.data().points)) &&
 				((selected_time_control == "Time Control") || (selected_time_control == "None" && doc.data().white_time == null)) &&
 				(($('search_public').lbound.value == "" && $('search_public').ubound.value == "") || (doc.data().white_user != null ? (parseFloat(doc.data().white_user_elo) <= parseInt($('search_public').ubound.value != "" ? $('search_public').ubound.value : 10000) && parseFloat(doc.data().white_user_elo) >= parseInt($('search_public').lbound.value ? $('search_public').lbound.value : 0)) : (parseFloat(doc.data().black_user_elo) <= parseInt($('search_public').ubound.value != "" ? $('search_public').ubound.value : 10000) && parseFloat(doc.data().black_user_elo) >= parseInt($('search_public').lbound.value ? $('search_public').lbound.value : 0)))) &&
-				($('search_public').opponent_search.value == "" || $('search_public').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user))
+				($('search_public').opponent_search.value == "" || $('search_public').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user))) ||
+				(mode == "observer" &&
+				((selected_game_mode_observer == "Variation") || (doc.data().mode.indexOf(selected_game_mode_observer) != -1)) &&
+				((selected_game_mode_observer == "Mode") || (selected_game_mode_observer == "Casual" && !doc.data().points) || (selected_game_mode_observer == "Ranked" && doc.data().points)) &&
+				((selected_time_control_observer == "Time Control") || (selected_time_control_observer == "None" && doc.data().white_time == null)) &&
+				(($('search_observer').lbound.value == "" && $('search_observer').ubound.value == "") || (doc.data().white_user != null ? (parseFloat(doc.data().white_user_elo) <= parseInt($('search_observer').ubound.value != "" ? $('search_observer').ubound.value : 10000) && parseFloat(doc.data().white_user_elo) >= parseInt($('search_observer').lbound.value ? $('search_observer').lbound.value : 0)) : (parseFloat(doc.data().black_user_elo) <= parseInt($('search_observer').ubound.value != "" ? $('search_observer').ubound.value : 10000) && parseFloat(doc.data().black_user_elo) >= parseInt($('search_observer').lbound.value ? $('search_observer').lbound.value : 0)))) &&
+				($('search_observer').opponent_search.value == "" || $('search_observer').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user)))
+				)
 			) {
             if (
                 (relevancy.weight(doc.data().name,input) >= precision || input == ""))
@@ -209,11 +252,14 @@ function sortData(mode, id, input="", precision=0.3) {
 				new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${data.white_user ? data.white_user_elo : data.black_user_elo}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
 			}
 			else {
-				new_table.innerHTML = `<td>${data.name}</td><td>${data.white_user}</td><td>${data.black_user}</td><td>${variation}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;	
+				new_table.innerHTML = `<td>${data.name}</td><td>${data.white_user}</td><td>${data.white_user_elo}</td><td>${data.black_user}</td><td>${data.black_user_elo}</td><td>${variation}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;	
 			}
             }
 
-    })
+    }).then(() => {
+	if (mode == "public") {document.getElementById('search_public').getElementsByTagName('button')[0].style['animation-play-state'] = 'paused';}
+	else if (mode == "observer") {document.getElementById('search_observer').getElementsByTagName('button')[0].style['animation-play-state'] = 'paused';}
+	})
 }
 
 $('load_public').getElementsByTagName('table')[0].addEventListener('click', e => {
