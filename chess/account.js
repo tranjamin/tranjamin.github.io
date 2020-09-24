@@ -2,6 +2,9 @@
 // var user_id = "";
 var email;
 
+var current_games = [];
+var past_games = [];
+
 update_graphics();
 update_nav_graphics();
 window.addEventListener('resize', e => {
@@ -14,6 +17,8 @@ window.addEventListener('load', e => {
 })
 
 function update_graphics() {
+
+
 	var overlay = $('overlay');
 	overlay.style.height = window.innerHeight * 0.95 + "px";
 	overlay.style.width = overlay.style.height.slice(0, -2) * 1.2 + "px";
@@ -22,17 +27,22 @@ function update_graphics() {
 
 	var rules = $('rules_nav');
 	rules.style.width = overlay.getBoundingClientRect().width;
+	if(!user_id) {
+		$('rules_nav').getElementsByTagName('li')[0].style.width = parseFloat(getComputedStyle($('rules_nav')).width)/2 + "px";
+		$('rules_nav').getElementsByTagName('li')[1].style.width = parseFloat(getComputedStyle($('rules_nav')).width)/2 + "px";
+		}
+
 	document.getElementsByClassName('rules')[0].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
-	document.getElementsByClassName('rules')[1].style.top = $('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
-	document.getElementsByClassName('rules')[2].style.top = $('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
-	document.getElementsByClassName('rules')[3].style.top = $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
-	document.getElementsByClassName('rules')[4].style.top = $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
+	document.getElementsByClassName('rules')[1].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
+	document.getElementsByClassName('rules')[2].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
+	document.getElementsByClassName('rules')[3].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
+	document.getElementsByClassName('rules')[4].style.top = $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom - $('overlay').getBoundingClientRect().top + "px";
 
 	document.getElementsByClassName('rules')[0].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
-	document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[1].getBoundingClientRect().bottom + "px";
-	document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[2].getBoundingClientRect().bottom + "px";
-	document.getElementsByClassName('rules')[3].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[3].getBoundingClientRect().bottom + "px";
-	document.getElementsByClassName('rules')[4].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[4].getBoundingClientRect().bottom + "px";
+	document.getElementsByClassName('rules')[1].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
+	document.getElementsByClassName('rules')[2].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
+	document.getElementsByClassName('rules')[3].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
+	document.getElementsByClassName('rules')[4].style.maxHeight = $('overlay').style.height.slice(0, -2) - $('rules_nav').getElementsByTagName('li')[0].getBoundingClientRect().bottom + "px";
 
 }
 
@@ -41,77 +51,79 @@ $('load_past').style.display = "none";
 $('load_invite').style.display = "none";
 $('settings').style.display = "none";	
 
-$('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e => {
-	$('load_current').style.display = "none";
-	$('load_past').style.display = "none";
-	$('load_invite').style.display = "none";
-	$('info').style.display = "unset";
-	$('settings').style.display = "none";	
-	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
-})
-$('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e => {
-	$('load_past').style.display = "none";
-	$('load_invite').style.display = "none";
-	$('info').style.display = "none";
-	$('load_current').style.display = "unset";
-	$('settings').style.display = "none";	
-	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
-	e.target.setAttribute('class', 'table_select');
-})
-$('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e => {
-	$('load_past').style.display = "none";
-	$('load_current').style.display = "none";
-	$('info').style.display = "none";
-	$('load_invite').style.display = "unset";
-	$('settings').style.display = "none";	
-	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
-	e.target.setAttribute('class', 'table_select');
-})
-$('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
-	$('load_invite').style.display = "none";
-	$('load_current').style.display = "none";
-	$('info').style.display = "none";
-	$('load_past').style.display = "unset";
-	$('settings').style.display = "none";	
-	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
-	e.target.setAttribute('class', 'table_select');
-})
-$('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
-	$('load_invite').style.display = "none";
-	$('load_current').style.display = "none";
-	$('info').style.display = "none";
-	$('load_past').style.display = "none";
-	$('settings').style.display = "unset";	
-	e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
-	e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
-	e.target.setAttribute('class', 'table_select');
-	db.collection('account').doc(user_id).get().then(doc => {
-		email = doc.data().email
-		$('settings').getElementsByTagName('form')[1].innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
-		$('settings').getElementsByTagName('form')[3].innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
-	})
-})
 
 if (user_id) {
+	$('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e => {
+		$('load_current').style.display = "none";
+		$('load_past').style.display = "none";
+		$('load_invite').style.display = "none";
+		$('info').style.display = "unset";
+		$('settings').style.display = "none";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+	})
+	$('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e => {
+		$('load_past').style.display = "none";
+		$('load_invite').style.display = "none";
+		$('info').style.display = "none";
+		$('load_current').style.display = "unset";
+		$('settings').style.display = "none";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+		e.target.setAttribute('class', 'table_select');
+	})
+	$('rules_nav').getElementsByTagName('li')[2].addEventListener('click', e => {
+		$('load_past').style.display = "none";
+		$('load_current').style.display = "none";
+		$('info').style.display = "none";
+		$('load_invite').style.display = "unset";
+		$('settings').style.display = "none";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+		e.target.setAttribute('class', 'table_select');
+	})
+	$('rules_nav').getElementsByTagName('li')[3].addEventListener('click', e => {
+		$('load_invite').style.display = "none";
+		$('load_current').style.display = "none";
+		$('info').style.display = "none";
+		$('load_past').style.display = "unset";
+		$('settings').style.display = "none";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+		e.target.setAttribute('class', 'table_select');
+	})
+	$('rules_nav').getElementsByTagName('li')[4].addEventListener('click', e => {
+		$('load_invite').style.display = "none";
+		$('load_current').style.display = "none";
+		$('info').style.display = "none";
+		$('load_past').style.display = "none";
+		$('settings').style.display = "unset";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[2].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[3].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[4].setAttribute('class', '');
+		e.target.setAttribute('class', 'table_select');
+		db.collection('account').doc(user_id).get().then(doc => {
+			email = doc.data().email
+			$('settings').getElementsByTagName('form')[1].innerHTML = `<label for="username">Username: ${username}</label><input type="submit" value="Change">`
+			$('settings').getElementsByTagName('form')[3].innerHTML = `<label for="email">Email: ${email}</label><input type="submit" value="Change">`
+		})
+	})
+	
+
 	sortData('current', 'load_current');
 	sortData('invites', 'load_invite');
 	sortData('completed', 'load_past');
@@ -267,73 +279,6 @@ db.collection('chess').onSnapshot(ref => {
 	}
 })
 
-function sortData(conditional, id, input = "", precision = 0.3) {
-	var data_arr = {};
-	var doc_name = [];
-	db.collection('chess').get().then(snapshot => {
-		snapshot.forEach(doc => {
-			if (
-				(relevancy.weight(doc.data().name, input) >= precision || input == "") && ((conditional == "invites" && doc.data().invited_user == username && (doc.data().white_user == null || doc.data().black_user == null)) ||
-					(conditional == "current" && !doc.data().result && (doc.data().white_user == username || doc.data().black_user == username)) ||
-					(conditional == "completed" && doc.data().result && (doc.data().white_user == username || doc.data().black_user == username))
-				)) {
-				data_arr[doc.data().name] = doc.data();
-				doc_name.push(doc.data().name);
-			}
-		})
-	}).then(docRef => {
-		doc_name = relevancy.sort(doc_name, input);
-		doc_name.splice(10, doc_name.length - 1);
-		var header = $(id).getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
-		if (conditional == "current") {
-			header.innerHTML = "<th>Name</th><th>Opponent</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time Left</th>";
-		}
-		else if (conditional == "completed") {
-			header.innerHTML = "<th>Name</th><th>Opponent</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Result</th>";
-		}
-		$(id).getElementsByTagName('table')[0].innerHTML = "";
-		$(id).getElementsByTagName('table')[0].appendChild(header);
-		for (var element of doc_name) {
-			var data = data_arr[element];
-			var new_table = $(id).getElementsByTagName('table')[0].insertRow();
-			var play_as = data.randomised ? 'Random' : null;
-			var variation = data.mode;
-			if (data.mode.indexOf(' Chess') > 0) {
-				variation = data.mode.split(' Chess')[0];
-			}
-			if (data.mode.indexOf('Hill') != -1) {
-				variation = 'KOTH';
-			}
-			if (data.mode.indexOf('Check Checkmate') != -1) {
-				variation = '3 Check';
-			}
-			var time = null;
-			if (data.white_time) {
-				time = "";
-				for (var index of data.black_time.split('[')) {
-					try {
-						time += (index.split(',')[0] + "/" + parseInt(index.split(',')[1]) / 60 + "+" + (index.split(',')[2].slice(0, -1) ? index.split(',')[2].slice(0, -1) : 0) + " ");
-					}
-					catch (error) { }
-				}
-			}
-			if (!data.randomised) {
-				if (data.black_user == null) { play_as = "Black" }
-				if (data.white_user == null) { play_as = "White" }
-			}
-			if (conditional == 'current') {
-				new_table.innerHTML = `<td>${data.turn == (data.black_user == username ? 0 : 1) ? "<icon style='font-size: 75%'>&#9654 </icon>" : ""}${data.name}</td><td>${data.black_user == username ? data.white_user : data.black_user}</td><td>${variation}</td><td>${data.black_user == username ? "Black" : "White"}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${data.black_time == null ? time_to_str(data.black_user == username ? data.black_count : data.white_count) : "--:--.--"}</td>`;
-			}
-			else if (conditional == 'completed') {
-				new_table.innerHTML = `<td>${data.name}</td><td>${data.black_user == username ? data.white_user : data.black_user}</td><td>${variation}</td><td>${data.black_user == username ? "Black" : "White"}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${data.result == "Draw" ? "Draw" : data.result == (data.black_user ? "Black" : "White") ? "Win" : "Loss"}</td>`;
-			}
-			else {
-				new_table.innerHTML = `<td>${data.name}</><td>${data.admin}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
-			}
-		}
-
-	})
-}
 
 $('load_current').getElementsByTagName('table')[0].addEventListener('click', e => {
 	if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
@@ -415,6 +360,213 @@ db.collection('account').doc(user_id).onSnapshot(doc => {
 	$('rankings').innerHTML = doc.data().ranking;
 })
 }
+
+
+else {
+	$('rules_nav').innerHTML = '<li class="table_select">Current Games</li><li>Completed Games</li>'
+	$('rules_nav').getElementsByTagName('li')[0].style.width = parseFloat(getComputedStyle($('rules_nav')).width)/2 + "px";
+	$('rules_nav').getElementsByTagName('li')[1].style.width = parseFloat(getComputedStyle($('rules_nav')).width)/2 + "px";
+	$('info').style.display = 'none';
+	$('load_current').style.display = 'unset';
+	$('load_current').getElementsByTagName('table')[0].getElementsByTagName('tr')[0].innerHTML = "<th>Name</th><th>Opponent</th><th>Mode</th><th>Play as</th><th>Time</th>";	
+	$('load_past').getElementsByTagName('table')[0].getElementsByTagName('tr')[0].innerHTML = "<th>Name</th><th>Opponent</th><th>Mode</th><th>Play as</th><th>Time</th>";
+
+	$('rules_nav').getElementsByTagName('li')[0].addEventListener('click', e => {
+		$('load_past').style.display = "none";
+		$('load_invite').style.display = "none";
+		$('info').style.display = "none";
+		$('load_current').style.display = "unset";
+		$('settings').style.display = "none";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.setAttribute('class', 'table_select');
+	})
+	$('rules_nav').getElementsByTagName('li')[1].addEventListener('click', e => {
+		$('load_past').style.display = "unset";
+		$('load_current').style.display = "none";
+		$('info').style.display = "none";
+		$('load_invite').style.display = "none";
+		$('settings').style.display = "none";	
+		e.target.parentElement.getElementsByTagName('li')[0].setAttribute('class', '');
+		e.target.parentElement.getElementsByTagName('li')[1].setAttribute('class', '');
+		e.target.setAttribute('class', 'table_select');
+	})
+
+
+	db.collection('chess').where('black_user','==','anon').get().then(snapshot => snapshot.docs.forEach(doc => {
+		if ((document.cookie.match(/\w{20}_info/g)).includes(doc.id + "_info")) {
+			if (doc.data().result == null) {
+				current_games.push([doc.data().creation_date, doc.data().name, doc.data()]);
+			}
+			else {
+				past_games.push([doc.data().creation_date, doc.data().name, doc.data()]);
+			}
+		}
+	})).then(() => {
+		db.collection('chess').where('white_user','==','anon').get().then(snapshot => snapshot.docs.forEach(doc => {
+			if ((document.cookie.match(/\w{20}_info/g)).includes(doc.id + "_info")) {
+				if (doc.data().result == null) {
+					current_games.push([doc.data().creation_date, doc.data().name, doc.data()]);
+				}
+				else {
+					past_games.push([doc.data().creation_date, doc.data().name, doc.data()]);
+				}
+			}
+		})).then(() => {
+			current_games.forEach(game_arr => {
+				sortDataAnon(past_games, 'completed', 'load_past')
+				sortDataAnon(current_games, 'current', 'load_current')
+			})
+
+		})
+	})
+
+}
+
+function sortDataAnon(doc_list, format_or_fields, id, input = "", precision = 0.3) {
+	var sorted_arr = [];
+	if (input == "") {
+		sorted_arr = doc_list.sort((a, b) => {
+			return b[0] - a[0]
+		  });
+	}
+	else {
+		doc_list.forEach((doc, id) => {
+			if ((relevancy.weight(doc[2].name, input) >= precision)) {
+				sorted_arr.push(doc.push(relevancy.weight(doc[2].name, input)));
+			}
+		sorted_arr = sorted_arr.sort((a, b) => {
+			return b[2] - a[2]
+		  })
+	})
+}
+		var header = $(id).getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
+
+		$(id).getElementsByTagName('table')[0].innerHTML = "";
+		$(id).getElementsByTagName('table')[0].appendChild(header);
+		for (var i = 0; i < (sorted_arr.length >= 10 ? 10 : sorted_arr.length); i++) {
+			var fields = format_or_fields;
+			console.log(sorted_arr[i][2])
+			renderData(sorted_arr[i][2], fields, id, typeof(format_or_fields) == "string" ? format_or_fields : null)
+		}
+}
+function sortData(conditional, id, input = "", precision = 0.3) {
+	var data_arr = {};
+	var doc_name = [];
+	db.collection('chess').get().then(snapshot => {
+		snapshot.forEach(doc => {
+			if (
+				(relevancy.weight(doc.data().name, input) >= precision || input == "") && ((conditional == "invites" && doc.data().invited_user == username && (doc.data().white_user == null || doc.data().black_user == null)) ||
+					(conditional == "current" && !doc.data().result && (doc.data().white_user == username || doc.data().black_user == username)) ||
+					(conditional == "completed" && doc.data().result && (doc.data().white_user == username || doc.data().black_user == username))
+				)) {
+				data_arr[doc.data().name] = doc.data();
+				doc_name.push(doc.data().name);
+			}
+		})
+	}).then(docRef => {
+		doc_name = relevancy.sort(doc_name, input);
+		doc_name.splice(10, doc_name.length - 1);
+		var header = $(id).getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
+		if (conditional == "current") {
+			header.innerHTML = "<th>Name</th><th>Opponent</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Time Left</th>";
+		}
+		else if (conditional == "completed") {
+			header.innerHTML = "<th>Name</th><th>Opponent</th><th>Mode</th><th>Play as</th><th>Ranked</th><th>Result</th>";
+		}
+		$(id).getElementsByTagName('table')[0].innerHTML = "";
+		$(id).getElementsByTagName('table')[0].appendChild(header);
+		for (var element of doc_name) {
+			var data = data_arr[element];
+			var new_table = $(id).getElementsByTagName('table')[0].insertRow();
+			var play_as = data.randomised ? 'Random' : null;
+			var variation = data.mode;
+			if (data.mode.indexOf(' Chess') > 0) {
+				variation = data.mode.split(' Chess')[0];
+			}
+			if (data.mode.indexOf('Hill') != -1) {
+				variation = 'KOTH';
+			}
+			if (data.mode.indexOf('Check Checkmate') != -1) {
+				variation = '3 Check';
+			}
+			var time = null;
+			if (data.white_time) {
+				time = "";
+				for (var index of data.black_time.split('[')) {
+					try {
+						time += (index.split(',')[0] + "/" + parseInt(index.split(',')[1]) / 60 + "+" + (index.split(',')[2].slice(0, -1) ? index.split(',')[2].slice(0, -1) : 0) + " ");
+					}
+					catch (error) { }
+				}
+			}
+			if (!data.randomised) {
+				if (data.black_user == null) { play_as = "Black" }
+				if (data.white_user == null) { play_as = "White" }
+			}
+			if (conditional == 'current') {
+				new_table.innerHTML = `<td>${data.turn == (data.black_user == username ? 0 : 1) ? "<icon style='font-size: 75%'>&#9654 </icon>" : ""}${data.name}</td><td>${data.black_user == username ? data.white_user : data.black_user}</td><td>${variation}</td><td>${data.black_user == username ? "Black" : "White"}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${data.black_time == null ? time_to_str(data.black_user == username ? data.black_count : data.white_count) : "--:--.--"}</td>`;
+			}
+			else if (conditional == 'completed') {
+				new_table.innerHTML = `<td>${data.name}</td><td>${data.black_user == username ? data.white_user : data.black_user}</td><td>${variation}</td><td>${data.black_user == username ? "Black" : "White"}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${data.result == "Draw" ? "Draw" : data.result == (data.black_user ? "Black" : "White") ? "Win" : "Loss"}</td>`;
+			}
+			else {
+				new_table.innerHTML = `<td>${data.name}</><td>${data.admin}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
+			}
+		}
+
+	})
+}
+
+function renderData(data, fields, id, format=null) {
+	var new_table = $(id).getElementsByTagName('table')[0].insertRow();
+	var new_table_html = "";
+	var play_as = data.randomised ? 'Random' : null;
+	var variation = data.mode;
+	if (data.mode.indexOf(' Chess') > 0) {
+		variation = data.mode.split(' Chess')[0];
+	}
+	if (data.mode.indexOf('Hill') != -1) {
+		variation = 'KOTH';
+	}
+	if (data.mode.indexOf('Check Checkmate') != -1) {
+		variation = '3 Check';
+	}
+	var time = null;
+	if (data.white_time) {
+		time = "";
+		for (var index of data.black_time.split('[')) {
+			try {
+				time += (index.split(',')[0] + "/" + parseInt(index.split(',')[1]) / 60 + "+" + (index.split(',')[2].slice(0, -1) ? index.split(',')[2].slice(0, -1) : 0) + " ");
+			}
+			catch (error) { }
+		}
+	}
+	if (!data.randomised) {
+		if (data.black_user == null) { play_as = "Black" }
+		if (data.white_user == null) { play_as = "White" }
+}
+
+if (format == 'current') {
+	new_table.innerHTML = `
+	<td>${data.turn == (data.black_user == username ? 0 : 1) ? "<icon style='font-size: 75%'>&#9654 </icon>" : ""}${data.name}</td>
+	<td>${data.black_user == username ? data.white_user : data.black_user}</td>
+	<td>${variation}</td>
+	<td>${data.black_user == username ? "Black" : "White"}</td>
+	${username == "anon" ? '' : (`<td>${data.points ? 'Ranked' : 'Casual'}</td>`)}
+	<td>${data.black_time == null ? time_to_str(data.black_user == username ? data.black_count : data.white_count) : "--:--.--"}</td>`;
+}
+else if (format == 'completed') {
+	new_table.innerHTML = `<td>${data.name}</td><td>${data.black_user == username ? data.white_user : data.black_user}</td><td>${variation}</td><td>${data.black_user == username ? "Black" : "White"}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${data.result == "Draw" ? "Draw" : data.result == (data.black_user ? "Black" : "White") ? "Win" : "Loss"}</td>`;
+}
+else {
+	for (var data_input of fields) {
+		new_table_html += `<td>${data[data_input]}</td>`
+	}
+	}
+
+}
+
 
 function time_to_str(time) {
 	var ret_string;

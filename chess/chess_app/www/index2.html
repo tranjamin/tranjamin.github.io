@@ -17,21 +17,50 @@
     <div id="nav">
         <ul>
     
-            <li><a href="signup.html" style="text-decoration: none; color: white;">&#11144</a></li>
-            <li><a href="account.html" style="text-decoration: none; color: white;">&#9881</a></li>
-            <li><a href="create.html" style="text-decoration: none; color: white;">&#9998</a>
+            <li><a href="signup.html" style="text-decoration: none; color: white;">Login/Signup</a></li>
+            <li><a href="account.html" style="text-decoration: none; color: white;">My Games</a></li>
+            <li><a href="create.html" style="text-decoration: none; color: white;">Create a Game</a>
             </li>
-            <li><a href="load.html" style="text-decoration: none; color: white;">&#9876</a></li>
-            <li><a href="about.html" style="text-decoration: none; color: white;">&#128366</a></li>
-            <li><a href="statement.html" style="text-decoration: none; color: white;">&#128737<br></a></li>
+            <li><a href="load.html" style="text-decoration: none; color: white;">Join Game</a></li>
+            <li><a href="about.html" style="text-decoration: none; color: white;">How to Play</a></li>
+            <li><a href="statement.html" style="text-decoration: none; color: white;">Privacy Policy<br></a></li>
         </ul>
 
     </div>
     <div id="copyright">
-        &copy 2020
+        &copy Benjamin Tran 2020<br>
+        Powered by Github and Google Firebase
     </div>
     <div id="overlay">
+        <h1>Tran</h1>
+        <h1><img src="favicon_edit.png" height="100px"/>Chess</h1>
+        <div id="welcome">
+        Welcome to the buggiest online chess server in  the world!
+        This version includes:
+        <ul>
+            <li>Realtime chat services</li>
+            <li>Numerous different modes</li>
+            <li>Fully functioning (maybe) chess clocks</li>
+            <li>And so much more!</li>
+        </ul>
+        <button onclick="window.open('https://github.com/tranjamin/tranjamin.github.io', 'popUpWindow')">See changelog</button>
         </div>
+        <label for="quick_join" class="suggested_label">Quick Join</label>
+        <label for="quick_observe" class="suggested_label">Quick Observe</label>
+        <div id="title_scroll">
+        <canvas class="suggested_game" name="quick_join">
+            
+        </canvas>
+        <canvas class="suggested_game">
+            
+        </canvas>
+        </div>
+    </div>
+    <div id="cookie_notice" style="display: none;">
+        <div>We use cookies</div>
+        <h6>We use non-tracking cookies to enhance your experience. By accepting, you agree to our use of cookies and our <a href="statement.html">terms and conditions</a>.</h6>
+        <button>Accept</button>
+        <button>Decline</button>
     </div>
         
 <!-- The core Firebase JS SDK is always required and must be listed first -->

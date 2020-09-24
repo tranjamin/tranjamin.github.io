@@ -1,6 +1,5 @@
-  
-// var username = "anon";
-// var user_id = "";
+document.addEventListener('deviceready', e => {  
+console.log('deviceready');
 var successful_email;
 
 
@@ -15,6 +14,22 @@ window.addEventListener('resize', e => {
 window.addEventListener('load', e => {
     update_graphics();
     update_nav_graphics();
+})
+
+
+update_graphics();
+
+highest_order_id = ["",0];
+var num_of_its;
+var it_num = 0;
+db.collection('chess').where('result', '==', null).where('visibility','==','public').where('invited_user', '==',null).get().then(snapshot => {
+    snapshot.docs.forEach(doc => {
+        if ((doc.data().white_user == null || doc.data().black_user == null)) {
+            console.log(doc.data().white_user)
+        }
+    })
+})
+
 })
 
 function draw_board(canvas) {
@@ -47,37 +62,3 @@ function update_graphics() {
         draw_board(classElement);
     })
 }
-
-update_graphics();
-
-highest_order_id = ["",0];
-var num_of_its;
-var it_num = 0;
-db.collection('chess').where('result', '==', null).where('visibility','==','public').where('invited_user', '==',null).get().then(snapshot => {
-    snapshot.docs.forEach(doc => {
-        if ((doc.data().white_user == null || doc.data().black_user == null)) {
-            console.log(doc.data().white_user)
-        }
-    })
-})
-/*db.collection('chess').where('result','==', null).get().then(snapshot => {num_of_its = snapshot.docs.length;
-    snapshot.docs.forEach(doc => {
-    it_num++;
-    var temp_num = it_num
-    if (doc.data().white_user != null && doc.data().black_user != null) {
-        db.collection('account').where('username', '==', doc.data().white_user).get().then(snapshot => snapshot.docs.forEach(acc => {
-            db.collection('account').where('username', '==', doc.data().black_user).get().then(snapshot => snapshot.docs.forEach(acc2 => {
-                console.log(acc.data().ranking + acc2.data().ranking);
-                if (acc.data().ranking + acc2.data().ranking > highest_order_id[1]) {
-                    highest_order_id = [doc.id, acc.data().ranking + acc2.data().ranking]
-                }
-            })).then(() => {
-                if (num_of_its == temp_num) {
-                console.log(highest_order_id)
-            }
-            })
-        }))
-        
-    }
-})})*/
-

@@ -59,13 +59,21 @@
         </div>
         <div class="rules" id="load_current">
             <form id='search_current'>
+                <div>
+                <label for="search">Enter Keywords and Adjust Precision</label><br>
                 <input type="text" placeholder="Search..." name="search">
-                <input type="number" min=0 max=1 step=0.005 name="increment">
+                <input type="number" min=0 max=1 step=0.005 name="increment"><br><br>
+                <label for="search">Filter Opponents and Set Min and Max Ranking</label><br>
+                <input type="text" placeholder="Search for opponent..." name="opponent_search">
+                <input type="number" min=0 max=3900 step=1 name="lbound">
+                <input type="number" min=1 max=4000 step=1 name="ubound">
+                </div>
+                <button>&#8635</button>
             </form>
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Admin</th>
+                    <th>Opponent</th>
                     <th>Mode</th>
                     <th>Play as</th>
                     <th>Ranked</th>
@@ -76,13 +84,21 @@
         </div>
         <div class="rules" id="load_invite">
             <form id='search_invite'>
+                <div>
+                <label for="search">Enter Keywords and Adjust Precision</label><br>
                 <input type="text" placeholder="Search..." name="search">
-                <input type="number" min=0 max=1 step=0.005 name="increment">
+                <input type="number" min=0 max=1 step=0.005 name="increment"><br><br>
+                <label for="search">Filter Opponents and Set Min and Max Ranking</label><br>
+                <input type="text" placeholder="Search for opponent..." name="opponent_search">
+                <input type="number" min=0 max=3900 step=1 name="lbound">
+                <input type="number" min=1 max=4000 step=1 name="ubound">
+                </div>
+                <button>&#8635</button>
             </form>
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Admin</th>
+                    <th>Opponent</th>
                     <th>Mode</th>
                     <th>Play as</th>
                     <th>Ranked</th>
@@ -92,13 +108,21 @@
         </div>
         <div class="rules" id="load_past">
             <form id='search_past'>
+                <div>
+                <label for="search">Enter Keywords and Adjust Precision</label><br>
                 <input type="text" placeholder="Search..." name="search">
-                <input type="number" min=0 max=1 step=0.005 name="increment">
+                <input type="number" min=0 max=1 step=0.005 name="increment"><br><br>
+                <label for="search">Filter Opponents and Set Min and Max Ranking</label><br>
+                <input type="text" placeholder="Search for opponent..." name="opponent_search">
+                <input type="number" min=0 max=3900 step=1 name="lbound">
+                <input type="number" min=1 max=4000 step=1 name="ubound">
+                </div>
+                <button>&#8635</button>
             </form>
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Admin</th>
+                    <th>Opponent</th>
                     <th>Mode</th>
                     <th>Play as</th>
                     <th>Ranked</th>
@@ -108,9 +132,9 @@
         </div>
         <div class="rules" id="settings">
             <br>
-                <form>
+                <form autocomplete="off">
                     <label for="confirm">Enter Your Password to Proceed</label><br>
-                    <input name="confirm" type='password' required><br>
+                    <input name="confirm" type='password' autocomplete="off" required><br>
                     <input type="submit" value="Proceed">
                 </form>
                 <p style="width: 100%; text-align: center; color: red;"></p>

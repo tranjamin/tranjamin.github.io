@@ -258,3 +258,15 @@ table td {
     text-align: center;
     font-size: 120%;
 }
+
+.page_controls {
+    font-family: 'Philosopher';
+    font-size: 2em;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+.page_controls span {
+    cursor: pointer;
+}

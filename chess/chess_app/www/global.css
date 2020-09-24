@@ -8,19 +8,20 @@ html {
 }
 
 #nav {
-    background-image: linear-gradient(rgb(41, 33, 33) 55%,orangered);
+    background-image: linear-gradient(to right, rgb(41, 33, 33) 55%,orangered);
     position: fixed;
     z-index: 100;
     color: white;
 
 }
 #nav li {
-    height: 16.66666666666666666%;
-    width: 100%;
+    height: 100%;
+    width: 16.7%;
     background-color: rgba(58, 54, 54, 0.158);
-    border-bottom: white 2px solid;
+    /* border-right: white 2px solid; */
     position: relative;
     padding: 0;
+    display: inline-block
 }
 #nav li:last-of-type {
     border-bottom: none;
@@ -40,9 +41,9 @@ html {
     display: block;
     position: absolute;
     height: 100%;
-    padding: 0% 2.5%;
+    padding: 2.5% 0;
     left: 0;
-    width: 95%;
+    width: 100%;
     background-color: unset;
     border: none;
     color: white;
@@ -58,7 +59,7 @@ html {
 #copyright {
     position: fixed;
     bottom: 1%;
-    right: 0.625%;
+    left: 0.625%;
     color: white;
     font-size: 67%;
     font-family: 'Times New Roman';

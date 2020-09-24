@@ -26,10 +26,10 @@
       "cordova-plugin-device": {}
     },
     "platforms": [
-      "android",
       "ios",
       "browser",
-      "windows"
+      "windows",
+      "android"
     ]
   },
   "dependencies": {

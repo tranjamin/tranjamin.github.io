@@ -12,9 +12,12 @@ var selected_mode = "Mode";
 var selected_game_mode = "Variation";
 var selected_play_as = "Play As";
 
-var selected_time_control_array_observer = 'Time Control';
-var selected_mode_array_observer = 'Mode';
+var selected_time_control_observer = 'Time Control';
+var selected_mode_observer = 'Mode';
 var selected_game_mode_observer = 'Variation';
+
+var join_arr = [];
+var observe_arr = [];
 
 function formatFilter(e, array) {
 	if (e.target.getAttribute('name') == 'back') {
@@ -124,6 +127,116 @@ function update_graphics() {
 
 }
 
+$('load_public').getElementsByClassName('page_controls')[0].addEventListener('click', e => {
+	if (getComputedStyle(e.target).color != "rgb(128, 128, 128)" && !e.target.childElementCount) {
+	var current_page = 1;
+	for (var i = 2; i <= 6; i++) {
+		if (e.target.parentElement.getElementsByTagName('span')[i].style.color == "orangered") {
+			current_page = i - 1;
+			break;
+		}
+	}
+
+	var page_number = null;
+	if (!isNaN(parseInt(e.target.innerHTML))) {
+		page_number = parseInt(e.target.innerHTML);
+	 }
+	else if (e.target.innerHTML == '⭰') {
+		page_number = 1
+	}
+	else if (e.target.innerHTML == "🠤") {
+		page_number = current_page - 1
+	}
+	else if (e.target.innerHTML == "🠦") {
+		page_number = current_page + 1
+
+	}
+	else if (e.target.innerHTML == "⭲") {
+		page_number = (Math.ceil(join_arr.length / 10))
+	}
+	var header = $('load_public').getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
+	$('load_public').getElementsByTagName('table')[0].innerHTML = "";
+	$('load_public').getElementsByTagName('table')[0].appendChild(header); 
+
+	for (var i = ((page_number - 1) * 10); i < (join_arr.length < (page_number * 10) ? join_arr.length : (page_number * 10) ); i++) {
+		render_data('load_public','public',join_arr,i)
+	}
+	e.target.parentElement.getElementsByTagName('span')[page_number + 1].style.color = 'orangered';
+	e.target.parentElement.getElementsByTagName('span')[current_page + 1].style.color = 'white';
+	if (page_number != 1) {
+		e.target.parentElement.getElementsByTagName('span')[0].style.color = 'white';
+		e.target.parentElement.getElementsByTagName('span')[1].style.color = 'white';	
+	}
+	else {
+		e.target.parentElement.getElementsByTagName('span')[0].style.color = 'grey';
+		e.target.parentElement.getElementsByTagName('span')[1].style.color = 'grey';	
+	}
+	if (page_number == Math.ceil(join_arr.length / 10)) {
+		e.target.parentElement.getElementsByTagName('span')[7].style.color = 'grey';
+		e.target.parentElement.getElementsByTagName('span')[8].style.color = 'grey';	
+	}
+	else {
+		e.target.parentElement.getElementsByTagName('span')[7].style.color = 'white';
+		e.target.parentElement.getElementsByTagName('span')[8].style.color = 'white';	
+	}
+
+	}
+})
+$('load_observer').getElementsByClassName('page_controls')[0].addEventListener('click', e => {
+	if (getComputedStyle(e.target).color != "rgb(128, 128, 128)" && !e.target.childElementCount) {
+	var current_page = 1;
+	for (var i = 2; i <= 6; i++) {
+		if (e.target.parentElement.getElementsByTagName('span')[i].style.color == "orangered") {
+			current_page = i - 1;
+			break;
+		}
+	}
+
+	var page_number = null;
+	if (!isNaN(parseInt(e.target.innerHTML))) {
+		page_number = parseInt(e.target.innerHTML);
+	 }
+	else if (e.target.innerHTML == '⭰') {
+		page_number = 1
+	}
+	else if (e.target.innerHTML == "🠤") {
+		page_number = current_page - 1
+	}
+	else if (e.target.innerHTML == "🠦") {
+		page_number = current_page + 1
+
+	}
+	else if (e.target.innerHTML == "⭲") {
+		page_number = (Math.ceil(observe_arr.length / 10))
+	}
+	var header = $('load_observer').getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
+	$('load_observer').getElementsByTagName('table')[0].innerHTML = "";
+	$('load_observer').getElementsByTagName('table')[0].appendChild(header); 
+
+	for (var i = ((page_number - 1) * 10); i < (observe_arr.length < (page_number * 10) ? observe_arr.length : (page_number * 10) ); i++) {
+		render_data('load_observer','observer',observe_arr,i)
+	}
+	e.target.parentElement.getElementsByTagName('span')[page_number + 1].style.color = 'orangered';
+	e.target.parentElement.getElementsByTagName('span')[current_page + 1].style.color = 'white';
+	if (page_number != 1) {
+		e.target.parentElement.getElementsByTagName('span')[0].style.color = 'white';
+		e.target.parentElement.getElementsByTagName('span')[1].style.color = 'white';	
+	}
+	else {
+		e.target.parentElement.getElementsByTagName('span')[0].style.color = 'grey';
+		e.target.parentElement.getElementsByTagName('span')[1].style.color = 'grey';	
+	}
+	if (page_number == Math.ceil(observe_arr.length / 10)) {
+		e.target.parentElement.getElementsByTagName('span')[7].style.color = 'grey';
+		e.target.parentElement.getElementsByTagName('span')[8].style.color = 'grey';	
+	}
+	else {
+		e.target.parentElement.getElementsByTagName('span')[7].style.color = 'white';
+		e.target.parentElement.getElementsByTagName('span')[8].style.color = 'white';	
+	}
+
+	}
+})
 
 
 $('load_private').style.display = "none";
@@ -190,134 +303,188 @@ db.collection('chess').onSnapshot(ref => {
 })
 
 function sortData(mode, id, input="", precision=0.3) {
-    console.clear();
-    var data_arr = {};
-	var doc_name = [];
+	//data, name, date/elo
+    var data_arr = [];
     db.collection('chess').where('visibility', '==', 'Public').where('creation_date','>',new Date(new Date() - 30*24*3600*1000)).orderBy('creation_date','desc').get().then(snapshot => {
         snapshot.forEach(doc => {
 			if (((mode == "observer" && doc.data().white_user != null && doc.data().black_user != null) || 
-				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))) && ((mode == "public" &&
+				(mode == "public" && (doc.data().white_user == null || doc.data().black_user == null))) && 
+				((username == "anon" && !getCookie(doc.id + "_info")) || 
+				(username != doc.data().white_user && username != doc.data().black_user))
+				&& (
+				
+				(mode == "public" &&
 				((selected_play_as == "Play As") || (selected_play_as == "Random" && doc.data().randomised) || (selected_play_as == "White" && doc.data().white_user == null) || (selected_play_as == "Black" && doc.data().black_user == null)) &&
 				((selected_game_mode == "Variation") || (doc.data().mode.indexOf(selected_game_mode) != -1)) &&
 				((selected_mode == "Mode") || (selected_mode == "Casual" && !doc.data().points) || (selected_mode == "Ranked" && doc.data().points)) &&
 				((selected_time_control == "Time Control") || (selected_time_control == "None" && doc.data().white_time == null)) &&
 				(($('search_public').lbound.value == "" && $('search_public').ubound.value == "") || (doc.data().white_user != null ? (parseFloat(doc.data().white_user_elo) <= parseInt($('search_public').ubound.value != "" ? $('search_public').ubound.value : 10000) && parseFloat(doc.data().white_user_elo) >= parseInt($('search_public').lbound.value ? $('search_public').lbound.value : 0)) : (parseFloat(doc.data().black_user_elo) <= parseInt($('search_public').ubound.value != "" ? $('search_public').ubound.value : 10000) && parseFloat(doc.data().black_user_elo) >= parseInt($('search_public').lbound.value ? $('search_public').lbound.value : 0)))) &&
-				($('search_public').opponent_search.value == "" || $('search_public').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user))) ||
+				($('search_public').opponent_search.value == "" || $('search_public').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user))) 
+				
+				||
+				
 				(mode == "observer" &&
 				((selected_game_mode_observer == "Variation") || (doc.data().mode.indexOf(selected_game_mode_observer) != -1)) &&
-				((selected_game_mode_observer == "Mode") || (selected_game_mode_observer == "Casual" && !doc.data().points) || (selected_game_mode_observer == "Ranked" && doc.data().points)) &&
+				((selected_mode_observer == "Mode") || (selected_mode_observer == "Casual" && !doc.data().points) || (selected_mode_observer == "Ranked" && doc.data().points)) &&
 				((selected_time_control_observer == "Time Control") || (selected_time_control_observer == "None" && doc.data().white_time == null)) &&
 				(($('search_observer').lbound.value == "" && $('search_observer').ubound.value == "") || (doc.data().white_user != null ? (parseFloat(doc.data().white_user_elo) <= parseInt($('search_observer').ubound.value != "" ? $('search_observer').ubound.value : 10000) && parseFloat(doc.data().white_user_elo) >= parseInt($('search_observer').lbound.value ? $('search_observer').lbound.value : 0)) : (parseFloat(doc.data().black_user_elo) <= parseInt($('search_observer').ubound.value != "" ? $('search_observer').ubound.value : 10000) && parseFloat(doc.data().black_user_elo) >= parseInt($('search_observer').lbound.value ? $('search_observer').lbound.value : 0)))) &&
 				($('search_observer').opponent_search.value == "" || $('search_observer').opponent_search.value == (doc.data().white_user ? doc.data().white_user : doc.data().black_user)))
+				
 				)
 			) {
+			if (mode == "observer") {console.log(doc.data())}
             if (
                 (relevancy.weight(doc.data().name,input) >= precision || input == ""))
-            {data_arr[doc.data().name] = doc.data();            
-            doc_name.push(doc.data().name);}}
+            {  
+			var weighting = null;
+			if (mode == "observer")    {   
+			weighting = (1 / (Math.ceil((new Date() - doc.data().creation_date.toDate())/(1000*60) / 5) ? Math.ceil((new Date() - doc.data().creation_date.toDate())/(1000*60) / 5) : 1)) + 
+			0.5*(doc.data().white_user_elo + doc.data().black_user_elo) / (1 + 0.0005*Math.abs(doc.data().white_user_elo - doc.data().black_user_elo))
+		}
+			data_arr.push([doc.data(), doc.id, relevancy.weight(doc.data().name,input), weighting]);
+		}}
         })
     }).then(docRef => {
-        doc_name = relevancy.sort(doc_name, input);
-        doc_name.splice(10, doc_name.length - 1);
+		if (input != "") {
+			data_arr = data_arr.sort((a, b) => {
+				return b[2] - a[2]
+			  });
+		}
+		else if (mode == "observer") {
+			data_arr = data_arr.sort((a, b) => {
+				return b[3] - a[3]
+			  });
+		}
+		data_arr.splice(50, data_arr.length - 1);
+		if (mode == "public") {
+			join_arr = data_arr;
+		}
+		else {
+			observe_arr = data_arr
+		}
         var header = $(id).getElementsByTagName('table')[0].getElementsByTagName('tr')[0];
         $(id).getElementsByTagName('table')[0].innerHTML = "";
-        $(id).getElementsByTagName('table')[0].appendChild(header);    
-        for (var element of doc_name) {
-            var data = data_arr[element];
-            var new_table = $(id).getElementsByTagName('table')[0].insertRow();
-            var play_as = data.randomised ? 'Random' : null;
-            var variation = data.mode;
-            if (data.mode.indexOf(' Chess') > 0) {
-                variation = data.mode.split(' Chess')[0];
-            }
-            if (data.mode.indexOf('Hill') != -1) {
-                variation = 'KOTH';
-            }
-            if (data.mode.indexOf('Check Checkmate') != -1) {
-                variation = '3 Check';
-            }
-            var time = null;
-            if (data.white_time) {
-                time = "";
-            for (var index of data.black_time.split('[')) {
-                try {
-                time += (index.split(',')[0] + "/" + parseInt(index.split(',')[1])/60 + "+" + (index.split(',')[2].slice(0,-1) ? index.split(',')[2].slice(0,-1) : 0) + " ");
-            }
-                catch (error) {}
-            }}
-            if (!data.randomised) {
-            if (data.black_user == null) {play_as = "Black"} 
-			if (data.white_user == null) {play_as = "White"}}
-			if (mode == "public") {
-				new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${data.white_user ? data.white_user_elo : data.black_user_elo}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
-			}
-			else {
-				new_table.innerHTML = `<td>${data.name}</td><td>${data.white_user}</td><td>${data.white_user_elo}</td><td>${data.black_user}</td><td>${data.black_user_elo}</td><td>${variation}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;	
-			}
-            }
+		$(id).getElementsByTagName('table')[0].appendChild(header); 
+        for (var i = 0; i < (data_arr.length < 10 ? data_arr.length : 10); i++) {
+			render_data(id, mode, data_arr, i);
+		}
 
     }).then(() => {
 	if (mode == "public") {document.getElementById('search_public').getElementsByTagName('button')[0].style['animation-play-state'] = 'paused';}
 	else if (mode == "observer") {document.getElementById('search_observer').getElementsByTagName('button')[0].style['animation-play-state'] = 'paused';}
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[2].style.color = 'orangered';
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[1].style.color = "grey";
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[0].style.color = "grey";
+
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[3].style.color = 'white';
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[4].style.color = 'white';
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[5].style.color = 'white';
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[6].style.color = 'white';
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[7].style.color = 'white';
+	$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[8].style.color = 'white';
+	if (data_arr.length <= 40) {
+		$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[6].style.color = "grey";
+	}
+	if (data_arr.length <= 30) {
+		$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[5].style.color = "grey";
+	}
+	if (data_arr.length <= 20) {
+		$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[4].style.color = "grey";
+	}
+	if (data_arr.length <= 10) {
+		$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[3].style.color = "grey";
+		$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[7].style.color = "grey";
+		$(id).getElementsByClassName('page_controls')[0].getElementsByTagName('span')[8].style.color = "grey";
+	}
 	})
+}
+
+function render_data(id, mode, data_arr, i)  {
+	var element = data_arr[i];
+	var data = element[0];
+	var new_table = $(id).getElementsByTagName('table')[0].insertRow();
+	new_table.setAttribute('id', element[1])
+	var play_as = data.randomised ? 'Random' : null;
+	var variation = data.mode;
+	if (data.mode.indexOf(' Chess') > 0) {
+		variation = data.mode.split(' Chess')[0];
+	}
+	if (data.mode.indexOf('Hill') != -1) {
+		variation = 'KOTH';
+	}
+	if (data.mode.indexOf('Check Checkmate') != -1) {
+		variation = '3 Check';
+	}
+	var time = null;
+	if (data.white_time) {
+		time = "";
+	for (var index of data.black_time.split('[')) {
+		try {
+		time += (index.split(',')[0] + "/" + parseInt(index.split(',')[1])/60 + "+" + (index.split(',')[2].slice(0,-1) ? index.split(',')[2].slice(0,-1) : 0) + " ");
+	}
+		catch (error) {}
+	}}
+	if (!data.randomised) {
+	if (data.black_user == null) {play_as = "Black"} 
+	if (data.white_user == null) {play_as = "White"}}
+	if (mode == "public") {
+		new_table.innerHTML = `<td>${data.name}</td><td>${data.admin}</td><td>${data.white_user ? data.white_user_elo : data.black_user_elo}</td><td>${variation}</td><td>${play_as}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;
+	}
+	else {
+		new_table.innerHTML = `<td>${data.name}</td><td>${data.white_user}</td><td>${data.white_user_elo}</td><td>${data.black_user}</td><td>${data.black_user_elo}</td><td>${variation}</td><td>${data.points ? 'Ranked' : 'Casual'}</td><td>${time}</td>`;	
+	}
 }
 
 $('load_public').getElementsByTagName('table')[0].addEventListener('click', e => {
     if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
-        var load_name = e.target.parentElement.cells[0].innerHTML;
-		var load_id;
+		var load_id = e.target.parentElement.getAttribute('id');
+		var doc_data;
+		for (var join of join_arr) {if (join[1] == load_id) {doc_data = join[0]}} 
 		var user_elo = null;
 		db.collection('account').doc(user_id ? user_id : " ").get().then(doc => {
 			user_elo = doc.data() ? doc.data().ranking : null;
 		}).then(() => {
-			db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
-				snapshot.forEach(doc => {
-					if (doc.data().name == load_name) {
-						load_id = doc.id;
-						console.log(doc.data().black_user, doc.data().white_user, username);
-						if (doc.data().white_user == null && doc.data().black_user != username) {
-							db.collection('chess').doc(load_id).update({
-								white_user: username,
-								white_user_id: user_id,
-								white_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
-								white_user_elo: user_elo
-							}).then(docRef => {
-								console.log('t2')
-								setCookie('game_id',load_id,2);
-								sessionStorage.setItem('game_id',load_id);
-								if (username == "anon") {
-									setCookie(load_id + "_info", 'white', 9999);
-									sessionStorage.setItem(load_id + "_info", 'white', 9999);
-								}
-								window.location.assign('play.html');
-							})
-						}
-						else if (doc.data().black_user == null && doc.data().white_user != username) {
-							db.collection('chess').doc(load_id).update({
-								black_user: username,
-								black_user_id: user_id,
-								black_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
-								black_user_elo: user_elo
-							}).then(docRef => {
-								console.log('t2')
-								setCookie('game_id',load_id,2);
-								sessionStorage.setItem('game_id',load_id);
-								if (username == "anon") {
-									setCookie(load_id + "_info", 'black', 9999);
-									sessionStorage.setItem(load_id + "_info", 'black', 9999);
-								}
-								window.location.assign('play.html');
-							})
-						}
-						else {
-							setCookie('game_id',load_id,2);
-							sessionStorage.setItem('game_id',load_id);
-							window.location.assign('play.html');
-							
-						}
+			if (doc_data.white_user == null && doc_data.black_user != username) {
+				db.collection('chess').doc(load_id).update({
+					white_user: username,
+					white_user_id: user_id,
+					white_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
+					white_user_elo: user_elo
+				}).then(docRef => {
+					console.log('t2')
+					setCookie('game_id',load_id,2);
+					sessionStorage.setItem('game_id',load_id);
+					if (username == "anon") {
+						setCookie(load_id + "_info", 'white', 9999);
+						sessionStorage.setItem(load_id + "_info", 'white', 9999);
 					}
+					window.location.assign('play.html');
 				})
-			})
+			}
+			else if (doc_data.black_user == null && doc_data.white_user != username) {
+				db.collection('chess').doc(load_id).update({
+					black_user: username,
+					black_user_id: user_id,
+					black_user_email: (auth.currentUser == null ? "" : auth.currentUser.email),
+					black_user_elo: user_elo
+				}).then(docRef => {
+					console.log('t2')
+					setCookie('game_id',load_id,2);
+					sessionStorage.setItem('game_id',load_id);
+					if (username == "anon") {
+						setCookie(load_id + "_info", 'black', 9999);
+						sessionStorage.setItem(load_id + "_info", 'black', 9999);
+					}
+					window.location.assign('play.html');
+				})
+			}
+			else {
+				setCookie('game_id',load_id,2);
+				sessionStorage.setItem('game_id',load_id);
+				window.location.assign('play.html');
+				
+			}
+					
 		})
 
     }
@@ -325,19 +492,11 @@ $('load_public').getElementsByTagName('table')[0].addEventListener('click', e =>
 
 $('load_observer').getElementsByTagName('table')[0].addEventListener('click', e => {
     if (e.target.parentElement.tagName == "TR" && e.target.tagName != "TH") {
-        var load_name = e.target.parentElement.cells[0].innerHTML;
-        var load_id;
-        db.collection('chess').where('name', '==', load_name).get().then(snapshot => {
-            snapshot.forEach(doc => {
-                if (doc.data().name == load_name) {
-					load_id = doc.id;
-            }})
-        }).then(docRef => {
-            console.log(load_id);
-            setCookie('game_id',load_id,2);
-            sessionStorage.setItem('game_id',load_id);
-            window.location.assign('play.html');
-        })
+        var load_id = e.target.parentElement.getAttribute('id')
+		console.log(load_id);
+		setCookie('game_id',load_id,2);
+		sessionStorage.setItem('game_id',load_id);
+		window.location.assign('play.html');
     }
 })
 
