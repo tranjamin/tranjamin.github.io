@@ -258,11 +258,7 @@ $('new_password').addEventListener('submit', e => {
     if (e.target.create_newpassword.value == e.target.confirm_newpassword) {
         $('newpassword_error').innerHTML = ""
         auth.confirmPasswordReset($('reset_code').reset_code.value, e.target.create_newpassword).then(() => {
-        db.collection('account').doc(user_id).update({
-            password: e.target.create_newpassword
-        }).then(docRef => {
             location.assign('account.html');
-        })
     }).catch(error => {$('newpassword_error').innerHTML = error.message})
     }
     else {
