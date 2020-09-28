@@ -255,7 +255,7 @@ $('reset_code').addEventListener('submit', e => {
 })
 $('new_password').addEventListener('submit', e => {
     e.preventDefault();
-    if (e.target.create_newpassword.value == e.target.confirm_newpassword) {
+    if (e.target.create_newpassword.value == e.target.confirm_newpassword.value) {
         $('newpassword_error').innerHTML = ""
         auth.confirmPasswordReset($('reset_code').reset_code.value, e.target.create_newpassword).then(() => {
             location.assign('account.html');
