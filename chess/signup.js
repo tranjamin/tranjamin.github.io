@@ -26,7 +26,7 @@ window.addEventListener('load', e => {
             if (ele.split('=')[0] == 'oobCode') {
                 reset_code_GET = ele.split('=')[1];
                 $('overlay2').style.visibility = "visible";
-                auth.verifyPasswordReset(reset_code_GET).then(doc => {
+                auth.verifyPasswordResetCode(reset_code_GET).then(doc => {
                     $('reset').reset_address.value = doc;
                     $('reset_code').reset_code.value = reset_code_GET;
                 }).catch(error => {
@@ -248,7 +248,7 @@ $('reset').addEventListener('submit', e => {
 })
 $('reset_code').addEventListener('submit', e => {
     e.preventDefault();
-    auth.verifyPasswordReset(e.target.reset_code.value).then(email => {
+    auth.verifyPasswordResetCode(e.target.reset_code.value).then(email => {
         $('change_password').style.visibility = "visible";
         $('reset_error').innerHTML = "";
     }).catch(error => {$('reset_error').innerHTML = error.message;})
