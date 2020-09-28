@@ -26,7 +26,7 @@ window.addEventListener('load', e => {
             if (ele.split('=')[0] == 'oobCode') {
                 reset_code_GET = ele.split('=')[1];
                 $('overlay2').style.visibility = "visible";
-                auth.confirmPasswordReset(reset_code_GET).then(doc => {
+                auth.verifyPasswordReset(reset_code_GET).then(doc => {
                     $('reset').reset_address.value = doc;
                     $('reset_code').reset_code.value = reset_code_GET;
                 }).catch(error => {
