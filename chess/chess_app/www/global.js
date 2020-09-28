@@ -97,6 +97,15 @@ function update_nav_graphics () {
 
 }
 
+function onDeviceReady() {
+    console.log('navvvvvvvvv')
+    console.log(navigator.camera);
+}
+
 window.addEventListener('DOMContentLoaded', e => {
     global_function();
+    document.addEventListener("deviceready", onDeviceReady, false);
+
 })
+
+document.addEventListener("deviceready", onDeviceReady, false);

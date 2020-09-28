@@ -15,6 +15,9 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="*://tranjamin.github.io/*"/>
+    <plugin name="cordova-plugin-camera" spec="^5.0.0"/>
+    <plugin name="cordova-plugin-file" spec="^6.0.0"/>
     <platform name="android">
         <allow-intent href="market:*" />
     </platform>

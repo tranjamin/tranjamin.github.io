@@ -9,6 +9,9 @@ var clickable = true;
 
 var options = $('options');
 
+var reset_code_GET;
+
+
 update_graphics();
 update_nav_graphics();
 window.addEventListener('resize', e => {
@@ -18,6 +21,20 @@ window.addEventListener('resize', e => {
 window.addEventListener('load', e => {
     update_graphics();
     update_nav_graphics();
+    if (location.search) {
+        location.search.split('&').forEach(ele => {
+            if (ele.split('=')[0] == 'oobCode') {
+                reset_code_GET = ele.split('=')[1];
+                $('overlay2').style.visibility = "visible";
+                auth.confirmPasswordReset(reset_code_GET).then(doc => {
+                    $('reset').reset_address.value = doc;
+                    $('reset_code').reset_code.value = reset_code_GET;
+                }).catch(error => {
+                    $('reset_error').innerHTML = error.message;
+                })
+            }
+        })
+        }
 })
 
 
@@ -202,30 +219,13 @@ $('signup').addEventListener('submit', e=> {
 $('forgot_password').addEventListener('click', e => {
     $('overlay2').style.visibility = "visible";
 })
-var random_str = "";
+var address;
 $('reset').addEventListener('submit', e => {
     e.preventDefault();
-    var char_str = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',1,2,3,4,5,6,7,8,9,0]
-    random_str = "";
-    for (var i = 0; i < 15; i++) {
-        random_str += char_str[Math.floor(Math.random() * 62)];
-    }
-    var address;
     if (e.target.reset_config.value == "Email") {
-        db.collection('account').where('email', '==', e.target.reset_address.value).get().then(snapshot => {
-            snapshot.docs.forEach(doc => {
-                address = doc.data().email;
-            })
-        }).then(docRef => {
-            if (address) {
-                sendEmail(address, 'Reset Your Password', 'To reset your password, use the following code: ' + random_str);
-                e.target.nextElementSibling.innerHTML = ""; 
-                console.log('sending');
-            }    
-            else {
-                e.target.reset_address.value = "";
-                e.target.nextElementSibling.innerHTML = "Username/Email not found"
-            }            
+        auth.sendPasswordResetEmail(e.target.reset_address.value).then(e.target.reset_submit.value = "Resend").catch(error => {
+            e.target.nextElementSibling.innerHTML = error.message;
+            e.target.reset_submit.value = "Send Email";
         })
     }
     else {
@@ -233,53 +233,39 @@ $('reset').addEventListener('submit', e => {
             snapshot.docs.forEach(doc => {
                 address = doc.data().email;
             })
-        }).then(docRef => {
+        }).then(() => {
             if (address) {
-                sendEmail(address, 'Reset Your Password', 'To reset your password, use the following code: ' + random_str);
-                e.target.nextElementSibling.innerHTML = "";
-                console.log('sending');
-            }
+            auth.sendPasswordResetEmail(e.target.reset_address.value).then(e.target.reset_submit.value = "Resend").catch(error => {
+                e.target.nextElementSibling.innerHTML = error.message;
+            })}
             else {
-                e.target.reset_address.value = "";
-                e.target.nextElementSibling.innerHTML = "Username/Email not found"
-            }            
+                e.target.nextElementSibling.innerHTML = 'Username is invalid or does not have an linked email'; 
+            }
+        }).catch(error => {
+            e.target.nextElementSibling.innerHTML = error.message; 
         })     
     }
 })
 $('reset_code').addEventListener('submit', e => {
     e.preventDefault();
-    if (e.target.reset_code.value == random_str) {
+    auth.verifyPasswordReset(e.target.reset_code.value).then(email => {
         $('change_password').style.visibility = "visible";
         $('reset_error').innerHTML = "";
-    }
-    else {
-        $('reset_error').innerHTML = "Reset Code is Incorrect";
-    }
+    }).catch(error => {$('reset_error').innerHTML = error.message;})
 })
 $('new_password').addEventListener('submit', e => {
     e.preventDefault();
     if (e.target.create_newpassword.value == e.target.confirm_newpassword) {
         $('newpassword_error').innerHTML = ""
+        auth.confirmPasswordReset($('reset_code').reset_code.value, e.target.create_newpassword).then(() => {
         db.collection('account').doc(user_id).update({
             password: e.target.create_newpassword
         }).then(docRef => {
             location.assign('account.html');
         })
+    }).catch(error => {$('newpassword_error').innerHTML = error.message})
     }
     else {
         $('newpassword_error').innerHTML = "Passwords do not match";
     }
 })
-
-
-function sendEmail (email_address, subject, body) {
-    Email.send({
-        Host: "smtp.gmail.com",
-        Username: "tranjaminchess.noreply@gmail.com",
-        Password: 'findArr(w_rooka.pos, white_arr)',
-        To: email_address,
-        From: "tranjaminchess.noreply@gmail.com",
-        Subject: subject,
-        Body: body
-    }).then(error => {successful_email = error})
-}
