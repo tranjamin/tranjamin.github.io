@@ -1,0 +1,78 @@
+<!DOCTYPE html> 
+<html style="font-size: 50px">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="index.css" type="text/css" rel="stylesheet">
+        <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|Mansalva|Sofia&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Raleway:wght@700&display=swap"
+        rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Modak&display=swap" rel="stylesheet">
+        <title>Tranjamin | HomePage</title>
+        <style type='text/css'>html{margin:0 !important ;}</style>
+        <style>
+                .w3-left, .w3-right, .w3-badge {cursor:pointer}
+                .w3-badge {height:13px;width:13px;padding:0}
+                </style>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+  <body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-firestore.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+
+        <header class='header'>
+            <h1 id="title">Tranjamin</h1>
+            <ul id="nav">
+            <li><a href="index.html" style="text-decoration: none;" id="currentPage" class="hoverable">Home</a></li>
+            <li><a href="about.html" style="text-decoration: none;" class="hoverable">About</a></li>
+            <li class="customform">
+              <div class="dropdown">
+                      <button class="dropbtn"><a style="text-decoration: none;background-color: rgba(255, 123, 0,0)" href="portfolio.html">Portfolio</a>
+                          <i class="fa fa-caret-down"></i>
+                      </button>
+                      <div class="dropdown-content">
+                      <a href="portfolio.html">Web</a>
+                        <a href="portfolio.html">Python</a>
+                        <a href="portfolio.html">C++</a>
+                        <a href="portfolio.html">Flutter and FlutterFire</a>
+                      </div>
+              </div>
+      </li>
+            <li><a href="projects.html" style="text-decoration: none;" class= "hoverable">All Projects</a></li>
+            <li><a href="resources.html" style="text-decoration: none;" class= "hoverable">Resources</a></li>
+            <li>
+              Search
+            </li>
+            </ul>
+        </header>
+        <main></main>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAB3OWNq-4WI_8szpIt5P4LRLoM5XlGgVY",
+    authDomain: "fir-learning-220e1.firebaseapp.com",
+    databaseURL: "https://fir-learning-220e1.firebaseio.com",
+    projectId: "fir-learning-220e1",
+    storageBucket: "fir-learning-220e1.appspot.com",
+    messagingSenderId: "634284375454",
+    appId: "1:634284375454:web:131f876d7399d27253aa8f"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  //db.settings({timestampsInSnapshots: true});
+</script>
+<script src="relevancy.js"></script>
+<script src="firebase.js"></script>
+  </body>
+</html>
