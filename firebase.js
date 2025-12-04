@@ -5,6 +5,7 @@ db.collection("users").get().then(function (snapshot) {
     })
 })
 
+
 countDownloads();
 if (document.title == "Benjamin Tran | Homepage") {
     document.getElementById('slideshow-container').style.height = "660px";
