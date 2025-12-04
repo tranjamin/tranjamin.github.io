@@ -141,7 +141,7 @@ if (name) {
     toggleVisibilitySignUp(document.getElementById("signup"), document.getElementById("signupform"));
     document.getElementById('member-benefits').style.display = "block";
 
-    if (name == "My Darling Wife" || true) {
+    if (name == "My Darling Wife") {
         console.log("welcome...");
         document.getElementById("title").textContent = "hehe I have escaped back into the real world... to your favourite dessert!";
         document.getElementById("title").style.fontSize = "20px";
@@ -839,6 +839,12 @@ login.addEventListener("submit", (e) => {
                     document.getElementById("incorrectusername").innerHTML = "";
                     document.getElementById("password").value = "";
                     document.getElementById("username").value = "";
+
+                    if (name == "My Darling Wife") {
+                        console.log("welcome...");
+                        document.getElementById("title").textContent = "hehe I have escaped back into the real world... to your favourite dessert!";
+                        document.getElementById("title").style.fontSize = "20px";
+                    }
 
                     function vis() {
                         document.getElementById("newPassword").style.visibility = "";
