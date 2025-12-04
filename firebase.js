@@ -18,6 +18,10 @@ if (document.title == "Benjamin Tran | Homepage") {
                     function hide() { document.getElementById("a11").style.display = "none"; }
                     setTimeout(hide, 8000);
                 }
+                if (doc.data()["username"] == "wifey") {
+                    document.getElementById("title").textContent = "hehe I have escaped back into the real world... to your favourite dessert!"
+                    document.getElementById("title").style.fontSize = "20px" 
+                }
             })
         }
         else {
