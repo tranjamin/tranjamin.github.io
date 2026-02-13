@@ -80,7 +80,7 @@
           <img src="Letter_undone.png" class="img" id="img2">
           <img src="Letter_opened.png" class="img" id="img3">
           <p id="textstage">
-To my dearest, will you be my valentine?
+            INTENTIONALLY BLANK
           </p>
         </div>
 
@@ -100,6 +100,10 @@ To my dearest, will you be my valentine?
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+
+  db.collection("messages").doc("message").get().then(doc => {
+    document.getElementById('textstage').textContent = doc.data().message;
+  });
   //db.settings({timestampsInSnapshots: true});
 </script>
 <script>
