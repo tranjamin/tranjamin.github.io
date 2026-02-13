@@ -64,14 +64,14 @@ body {
 
 .titles {
 text-align: center;
-font-size: 1.5rem;
+font-size: 8vw;
 font-family: "Love Light", cursive;
-font-weight: 600;
+font-weight: 500;
 width: 100%;
 margin-top: 0%;
 position: fixed;
 z-index: 2;
-line-height: 120px;
+/* line-height: 150px; */
 color: /*darkred*/ rgb(0, 0, 0);
 display: inline-block;
 margin: none;
@@ -109,7 +109,7 @@ opacity: 0;
 main {
   position: relative;
   left: 12.5%;
-  top: 120px;
+  top: 160px;
   z-index: 0;
   width: 75%;
   overflow: hidden;
