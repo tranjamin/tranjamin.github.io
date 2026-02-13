@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html style="font-size: 50px">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="index.css" type="text/css" rel="stylesheet">
+        <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Sofia" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet"> 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courgette&family=Italianno&family=Love+Light&display=swap" rel="stylesheet">
+        <title>❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️</title>
+        <style type='text/css'>html{margin:0 !important ;}</style>
+        <style>
+                .w3-left, .w3-right, .w3-badge {cursor:pointer}
+                .w3-badge {height:13px;width:13px;padding:0}
+                </style>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <script src="animate-heart-canvas-master/animate-heart-canvas-browser.js"></script>
+    <script>
+        let queryData = getSearchData()
+        console.log(queryData)
+        let animateHeartCanvas = new AnimateHeartCanvas(
+            Number(queryData.hMin),
+            Number(queryData.hMax),
+            Number(queryData.countHeart),
+            Number(queryData.sizeMin),
+            Number(queryData.sizeMax),
+            queryData.bgColor,
+        )
+        function getSearchData(){
+          let searchString = location.search;
+            if (searchString){
+                let obj = {};
+                searchString = searchString.substring(1, searchString.length);
+                let tempArray = searchString.split('&');
+                tempArray.forEach(item => {
+                    obj[item.split('=')[0]] = decodeURIComponent(item.split('=')[1]);
+                });
+                return obj;
+            } else {
+                return false;
+            }
+        }
+    </script>
+    </head>
+  <body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-firestore.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+        <article>
+        <h1 class="titles" id="title1">Happy Valentine's Day!</h1>
+        <h1 class="titles" id="title2">Olles Guate zum Valentinstog</h1>
+        <h1 class="titles" id="title3">我是同性恋</h1>
+        </article>
+        <main>
+
+        <iframe 
+          src=https://iluvyou.app/valentine?d=eyJuYW1lIjoiRG9yaXMiLCJkYXlzIjozMzMsImV4cGVyaWVuY2UiOiJ2YWxlbnRpbmUiLCJzdGVwcyI6eyJzdGVwMSI6eyJlbmFibGVkIjp0cnVlLCJzdWJ0aXRsZSI6IlRvIG15IGV2ZXJ5dGhpbmcifSwic3RlcDIiOnsiZW5hYmxlZCI6dHJ1ZX0sInN0ZXAzIjp7ImVuYWJsZWQiOnRydWUsImhlYWRpbmciOiJUaGUgTWlyYWNsZSBvZiBNeSBXb3JsZCIsInBhcmFncmFwaCI6IkkgZG9uJ3Qga25vdyB3aGF0IEkgZGlkIHRvIGRlc2VydmUgeW91In0sInN0ZXA1Ijp7ImVuYWJsZWQiOnRydWUsInByb21wdCI6IlNjcmF0Y2ggZm9yIGEgc3VycHJpc2UhIiwic2NyYXRjaFRleHQiOiJQVVNTSSBTT0ZPUlQhIn19fQ%3D%3D
+          width="100%" 
+          height="600px"
+          position="centered"
+          style="border:none;">
+        </iframe>
+
+        <div class="stage">
+          <img src="Letter_closed.png" class="img active" id="img1">
+          <img src="Letter_undone.png" class="img" id="img2">
+          <img src="Letter_opened.png" class="img" id="img3">
+          <p id="textstage">
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vel quam quis mi egestas facilisis. Fusce facilisis eu orci vel hendrerit. Phasellus semper arcu eu tellus sagittis dapibus. Nunc non nisl sed diam pellentesque convallis nec sed quam. Nullam aliquet facilisis sapien eu sollicitudin. Duis sed rhoncus felis. Praesent aliquet, diam vel rutrum facilisis, mauris nisl sollicitudin quam, vitae pretium ante nibh vitae mi. Donec pharetra sem id fringilla scelerisque. Ut porta tortor enim, et ultricies sem vehicula quis. Ut orci mauris, aliquet id sem eget, luctus pellentesque massa. Integer lacus risus, consectetur vel ligula ut, volutpat viverra risus.
+
+Donec bibendum risus at libero gravida vestibulum. Nulla dapibus gravida leo, nec scelerisque neque commodo quis. Mauris pulvinar turpis a iaculis feugiat. Donec mollis elementum lobortis. Morbi finibus consectetur nisi, dignissim pharetra orci. Pellentesque tempor ullamcorper lorem, id suscipit lorem euismod sed. Integer eget dictum erat. Curabitur eleifend, magna at dignissim tincidunt, diam ante imperdiet nisl, eget faucibus purus mi nec turpis.
+
+Sed mauris nulla, gravida sed dui at, dapibus sagittis purus. Nulla in odio at justo tempor euismod ultrices at orci. Vivamus quis metus quis magna rutrum rutrum et eget justo. Praesent nec lacus non libero vestibulum accumsan sit amet vel augue. Nulla facilisi. Nam semper erat ut justo ultrices posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ultricies viverra magna, tincidunt condimentum nisl gravida et. Nunc elementum, augue vel convallis gravida, felis lorem sollicitudin dolor, sit amet facilisis leo tellus eu ipsum. Donec et elementum nibh. Nullam consectetur convallis sapien sed malesuada. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+
+Duis congue risus quis cursus egestas. Nunc aliquam mauris at nunc dapibus, nec congue mauris gravida. Aliquam nec malesuada orci, eget hendrerit sapien. Duis rutrum et felis eget vestibulum. Sed non nisl consequat, vehicula lorem nec, tristique neque. In hac habitasse platea dictumst. Fusce vel orci eu dolor aliquam volutpat eu ut velit.
+
+Nam non urna a magna scelerisque sagittis quis non eros. Etiam vel lobortis neque. Proin et diam pharetra, lacinia ante at, pellentesque lorem. Vestibulum ut volutpat enim, at commodo velit. Aenean interdum fringilla ex, non varius nulla pharetra in. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam quis quam eget leo posuere faucibus sed eget turpis. Curabitur facilisis in sem at pulvinar. Fusce magna tortor, egestas at enim non, auctor faucibus enim. Praesent velit orci, fringilla nec erat ac, laoreet varius risus. Praesent blandit rhoncus tempor. Sed eget aliquet metus. Proin felis nunc, finibus vel tincidunt nec, interdum vitae nunc. 
+          </p>
+        </div>
+
+        </main>
+        
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAB3OWNq-4WI_8szpIt5P4LRLoM5XlGgVY",
+    authDomain: "fir-learning-220e1.firebaseapp.com",
+    databaseURL: "https://fir-learning-220e1.firebaseio.com",
+    projectId: "fir-learning-220e1",
+    storageBucket: "fir-learning-220e1.appspot.com",
+    messagingSenderId: "634284375454",
+    appId: "1:634284375454:web:131f876d7399d27253aa8f"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  //db.settings({timestampsInSnapshots: true});
+</script>
+<script>
+const images = document.querySelectorAll(".img");
+let index = 0;
+
+function showNext() {
+  if (index >= images.length - 1) return;
+
+  // fade current out
+  images[index].classList.remove("active");
+  index++;
+
+  // fade next in
+  setTimeout(() => {
+    images[index].classList.add("active");
+
+    // auto fade out after 2s
+    setTimeout(() => {
+      images[index].classList.remove("active");
+
+      // if more images → continue
+      if (index < images.length - 1) {
+        index++;
+        setTimeout(() => {
+          images[index].classList.add("active");
+
+          setTimeout(() => {
+            images[index].classList.remove("active");
+            document.getElementById('textstage').style.visibility = "visible";
+            document.getElementById('textstage').classList.add("fade-text");
+          }, 2000);
+
+        }, 0);
+      }
+    }, 2000);
+
+  }, 0);
+}
+
+images[0].addEventListener('click', showNext);
+images[1].addEventListener('click', showNext);
+images[2].addEventListener('click', showNext);
+
+const title1 = document.getElementById("title1");
+const title2 = document.getElementById("title2");
+const title3 =  document.getElementById("title3");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 10) {   // adjust threshold as needed
+    title1.classList.add("scrolled");
+    title2.classList.add("scrolled");
+    title3.classList.add("scrolled");
+  } else {
+    title1.classList.remove("scrolled");
+    title2.classList.remove("scrolled");
+    title3.classList.remove("scrolled");
+  }
+});
+</script>
+<script src="firebase.js"></script>
+  </body>
+</html>
